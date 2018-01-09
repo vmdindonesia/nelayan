@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
-import { Button } from 'react-native-elements'
+import { Container, ContainerSection, Input, Button } from '../components/common'
 
 class AuthScreen extends Component {
 	render() {
@@ -8,14 +8,32 @@ class AuthScreen extends Component {
 
 		return (
 			<View style={styles.container}>
-				<Text>Halaman Login</Text>
-				<Button
-					raised
-					buttonStyle={{ backgroundColor: 'blue' }}
-					textStyle={{ textAlign: 'center' }}
-					title="Belum memiliki akun? Registrasi"
-					onPress={() => navigate('Register')}
-				/>
+				<Container>
+					<ContainerSection>
+						<Input
+							label='Email'
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Password'
+							secureTextEntry
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Button onPress={() => alert('Login')}>
+							Login
+						</Button>
+					</ContainerSection>
+				</Container>
+				
+				<Text style={{ textAlign: 'center', marginTop: 10 }}>
+					Belum punya akun?
+					<Text
+						onPress={() => navigate('Register')}
+						style={{ color: 'green', fontWeight: 'bold' }}
+					> Registrasi</Text>
+				</Text>
 			</View>
 		)
 	}
@@ -23,8 +41,7 @@ class AuthScreen extends Component {
 
 const styles = {
 	container: {
-		flex: 1,
-		alignItems: 'center',
+		marginTop: 100,
 		justifyContent: 'center'
 	}
 }

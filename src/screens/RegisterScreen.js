@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, ScrollView, Text, Picker, KeyboardAvoidingView } from 'react-native'
-import { Button } from 'react-native-elements'
-import { Container, ContainerSection, Input } from '../components/common'
+import { Container, ContainerSection, Input, Button } from '../components/common'
 
 class RegisterScreen extends Component {
 	static navigationOptions = {
@@ -107,19 +106,13 @@ class RegisterScreen extends Component {
 								secureTextEntry
 							/>
 						</ContainerSection>
+						
 					</Container>
-
-					<View style={{ height: 20 }} />
-
-					<Button
-						raised
-						title="Register"
-						onPress={() => navigate('CatalogList')}
-					/>
-
-					<View style={{ height: 20 }} />
-
-
+					<ContainerSection>
+						<Button onPress={() => navigate('CatalogList')}>
+							Register
+						</Button>
+					</ContainerSection>
 				</ScrollView>
 			</KeyboardAvoidingView>
 			

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react'
+import { Text, TouchableOpacity } from 'react-native'
 
 class Button extends Component {
 	render() {
@@ -10,14 +10,14 @@ class Button extends Component {
 					{this.props.children}
 				</Text>
 			</TouchableOpacity>
-		);
+		)
 	}
 }
 
 const styles = {
 	textStyle: {
 		alignSelf: 'center',
-		color: '#007aff',
+		color: '#fff',
 		fontSize: 16,
 		fontWeight: '600',
 		paddingTop: 10,
@@ -26,8 +26,8 @@ const styles = {
 	buttonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: '#fff',
-		borderRadius: 5,
+		backgroundColor: '#007aff',
+		borderRadius: 2,
 		borderWidth: 1,
 		borderColor: '#007aff',
 		marginLeft: 5,
@@ -35,4 +35,4 @@ const styles = {
 	}
 }
 
-export {Button};
+export { Button }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, View, Text, Image, KeyboardAvoidingView } from 'react-native'
-import { Button } from 'react-native-elements'
-import { Container, ContainerSection, Input } from '../components/common'
+import { Container, ContainerSection, Input, Button } from '../components/common'
 
 class CatalogCreate extends Component {
 	static navigationOptions = {
@@ -57,11 +56,11 @@ class CatalogCreate extends Component {
 							/>
 						</ContainerSection>
 					</Container>
-					<Button
-						raised
-						title="Tambah"
-						onPress={() => navigate('CatalogList')}
-					/>
+					<ContainerSection>
+						<Button onPress={() => navigate('CatalogList')}>
+							Tambah
+						</Button>
+					</ContainerSection>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		)
