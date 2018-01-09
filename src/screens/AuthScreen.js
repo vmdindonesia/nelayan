@@ -24,7 +24,6 @@ class AuthScreen extends Component {
 const styles = {
 	container: {
 		flex: 1,
-		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center'
 	}

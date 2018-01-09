@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, ScrollView, Text, Picker, KeyboardAvoidingView } from 'react-native'
-import { Card, CardSection, Input, Spinner } from '../components/common'
 import { Button } from 'react-native-elements'
+import { Card, CardSection, Input, Spinner } from '../components/common'
 
 class RegisterScreen extends Component {
 	static navigationOptions = {
@@ -10,7 +10,7 @@ class RegisterScreen extends Component {
 
 	render() {
 		const { navigate } = this.props.navigation
-		
+
 		return (
 			<KeyboardAvoidingView
 				style={styles.container}
@@ -111,7 +111,7 @@ class RegisterScreen extends Component {
 					<Button
 						raised
 						title="Register"
-						onPress={() => navigate('Login')}
+						onPress={() => navigate('CatalogList')}
 					/>
 
 					<View style={{ height: 20 }} />
@@ -126,7 +126,7 @@ class RegisterScreen extends Component {
 
 const styles = {
 	containerStyle: {
-		backgroundColor: 'white',
+		
 	},
 	headerStyle: {
 		marginLeft: 5
