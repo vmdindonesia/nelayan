@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 import ActionButton from 'react-native-action-button'
-import Icon from 'react-native-vector-icons/Ionicons'
 
 class CatalogList extends Component {
 	static navigationOptions = {
@@ -10,6 +9,8 @@ class CatalogList extends Component {
 	}
 
 	render() {
+		const { navigate } = this.props.navigation
+
 		return (
 			<View style={styles.containerStyle}>
 				<Text style={styles.infoStyle}>
@@ -18,8 +19,8 @@ class CatalogList extends Component {
 				</Text>
 
 				<ActionButton
-				  buttonColor="rgba(231,76,60,1)"
-				  onPress={() => { alert("hi")}}
+					buttonColor="rgba(231,76,60,1)"
+					onPress={() => navigate('CatalogCreate')}
 				/>
 			</View>
 		)
@@ -35,10 +36,10 @@ const styles = {
 		textAlign: 'center'
 	},
 	actionButtonIcon: {
-   	fontSize: 20,
-   	height: 22,
-   	color: 'white',
- 	},
+		fontSize: 20,
+		height: 22,
+		color: 'white',
+	},
 }
 
 export default CatalogList

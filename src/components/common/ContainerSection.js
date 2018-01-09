@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 
-class CardSection extends Component {
+class ContainerSection extends Component {
 	render() {
 		return (
 			<View style={styles.containerStyle}>
@@ -13,13 +13,11 @@ class CardSection extends Component {
 
 const styles = {
 	containerStyle: {
-		borderBottomWidth: 1, 
 		padding: 5,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
-		borderColor: '#ddd',
 		position: 'relative'
 	}
 }
 
-export { CardSection }
+export { ContainerSection }

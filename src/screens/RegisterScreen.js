@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, ScrollView, Text, Picker, KeyboardAvoidingView } from 'react-native'
 import { Button } from 'react-native-elements'
-import { Card, CardSection, Input, Spinner } from '../components/common'
+import { Container, ContainerSection, Input } from '../components/common'
 
 class RegisterScreen extends Component {
 	static navigationOptions = {
@@ -17,14 +17,17 @@ class RegisterScreen extends Component {
 				behavior="padding"
 				keyboardVerticalOffset={80}
 			>
-				<ScrollView style={styles.containerStyle}>
-					<Card>
-						<CardSection>
+				<ScrollView 
+					style={styles.containerStyle}
+					keyboardShouldPersistTaps="always"
+				>
+					<Container>
+						<ContainerSection>
 							<Text style={styles.headerStyle}>
 								INFORMASI LEMBAGA
 							</Text>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Text style={styles.pickerTextStyle}>Jenis Supplier</Text>
 							<Picker
 								style={{ flex: 1 }}
@@ -34,20 +37,20 @@ class RegisterScreen extends Component {
 								<Picker.Item label="Koperasi" value="Koperasi" />
 								<Picker.Item label="Perseorangan" value="Koperasi" />
 							</Picker>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='Desa/Kelurahan'
 								placeholder='contoh: Antapani'
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='Kecamatan'
 								placeholder='contoh: Antapani Kidul'
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Text style={styles.pickerTextStyle}>Kota/Kabupaten</Text>
 							<Picker
 								style={{ flex: 1 }}
@@ -57,54 +60,54 @@ class RegisterScreen extends Component {
 								<Picker.Item label="Jakarta" value="Jakarta" />
 								<Picker.Item label="Pangandaran" value="Pangandaran" />
 							</Picker>
-						</CardSection>
-					</Card>
+						</ContainerSection>
+					</Container>
 
-					<Card>
-						<CardSection>
+					<Container>
+						<ContainerSection>
 							<Text style={styles.headerStyle}>
 								INFORMASI PERSONAL
 							</Text>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='Nama Lengkap'
 								placeholder='contoh: Ahmad Darudi'
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='No. KTP'
 								placeholder='contoh: 321317989029'
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='No. HP'
 								placeholder='contoh: 085621017922'
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='Email'
 								placeholder='contoh: erwin@gmail.com'
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='Password'
 								placeholder='minimal 6 karakter'
 								secureTextEntry
 							/>
-						</CardSection>
-						<CardSection>
+						</ContainerSection>
+						<ContainerSection>
 							<Input
 								label='Konfirmasi Password'
 								placeholder='minimal 6 karakter'
 								secureTextEntry
 							/>
-						</CardSection>
-					</Card>
+						</ContainerSection>
+					</Container>
 
 					<View style={{ height: 20 }} />
 

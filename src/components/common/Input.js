@@ -3,7 +3,7 @@ import { Text, View, TextInput } from 'react-native'
 
 class Input extends Component {
 	render() {
-		const { label, value, onChangeText, placeholder, secureTextEntry } = this.props
+		const { label, value, onChangeText, placeholder, secureTextEntry, keyboardType } = this.props
 		const { inputStyle, labelStyle, containerStyle } = styles
 
 		return (
@@ -16,6 +16,7 @@ class Input extends Component {
 					value={value}
 					onChangeText={onChangeText}
 					style={inputStyle}
+					keyboardType={keyboardType}
 				/>
 			</View>
 		)
