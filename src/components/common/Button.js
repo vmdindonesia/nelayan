@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableNativeFeedback } from 'react-native'
 
 class Button extends Component {
 	render() {
-		const { buttonStyle, textStyle } = styles
 		return (
-			<TouchableOpacity onPress={this.props.onPress} style={buttonStyle}>
-				<Text style={textStyle}>
-					{this.props.children}
-				</Text>
-			</TouchableOpacity>
+			<TouchableNativeFeedback
+				onPress={this.props.onPress}
+				background={TouchableNativeFeedback.SelectableBackground()}
+			>
+				<View style={styles.buttonStyle}>
+					<Text style={styles.textStyle}>{this.props.children}</Text>
+				</View>
+			</TouchableNativeFeedback>
 		)
 	}
 }
