@@ -1,17 +1,12 @@
 import React from 'react'
 import { StackNavigator } from 'react-navigation'
-import LoginForm from './src/components/LoginForm'
-import RegisterForm from './src/components/RegisterForm'
+import AuthScreen from './src/screens/AuthScreen'
+import RegisterScreen from './src/screens/RegisterScreen'
 
 // Routes
 const Routes = StackNavigator({
-  Login: { screen: LoginForm },
-  Register: { 
-    screen: RegisterForm,
-    navigationOptions: {
-      headerTitle: 'Registrasi',
-    },
-  },
+  Login: { screen: AuthScreen },
+  Register: { screen: RegisterScreen },
 }, {
   navigationOptions: { headerStyle: { marginTop: Expo.Constants.statusBarHeight } }
 })
