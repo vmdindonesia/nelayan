@@ -3,6 +3,10 @@ import { View, Text } from 'react-native'
 import { Container, ContainerSection, Input, Button } from '../components/common'
 
 class AuthScreen extends Component {
+	static navigationOptions = {
+		header: null
+	}
+
 	render() {
 		const { navigate } = this.props.navigation
 

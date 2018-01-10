@@ -1,14 +1,100 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, Picker, KeyboardAvoidingView } from 'react-native'
-import { Container, ContainerSection, Input, Button } from '../components/common'
+import axios from 'axios'
+import { ScrollView, Text, Picker, KeyboardAvoidingView } from 'react-native'
+import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
+import Constants from '../constants'
 
 class RegisterScreen extends Component {
 	static navigationOptions = {
 		title: 'Registrasi'
 	}
 
+	constructor(props) {
+		super(props)
+	
+		this.state = {
+			typeOrganization: 'Kelompok Nelayan',
+			organization: '',
+			address: '',
+			cityId: '',
+
+			name: '',
+			idNumber: '',
+			phone: '',
+			email: '',
+			password: '',
+			confirmPassword: '',
+
+			loading: false
+		}
+	}
+
+	onChangeInput = (name, v) => {
+    this.setState({[name]: v})
+	}
+
+	// to do: form validation
+	// 
+
+	register = () => {
+		this.setState({loading: true})
+
+		const data = this.state
+
+		axios.post(`${Constants.BASE_URL}register-supplier`, data)
+		.then(response => {
+			console.log(response)
+			if (response.status === 200) {
+				this.props.navigation.navigate('CatalogList')
+			}
+			else {
+				alert(response.data.message)
+			}
+
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Tidak ada koneksi internet')
+			}
+
+			this.setState({loading: false})
+		})
+	}
+
+	renderButton = () => {
+		if (this.state.loading) {
+			return <Spinner size='large' />
+		}
+
+		return (
+			<Button onPress={this.register}>
+				Register
+			</Button>
+		)
+	}
+
 	render() {
-		const { navigate } = this.props.navigation
+		const { 
+			typeOrganization,
+			organization,
+			address,
+			cityId,
+
+			name,
+			idNumber,
+			phone,
+			email,
+			password,
+			confirmPassword,
+
+			loading
+		} = this.state
+
+		console.log(this.state)
 
 		return (
 			<KeyboardAvoidingView
@@ -30,17 +116,19 @@ class RegisterScreen extends Component {
 							<Text style={styles.pickerTextStyle}>Jenis Supplier</Text>
 							<Picker
 								style={{ flex: 1 }}
-								selectedValue={this.props.shift}
-								onValueChange={() => console.log('pressed')}
+								selectedValue={typeOrganization}
+								onValueChange={v => this.onChangeInput('typeOrganization', v)}
 							>
-								<Picker.Item label="Koperasi" value="Koperasi" />
-								<Picker.Item label="Perseorangan" value="Koperasi" />
+								<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
+								<Picker.Item label="Personal" value="Personal" />
 							</Picker>
 						</ContainerSection>
 						<ContainerSection>
 							<Input
 								label='Desa/Kelurahan'
 								placeholder='contoh: Antapani'
+								value={address}
+								onChangeText={v => this.onChangeInput('address', v)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
@@ -53,11 +141,12 @@ class RegisterScreen extends Component {
 							<Text style={styles.pickerTextStyle}>Kota/Kabupaten</Text>
 							<Picker
 								style={{ flex: 1 }}
-								selectedValue={this.props.city}
-								onValueChange={() => console.log('pressed')}
+								selectedValue={cityId}
+								onValueChange={v => this.onChangeInput('cityId', v)}
 							>
-								<Picker.Item label="Jakarta" value="Jakarta" />
-								<Picker.Item label="Pangandaran" value="Pangandaran" />
+								<Picker.Item label="- Pilih Kota/Kabupaten" value="" />
+								<Picker.Item label="Jakarta" value="1" />
+								<Picker.Item label="Pangandaran" value="2" />
 							</Picker>
 						</ContainerSection>
 					</Container>
@@ -72,24 +161,34 @@ class RegisterScreen extends Component {
 							<Input
 								label='Nama Lengkap'
 								placeholder='contoh: Ahmad Darudi'
+								value={name}
+								onChangeText={v => this.onChangeInput('name', v)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
 							<Input
 								label='No. KTP'
 								placeholder='contoh: 321317989029'
+								keyboardType="numeric"
+								value={idNumber}
+								onChangeText={v => this.onChangeInput('idNumber', v)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
 							<Input
 								label='No. HP'
 								placeholder='contoh: 085621017922'
+								keyboardType="numeric"
+								value={phone}
+								onChangeText={v => this.onChangeInput('phone', v)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
 							<Input
 								label='Email'
 								placeholder='contoh: erwin@gmail.com'
+								value={email}
+								onChangeText={v => this.onChangeInput('email', v)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
@@ -97,6 +196,8 @@ class RegisterScreen extends Component {
 								label='Password'
 								placeholder='minimal 6 karakter'
 								secureTextEntry
+								value={password}
+								onChangeText={v => this.onChangeInput('password', v)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
@@ -104,18 +205,17 @@ class RegisterScreen extends Component {
 								label='Konfirmasi Password'
 								placeholder='minimal 6 karakter'
 								secureTextEntry
+								value={confirmPassword}
+								onChangeText={v => this.onChangeInput('confirmPassword', v)}
 							/>
 						</ContainerSection>
 						
 					</Container>
 					<ContainerSection>
-						<Button onPress={() => navigate('CatalogList')}>
-							Register
-						</Button>
+						{this.renderButton()}
 					</ContainerSection>
 				</ScrollView>
 			</KeyboardAvoidingView>
-			
 		)
 	}
 }
