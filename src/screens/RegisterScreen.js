@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { ScrollView, Text, Picker, KeyboardAvoidingView } from 'react-native'
+import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import Constants from '../constants'
 
@@ -30,7 +30,7 @@ class RegisterScreen extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-    this.setState({[name]: v})
+		this.setState({[name]: v})
 	}
 
 	// to do: form validation
@@ -71,7 +71,18 @@ class RegisterScreen extends Component {
 		}
 
 		return (
-			<Button onPress={this.register}>
+			<Button 
+				onPress={
+					() => Alert.alert(
+						'Yakin sudah mengisi informasi profil anda dengan tepat?',
+						'',
+						[
+							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+							{text: 'Ya', onPress: () => this.register()},
+						]
+					)
+				}
+			>
 				Register
 			</Button>
 		)
