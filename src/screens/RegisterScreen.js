@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert } from 'react-native'
+import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import Constants from '../constants'
+import AutoComplete from '../components/AutoComplete'
 
 class RegisterScreen extends Component {
 	static navigationOptions = {
@@ -25,23 +26,65 @@ class RegisterScreen extends Component {
 			password: '',
 			confirmPassword: '',
 
-			loading: false
+			loading: false,
+			suggestions: [],
+			values: [],
+			fishIds: [],
 		}
+	}
+
+	onItemSelected = (index, item) => {
+		const { fishIds, values } = this.state
+		fishIds[index] = item.id
+		values[index] = item.name
+
+		this.setState({
+			suggestions: [],
+			fishIds,
+			values
+		})
 	}
 
 	onChangeInput = (name, v) => {
 		this.setState({[name]: v})
 	}
 
+	querySuggestion = (index, text) => {
+		const { values, suggestions } = this.state
+		values[index] = text
+
+		this.setState({values})
+
+		axios.get(`${Constants.BASE_URL}/fishes/search?key=${text}`, {
+			headers: {'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNCwibmFtZSI6ImFyaWYiLCJlbWFpbCI6ImFyaWZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMxMjMiLCJwaG9uZSI6IjA4MjExMTEyMjEiLCJwaG90byI6bnVsbCwiYWRkcmVzcyI6ImFsZGlyb24iLCJyb2xlIjoic3VwcGxpZXIiLCJwb2ludEFtb3VudCI6MCwiaWROdW1iZXIiOiIzMjQ3MDI0NDQiLCJvcmdhbml6YXRpb24iOiJtaXRyYSBrYXNpaCIsInR5cGVPcmdhbml6YXRpb24iOiJwdCIsImFjdGl2ZSI6ZmFsc2UsInZlcmlmeSI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiJ9LCJpYXQiOjE1MTU0OTExNDYsImV4cCI6MTUxNjA5NTk0Nn0.3X3XEV50K2vEZXsvd-BaXc8ElHE8qj2i_N-n-x9stUM'}
+		})
+		.then(response => {
+			res = response.data.data
+			suggestions[index] = res
+			this.setState({suggestions})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
+	}
+
 	// to do: form validation
 	// 
 
 	register = () => {
+		Keyboard.dismiss()
+		this.props.navigation.navigate('HomeScreen')
+
 		this.setState({loading: true})
 
 		const data = this.state
 
-		axios.post(`${Constants.BASE_URL}register-supplier`, data)
+		axios.post(`${Constants.BASE_URL}/register-supplier`, data)
 		.then(response => {
 			console.log(response)
 			if (response.status === 200) {
@@ -58,7 +101,7 @@ class RegisterScreen extends Component {
 				alert(error.response.data.message)
 			}
 			else {
-				alert('Tidak ada koneksi internet')
+				alert('Koneksi internet bermasalah')
 			}
 
 			this.setState({loading: false})
@@ -74,8 +117,8 @@ class RegisterScreen extends Component {
 			<Button 
 				onPress={
 					() => Alert.alert(
-						'Yakin sudah mengisi informasi profil anda dengan tepat?',
 						'',
+						'Yakin sudah mengisi informasi profil anda dengan tepat?',
 						[
 							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 							{text: 'Ya', onPress: () => this.register()},
@@ -102,7 +145,10 @@ class RegisterScreen extends Component {
 			password,
 			confirmPassword,
 
-			loading
+			loading,
+			suggestions,
+			values,
+			fishIds
 		} = this.state
 
 		console.log(this.state)
@@ -220,7 +266,118 @@ class RegisterScreen extends Component {
 								onChangeText={v => this.onChangeInput('confirmPassword', v)}
 							/>
 						</ContainerSection>
-						
+					</Container>
+					<Container>
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								PRODUK UNGGULAN
+							</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[0]}
+								onChangeText={text => this.querySuggestion(0, text)}
+								value={values[0]}
+							>
+							{
+								suggestions[0] && suggestions[0].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(0, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
+							}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[1]}
+								onChangeText={text => this.querySuggestion(1, text)}
+								value={values[1]}
+							>
+							{
+								suggestions[1] && suggestions[1].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(1, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
+							}
+							</AutoComplete>
+						</ContainerSection>	
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[2]}
+								onChangeText={text => this.querySuggestion(2, text)}
+								value={values[2]}
+							>
+							{
+								suggestions[2] && suggestions[2].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(2, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
+							}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[3]}
+								onChangeText={text => this.querySuggestion(3, text)}
+								value={values[3]}
+							>
+							{
+								suggestions[3] && suggestions[3].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(3, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
+							}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[4]}
+								onChangeText={text => this.querySuggestion(4, text)}
+								value={values[4]}
+							>
+							{
+								suggestions[4] && suggestions[4].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(4, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
+							}
+							</AutoComplete>
+						</ContainerSection>					
 					</Container>
 					<ContainerSection>
 						{this.renderButton()}
@@ -242,7 +399,15 @@ const styles = {
 		color: '#8e8e8e',
 		flex: 1,
 		paddingLeft: 5
-	}
+	},
+	containerItemAutoSelect: {
+		borderBottomWidth: 1, 
+		padding: 10,
+		justifyContent: 'flex-start',
+		flexDirection: 'row',
+		borderColor: '#ddd',
+		position: 'relative'
+	},
 }
 
 export default RegisterScreen

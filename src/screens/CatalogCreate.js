@@ -1,14 +1,48 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, Image, KeyboardAvoidingView } from 'react-native'
+import { ScrollView, Text, KeyboardAvoidingView, Keyboard } from 'react-native'
+import axios from 'axios'
 import { Container, ContainerSection, Input, Button } from '../components/common'
+import AutoComplete from '../components/AutoComplete'
+import Constants from '../constants'
 
 class CatalogCreate extends Component {
 	static navigationOptions = {
 		title: 'Tambah Katalog'
 	}
 
+	constructor(props) {
+		super(props);
+	
+		this.state = {
+			suggestions: []
+		}
+	}
+
+	createCatalog = () => {
+		Keyboard.dismiss()
+		this.props.navigation.navigate('CatalogList')
+	}
+
+	querySuggestion = (text) => {
+		axios.get(`${Constants.BASE_URL}/fishes/search?key=${text}`, {
+			headers: {'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNCwibmFtZSI6ImFyaWYiLCJlbWFpbCI6ImFyaWZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMxMjMiLCJwaG9uZSI6IjA4MjExMTEyMjEiLCJwaG90byI6bnVsbCwiYWRkcmVzcyI6ImFsZGlyb24iLCJyb2xlIjoic3VwcGxpZXIiLCJwb2ludEFtb3VudCI6MCwiaWROdW1iZXIiOiIzMjQ3MDI0NDQiLCJvcmdhbml6YXRpb24iOiJtaXRyYSBrYXNpaCIsInR5cGVPcmdhbml6YXRpb24iOiJwdCIsImFjdGl2ZSI6ZmFsc2UsInZlcmlmeSI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiJ9LCJpYXQiOjE1MTU0OTExNDYsImV4cCI6MTUxNjA5NTk0Nn0.3X3XEV50K2vEZXsvd-BaXc8ElHE8qj2i_N-n-x9stUM'}
+		})
+		.then(response => {
+			res = response.data.data
+			this.setState({suggestions: res})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
+	}
+
 	render() {
-		const { navigate } = this.props.navigation
+		const { suggestions } = this.state
 
 		return (
 			<KeyboardAvoidingView
@@ -21,8 +55,10 @@ class CatalogCreate extends Component {
 				>
 					<Container>
 						<ContainerSection>
-							<Input
+							<AutoComplete
 								label="Nama Komoditas"
+								suggestions={suggestions}
+								onChangeText={text => this.querySuggestion(text)}
 							/>
 						</ContainerSection>
 						<ContainerSection>
@@ -49,15 +85,17 @@ class CatalogCreate extends Component {
 								placeholder="Harga Max"
 							/>
 						</ContainerSection>
-						<ContainerSection>
-							<Image 
-								style={styles.imageStyle}
-								source={{ uri: 'http://pasarlaut.com/wp-content/uploads/2016/08/cakalang-842x474.jpg' }} 
-							/>
-						</ContainerSection>
+						{
+							// <ContainerSection>
+							// 	<Image 
+							// 		style={styles.imageStyle}
+							// 		source={{ uri: 'http://pasarlaut.com/wp-content/uploads/2016/08/cakalang-842x474.jpg' }} 
+							// 	/>
+							// </ContainerSection>
+						}
 					</Container>
 					<ContainerSection>
-						<Button onPress={() => navigate('CatalogList')}>
+						<Button onPress={this.createCatalog}>
 							Tambah
 						</Button>
 					</ContainerSection>

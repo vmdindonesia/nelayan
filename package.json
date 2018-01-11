@@ -23,6 +23,7 @@
     "axios": "^0.17.1",
     "expo": "^23.0.4",
     "react": "16.0.0",
+    "react-autosuggest": "^9.3.2",
     "react-native": "0.50.3",
     "react-native-action-button": "^2.8.3",
     "react-native-elements": "^0.18.5",

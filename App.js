@@ -4,6 +4,7 @@ import AuthScreen from './src/screens/AuthScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
 import CatalogList from './src/screens/CatalogList'
 import CatalogCreate from './src/screens/CatalogCreate'
+import HomeScreen from './src/screens/HomeScreen'
 
 // Routes
 const Routes = StackNavigator({
@@ -11,6 +12,7 @@ const Routes = StackNavigator({
   Register: { screen: RegisterScreen },
   CatalogList: { screen: CatalogList },
   CatalogCreate: { screen: CatalogCreate },
+  HomeScreen: { screen: HomeScreen },
 }, {
   cardStyle: { backgroundColor: '#fff' },
   navigationOptions: { headerStyle: { marginTop: Expo.Constants.statusBarHeight } }
