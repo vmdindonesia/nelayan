@@ -25,8 +25,6 @@ class Login extends Component {
 
 	onLoginComplete(props) {
 		if (props.user.token) {
-			Keyboard.dismiss()
-
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
@@ -42,10 +40,22 @@ class Login extends Component {
 	}
 
 	login = () => {
+		Keyboard.dismiss()
+
 		const { email, password } = this.state
 		//To do: validate
 		
 		this.props.login(email, password)
+	}
+
+	renderError = () => {
+		if (this.props.user.error) {
+			return (
+				<Text style={styles.errorTextStyle}>
+					{this.props.user.error}
+				</Text>
+			)
+		}
 	}
 
 	renderButton = () => {
@@ -82,6 +92,9 @@ class Login extends Component {
 							value={password}
 						/>
 					</ContainerSection>
+
+					{this.renderError()}
+
 					<ContainerSection>
 						{this.renderButton()}
 					</ContainerSection>
@@ -103,6 +116,10 @@ const styles = {
 	container: {
 		marginTop: 100,
 		justifyContent: 'center'
+	},
+	errorTextStyle: {
+		textAlign: 'center',
+		color: 'red'
 	}
 }
 
