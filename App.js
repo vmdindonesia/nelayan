@@ -8,11 +8,11 @@ import HomeScreen from './src/screens/HomeScreen'
 
 // Routes
 const Routes = StackNavigator({
+  HomeScreen: { screen: HomeScreen },
   Login: { screen: AuthScreen },
   Register: { screen: RegisterScreen },
   CatalogList: { screen: CatalogList },
   CatalogCreate: { screen: CatalogCreate },
-  HomeScreen: { screen: HomeScreen },
 }, {
   cardStyle: { backgroundColor: '#fff' },
   navigationOptions: { headerStyle: { marginTop: Expo.Constants.statusBarHeight } }

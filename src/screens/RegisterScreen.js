@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import Constants from '../constants'
@@ -78,7 +79,15 @@ class RegisterScreen extends Component {
 
 	register = () => {
 		Keyboard.dismiss()
-		this.props.navigation.navigate('HomeScreen')
+
+		// for testing
+		const resetAction = NavigationActions.reset({
+			index: 0,
+			actions: [
+				NavigationActions.navigate({ routeName: 'HomeScreen'})
+			]
+		})
+		this.props.navigation.dispatch(resetAction)
 
 		this.setState({loading: true})
 

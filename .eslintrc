@@ -7,6 +7,7 @@
 		"no-undef": 0,
 		"no-unused-vars": 1,
 		"object-curly-spacing": 0,
-		"brace-style": 0
+		"brace-style": 0,
+		global-require: 0
 	}
 }
