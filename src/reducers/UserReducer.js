@@ -1,7 +1,8 @@
 import {
 	USER_LOADING,
 	USER_LOGIN_SUCCESS,
-	USER_LOGIN_FAIL
+	USER_LOGIN_FAIL,
+	USER_LOGOUT,
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -12,7 +13,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	console.log(action)
-	
+
 	switch (action.type) {
 		case USER_LOADING:
 			return {...state, loading: true, error: ''}
@@ -20,6 +21,8 @@ export default (state = INITIAL_STATE, action) => {
 			return {...state, loading: false, token: action.payload, error: ''}
 		case USER_LOGIN_FAIL:
 			return {...state, loading: false, error: action.payload}
+		case USER_LOGOUT:
+			return {...state, token: ''}
 		default:
 			return state
 	}

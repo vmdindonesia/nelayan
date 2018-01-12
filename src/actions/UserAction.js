@@ -3,7 +3,8 @@ import { BASE_URL } from '../constants'
 import {
 	USER_LOADING,
 	USER_LOGIN_SUCCESS,
-	USER_LOGIN_FAIL
+	USER_LOGIN_FAIL,
+	USER_LOGOUT,
 } from './types'
 
 export const login = (email, password) => {
@@ -15,6 +16,12 @@ export const login = (email, password) => {
 		axios.post(`${BASE_URL}/login`, data)
 		.then(response => loginSuccess(dispatch, response))
 		.catch(error => loginFail(dispatch, error))
+	}
+}
+
+export const logout = () => {
+	return {
+    type: USER_LOGOUT
 	}
 }
 
