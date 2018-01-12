@@ -97,7 +97,7 @@ class RegisterScreen extends Component {
 		.then(response => {
 			console.log(response)
 			if (response.status === 200) {
-				this.props.navigation.navigate('CatalogList')
+				this.props.navigation.navigate('HomeScreen')
 			}
 			else {
 				alert(response.data.message)

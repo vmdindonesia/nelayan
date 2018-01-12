@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableNativeFeedback } from 'react-native'
-import { Card } from '../components/common'
+import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 
 class HomeScreen extends Component {
 	static navigationOptions = {
@@ -24,19 +23,21 @@ class HomeScreen extends Component {
 						/>
 					</View>
 					<Text style={profileName}>Suhardi Suharman</Text>
-					<View style={{ flexDirection: 'row', marginTop: 10}}>
-						<View style={{flex: 1}}>
-							<Image 
-								style={coin}
-								source={require('../../assets/coin.png')} 
-							/>
+					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
+						<View style={{ flexDirection: 'row', marginTop: 10}}>
+							<View style={{flex: 1}}>
+								<Image 
+									style={coin}
+									source={require('../../assets/coin.png')} 
+								/>
+							</View>
+							<Text style={point}>100</Text>
 						</View>
-						<Text style={point}>100</Text>
-					</View>
+					</TouchableWithoutFeedback>
 				</View>
 				<View style={menuContainerStyle}>
 					<View style={{flexDirection: 'row'}}>
-						<TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('Profil')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
@@ -45,7 +46,7 @@ class HomeScreen extends Component {
 								<Text style={{textAlign: 'center'}}>Profil</Text>
 							</View>
 						</TouchableNativeFeedback>
-						<TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('FishLogList')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
@@ -54,7 +55,7 @@ class HomeScreen extends Component {
 								<Text style={{textAlign: 'center'}}>Fish Log</Text>
 							</View>
 						</TouchableNativeFeedback>
-						<TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('TransactionList')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
@@ -65,7 +66,7 @@ class HomeScreen extends Component {
 						</TouchableNativeFeedback>
 					</View>
 					<View style={{flexDirection: 'row'}}>
-						<TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('RequestList')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
@@ -74,7 +75,7 @@ class HomeScreen extends Component {
 								<Text style={{textAlign: 'center'}}>Request</Text>
 							</View>
 						</TouchableNativeFeedback>
-						<TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('MemberList')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
@@ -83,7 +84,7 @@ class HomeScreen extends Component {
 								<Text style={{textAlign: 'center'}}>Anggota</Text>
 							</View>
 						</TouchableNativeFeedback>
-						<TouchableNativeFeedback>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('Information')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
