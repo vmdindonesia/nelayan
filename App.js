@@ -1,9 +1,14 @@
 import React from 'react'
 import { StackNavigator } from 'react-navigation'
-import AuthScreen from './src/screens/AuthScreen'
-import RegisterScreen from './src/screens/RegisterScreen'
-import CatalogCreate from './src/screens/CatalogCreate'
-import HomeScreen from './src/screens/HomeScreen'
+import { Provider } from 'react-redux'
+import ReduxThunk from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux'
+
+import reducers from './src/reducers'
+
+import Login from './src/screens/Login'
+import Register from './src/screens/Register'
+import Home from './src/screens/Home'
 
 import FishLogList from './src/screens/FishLogList'
 import Profil from './src/screens/Profil'
@@ -15,9 +20,9 @@ import Reward from './src/screens/Reward'
 
 // Routes
 const Routes = StackNavigator({
-  HomeScreen: { screen: HomeScreen },
-  Login: { screen: AuthScreen },
-  Register: { screen: RegisterScreen },
+  Home: { screen: Home },
+  Login: { screen: Login },
+  Register: { screen: Register },
 
   FishLogList: { screen: FishLogList },
   Profil: { screen: Profil },
@@ -27,7 +32,6 @@ const Routes = StackNavigator({
   Information: { screen: Information },
   Reward: { screen: Reward },
 
-  CatalogCreate: { screen: CatalogCreate },
 }, {
   cardStyle: { backgroundColor: '#fff' },
   navigationOptions: { headerStyle: { marginTop: Expo.Constants.statusBarHeight } }
@@ -36,8 +40,12 @@ const Routes = StackNavigator({
 
 export default class App extends React.Component {
   render() {
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
+
     return (
-      <Routes />
+      <Provider store={store}>
+        <Routes />
+      </Provider>
     )
   }
 }

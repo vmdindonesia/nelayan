@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 import { Container, ContainerSection, Input, Button } from '../components/common'
 
-class AuthScreen extends Component {
+class Login extends Component {
 	static navigationOptions = {
 		header: null
 	}
@@ -50,4 +50,4 @@ const styles = {
 	}
 }
 
-export default AuthScreen
+export default Login

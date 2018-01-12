@@ -6,7 +6,7 @@ import { Container, ContainerSection, Input, Button, Spinner } from '../componen
 import Constants from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
-class RegisterScreen extends Component {
+class Register extends Component {
 	static navigationOptions = {
 		title: 'Registrasi'
 	}
@@ -84,7 +84,7 @@ class RegisterScreen extends Component {
 		const resetAction = NavigationActions.reset({
 			index: 0,
 			actions: [
-				NavigationActions.navigate({ routeName: 'HomeScreen'})
+				NavigationActions.navigate({ routeName: 'Home'})
 			]
 		})
 		this.props.navigation.dispatch(resetAction)
@@ -97,7 +97,7 @@ class RegisterScreen extends Component {
 		.then(response => {
 			console.log(response)
 			if (response.status === 200) {
-				this.props.navigation.navigate('HomeScreen')
+				this.props.navigation.navigate('Home')
 			}
 			else {
 				alert(response.data.message)
@@ -419,4 +419,4 @@ const styles = {
 	},
 }
 
-export default RegisterScreen
+export default Register

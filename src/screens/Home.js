@@ -1,9 +1,23 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
+import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 
-class HomeScreen extends Component {
+class Home extends Component {
 	static navigationOptions = {
 		header: null
+	}
+
+	componentWillMount() {
+		if (!this.props.user.token || this.props.user.token === '') {
+			const resetAction = NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Login'})
+				]
+			})
+			this.props.navigation.dispatch(resetAction)
+		}
 	}
 
 	render() {
@@ -183,4 +197,10 @@ const styles = {
 	}
 }
 
-export default HomeScreen
+const mapStateToProps = (state) => {
+	const { user } = state
+
+	return { user }
+}
+
+export default connect(mapStateToProps)(Home)
