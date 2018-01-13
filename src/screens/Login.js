@@ -19,14 +19,12 @@ class Login extends Component {
 		}
 	}
 
-	componentWillReceiveProps() {
-		this.onLoginComplete()
+	componentWillReceiveProps(nextProps) {
+		this.onLoginComplete(nextProps)
 	}
 
-	async onLoginComplete() {
-		let token = await AsyncStorage.getItem('token')
-
-		if (token) {
+	onLoginComplete(props) {
+		if (props.user.token) {
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [

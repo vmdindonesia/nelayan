@@ -9,8 +9,8 @@ class Home extends Component {
 		header: null
 	}
 
-	async componentWillMount() {
-		let token = await AsyncStorage.getItem('token')
+	componentWillMount() {
+		const {token} = this.props.user
 
 		if (!token || token === '') {
 			const resetAction = NavigationActions.reset({
@@ -21,8 +21,6 @@ class Home extends Component {
 			})
 			this.props.navigation.dispatch(resetAction)
 		}
-
-		console.log(token, 'token bro')
 	}
 
 	render() {
@@ -121,7 +119,7 @@ class Home extends Component {
 							> Hubungi Aruna</Text>
 						</Text>
 					</View>
-					<TouchableWithoutFeedback onPress={() => this.props.logout(this.props.navigation.navigate('Login'))}>
+					<TouchableWithoutFeedback onPress={() => this.props.logout(() => this.props.navigation.navigate('Login'))}>
 						<View>
 							<Text style={{textAlign: 'center'}}>Logout</Text>
 						</View>
@@ -142,7 +140,7 @@ const styles = {
 		justifyContent: 'center',
 		alignSelf: 'center',
 		backgroundColor: '#56bde6',
-    width: '100%'
+		width: '100%'
 	},
 	menuContainerStyle: {
 		flex: 5,

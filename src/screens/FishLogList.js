@@ -1,18 +1,86 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-native'
+import { connect } from 'react-redux'
+import { fishLogsFetch } from '../actions'
 
 class FishLogList extends Component {
 	static navigationOptions = {
 		title: 'Fish Log'
 	}
 
-	render() {
+	componentWillMount() {
+		this.props.fishLogsFetch(this.props.user.token)	
+	}
+
+	renderItem = (item) => {
 		return (
-			<View>
-				<Text>FishLogList</Text>
-			</View>
+			<TouchableNativeFeedback>
+				<View style={styles.itemContainerStyle}>
+					<View style={styles.thumbnailContainerStyle}>
+						<Image 
+							style={styles.thumbnailStyle}
+							source={require('../../assets/ikan.jpg')} 
+						/>
+					</View>
+					<View style={styles.headerContentStyle}>
+						<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
+						<View style={{flexDirection: 'row'}}>
+							<Text style={{flex: 1}}>{item.size} Kg</Text>
+							<Text style={{flex: 1, textAlign: 'right'}}>Rp {item.price}</Text>
+						</View>
+						<Text>{item.createdAt}</Text>
+					</View>
+				</View>
+			</TouchableNativeFeedback>
+		)
+	}
+
+	render() {		
+		return (
+			<FlatList
+				data={this.props.fishLogs}
+				renderItem={({item}) => this.renderItem(item)}
+				keyExtractor={(item, index) => index}
+			/>
 		)
 	}
 }
 
-export default FishLogList
+const styles = {
+	itemContainerStyle: {
+		borderBottomWidth: 1, 
+		padding: 5,
+		justifyContent: 'flex-start',
+		flexDirection: 'row',
+		borderColor: '#ddd',
+	},
+	thumbnailContainerStyle: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		margin: 15,
+	},
+	thumbnailStyle: {
+		height: 100,
+		width: 100,
+		borderRadius: 5
+	},
+	headerContentStyle: {
+		flex: 1,
+		marginRight: 15,
+		marginTop: 5,
+		marginBottom: 10,
+		flexDirection: 'column',
+		justifyContent: 'space-around'
+	},
+	hedaerTextStyle: {
+		fontSize: 20,
+	}
+}
+
+const mapStateToProps = state => {
+	const { fishLogs, user } = state
+
+	return { fishLogs, user }
+}
+
+export default connect(mapStateToProps, {fishLogsFetch})(FishLogList)

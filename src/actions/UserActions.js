@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { AsyncStorage } from 'react-native'
 import { BASE_URL } from '../constants'
 import {
 	USER_LOADING,
 	USER_LOGIN_SUCCESS,
 	USER_LOGIN_FAIL,
+	USER_LOGOUT,
 } from './types'
 
 export const login = (email, password) => {
@@ -19,22 +19,26 @@ export const login = (email, password) => {
 	}
 }
 
-export const logout = (callback) => async dispatch => {
-	await AsyncStorage.setItem('token', '')
+export const logout = (callback) => {
 	callback()
+
+	return (dispatch) => {
+		dispatch({
+			type: USER_LOGOUT
+		})
+	}
 }
 
 const loading = (dispatch) => {
-  dispatch({
-    type: USER_LOADING
-  })
+	dispatch({
+		type: USER_LOADING
+	})
 }
 
-const loginSuccess = async (dispatch, response) => {
-	await AsyncStorage.setItem('token', response.data.token)
-	
+const loginSuccess = (dispatch, response) => {
 	dispatch({
-		type: USER_LOGIN_SUCCESS
+		type: USER_LOGIN_SUCCESS,
+		payload: response.data.token
 	})
 }
 
