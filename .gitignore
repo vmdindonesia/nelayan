@@ -6,6 +6,8 @@
 # dependencies
 /node_modules
 
+/src/constants.js
+
 # misc
 .env.local
 .env.development.local
