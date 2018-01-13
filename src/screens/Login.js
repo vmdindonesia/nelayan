@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Keyboard } from 'react-native'
+import { View, Text, Keyboard, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
@@ -19,12 +19,14 @@ class Login extends Component {
 		}
 	}
 
-	componentWillReceiveProps(nextProps) {
-		this.onLoginComplete(nextProps)
+	componentWillReceiveProps() {
+		this.onLoginComplete()
 	}
 
-	onLoginComplete(props) {
-		if (props.user.token) {
+	async onLoginComplete() {
+		let token = await AsyncStorage.getItem('token')
+
+		if (token) {
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [

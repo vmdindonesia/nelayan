@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
+import { AsyncStorage, View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
+import { logout } from '../actions'
 
 class Home extends Component {
 	static navigationOptions = {
 		header: null
 	}
 
-	componentWillMount() {
-		if (!this.props.user.token || this.props.user.token === '') {
+	async componentWillMount() {
+		let token = await AsyncStorage.getItem('token')
+
+		if (!token || token === '') {
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
@@ -18,6 +21,8 @@ class Home extends Component {
 			})
 			this.props.navigation.dispatch(resetAction)
 		}
+
+		console.log(token, 'token bro')
 	}
 
 	render() {
@@ -116,6 +121,11 @@ class Home extends Component {
 							> Hubungi Aruna</Text>
 						</Text>
 					</View>
+					<TouchableWithoutFeedback onPress={() => this.props.logout(this.props.navigation.navigate('Login'))}>
+						<View>
+							<Text style={{textAlign: 'center'}}>Logout</Text>
+						</View>
+					</TouchableWithoutFeedback>
 				</View>
 			</View>
 		)
@@ -203,4 +213,4 @@ const mapStateToProps = (state) => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps, {logout})(Home)
