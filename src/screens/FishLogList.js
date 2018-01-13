@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-native'
 import { connect } from 'react-redux'
+import ActionButton from 'react-native-action-button'
 import { fishLogsFetch } from '../actions'
 
 class FishLogList extends Component {
@@ -37,11 +38,19 @@ class FishLogList extends Component {
 
 	render() {		
 		return (
-			<FlatList
-				data={this.props.fishLogs}
-				renderItem={({item}) => this.renderItem(item)}
-				keyExtractor={(item, index) => index}
-			/>
+			<View style={{flex: 1}}>
+				<FlatList
+					data={this.props.fishLogs}
+					renderItem={({item}) => this.renderItem(item)}
+					keyExtractor={(item, index) => index}
+				/>
+
+				<ActionButton
+					buttonColor="rgba(231,76,60,1)"
+					onPress={() => this.props.navigation.navigate('FishLogCreate')}
+				/>
+
+			</View>
 		)
 	}
 }
