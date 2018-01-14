@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-native'
+import moment from 'moment'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
 import { fishLogsFetch } from '../actions'
@@ -31,7 +32,7 @@ class FishLogList extends Component {
 							<Text style={{flex: 1}}>{item.size} Kg</Text>
 							<Text style={{flex: 1, textAlign: 'right'}}>Rp {item.price}</Text>
 						</View>
-						<Text>{item.createdAt}</Text>
+						<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 					</View>
 				</View>
 			</TouchableNativeFeedback>
