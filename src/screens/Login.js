@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Keyboard, AsyncStorage } from 'react-native'
+import { View, Text, Keyboard, Image } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
@@ -73,10 +73,19 @@ class Login extends Component {
 	render() {
 		const { navigate } = this.props.navigation
 		const { email, password } = this.state
+		console.log(this.state)
 
 		return (
 			<View style={styles.container}>
 				<Container>
+					<ContainerSection>
+						<View style={{flex: 1, marginBottom: 30}}>
+							<Image
+								style={{alignSelf: 'center'}}
+								source={require('../../assets/logo.png')} 
+							/>
+						</View>
+					</ContainerSection>
 					<ContainerSection>
 						<Input
 							label='Email'

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 import AutoComplete from '../components/AutoComplete'
@@ -15,10 +15,11 @@ class Register extends Component {
 		super(props)
 	
 		this.state = {
-			typeOrganization: 'Kelompok Nelayan',
+			organizationType: 'Kelompok Nelayan',
 			organization: '',
-			address: '',
 			cityId: '',
+			subDistrict: '',
+			village: '',
 
 			name: '',
 			idNumber: '',
@@ -30,18 +31,18 @@ class Register extends Component {
 			loading: false,
 			suggestions: [],
 			values: [],
-			fishIds: [],
+			FishIds: [],
 		}
 	}
 
 	onItemSelected = (index, item) => {
-		const { fishIds, values } = this.state
-		fishIds[index] = item.id
+		const { FishIds, values } = this.state
+		FishIds[index] = item.id
 		values[index] = item.name
 
 		this.setState({
 			suggestions: [],
-			fishIds,
+			FishIds,
 			values
 		})
 	}
@@ -79,25 +80,22 @@ class Register extends Component {
 
 	register = () => {
 		Keyboard.dismiss()
-
-		// for testing
-		const resetAction = NavigationActions.reset({
-			index: 0,
-			actions: [
-				NavigationActions.navigate({ routeName: 'Home'})
-			]
-		})
-		this.props.navigation.dispatch(resetAction)
-
 		this.setState({loading: true})
 
 		const data = this.state
 
 		axios.post(`${BASE_URL}/register-supplier`, data)
 		.then(response => {
-			console.log(response)
+			console.log(response.status)
 			if (response.status === 200) {
-				this.props.navigation.navigate('Home')
+				const resetAction = NavigationActions.reset({
+					index: 0,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Login'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
 			}
 			else {
 				alert(response.data.message)
@@ -142,10 +140,10 @@ class Register extends Component {
 
 	render() {
 		const { 
-			typeOrganization,
-			organization,
-			address,
+			organizationType,
 			cityId,
+			subDistrict,
+			village,
 
 			name,
 			idNumber,
@@ -154,10 +152,8 @@ class Register extends Component {
 			password,
 			confirmPassword,
 
-			loading,
 			suggestions,
 			values,
-			fishIds
 		} = this.state
 
 		console.log(this.state)
@@ -184,28 +180,14 @@ class Register extends Component {
 								<View style={styles.pickerStyle}>
 									<Picker
 										style={{ flex: 1 }}
-										selectedValue={typeOrganization}
-										onValueChange={v => this.onChangeInput('typeOrganization', v)}
+										selectedValue={organizationType}
+										onValueChange={v => this.onChangeInput('organizationType', v)}
 									>
 										<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
 										<Picker.Item label="Personal" value="Personal" />
 									</Picker>
 								</View>
 							</View>
-						</ContainerSection>
-						<ContainerSection>
-							<Input
-								label='Desa/Kelurahan'
-								placeholder='contoh: Antapani'
-								value={address}
-								onChangeText={v => this.onChangeInput('address', v)}
-							/>
-						</ContainerSection>
-						<ContainerSection>
-							<Input
-								label='Kecamatan'
-								placeholder='contoh: Antapani Kidul'
-							/>
 						</ContainerSection>
 						<ContainerSection>
 							<View style={styles.pickerContainer}>
@@ -222,6 +204,22 @@ class Register extends Component {
 									</Picker>
 								</View>
 							</View>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Kecamatan'
+								placeholder='contoh: Antapani'
+								value={subDistrict}
+								onChangeText={v => this.onChangeInput('subDistrict', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Desa/Kelurahan'
+								placeholder='contoh: Antapani Kidul'
+								value={village}
+								onChangeText={v => this.onChangeInput('village', v)}
+							/>
 						</ContainerSection>
 					</Container>
 
@@ -247,6 +245,16 @@ class Register extends Component {
 								value={idNumber}
 								onChangeText={v => this.onChangeInput('idNumber', v)}
 							/>
+						</ContainerSection>
+						<Text style={styles.pickerTextStyle}>Upload Foto KTP</Text>
+						<ContainerSection>
+							<TouchableWithoutFeedback>
+								<View style={{flex: 1, padding: 8}}>
+									<Image
+										source={require('../../assets/uploader-ktp.png')} 
+									/>
+								</View>
+							</TouchableWithoutFeedback>
 						</ContainerSection>
 						<ContainerSection>
 							<Input
