@@ -3,7 +3,7 @@ import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import Constants from '../constants'
+import { BASE_URL } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
 class Register extends Component {
@@ -56,7 +56,7 @@ class Register extends Component {
 
 		this.setState({values})
 
-		axios.get(`${Constants.BASE_URL}/fishes/search?key=${text}`, {
+		axios.get(`${BASE_URL}/fishes/search?key=${text}`, {
 			headers: {'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNCwibmFtZSI6ImFyaWYiLCJlbWFpbCI6ImFyaWZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMxMjMiLCJwaG9uZSI6IjA4MjExMTEyMjEiLCJwaG90byI6bnVsbCwiYWRkcmVzcyI6ImFsZGlyb24iLCJyb2xlIjoic3VwcGxpZXIiLCJwb2ludEFtb3VudCI6MCwiaWROdW1iZXIiOiIzMjQ3MDI0NDQiLCJvcmdhbml6YXRpb24iOiJtaXRyYSBrYXNpaCIsInR5cGVPcmdhbml6YXRpb24iOiJwdCIsImFjdGl2ZSI6ZmFsc2UsInZlcmlmeSI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiJ9LCJpYXQiOjE1MTU0OTExNDYsImV4cCI6MTUxNjA5NTk0Nn0.3X3XEV50K2vEZXsvd-BaXc8ElHE8qj2i_N-n-x9stUM'}
 		})
 		.then(response => {
@@ -93,7 +93,7 @@ class Register extends Component {
 
 		const data = this.state
 
-		axios.post(`${Constants.BASE_URL}/register-supplier`, data)
+		axios.post(`${BASE_URL}/register-supplier`, data)
 		.then(response => {
 			console.log(response)
 			if (response.status === 200) {
@@ -179,15 +179,19 @@ class Register extends Component {
 							</Text>
 						</ContainerSection>
 						<ContainerSection>
-							<Text style={styles.pickerTextStyle}>Jenis Supplier</Text>
-							<Picker
-								style={{ flex: 1 }}
-								selectedValue={typeOrganization}
-								onValueChange={v => this.onChangeInput('typeOrganization', v)}
-							>
-								<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
-								<Picker.Item label="Personal" value="Personal" />
-							</Picker>
+							<View style={styles.pickerContainer}>
+								<Text style={styles.pickerTextStyle}>Jenis Nelayan</Text>
+								<View style={styles.pickerStyle}>
+									<Picker
+										style={{ flex: 1 }}
+										selectedValue={typeOrganization}
+										onValueChange={v => this.onChangeInput('typeOrganization', v)}
+									>
+										<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
+										<Picker.Item label="Personal" value="Personal" />
+									</Picker>
+								</View>
+							</View>
 						</ContainerSection>
 						<ContainerSection>
 							<Input
@@ -204,16 +208,20 @@ class Register extends Component {
 							/>
 						</ContainerSection>
 						<ContainerSection>
-							<Text style={styles.pickerTextStyle}>Kota/Kabupaten</Text>
-							<Picker
-								style={{ flex: 1 }}
-								selectedValue={cityId}
-								onValueChange={v => this.onChangeInput('cityId', v)}
-							>
-								<Picker.Item label="- Pilih Kota/Kabupaten" value="" />
-								<Picker.Item label="Jakarta" value="1" />
-								<Picker.Item label="Pangandaran" value="2" />
-							</Picker>
+							<View style={styles.pickerContainer}>
+								<Text style={styles.pickerTextStyle}>Kota/Kabupaten</Text>
+								<View style={styles.pickerStyle}>
+									<Picker
+										style={{ flex: 1 }}
+										selectedValue={cityId}
+										onValueChange={v => this.onChangeInput('cityId', v)}
+									>
+										<Picker.Item label="- Pilih Kota/Kabupaten" value="" />
+										<Picker.Item label="Jakarta" value="1" />
+										<Picker.Item label="Pangandaran" value="2" />
+									</Picker>
+								</View>
+							</View>
 						</ContainerSection>
 					</Container>
 
@@ -284,7 +292,7 @@ class Register extends Component {
 						</ContainerSection>
 						<ContainerSection>
 							<AutoComplete
-								label="Nama Komoditas"
+								label="Nama Komoditas 1"
 								suggestions={suggestions[0]}
 								onChangeText={text => this.querySuggestion(0, text)}
 								value={values[0]}
@@ -305,7 +313,7 @@ class Register extends Component {
 						</ContainerSection>
 						<ContainerSection>
 							<AutoComplete
-								label="Nama Komoditas"
+								label="Nama Komoditas 2"
 								suggestions={suggestions[1]}
 								onChangeText={text => this.querySuggestion(1, text)}
 								value={values[1]}
@@ -326,7 +334,7 @@ class Register extends Component {
 						</ContainerSection>	
 						<ContainerSection>
 							<AutoComplete
-								label="Nama Komoditas"
+								label="Nama Komoditas 3"
 								suggestions={suggestions[2]}
 								onChangeText={text => this.querySuggestion(2, text)}
 								value={values[2]}
@@ -347,7 +355,7 @@ class Register extends Component {
 						</ContainerSection>
 						<ContainerSection>
 							<AutoComplete
-								label="Nama Komoditas"
+								label="Nama Komoditas 4"
 								suggestions={suggestions[3]}
 								onChangeText={text => this.querySuggestion(3, text)}
 								value={values[3]}
@@ -368,7 +376,7 @@ class Register extends Component {
 						</ContainerSection>
 						<ContainerSection>
 							<AutoComplete
-								label="Nama Komoditas"
+								label="Nama Komoditas 5"
 								suggestions={suggestions[4]}
 								onChangeText={text => this.querySuggestion(4, text)}
 								value={values[4]}
@@ -404,9 +412,21 @@ const styles = {
 	headerStyle: {
 		marginLeft: 5
 	},
+	pickerContainer: {
+		flex: 1, 
+		height: 65,
+		marginBottom: 5
+	},
+	pickerStyle: {
+		flex: 1,
+		borderBottomWidth: 1,
+		borderColor: '#716c6c',
+		marginRight: 3,
+		marginLeft: 3,
+	},
 	pickerTextStyle: {
 		color: '#8e8e8e',
-		flex: 1,
+		fontSize: 16,
 		paddingLeft: 5
 	},
 	containerItemAutoSelect: {

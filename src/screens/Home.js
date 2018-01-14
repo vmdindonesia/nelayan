@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AsyncStorage, View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { logout } from '../actions'
