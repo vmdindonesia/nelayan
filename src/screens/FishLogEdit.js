@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import { View, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, BackHandler } from 'react-native'
-import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
+import axios from 'axios'
 import { BASE_URL } from '../constants'
+import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 
-class FishLogCreate extends Component {
+class FishLogEdit extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: 'Tambah Fishlog',
+		title: 'Ubah Fishlog',
 		headerLeft: 
 			<TouchableNativeFeedback
 				onPress={() => 
@@ -15,7 +15,7 @@ class FishLogCreate extends Component {
 						if (navigation.state.params && navigation.state.params.change) {
 							Alert.alert(
 								'',
-								'Yakin batal mengisi fishlog?',
+								'Yakin batal mengubah fishlog?',
 								[
 									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 									{text: 'Ya', onPress: () => navigation.goBack()},
@@ -40,22 +40,38 @@ class FishLogCreate extends Component {
 	
 		this.state = {
 			loading: false,
-			UserId: '1',
-			FishId: '1',
-			size: '',
-			quantity: '',
-			price: '',
-			photo: 'ikan.jpg',
-			change: false
+			data: {},
 		}
+	}
+
+	componentWillMount() {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		
+		axios.get(`${BASE_URL}/fishlogs/${id}`, {
+			headers: {'x-access-token': token}
+		})
+		.then(response => {
+			this.setState({data: response.data.data})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
 	}
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
-			if (this.state.change === true) {
+			const { params } = this.props.navigation.state
+			
+			if (params && params.change === true) {
 				Alert.alert(
 					'',
-					'Yakin batal mengisi fishlog?',
+					'Yakin batal mengubah fishlog?',
 					[
 						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 						{text: 'Ya', onPress: () => this.props.navigation.goBack()},
@@ -68,22 +84,22 @@ class FishLogCreate extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({
-			[name]: v,
-			change: true
-		})
+		const { data } = this.state
+		data[name] = v
+		this.setState({data})
 
 		this.props.navigation.setParams({change: true})
 	}
 
 	onSubmit = () => {
+		let id = this.props.navigation.state.params.id
+		let { data } = this.state
+		let token = this.props.user.token
+
 		Keyboard.dismiss()
 		this.setState({loading: true})
 
-		const data = this.state
-		let token = this.props.user.token
-
-		axios.post(`${BASE_URL}/fishlogs`, data, {
+		axios.put(`${BASE_URL}/fishlogs/${id}`, data, {
 			headers: {'x-access-token': token}
 		})
 		.then(response => {
@@ -98,6 +114,7 @@ class FishLogCreate extends Component {
 			this.setState({loading: false})
 		})
 		.catch(error => {
+			console.log(error.response)
 			if (error.response) {
 				alert(error.response.data.message)
 			}
@@ -119,7 +136,7 @@ class FishLogCreate extends Component {
 				onPress={
 					() => Alert.alert(
 						'',
-						'Yakin sudah mengisi informasi dengan benar?',
+						'Yakin ingin merubah data?',
 						[
 							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 							{text: 'Ya', onPress: () => this.onSubmit()},
@@ -133,15 +150,8 @@ class FishLogCreate extends Component {
 	}
 
 	render() {
-		console.log(this.props.navigation.state.params)
-		const {
-			UserId,
-			FishId,
-			size,
-			quantity,
-			price,
-			photo
-		} = this.state
+		const { data } = this.state
+			console.log(this.state)
 
 		return (
 			<View>
@@ -150,14 +160,14 @@ class FishLogCreate extends Component {
 						<Text style={{color: '#8e8e8e', paddingLeft: 5, fontSize: 16}}>Tanggal</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>02/01/2018</Text>
+						<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>{data.createdAt}</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
 							<Text style={styles.pickerTextStyle}>Komoditas</Text>
 							<View style={styles.pickerStyle}>
 								<Picker
-									selectedValue={FishId}
+									selectedValue={data.FishId && data.FishId.toString()}
 									onValueChange={v => this.onChangeInput('FishId', v)}
 								>
 									<Picker.Item label="Tongkol" value="1" />
@@ -170,14 +180,14 @@ class FishLogCreate extends Component {
 						<Input
 							label="Jumlah"
 							keyboardType="numeric"
-							value={quantity}
+							value={data.quantity && data.quantity.toString()}
 							onChangeText={v => this.onChangeInput('quantity', v)}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
 						<Input
 							label="Ukuran"
 							keyboardType="numeric"
-							value={size}
+							value={data.size && data.size.toString()}
 							onChangeText={v => this.onChangeInput('size', v)}
 						/>
 						<Text style={styles.unitStyle}>Cm</Text>
@@ -186,7 +196,7 @@ class FishLogCreate extends Component {
 						<Input
 							label="Harga/Kg"
 							keyboardType="numeric"
-							value={price}
+							value={data.price && data.price.toString()}
 							onChangeText={v => this.onChangeInput('price', v)}
 						/>
 					</ContainerSection>
@@ -232,4 +242,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(FishLogCreate)
+export default connect(mapStateToProps)(FishLogEdit)

@@ -11,7 +11,7 @@ import Register from './src/screens/Register'
 import Home from './src/screens/Home'
 
 import FishLogList from './src/screens/FishLogList'
-import FishLogDetail from './src/screens/FishLogDetail'
+import FishLogEdit from './src/screens/FishLogEdit'
 import FishLogCreate from './src/screens/FishLogCreate'
 import Profil from './src/screens/Profil'
 import TransactionList from './src/screens/TransactionList'
@@ -27,7 +27,7 @@ const Routes = StackNavigator({
   Register: { screen: Register },
 
   FishLogList: { screen: FishLogList },
-  FishLogDetail: { screen: FishLogDetail },
+  FishLogEdit: { screen: FishLogEdit },
   FishLogCreate: { screen: FishLogCreate },
   
   Profil: { screen: Profil },

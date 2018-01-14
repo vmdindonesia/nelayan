@@ -16,7 +16,7 @@ class FishLogList extends Component {
 	renderItem = (item) => {
 		return (
 			<TouchableNativeFeedback 
-				onPress={() => this.props.navigation.navigate('FishLogDetail', {id: item.id})}
+				onPress={() => this.props.navigation.navigate('FishLogEdit', {id: item.id})}
 			>
 				<View style={styles.itemContainerStyle}>
 					<View style={styles.thumbnailContainerStyle}>
