@@ -10,7 +10,7 @@ class FishLogList extends Component {
 	}
 
 	componentWillMount() {
-		this.props.fishLogsFetch(this.props.user.token)	
+		this.props.fishLogsFetch(this.props.user.token)
 	}
 
 	renderItem = (item) => {

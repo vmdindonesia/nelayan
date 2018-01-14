@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { View, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, BackHandler } from 'react-native'
+import { View, ScrollView, Text, Picker, Keyboard, KeyboardAvoidingView, Alert, Image, TouchableNativeFeedback, BackHandler, TouchableWithoutFeedback } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 
@@ -18,7 +18,10 @@ class FishLogCreate extends Component {
 								'Yakin batal mengisi fishlog?',
 								[
 									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-									{text: 'Ya', onPress: () => navigation.goBack()},
+									{text: 'Ya', onPress: () => {
+										this.props.navigation.setParams({change: false})
+										navigation.goBack()
+									}},
 								]
 							)
 						}
@@ -52,6 +55,7 @@ class FishLogCreate extends Component {
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			const { params } = this.props.navigation.state
+			console.log(params)
 			
 			if (params && params.change === true) {
 				Alert.alert(
@@ -59,7 +63,10 @@ class FishLogCreate extends Component {
 					'Yakin batal mengisi fishlog?',
 					[
 						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-						{text: 'Ya', onPress: () => this.props.navigation.goBack()},
+						{text: 'Ya', onPress: () => {
+							this.props.navigation.setParams({change: false})
+							this.props.navigation.goBack()
+						}},
 					]
 				)
 
@@ -87,6 +94,7 @@ class FishLogCreate extends Component {
 		.then(response => {
 			console.log(response)
 			if (response.status === 200) {
+				this.props.navigation.setParams({change: false})
 				this.props.navigation.navigate('FishLogList')
 			}
 			else {
@@ -142,57 +150,75 @@ class FishLogCreate extends Component {
 		} = this.state
 
 		return (
-			<View>
-				<Container>
-					<ContainerSection>
-						<Text style={{color: '#8e8e8e', paddingLeft: 5, fontSize: 16}}>Tanggal</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>02/01/2018</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Komoditas</Text>
-							<View style={styles.pickerStyle}>
-								<Picker
-									selectedValue={FishId}
-									onValueChange={v => this.onChangeInput('FishId', v)}
-								>
-									<Picker.Item label="Tongkol" value="1" />
-									<Picker.Item label="Tuna" value="2" />
-								</Picker>
+			<KeyboardAvoidingView
+				behavior="padding"
+				keyboardVerticalOffset={80}
+			>
+				<ScrollView 
+					keyboardShouldPersistTaps="always"
+				>
+					<Container>
+						<ContainerSection>
+							<TouchableWithoutFeedback>
+								<View style={{flex: 1, padding: 8}}>
+									<Image
+										style={{width: '100%'}}
+										source={require('../../assets/uploader.png')} 
+									/>
+								</View>
+							</TouchableWithoutFeedback>
+						</ContainerSection>
+						<ContainerSection>
+							<Text style={{color: '#8e8e8e', paddingLeft: 5, fontSize: 16}}>Tanggal</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>02/01/2018</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<View style={styles.pickerContainer}>
+								<Text style={styles.pickerTextStyle}>Komoditas</Text>
+								<View style={styles.pickerStyle}>
+									<Picker
+										selectedValue={FishId}
+										onValueChange={v => this.onChangeInput('FishId', v)}
+									>
+										<Picker.Item label="Tongkol" value="1" />
+										<Picker.Item label="Tuna" value="2" />
+									</Picker>
+								</View>
 							</View>
-						</View>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label="Jumlah"
-							keyboardType="numeric"
-							value={quantity}
-							onChangeText={v => this.onChangeInput('quantity', v)}
-						/>
-						<Text style={styles.unitStyle}>Kg</Text>
-						<Input
-							label="Ukuran"
-							keyboardType="numeric"
-							value={size}
-							onChangeText={v => this.onChangeInput('size', v)}
-						/>
-						<Text style={styles.unitStyle}>Cm</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label="Harga/Kg"
-							keyboardType="numeric"
-							value={price}
-							onChangeText={v => this.onChangeInput('price', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						{this.renderButton()}
-					</ContainerSection>
-				</Container>
-			</View>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label="Jumlah"
+								keyboardType="numeric"
+								value={quantity}
+								onChangeText={v => this.onChangeInput('quantity', v)}
+							/>
+							<Text style={styles.unitStyle}>Kg</Text>
+							<Input
+								label="Ukuran"
+								keyboardType="numeric"
+								value={size}
+								onChangeText={v => this.onChangeInput('size', v)}
+							/>
+							<Text style={styles.unitStyle}>Cm</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label="Harga/Kg"
+								keyboardType="numeric"
+								value={price}
+								onChangeText={v => this.onChangeInput('price', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							{this.renderButton()}
+						</ContainerSection>
+						<View style={{height: 100}} />
+					</Container>
+				</ScrollView>
+			</KeyboardAvoidingView>
 		)
 	}
 }
