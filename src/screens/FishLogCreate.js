@@ -46,13 +46,14 @@ class FishLogCreate extends Component {
 			quantity: '',
 			price: '',
 			photo: 'ikan.jpg',
-			change: false
 		}
 	}
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
-			if (this.state.change === true) {
+			const { params } = this.props.navigation.state
+			
+			if (params && params.change === true) {
 				Alert.alert(
 					'',
 					'Yakin batal mengisi fishlog?',
@@ -68,10 +69,7 @@ class FishLogCreate extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({
-			[name]: v,
-			change: true
-		})
+		this.setState({[name]: v})
 
 		this.props.navigation.setParams({change: true})
 	}
