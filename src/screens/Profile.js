@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL } from '../constants'
 import { Container, ContainerSection } from '../components/common'
 
-class Profil extends Component {
+class Profile extends Component {
 	static navigationOptions = {
 		title: 'Profil'
 	}
@@ -162,4 +162,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(Profil)
+export default connect(mapStateToProps)(Profile)

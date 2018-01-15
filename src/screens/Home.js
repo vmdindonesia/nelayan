@@ -54,7 +54,7 @@ class Home extends Component {
 				</View>
 				<View style={menuContainerStyle}>
 					<View style={{flexDirection: 'row'}}>
-						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('Profil')}>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('Profile')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
