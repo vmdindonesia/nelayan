@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { ScrollView, Text, Keyboard, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { BASE_URL } from '../constants'
 import AutoComplete from '../components/AutoComplete'
-import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback } from 'react-native'
-import { Card, CardSection, Container, ContainerSection, Button, Input, Spinner } from '../components/common'
+import { Container, ContainerSection, Button, Spinner } from '../components/common'
 
 class ProductForm extends Component {
 	static navigationOptions = {
@@ -45,7 +45,7 @@ class ProductForm extends Component {
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
-					NavigationActions.navigate({ routeName: 'Profile'})
+					NavigationActions.navigate({routeName: 'Profile'})
 				]
 			})
 			this.props.navigation.dispatch(resetAction)

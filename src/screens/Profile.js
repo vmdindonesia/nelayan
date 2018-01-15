@@ -92,7 +92,7 @@ class Profile extends Component {
 						</ContainerSection>
 					</Container>
 
-					<View>
+					<View style={{paddingBottom: 20}}>
 						<View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20}}>
 							<Text style={{fontWeight: 'bold', fontSize: 20}}>
 								Komoditas
