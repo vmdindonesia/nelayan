@@ -58,7 +58,7 @@ class Home extends Component {
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
-									source={require('../../assets/menuIcon.png')} 
+									source={require('../../assets/katalog.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Profil</Text>
 							</View>
@@ -67,7 +67,7 @@ class Home extends Component {
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
-									source={require('../../assets/menuIcon.png')} 
+									source={require('../../assets/fishlog.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Fish Log</Text>
 							</View>
@@ -76,7 +76,7 @@ class Home extends Component {
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
-									source={require('../../assets/menuIcon.png')} 
+									source={require('../../assets/transaksi.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Transaksi</Text>
 							</View>
@@ -87,7 +87,7 @@ class Home extends Component {
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
-									source={require('../../assets/menuIcon.png')} 
+									source={require('../../assets/permintaan.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Request</Text>
 							</View>
@@ -96,7 +96,7 @@ class Home extends Component {
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
-									source={require('../../assets/menuIcon.png')} 
+									source={require('../../assets/anggota.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Anggota</Text>
 							</View>
@@ -105,7 +105,7 @@ class Home extends Component {
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
-									source={require('../../assets/menuIcon.png')} 
+									source={require('../../assets/informasi.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Informasi</Text>
 							</View>
