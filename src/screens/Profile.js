@@ -56,7 +56,7 @@ class Profile extends Component {
 			labelStyle, dataStyle
 		} = styles
 
-		const { data } = this.state
+		const { data, FishId, value } = this.state
 
 		console.log('render komponen')
 		return (
@@ -112,7 +112,7 @@ class Profile extends Component {
 											source={require('../../assets/ikan.jpg')} 
 										/>
 										<Text key={item.id}>{item.Fish && item.Fish.name}</Text>
-										<TouchableOpacity>
+										<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
 											<View style={{width: 35}}>
 												<Ionicons style={{marginLeft: 10}} name="md-create" size={24} color="black" />
 											</View>

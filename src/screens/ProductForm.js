@@ -9,7 +9,7 @@ import { Container, ContainerSection, Button, Spinner } from '../components/comm
 
 class ProductForm extends Component {
 	static navigationOptions = {
-		title: 'Tambah Katalog'
+		title: 'Pilih Komoditas'
 	}
 
 	constructor(props) {
@@ -20,6 +20,18 @@ class ProductForm extends Component {
 			suggestions: [],
 			value: '',
 			FishId: ''
+		}
+	}
+
+	componentWillMount() {
+		const { params } = this.props.navigation.state
+		console.log(params)
+
+		if (params && params.FishId !== '') {
+			this.setState({
+				value: params.value,
+				FishId: params.FishId
+			})
 		}
 	}
 
@@ -37,15 +49,24 @@ class ProductForm extends Component {
 
 		let token = this.props.user.token
 		const data = { FishId: this.state.FishId }
+		const { params } = this.props.navigation.state
 
-		axios.post(`${BASE_URL}/products`, data, {
+		const url = params ? `${BASE_URL}/products/${params.ProductId}` : `${BASE_URL}/products`
+
+		axios({
+			method: params ? 'put' : 'post',
+			url,
+			data,
 			headers: {'x-access-token': token}
 		})
 		.then(response => {
+			this.props.navigation.setParams({FishId: '', value: '', ProductId: ''})
+			
 			const resetAction = NavigationActions.reset({
-				index: 0,
+				index: 1,
 				actions: [
-					NavigationActions.navigate({routeName: 'Profile'})
+					NavigationActions.navigate({ routeName: 'Home'}),
+					NavigationActions.navigate({ routeName: 'Profile'})
 				]
 			})
 			this.props.navigation.dispatch(resetAction)
