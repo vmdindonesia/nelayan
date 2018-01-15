@@ -157,7 +157,6 @@ class FishLogEdit extends Component {
 
 	render() {
 		const { data } = this.state
-			console.log(this.state)
 
 		return (
 			<KeyboardAvoidingView
@@ -261,7 +260,6 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { user } = state
-
 	return { user }
 }
 

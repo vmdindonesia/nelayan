@@ -20,6 +20,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "^6.2.2",
     "axios": "^0.17.1",
     "expo": "^23.0.4",
     "install": "^0.10.2",

@@ -144,7 +144,6 @@ const styles = {
 	},
 	menuContainerStyle: {
 		flex: 5,
-		// flexDirection: 'row',
 		alignSelf: 'center',
 		paddingTop: 20
 	},
