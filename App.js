@@ -13,7 +13,9 @@ import Home from './src/screens/Home'
 import FishLogList from './src/screens/FishLogList'
 import FishLogEdit from './src/screens/FishLogEdit'
 import FishLogCreate from './src/screens/FishLogCreate'
+import ProductForm from './src/screens/ProductForm'
 import Profile from './src/screens/Profile'
+import ProfileEdit from './src/screens/ProfileEdit'
 import TransactionList from './src/screens/TransactionList'
 import RequestList from './src/screens/RequestList'
 import MemberList from './src/screens/MemberList'
@@ -29,8 +31,11 @@ const Routes = StackNavigator({
   FishLogList: { screen: FishLogList },
   FishLogEdit: { screen: FishLogEdit },
   FishLogCreate: { screen: FishLogCreate },
+
+  ProductForm: { screen: ProductForm },
   
   Profile: { screen: Profile },
+  ProfileEdit: { screen: ProfileEdit },
   TransactionList: { screen: TransactionList },
   RequestList: { screen: RequestList },
   MemberList: { screen: MemberList },

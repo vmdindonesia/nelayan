@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, ScrollView, Text, Picker, Keyboard, KeyboardAvoidingView, Alert, Image, TouchableWithoutFeedback,TouchableNativeFeedback, BackHandler } from 'react-native'
+import { View, ScrollView, Text, Picker, Keyboard, KeyboardAvoidingView, Alert, Image, TouchableWithoutFeedback, TouchableNativeFeedback, BackHandler } from 'react-native'
 import axios from 'axios'
 import { BASE_URL } from '../constants'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'

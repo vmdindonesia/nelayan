@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { ScrollView, View, Text, Image, Modal, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import ActionButton from 'react-native-action-button'
 import { Ionicons } from '@expo/vector-icons';
 import { BASE_URL } from '../constants'
-import { Container, ContainerSection } from '../components/common'
+import { Card, CardSection, Container, ContainerSection, Button, Input } from '../components/common'
+import AutoComplete from '../components/AutoComplete'
 
 class Profile extends Component {
 	static navigationOptions = {
@@ -18,10 +18,19 @@ class Profile extends Component {
 		this.state = {
 			loading: false,
 			data: {},
+			modalVisible: false,
+
+			suggestions: [],
+			value: '',
+			FishId: ''
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
+		this.getData()
+	}
+
+	getData = () => {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/profile`, {
@@ -49,9 +58,9 @@ class Profile extends Component {
 
 		const { data } = this.state
 
-
+		console.log('render komponen')
 		return (
-			<View style={containerStyle}>
+			<ScrollView style={containerStyle}>
 				<View style={headerHomeStyle}>
 					<View style={profileImageContainer}>
 						<Image 
@@ -83,30 +92,38 @@ class Profile extends Component {
 						</ContainerSection>
 					</Container>
 
-					<View style={{padding: 20}}>
-						<Text style={{fontWeight: 'bold', fontSize: 18, marginBottom: 10}}>Komoditas</Text>
-						<View style={{flexDirection: 'row'}}>
+					<View>
+						<View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20}}>
+							<Text style={{fontWeight: 'bold', fontSize: 20}}>
+								Komoditas
+							</Text>
+							<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm')}>
+								<View style={{width: 35}}>
+									<Ionicons style={{marginLeft: 10}} name="md-add" size={24} color="black" />
+								</View>
+							</TouchableOpacity>
+						</View>
+						<Card>
 							{
 								data.Products && data.Products.map(item =>
-									<View style={{marginRight: 10}} key={item.id}>
+									<CardSection key={item.id}>
 										<Image 
 											style={{width: 60, height: 60, borderRadius: 3}}
 											source={require('../../assets/ikan.jpg')} 
 										/>
 										<Text key={item.id}>{item.Fish && item.Fish.name}</Text>
-									</View> 
+										<TouchableOpacity>
+											<View style={{width: 35}}>
+												<Ionicons style={{marginLeft: 10}} name="md-create" size={24} color="black" />
+											</View>
+										</TouchableOpacity>
+									</CardSection>
 								)
 							}
-						</View>
+						</Card>
 					</View>
 				</View>
-
-				<ActionButton
-					buttonColor="rgba(231,76,60,1)"
-					onPress={() => console.log('hai')}
-					icon={<Ionicons name="md-create" size={24} color="white" />}
-				/>		
-			</View>
+			</ScrollView>
 		)
 	}
 }
@@ -120,7 +137,9 @@ const styles = {
 		justifyContent: 'center',
 		alignSelf: 'center',
 		backgroundColor: '#56bde6',
-		width: '100%'
+		width: '100%',
+		paddingTop: 20,
+		paddingBottom: 20
 	},
 	menuContainerStyle: {
 		flex: 5,
@@ -149,11 +168,6 @@ const styles = {
 	},
 	dataStyle: {
 		flex: 1
-	},
-	actionButtonIcon: {
-		fontSize: 20,
-		height: 22,
-		color: 'white',
 	},
 }
 
