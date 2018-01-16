@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
+import moment from 'moment'
 import { View, ScrollView, Text, Picker, Keyboard, KeyboardAvoidingView, Alert, Image, TouchableNativeFeedback, BackHandler, TouchableWithoutFeedback } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
@@ -93,22 +95,23 @@ class FishLogCreate extends Component {
 		})
 		.then(response => {
 			console.log(response)
-			if (response.status === 200) {
-				this.props.navigation.setParams({change: false})
-				this.props.navigation.navigate('FishLogList')
-			}
-			else {
-				alert(response.data.message)
-			}
+			this.props.navigation.setParams({change: false})
+
+			const resetAction = NavigationActions.reset({
+				index: 1,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Home'}),
+					NavigationActions.navigate({ routeName: 'FishLogList'})
+				]
+			})
+			this.props.navigation.dispatch(resetAction)
+	
 
 			this.setState({loading: false})
 		})
 		.catch(error => {
 			if (error.response) {
 				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
 			}
 
 			this.setState({loading: false})
@@ -172,7 +175,7 @@ class FishLogCreate extends Component {
 							<Text style={{color: '#8e8e8e', paddingLeft: 5, fontSize: 16}}>Tanggal</Text>
 						</ContainerSection>
 						<ContainerSection>
-							<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>02/01/2018</Text>
+							<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>{moment().format('DD/MM/YYYY')}</Text>
 						</ContainerSection>
 						<ContainerSection>
 							<View style={styles.pickerContainer}>
