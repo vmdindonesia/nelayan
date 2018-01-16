@@ -119,7 +119,17 @@ class Home extends Component {
 							> Hubungi Aruna</Text>
 						</Text>
 					</View>
-					<TouchableWithoutFeedback onPress={() => this.props.logout(() => this.props.navigation.navigate('Login'))}>
+					<TouchableWithoutFeedback 
+						onPress={() => this.props.logout(() => {
+							const resetAction = NavigationActions.reset({
+								index: 0,
+								actions: [
+									NavigationActions.navigate({ routeName: 'Login'})
+								]
+							})
+							this.props.navigation.dispatch(resetAction)
+						})}
+					>
 						<View>
 							<Text style={{textAlign: 'center'}}>Logout</Text>
 						</View>
