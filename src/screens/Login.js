@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Keyboard, Image } from 'react-native'
+import { View, Text, Keyboard, Image, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
@@ -25,6 +25,8 @@ class Login extends Component {
 
 	onLoginComplete(props) {
 		if (props.user.token) {
+			AsyncStorage.setItem('token', props.user.token).then(console.log('token tersimpan'))
+
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [

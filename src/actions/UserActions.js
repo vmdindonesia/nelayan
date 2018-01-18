@@ -1,10 +1,12 @@
 import axios from 'axios'
+import { AsyncStorage } from 'react-native'
 import { BASE_URL } from '../constants'
 import {
 	USER_LOADING,
 	USER_LOGIN_SUCCESS,
 	USER_LOGIN_FAIL,
 	USER_LOGOUT,
+	SET_USER_TOKEN
 } from './types'
 
 export const login = (email, password) => {
@@ -20,12 +22,21 @@ export const login = (email, password) => {
 }
 
 export const logout = (callback) => {
+	AsyncStorage.removeItem('token').then(console.log('token terhapus'))
+
 	callback()
 
 	return (dispatch) => {
 		dispatch({
 			type: USER_LOGOUT
 		})
+	}
+}
+
+export const setUserToken = (token) => {
+	return {
+		type: SET_USER_TOKEN,
+		payload: token
 	}
 }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, Image, Modal, TouchableOpacity } from 'react-native'
+import { ScrollView, View, Text, Image, TouchableOpacity, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons';

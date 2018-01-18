@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { logout } from '../actions'
+import { logout, setUserToken } from '../actions'
 
 class Home extends Component {
 	static navigationOptions = {
@@ -10,17 +10,23 @@ class Home extends Component {
 	}
 
 	componentWillMount() {
-		const {token} = this.props.user
+		// to do: check token expired
 
-		if (!token || token === '') {
-			const resetAction = NavigationActions.reset({
-				index: 0,
-				actions: [
-					NavigationActions.navigate({ routeName: 'Login'})
-				]
-			})
-			this.props.navigation.dispatch(resetAction)
-		}
+		AsyncStorage.getItem('token', (err, result) => {
+			console.log(result, 'Token');
+			if (!result || result === '') {
+				const resetAction = NavigationActions.reset({
+					index: 0,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Login'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+			} 
+			else {
+				this.props.setUserToken(result)
+			}
+		})
 	}
 
 	render() {
@@ -220,4 +226,4 @@ const mapStateToProps = (state) => {
 	return { user }
 }
 
-export default connect(mapStateToProps, {logout})(Home)
+export default connect(mapStateToProps, { logout, setUserToken })(Home)
