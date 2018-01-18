@@ -78,17 +78,6 @@ class Home extends Component {
 								<Text style={{textAlign: 'center'}}>Fish Log</Text>
 							</View>
 						</TouchableNativeFeedback>
-						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('TransactionList')}>
-							<View style={menuItemStyle}>
-								<Image 
-									style={menuIcon}
-									source={require('../../assets/transaksi.png')} 
-								/>
-								<Text style={{textAlign: 'center'}}>Transaksi</Text>
-							</View>
-						</TouchableNativeFeedback>
-					</View>
-					<View style={{flexDirection: 'row'}}>
 						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('RequestList')}>
 							<View style={menuItemStyle}>
 								<Image 
@@ -96,6 +85,17 @@ class Home extends Component {
 									source={require('../../assets/permintaan.png')} 
 								/>
 								<Text style={{textAlign: 'center'}}>Request</Text>
+							</View>
+						</TouchableNativeFeedback>
+					</View>
+					<View style={{flexDirection: 'row'}}>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('TransactionList')}>
+							<View style={menuItemStyle}>
+								<Image 
+									style={menuIcon}
+									source={require('../../assets/transaksi.png')} 
+								/>
+								<Text style={{textAlign: 'center'}}>Transaksi</Text>
 							</View>
 						</TouchableNativeFeedback>
 						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('MemberList')}>

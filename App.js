@@ -3,6 +3,7 @@ import { StackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
+import numeral from 'numeral'
 
 import reducers from './src/reducers'
 
@@ -21,6 +22,20 @@ import RequestList from './src/screens/RequestList'
 import MemberList from './src/screens/MemberList'
 import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
+
+numeral.register('locale', 'id', {
+  delimiters: {
+    thousands: '.',
+    decimal: ','
+  },
+  ordinal: function (number) {
+      return number === 1 ? 'er' : 'ème';
+  },
+  currency: {
+      symbol: 'Rp'
+  }
+})
+numeral.locale('id')
 
 // Routes
 const Routes = StackNavigator({

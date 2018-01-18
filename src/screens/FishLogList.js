@@ -3,6 +3,7 @@ import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-nati
 import moment from 'moment'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
+import numeral from 'numeral'
 import { fishLogsFetch } from '../actions'
 
 class FishLogList extends Component {
@@ -30,7 +31,7 @@ class FishLogList extends Component {
 						<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
 						<View style={{flexDirection: 'row'}}>
 							<Text style={{flex: 1}}>{item.size} Kg</Text>
-							<Text style={{flex: 1, textAlign: 'right'}}>Rp {item.price}</Text>
+							<Text style={{flex: 1, textAlign: 'right'}}>Rp {numeral(item.price).format('0,0')}</Text>
 						</View>
 						<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 					</View>
