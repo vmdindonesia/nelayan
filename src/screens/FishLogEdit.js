@@ -45,6 +45,7 @@ class FishLogEdit extends Component {
 	
 		this.state = {
 			loading: false,
+			loadingPage: true,
 			data: {},
 		}
 	}
@@ -57,7 +58,10 @@ class FishLogEdit extends Component {
 			headers: {token}
 		})
 		.then(response => {
-			this.setState({data: response.data.data})
+			this.setState({
+				data: response.data.data,
+				loadingPage: false
+			})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -66,6 +70,7 @@ class FishLogEdit extends Component {
 			else {
 				alert('Koneksi internet bermasalah')
 			}
+			this.setState({loadingPage: false})
 		})
 	}
 
@@ -161,7 +166,15 @@ class FishLogEdit extends Component {
 	}
 
 	render() {
-		const { data } = this.state
+		const { data, loadingPage } = this.state
+
+		if (loadingPage) {
+			return (
+				<View style={{flex: 1}}>
+					<Spinner size='large' />
+				</View>
+			)
+		}
 
 		return (
 			<ScrollView keyboardShouldPersistTaps="always">

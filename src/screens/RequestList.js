@@ -7,7 +7,7 @@ import { Card, CardSection, Spinner } from '../components/common'
 
 class RequestList extends Component {
 	static navigationOptions = {
-		title: 'Request'
+		title: 'Request List'
 	}
 
 	componentWillMount() {
@@ -16,22 +16,28 @@ class RequestList extends Component {
 
 	renderItem = (item) => {
 		return (
-			<Card>
-				<CardSection style={{flexDirection: 'row'}}>
-					<View style={{flexDirection: 'column', flex: 1}}>
-						<Image 
-							style={styles.thumbnailStyle}
-							source={require('../../assets/11.jpg')} 
-						/>
-					</View>
-					<View style={{justifyContent: 'space-around', flex: 2}}>
-						<Text style={styles.buyerName}>{item.BuyerId}</Text>
-						<Text style={styles.productName}>{item.Transaction.Fish.name} - {item.Transaction.quantity} Kg</Text>
-						<Text style={{textAlign: 'right'}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
-						<Text style={{textAlign: 'right'}}>{item.Status.name}</Text>
-					</View>
-				</CardSection>
-			</Card>
+			<TouchableNativeFeedback
+				onPress={() => this.props.navigation.navigate('RequestDetail', {id: item.id})}
+			>
+				<View>
+					<Card>
+						<CardSection style={{flexDirection: 'row'}}>
+							<View style={{flexDirection: 'column', flex: 1}}>
+								<Image 
+									style={styles.thumbnailStyle}
+									source={require('../../assets/11.jpg')} 
+								/>
+							</View>
+							<View style={{justifyContent: 'space-around', flex: 2}}>
+								<Text style={styles.buyerName}>{item.BuyerId}</Text>
+								<Text style={styles.productName}>{item.Transaction.Fish.name} - {item.Transaction.quantity} Kg</Text>
+								<Text style={{textAlign: 'right'}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
+								<Text style={{textAlign: 'right'}}>{item.Status.name}</Text>
+							</View>
+						</CardSection>
+					</Card>
+				</View>
+			</TouchableNativeFeedback>
 		)
 	}
 
