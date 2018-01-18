@@ -21,7 +21,7 @@ class FishLogEdit extends Component {
 								[
 									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 									{text: 'Ya', onPress: () => {
-										this.props.navigation.setParams({change: false})
+										navigation.setParams({change: false})
 										navigation.goBack()
 									}},
 								]

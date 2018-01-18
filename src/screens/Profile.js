@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { ScrollView, View, Text, Image, Modal, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
-// import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { BASE_URL } from '../constants'
 import { Card, CardSection, Container, ContainerSection, Button, Input } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
@@ -99,9 +99,7 @@ class Profile extends Component {
 							</Text>
 							<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm')}>
 								<View style={{width: 35}}>
-									{
-										// <Ionicons style={{marginLeft: 10}} name="md-add" size={24} color="black" />
-									}
+									<Icon style={{marginLeft: 10}} name="md-add" size={20} />
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -109,16 +107,14 @@ class Profile extends Component {
 							{
 								data.Products && data.Products.map(item =>
 									<CardSection key={item.id}>
-										<Image 
+										<Image
 											style={{width: 60, height: 60, borderRadius: 3}}
 											source={require('../../assets/ikan.jpg')} 
 										/>
 										<Text key={item.id}>{item.Fish && item.Fish.name}</Text>
 										<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
 											<View style={{width: 35}}>
-												{
-													// <Ionicons style={{marginLeft: 10}} name="md-create" size={24} color="black" />
-												}
+												<Icon style={{marginLeft: 10}} name="md-create" size={20} />
 											</View>
 										</TouchableOpacity>
 									</CardSection>
