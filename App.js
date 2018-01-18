@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
@@ -44,10 +44,9 @@ const Routes = StackNavigator({
 
 }, {
   cardStyle: { backgroundColor: '#fff' },
-  navigationOptions: { headerStyle: { marginTop: Expo.Constants.statusBarHeight } }
 })
 
-export default class App extends React.Component {
+export default class App extends Component<{}> {
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
 
@@ -58,3 +57,5 @@ export default class App extends React.Component {
     )
   }
 }
+
+

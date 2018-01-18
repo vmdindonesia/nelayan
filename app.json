@@ -1,12 +1,4 @@
 {
-  "expo": {
-  	"name": "Nelayan Aruna",
-  	"icon": "./assets/photo.png",
-  	"version": "1.0.0",
-  	"slug": "nelayan-aruna",
-    "sdkVersion": "23.0.0",
-    "android": {
-    	"package": "co.nusantech.app"
-    }
-  }
+  "name": "aruna_nelayan",
+  "displayName": "aruna_nelayan"
 }
