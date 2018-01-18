@@ -5,10 +5,19 @@ import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
 import numeral from 'numeral'
 import { fishLogsFetch } from '../actions'
+import { Spinner } from '../components/common'
 
 class FishLogList extends Component {
 	static navigationOptions = {
 		title: 'Fish Log'
+	}
+
+	constructor(props) {
+		super(props)
+	
+		this.state = {
+			loading: true,
+		}
 	}
 
 	componentWillMount() {
@@ -40,11 +49,19 @@ class FishLogList extends Component {
 		)
 	}
 
-	render() {		
+	render() {	
+		if (this.props.fishLogs.loading) {
+			return (
+				<View style={{flex: 1}}>
+					<Spinner size='large' />
+				</View>
+			)
+		}
+
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
-					data={this.props.fishLogs}
+					data={this.props.fishLogs.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
 				/>

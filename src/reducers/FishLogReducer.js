@@ -2,12 +2,15 @@ import {
 	FISHLOGS_FETCH_SUCCESS
 } from '../actions/types'
 
-const INITIAL_STATE = []
+const INITIAL_STATE = {
+	data: [],
+	loading: true
+}
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case FISHLOGS_FETCH_SUCCESS:
-			return action.payload
+			return {...state, data: action.payload, loading: false}
 		default:
 			return state
 	}

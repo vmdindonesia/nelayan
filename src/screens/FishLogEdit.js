@@ -164,9 +164,7 @@ class FishLogEdit extends Component {
 		const { data } = this.state
 
 		return (
-			<ScrollView 
-				keyboardShouldPersistTaps="always"
-			>
+			<ScrollView keyboardShouldPersistTaps="always">
 				<Container>
 					<ContainerSection>
 						<TouchableWithoutFeedback>

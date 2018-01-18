@@ -153,7 +153,7 @@ class FishLogCreate extends Component {
 		} = this.state
 
 		return (
-			<ScrollView>
+			<ScrollView keyboardShouldPersistTaps="always">
 				<Container>
 					<ContainerSection>
 						<TouchableWithoutFeedback>
