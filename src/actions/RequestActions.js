@@ -1,16 +1,16 @@
 import axios from 'axios'
 import { BASE_URL } from '../constants'
 import {
-	FISHLOGS_FETCH_SUCCESS
+	REQUESTS_FETCH_SUCCESS
 } from './types'
 
-export const fishLogsFetch = (token) => async (dispatch) => {
-	axios.get(`${BASE_URL}/fishlogs`, {
+export const requestsFetch = (token) => async (dispatch) => {
+	axios.get(`${BASE_URL}/supplier/requests`, {
 		headers: {token}
 	})
 	.then(response => {
 		dispatch({
-			type: FISHLOGS_FETCH_SUCCESS,
+			type: REQUESTS_FETCH_SUCCESS,
 			payload: response.data.data
 		})
 	})

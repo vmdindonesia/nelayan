@@ -35,7 +35,7 @@ class Profile extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/profile`, {
-			headers: {'x-access-token': token}
+			headers: {token}
 		})
 		.then(response => {
 			this.setState({data: response.data.user})

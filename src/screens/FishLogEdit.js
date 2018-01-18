@@ -54,7 +54,7 @@ class FishLogEdit extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/fishlogs/${id}`, {
-			headers: {'x-access-token': token}
+			headers: {token}
 		})
 		.then(response => {
 			this.setState({data: response.data.data})
@@ -108,7 +108,7 @@ class FishLogEdit extends Component {
 		this.setState({loading: true})
 
 		axios.put(`${BASE_URL}/fishlogs/${id}`, data, {
-			headers: {'x-access-token': token}
+			headers: {token}
 		})
 		.then(response => {
 			this.props.navigation.setParams({change: false})

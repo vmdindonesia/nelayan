@@ -91,7 +91,7 @@ class FishLogCreate extends Component {
 		let token = this.props.user.token
 
 		axios.post(`${BASE_URL}/fishlogs`, data, {
-			headers: {'x-access-token': token}
+			headers: {token}
 		})
 		.then(response => {
 			console.log(response)

@@ -5,3 +5,5 @@ export const USER_LOGOUT = 'user_logout'
 export const SET_USER_TOKEN = 'set_user_token'
 
 export const FISHLOGS_FETCH_SUCCESS = 'fishlogs_fetch_success'
+
+export const REQUESTS_FETCH_SUCCESS = 'requests_fetch_success'

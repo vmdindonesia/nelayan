@@ -57,7 +57,7 @@ class ProductForm extends Component {
 			method: params ? 'put' : 'post',
 			url,
 			data,
-			headers: {'x-access-token': token}
+			headers: {token}
 		})
 		.then(response => {
 			this.props.navigation.setParams({FishId: '', value: '', ProductId: ''})

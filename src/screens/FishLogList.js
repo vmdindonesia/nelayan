@@ -9,15 +9,7 @@ import { Spinner } from '../components/common'
 
 class FishLogList extends Component {
 	static navigationOptions = {
-		title: 'Fish Log'
-	}
-
-	constructor(props) {
-		super(props)
-	
-		this.state = {
-			loading: true,
-		}
+		title: 'Fishlog'
 	}
 
 	componentWillMount() {
