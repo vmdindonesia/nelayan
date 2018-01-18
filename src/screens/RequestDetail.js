@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { ScrollView, View, Text, Image } from 'react-native'
+import { Alert, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import axios from 'axios'
 import { BASE_URL } from '../constants'
 import { Container, ContainerSection, Spinner } from '../components/common'
@@ -41,6 +41,22 @@ class RequestDetail extends Component {
 		})
 	}
 
+	acceptRequest = () => {
+		// to do: accept request api
+		
+		Alert.alert(
+			'Sukses!',
+			`Terima kasih telah mengambil tawaran Solaria Resto\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
+			[]
+		)
+	}
+
+	declineRequest = () => {
+		// to do: decline request api
+
+		this.props.navigation.goBack()
+	}
+
 	render() {
 		const { data } = this.state
 
@@ -49,7 +65,7 @@ class RequestDetail extends Component {
 		}
 
 		return (
-			<ScrollView>
+			<View>
 				<Container>
 					<ContainerSection style={{flexDirection: 'row'}}>
 						<View style={{flexDirection: 'column', flex: 1}}>
@@ -67,6 +83,8 @@ class RequestDetail extends Component {
 					</ContainerSection>
 				</Container>
 
+				<View style={{height: 10}} />
+
 				<View style={styles.detail}>
 					<Text style={{fontSize: 18, fontWeight: 'bold'}}>Alamat Kirim</Text>
 					<Text>Jalan Dago no. 119</Text>
@@ -75,7 +93,45 @@ class RequestDetail extends Component {
 					<Text>Bandng - Jawa Barat</Text>
 					<Text>24 januari 2018</Text>
 				</View>
-			</ScrollView>
+				<View style={styles.detail}>
+					<Text>Status: {data.Status.name}</Text>
+				</View>
+
+				<View style={styles.actionButton}>
+					<TouchableNativeFeedback
+						onPress={() =>
+							Alert.alert(
+								'Tolak Request Order',
+								'Yakin menolak request order?',
+								[
+									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+									{text: 'Ya', onPress: () => this.acceptRequest()},
+								]
+							)
+						}
+					>
+						<View style={styles.buttonStyle}>
+							<Text style={styles.textStyle}>Ambil</Text>
+						</View>
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback
+						onPress={() =>
+							Alert.alert(
+								'Tolak Request Order',
+								'Yakin menolak request order?',
+								[
+									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+									{text: 'Ya', onPress: () => this.declineRequest()},
+								]
+							)
+						}
+					>
+						<View style={styles.buttonStyle2}>
+							<Text style={styles.textStyle}>Tolak</Text>
+						</View>
+					</TouchableNativeFeedback>
+				</View>
+			</View>
 		)
 	}
 }
@@ -95,11 +151,41 @@ const styles = {
 		color: '#000'
 	},
 	detail: {
-		marginTop: 10,
+		// marginTop: 10,
 		padding: 20,
 		borderWidth: 1,
 		borderColor: '#eaeaea'
-	}
+	},
+	actionButton: {
+		padding: 5,
+		justifyContent: 'flex-start',
+		flexDirection: 'row',
+		position: 'relative'
+	},
+	buttonStyle: {
+		flex: 1,
+		alignSelf: 'stretch',
+		backgroundColor: 'green',
+		borderRadius: 2,
+		marginLeft: 5,
+		marginRight: 5,
+	},
+	buttonStyle2: {
+		flex: 1,
+		alignSelf: 'stretch',
+		backgroundColor: 'red',
+		borderRadius: 2,
+		marginLeft: 5,
+		marginRight: 5,
+	},
+	textStyle: {
+		alignSelf: 'center',
+		color: '#fff',
+		fontSize: 16,
+		fontWeight: '600',
+		paddingTop: 10,
+		paddingBottom: 10,
+	},
 }
 
 const mapStateToProps = state => {

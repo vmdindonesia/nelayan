@@ -3,6 +3,7 @@ import { Text, View, TouchableNativeFeedback } from 'react-native'
 
 class Button extends Component {
 	render() {
+		console.log(this.props)
 		return (
 			<TouchableNativeFeedback
 				onPress={this.props.onPress}
