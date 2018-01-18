@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
+import { Spinner } from '../components/common'
 
 class RequestList extends Component {
 	static navigationOptions = {
@@ -8,8 +9,8 @@ class RequestList extends Component {
 
 	render() {
 		return (
-			<View>
-				<Text>RequestList</Text>
+			<View style={{flex: 1}}>
+				<Spinner size='large' />
 			</View>
 		)
 	}

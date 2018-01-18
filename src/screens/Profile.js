@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { BASE_URL } from '../constants'
-import { Card, CardSection, Container, ContainerSection, Button, Input } from '../components/common'
+import { Card, CardSection, Container, ContainerSection, Button, Input, Spinner } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
 
 class Profile extends Component {
@@ -16,7 +16,7 @@ class Profile extends Component {
 		super(props)
 	
 		this.state = {
-			loading: false,
+			loading: true,
 			data: {},
 			modalVisible: false,
 
@@ -31,6 +31,7 @@ class Profile extends Component {
 	}
 
 	getData = () => {
+		this.setState({loading: true})
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/profile`, {
@@ -38,6 +39,7 @@ class Profile extends Component {
 		})
 		.then(response => {
 			this.setState({data: response.data.user})
+			this.setState({loading: false})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -46,6 +48,7 @@ class Profile extends Component {
 			else {
 				alert('Koneksi internet bermasalah')
 			}
+			this.setState({loading: false})
 		})
 	}
 
@@ -56,9 +59,16 @@ class Profile extends Component {
 			labelStyle, dataStyle
 		} = styles
 
-		const { data, FishId, value } = this.state
+		const { data, FishId, value, loading } = this.state
 
-		console.log('render komponen')
+		if (loading) {
+			return (
+				<View style={{flex: 1}}>
+					<Spinner size='large' />
+				</View>
+			)
+		}
+
 		return (
 			<ScrollView style={containerStyle}>
 				<View style={headerHomeStyle}>
