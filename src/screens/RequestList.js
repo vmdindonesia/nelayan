@@ -22,13 +22,13 @@ class RequestList extends Component {
 				<View>
 					<Card>
 						<CardSection style={{flexDirection: 'row'}}>
-							<View style={{flexDirection: 'column', flex: 1}}>
+							<View style={{flexDirection: 'column'}}>
 								<Image 
 									style={styles.thumbnailStyle}
 									source={require('../../assets/11.jpg')} 
 								/>
 							</View>
-							<View style={{justifyContent: 'space-around', flex: 2}}>
+							<View style={{justifyContent: 'space-around', flex: 1}}>
 								<Text style={styles.buyerName}>{item.BuyerId}</Text>
 								<Text style={styles.productName}>{item.Transaction.Fish.name} - {item.Transaction.quantity} Kg</Text>
 								<Text style={{textAlign: 'right'}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
@@ -64,8 +64,8 @@ class RequestList extends Component {
 
 const styles = {
 	thumbnailStyle: {
-		height: 100,
-		width: 100,
+		height: 80,
+		width: 80,
 		borderRadius: 5
 	},
 	buyerName: {

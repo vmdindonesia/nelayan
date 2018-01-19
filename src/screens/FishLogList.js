@@ -82,8 +82,8 @@ const styles = {
 		margin: 15,
 	},
 	thumbnailStyle: {
-		height: 100,
-		width: 100,
+		height: 80,
+		width: 80,
 		borderRadius: 5
 	},
 	headerContentStyle: {
