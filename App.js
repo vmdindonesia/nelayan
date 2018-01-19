@@ -18,6 +18,7 @@ import ProductForm from './src/screens/ProductForm'
 import Profile from './src/screens/Profile'
 import ProfileEdit from './src/screens/ProfileEdit'
 import TransactionList from './src/screens/TransactionList'
+import TransactionDetail from './src/screens/TransactionDetail'
 import RequestList from './src/screens/RequestList'
 import RequestDetail from './src/screens/RequestDetail'
 import MemberList from './src/screens/MemberList'
@@ -57,6 +58,8 @@ const Routes = StackNavigator({
   ProfileEdit: { screen: ProfileEdit },
 
   TransactionList: { screen: TransactionList },
+  TransactionDetail: { screen: TransactionDetail },
+
   MemberList: { screen: MemberList },
   Information: { screen: Information },
   Reward: { screen: Reward },

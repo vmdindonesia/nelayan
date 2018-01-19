@@ -9,7 +9,9 @@ class TransactionList extends Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<TouchableNativeFeedback>
+				<TouchableNativeFeedback
+					onPress={() => this.props.navigation.navigate('TransactionDetail')}
+				>
 					<View style={styles.itemContainerStyle}>
 						<View style={styles.thumbnailContainerStyle}>
 							<Image 
@@ -51,7 +53,9 @@ class TransactionList extends Component {
 						</View>
 					</View>
 				</TouchableNativeFeedback>
-				<TouchableNativeFeedback>
+				<TouchableNativeFeedback
+					onPress={() => this.props.navigation.navigate('TransactionDetail')}
+				>
 					<View style={styles.itemContainerStyle}>
 						<View style={styles.thumbnailContainerStyle}>
 							<Image 

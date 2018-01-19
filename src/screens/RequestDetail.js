@@ -67,7 +67,7 @@ class RequestDetail extends Component {
 		return (
 			<View>
 				<Container>
-					<ContainerSection style={{flexDirection: 'row'}}>
+					<ContainerSection>
 						<View style={{flexDirection: 'column', flex: 1}}>
 							<Image 
 								style={styles.thumbnailStyle}
@@ -86,7 +86,7 @@ class RequestDetail extends Component {
 				<View style={{height: 10}} />
 
 				<View style={styles.detail}>
-					<Text style={{fontSize: 18, fontWeight: 'bold'}}>Alamat Kirim</Text>
+					<Text style={{fontSize: 18, fontWeight: 'bold'}}>Alamat Buyer</Text>
 					<Text>Jalan Dago no. 119</Text>
 					<Text>Kelurahan Dago</Text>
 					<Text>Kecamatan Dago</Text>
