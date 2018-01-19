@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, LayoutAnimation, UIManager } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CheckBox, Button } from 'react-native-elements'
 import { Card, CardSection, Container, ContainerSection, Spinner } from '../components/common'
@@ -24,9 +24,35 @@ class TransactionDetail extends Component {
 		}
 	}
 
-	componentWillUpdate() {
-		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-		LayoutAnimation.spring()
+	renderDetail =() => {
+		if (this.state.expanded) {
+			return (
+				<CardSection>
+					<View style={{flexDirection: 'column'}}>
+						<View>
+							<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
+						</View>
+						<View >
+							<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+								<CheckBox
+									title='Survei'
+									checked={this.state.checked}
+									onPress={() => this.setState({checked: !this.state.checked})}
+								/>
+								<CheckBox
+									title='Sample'
+									checked={this.state.checked}
+									onPress={() => this.setState({checked: !this.state.checked})}
+								/>
+							</View>
+						</View>
+						<View style={{marginTop: 10}}>
+							<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} />
+						</View>
+					</View>
+				</CardSection>
+			)
+		}
 	}
 
 	render() {
@@ -62,30 +88,7 @@ class TransactionDetail extends Component {
 							</View>
 						</TouchableWithoutFeedback>
 					</CardSection>
-					<CardSection>
-						<View style={{flexDirection: 'column'}}>
-							<View>
-								<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
-							</View>
-							<View >
-								<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
-									<CheckBox
-										title='Survei'
-										checked={this.state.checked}
-										onPress={() => this.setState({checked: !this.state.checked})}
-									/>
-									<CheckBox
-										title='Sample'
-										checked={this.state.checked}
-										onPress={() => this.setState({checked: !this.state.checked})}
-									/>
-								</View>
-							</View>
-							<View style={{marginTop: 10}}>
-								<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} />
-							</View>
-						</View>
-					</CardSection>
+					{this.renderDetail()}
 				</Card>
 
 			</View>
