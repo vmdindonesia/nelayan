@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CheckBox, Button } from 'react-native-elements'
 import { Card, CardSection, Container, ContainerSection, Spinner } from '../components/common'
@@ -21,37 +21,6 @@ class TransactionDetail extends Component {
 		this.state = {
 			expanded: false,
 			checked: false
-		}
-	}
-
-	renderDetail =() => {
-		if (this.state.expanded) {
-			return (
-				<CardSection>
-					<View style={{flexDirection: 'column'}}>
-						<View>
-							<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
-						</View>
-						<View >
-							<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
-								<CheckBox
-									title='Survei'
-									checked={this.state.checked}
-									onPress={() => this.setState({checked: !this.state.checked})}
-								/>
-								<CheckBox
-									title='Sample'
-									checked={this.state.checked}
-									onPress={() => this.setState({checked: !this.state.checked})}
-								/>
-							</View>
-						</View>
-						<View style={{marginTop: 10}}>
-							<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} />
-						</View>
-					</View>
-				</CardSection>
-			)
 		}
 	}
 
@@ -88,7 +57,51 @@ class TransactionDetail extends Component {
 							</View>
 						</TouchableWithoutFeedback>
 					</CardSection>
-					{this.renderDetail()}
+					{
+						this.state.expanded ? 
+							<CardSection>
+								<View style={{flexDirection: 'column'}}>
+									<View>
+										<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
+									</View>
+									<View >
+										<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+											<CheckBox
+												title='Survei'
+												checked="true"
+											/>
+											<CheckBox
+												title='Sample'
+												checked="true"
+											/>
+										</View>
+									</View>
+									<View style={{marginTop: 10}}>
+										<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} />
+									</View>
+									<View style={{height: 20, borderBottomWidth: 1, borderColor: '#eaeaea'}} />
+									<View> 
+										<TouchableOpacity onPress={() => Linking.openURL('http://komisiyudisial.go.id/downlot.php?file=Peraturan-KY-Nomor-2-Tahun-2015.pdf').catch(err => console.error('An error occurred', err))}>
+											<View style={{marginTop: 15, flexDirection: 'row'}}>
+												<Text style={{color: 'blue'}}>File Download.pdf</Text>
+												<Icon size={20} style={{color: 'blue', marginLeft: 5}} name="md-download" />
+											</View>
+										</TouchableOpacity>
+									</View>
+									<View style={{marginTop: 10, flexDirection: 'row'}}>
+										<View style={{flex: 1}}>
+											<Button raised title='Revisi' backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
+										</View>
+										<View style={{flex: 1}}>
+											<Button raised title='Setuju' backgroundColor="green" containerViewStyle={{width: '100%', marginLeft: 0}} />
+										</View>
+									</View>
+								</View>
+							</CardSection>
+						:
+							<View />
+					}
+					
 				</Card>
 
 			</View>
@@ -109,12 +122,6 @@ const styles = {
 		textAlign: 'right',
 		fontSize: 18,
 		color: '#000'
-	},
-	detail: {
-		// marginTop: 10,
-		padding: 20,
-		borderWidth: 1,
-		borderColor: '#eaeaea'
 	},
 	titleStyle: {
 		fontSize: 18,
