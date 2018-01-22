@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { CheckBox, Button } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/Ionicons'
+import Modal from 'react-native-modal'
+import { CheckBox, Button, FormInput, FormLabel } from 'react-native-elements'
 import { Card, CardSection, Container, ContainerSection, Spinner } from '../components/common'
 
 class TransactionDetail extends Component {
@@ -20,15 +21,20 @@ class TransactionDetail extends Component {
 	
 		this.state = {
 			expanded: false,
-			checked: false
+			checked: false,
+			isModalVisible: false
 		}
+	}
+
+	_toggleModal = () => {
+		this.setState({ isModalVisible: !this.state.isModalVisible })
 	}
 
 	render() {
 		const { expanded } = this.state
 
 		return (
-			<View>
+			<View style={{flex: 1}}>
 				<Container>
 					<ContainerSection>
 						<View style={{flexDirection: 'column', flex: 1}}>
@@ -90,7 +96,7 @@ class TransactionDetail extends Component {
 									</View>
 									<View style={{marginTop: 10, flexDirection: 'row'}}>
 										<View style={{flex: 1}}>
-											<Button raised title='Revisi' backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
+											<Button raised title='Revisi' onPress={this._toggleModal} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
 										</View>
 										<View style={{flex: 1}}>
 											<Button raised title='Setuju' backgroundColor="green" containerViewStyle={{width: '100%', marginLeft: 0}} />
@@ -104,6 +110,19 @@ class TransactionDetail extends Component {
 					
 				</Card>
 
+				<Modal
+					isVisible={this.state.isModalVisible}
+					onBackdropPress={() => this.setState({ isModalVisible: false })}
+				>
+					<View style={{ flex: 1, justifyContent: 'center' }}>
+						<View style={{backgroundColor: 'white', borderRadius: 2, padding: 10}}>
+							<Text style={{textAlign: 'center', marginBottom: 20}}>Catatan Revisi</Text>
+							<FormInput />
+							<Button raised title='Kirim' backgroundColor="blue" containerViewStyle={{marginTop: 20}} />
+						</View>
+					</View>
+				</Modal>
+			
 			</View>
 		)
 	}
