@@ -29,7 +29,7 @@ class RequestList extends Component {
 								/>
 							</View>
 							<View style={{justifyContent: 'space-around', flex: 1}}>
-								<Text style={styles.buyerName}>{item.BuyerId}</Text>
+								<Text style={styles.buyerName}>{item.User.name}</Text>
 								<Text style={styles.productName}>{item.Transaction.Fish.name} - {item.Transaction.quantity} Kg</Text>
 								<Text style={{textAlign: 'right'}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
 								<Text style={{textAlign: 'right'}}>{item.Status.name}</Text>
@@ -69,7 +69,8 @@ const styles = {
 		borderRadius: 5
 	},
 	buyerName: {
-		textAlign: 'left'
+		textAlign: 'left',
+		marginLeft: 10
 	},
 	productName: {
 		textAlign: 'right',

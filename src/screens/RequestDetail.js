@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import moment from 'moment'
 import { Alert, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import axios from 'axios'
@@ -21,6 +22,10 @@ class RequestDetail extends Component {
 	}
 
 	componentWillMount() {
+		this.fetchDetail()
+	}
+
+	fetchDetail = () => {
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
 		
@@ -42,19 +47,75 @@ class RequestDetail extends Component {
 	}
 
 	acceptRequest = () => {
-		// to do: accept request api
-		
-		Alert.alert(
-			'Sukses!',
-			`Terima kasih telah mengambil tawaran Solaria Resto\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
-			[]
-		)
+		this.setState({loading: true})
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		let { data } = this.state
+
+		let formData = {approval: 1}
+
+		axios.put(`${BASE_URL}/supplier/requests/${id}`, formData, {
+			headers: {token}
+		})
+		.then(() => {
+			this.fetchDetail()
+			this.setState({loading: false})
+			Alert.alert(
+				'Sukses!',
+				`Terima kasih telah mengambil tawaran ${data.User.name}\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
+				[]
+			)
+		})
+		.catch(error => {
+			this.setState({loading: false})
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
 	}
 
 	declineRequest = () => {
-		// to do: decline request api
+		this.setState({loading: true})
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		let { data } = this.state
 
-		this.props.navigation.goBack()
+		let formData = {approval: 0}
+
+		axios.put(`${BASE_URL}/supplier/requests/${id}`, formData, {
+			headers: {token}
+		})
+		.then(() => {
+			this.setState({loading: false})
+			Alert.alert(
+				'Sukses!',
+				'Request telah ditolak',
+				[
+					{text: 'Ok', onPress: () => {
+						const resetAction = NavigationActions.reset({
+							index: 1,
+							actions: [
+								NavigationActions.navigate({ routeName: 'Home'}),
+								NavigationActions.navigate({ routeName: 'RequestList'})
+							]
+						})
+						this.props.navigation.dispatch(resetAction)
+					}}
+				]
+			)
+		})
+		.catch(error => {
+			this.setState({loading: false})
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
 	}
 
 	render() {
@@ -87,50 +148,55 @@ class RequestDetail extends Component {
 
 				<View style={styles.detail}>
 					<Text style={{fontSize: 18, fontWeight: 'bold'}}>Alamat Buyer</Text>
-					<Text>Jalan Dago no. 119</Text>
-					<Text>Kelurahan Dago</Text>
-					<Text>Kecamatan Dago</Text>
-					<Text>Bandng - Jawa Barat</Text>
-					<Text>24 januari 2018</Text>
+					<Text>{data.User.subDistrict}</Text>
+					<Text>{data.User.village}</Text>
+					<Text>{moment(data.createdAt).format('DD MMM YYYY')}</Text>
 				</View>
 				<View style={styles.detail}>
 					<Text>Status: {data.Status.name}</Text>
 				</View>
 
-				<View style={styles.actionButton}>
-					<TouchableNativeFeedback
-						onPress={() =>
-							Alert.alert(
-								'Tolak Request Order',
-								'Yakin menolak request order?',
-								[
-									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-									{text: 'Ya', onPress: () => this.acceptRequest()},
-								]
-							)
-						}
-					>
-						<View style={styles.buttonStyle}>
-							<Text style={styles.textStyle}>Ambil</Text>
+				{
+					data.Status && data.Status.id === 1 ?
+						<View style={styles.actionButton}>
+							<TouchableNativeFeedback
+								onPress={() =>
+									Alert.alert(
+										'Ambil Request Order',
+										'Yakin ambil request order?',
+										[
+											{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+											{text: 'Ya', onPress: () => this.acceptRequest()},
+										]
+									)
+								}
+							>
+								<View style={styles.buttonStyle}>
+									<Text style={styles.textStyle}>Ambil</Text>
+								</View>
+							</TouchableNativeFeedback>
+							<TouchableNativeFeedback
+								onPress={() =>
+									Alert.alert(
+										'Tolak Request Order',
+										'Yakin menolak request order?',
+										[
+											{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+											{text: 'Ya', onPress: () => this.declineRequest()},
+										]
+									)
+								}
+							>
+								<View style={styles.buttonStyle2}>
+									<Text style={styles.textStyle}>Tolak</Text>
+								</View>
+							</TouchableNativeFeedback>
 						</View>
-					</TouchableNativeFeedback>
-					<TouchableNativeFeedback
-						onPress={() =>
-							Alert.alert(
-								'Tolak Request Order',
-								'Yakin menolak request order?',
-								[
-									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-									{text: 'Ya', onPress: () => this.declineRequest()},
-								]
-							)
-						}
-					>
-						<View style={styles.buttonStyle2}>
-							<Text style={styles.textStyle}>Tolak</Text>
+					:
+						<View style={styles.actionButton}>
+							<Text style={{margin: 15}}>{data.Status.id === 2 ? 'Menunggu Konfirmasi dari pembeli' : ''}</Text>
 						</View>
-					</TouchableNativeFeedback>
-				</View>
+				}
 			</View>
 		)
 	}
