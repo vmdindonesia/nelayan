@@ -24,6 +24,7 @@ import RequestDetail from './src/screens/RequestDetail'
 import MemberList from './src/screens/MemberList'
 import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
+import ForgotPassword from './src/screens/ForgotPassword'
 
 numeral.register('locale', 'id', {
   delimiters: {
@@ -44,6 +45,7 @@ const Routes = StackNavigator({
   Home: { screen: Home },
   Login: { screen: Login },
   Register: { screen: Register },
+  ForgotPassword: { screen: ForgotPassword },
 
   FishLogList: { screen: FishLogList },
   FishLogEdit: { screen: FishLogEdit },

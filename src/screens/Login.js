@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Keyboard, Image, AsyncStorage } from 'react-native'
+import { View, Text, Keyboard, Image, AsyncStorage, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
@@ -111,13 +111,22 @@ class Login extends Component {
 					</ContainerSection>
 				</Container>
 				
-				<Text style={{ textAlign: 'center', marginTop: 10 }}>
-					Belum punya akun?
-					<Text
-						onPress={() => navigate('Register')}
-						style={{ color: 'green', fontWeight: 'bold' }}
-					> Registrasi</Text>
-				</Text>
+				<View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 10}}>
+					<Text style={{ textAlign: 'center'}}>
+						Belum punya akun?
+					</Text>
+					<TouchableOpacity onPress={() => navigate('Register')}>
+						<Text style={{ color: 'green', fontWeight: 'bold' }}> 
+							{` Registrasi`}
+						</Text>
+					</TouchableOpacity>
+				</View>
+
+				<TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
+					<Text style={{ textAlign: 'center', marginTop: 10, color: 'green', fontWeight: 'bold' }}>
+						Lupa Password?
+					</Text>
+				</TouchableOpacity>
 			</View>
 		)
 	}
