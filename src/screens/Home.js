@@ -89,13 +89,13 @@ class Home extends Component {
 						</TouchableNativeFeedback>
 					</View>
 					<View style={{flexDirection: 'row'}}>
-						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('TransactionList')}>
+						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('OrderList')}>
 							<View style={menuItemStyle}>
 								<Image 
 									style={menuIcon}
 									source={require('../../assets/transaksi.png')} 
 								/>
-								<Text style={{textAlign: 'center'}}>Transaksi</Text>
+								<Text style={{textAlign: 'center'}}>Order</Text>
 							</View>
 						</TouchableNativeFeedback>
 						<TouchableNativeFeedback onPress={() => this.props.navigation.navigate('MemberList')}>

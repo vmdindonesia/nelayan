@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal'
-import { CheckBox, Button, FormInput, FormLabel } from 'react-native-elements'
+import numeral from 'numeral'
+import axios from 'axios'
+import { CheckBox, Button, FormInput } from 'react-native-elements'
 import { Card, CardSection, Container, ContainerSection, Spinner } from '../components/common'
+import { BASE_URL } from '../constants'
 
-class TransactionDetail extends Component {
+class OrderDetail extends Component {
 	static navigationOptions = {
 		title: 'Order 23049329',
 		headerRight: 
@@ -20,10 +24,37 @@ class TransactionDetail extends Component {
 		super(props)
 	
 		this.state = {
+			loading: true,
+			data: {},
 			expanded: false,
 			checked: false,
 			isModalVisible: false
 		}
+	}
+
+	componentWillMount() {
+		this.fetchDetail()
+	}
+
+	fetchDetail = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		
+		axios.get(`${BASE_URL}/supplier/orders/${id}`, {
+			headers: {token}
+		})
+		.then(response => {
+			this.setState({data: response.data.data, loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loading: false})
+		})
 	}
 
 	_toggleModal = () => {
@@ -31,7 +62,11 @@ class TransactionDetail extends Component {
 	}
 
 	render() {
-		const { expanded } = this.state
+		const { expanded, data } = this.state
+
+		if (this.state.loading) {
+			return <Spinner size='large' />
+		}
 
 		return (
 			<View style={{flex: 1}}>
@@ -44,10 +79,10 @@ class TransactionDetail extends Component {
 							/>
 						</View>
 						<View style={{justifyContent: 'space-around', flex: 2}}>
-							<Text style={styles.buyerName}>Nama Produk</Text>
-							<Text>Pembeli</Text>
-							<Text>Kuantitas</Text>
-							<Text>Harga</Text>
+							<Text style={styles.buyerName}>{data.Request.Transaction.Fish.name}</Text>
+							<Text>{data.Request.User.name}</Text>
+							<Text>{data.Request.Transaction.quantity}</Text>
+							<Text>Rp {numeral(data.Request.Transaction.minBudget).format('0,0')} - {numeral(data.Request.Transaction.maxBudget).format('0,0')}</Text>
 						</View>
 					</ContainerSection>
 				</Container>
@@ -149,4 +184,9 @@ const styles = {
 	}
 }
 
-export default TransactionDetail
+const mapStateToProps = state => {
+	const { user } = state
+	return { user }
+}
+
+export default connect(mapStateToProps)(OrderDetail)

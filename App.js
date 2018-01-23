@@ -17,8 +17,8 @@ import FishLogCreate from './src/screens/FishLogCreate'
 import ProductForm from './src/screens/ProductForm'
 import Profile from './src/screens/Profile'
 import ProfileEdit from './src/screens/ProfileEdit'
-import TransactionList from './src/screens/TransactionList'
-import TransactionDetail from './src/screens/TransactionDetail'
+import OrderList from './src/screens/OrderList'
+import OrderDetail from './src/screens/OrderDetail'
 import RequestList from './src/screens/RequestList'
 import RequestDetail from './src/screens/RequestDetail'
 import MemberList from './src/screens/MemberList'
@@ -57,8 +57,8 @@ const Routes = StackNavigator({
   Profile: { screen: Profile },
   ProfileEdit: { screen: ProfileEdit },
 
-  TransactionList: { screen: TransactionList },
-  TransactionDetail: { screen: TransactionDetail },
+  OrderList: { screen: OrderList },
+  OrderDetail: { screen: OrderDetail },
 
   MemberList: { screen: MemberList },
   Information: { screen: Information },
