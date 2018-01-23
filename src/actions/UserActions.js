@@ -1,4 +1,5 @@
 import axios from 'axios'
+import jwtDecode from 'jwt-decode'
 import { AsyncStorage } from 'react-native'
 import { BASE_URL } from '../constants'
 import {
@@ -34,9 +35,12 @@ export const logout = (callback) => {
 }
 
 export const setUserToken = (token) => {
+	let decoded = jwtDecode(token)
+	console.log('decoded ni bro')
+
 	return {
 		type: SET_USER_TOKEN,
-		payload: token
+		payload: {token, data: decoded.user}
 	}
 }
 

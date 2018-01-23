@@ -10,10 +10,11 @@ const INITIAL_STATE = {
 	token: '',
 	loading: false,
 	error: '',
+	data: {}
 }
 
 export default (state = INITIAL_STATE, action) => {
-	console.log(action)
+	console.log(action, 'action user')
 
 	switch (action.type) {
 		case USER_LOADING:
@@ -23,9 +24,9 @@ export default (state = INITIAL_STATE, action) => {
 		case USER_LOGIN_FAIL:
 			return {...state, loading: false, error: action.payload}
 		case USER_LOGOUT:
-			return {...state, token: ''}
+			return {...state, token: '', data: {}}
 		case SET_USER_TOKEN:
-			return {...state, token: action.payload}
+			return {...state, token: action.payload.token, data: action.payload.data}
 		default:
 			return state
 	}
