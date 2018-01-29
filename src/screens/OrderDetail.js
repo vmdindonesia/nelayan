@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
+import { ScrollView, View, Text, Alert, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal'
 import numeral from 'numeral'
@@ -10,15 +10,15 @@ import { Card, CardSection, Container, ContainerSection, Spinner } from '../comp
 import { BASE_URL } from '../constants'
 
 class OrderDetail extends Component {
-	static navigationOptions = {
-		title: 'Order 23049329',
+	static navigationOptions = ({ navigation }) => ({
+		title: `Order ${navigation.state.params.id}`,
 		headerRight: 
 			<TouchableOpacity>
 				<View>
 					<Icon style={{marginRight: 20}} size={30} name="md-chatboxes" />
 				</View>
 			</TouchableOpacity>
-	}
+	})
 
 	constructor(props) {
 		super(props)
@@ -66,6 +66,34 @@ class OrderDetail extends Component {
 		this.setState({ isModalVisible: !this.state.isModalVisible })
 	}
 
+	acceptContract = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		this.setState({loading: true})
+
+		let data = {
+			approval: 1
+		}
+
+		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
+			headers: {token}
+		})
+		.then(response => {
+			this.fetchDetail()
+			this.setState({loading: false})
+			Alert.alert('Berhasil!', 'Kontrak berhasil disetujui', [])
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loading: false})
+		})
+	}
+
 	render() {
 		const { contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, data } = this.state
 
@@ -80,12 +108,12 @@ class OrderDetail extends Component {
 						<View style={{flexDirection: 'column', flex: 1}}>
 							<Image 
 								style={styles.thumbnailStyle}
-								source={require('../../assets/11.jpg')} 
+								source={{uri: `${BASE_URL}/images/${data.Request.Transaction.photo}`}} 
 							/>
 						</View>
 						<View style={{justifyContent: 'space-around', flex: 2}}>
 							<Text style={styles.buyerName}>{data.Request.Transaction.Fish.name}</Text>
-							<Text>{data.Request.User.name}</Text>
+							<Text>{data.Request.Buyer.name}</Text>
 							<Text>{data.Request.Transaction.quantity}</Text>
 							<Text>Rp {numeral(data.Request.Transaction.minBudget).format('0,0')} - {numeral(data.Request.Transaction.maxBudget).format('0,0')}</Text>
 						</View>
@@ -123,25 +151,52 @@ class OrderDetail extends Component {
 										</View>
 									</View>
 									<View style={{marginTop: 10}}>
-										<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} />
+										<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} onPress={() => this.acceptContract()} />
 									</View>
-									<View style={{height: 20, borderBottomWidth: 1, borderColor: '#eaeaea'}} />
-									<View> 
-										<TouchableOpacity onPress={() => Linking.openURL('http://komisiyudisial.go.id/downlot.php?file=Peraturan-KY-Nomor-2-Tahun-2015.pdf').catch(err => console.error('An error occurred', err))}>
-											<View style={{marginTop: 15, flexDirection: 'row'}}>
-												<Text style={{color: 'blue'}}>File Download.pdf</Text>
-												<Icon size={20} style={{color: 'blue', marginLeft: 5}} name="md-download" />
+									{
+										data.Contract ?
+											<View>
+												<View style={{height: 20, borderBottomWidth: 1, borderColor: '#eaeaea'}} />
+												<View> 
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/files/${data.Contract.file}`).catch(err => console.error('An error occurred', err))}>
+														<View style={{marginTop: 15, flexDirection: 'row'}}>
+															<Text style={{color: 'blue'}}>File Kontrak.pdf</Text>
+															<Icon size={20} style={{color: 'blue', marginLeft: 5}} name="md-download" />
+														</View>
+													</TouchableOpacity>
+												</View>
+												{
+													data.Contract.StatusId === 4 ?
+														<View style={{marginTop: 10, flexDirection: 'row'}}>
+															<View style={{flex: 1}}>
+																<Button raised title='Revisi' onPress={this._toggleModal} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
+															</View>
+															<View style={{flex: 1}}>
+																<Button
+																	raised 
+																	title='Setuju' 
+																	backgroundColor="green" 
+																	containerViewStyle={{width: '100%', marginLeft: 0}} 
+																	onPress={
+																		() => Alert.alert(
+																			'Yakin ingin menyetujui kontrak?',
+																			'Kontrak yang telah disetujui tidak dapat diubah',
+																			[
+																				{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+																				{text: 'Ya', onPress: () => this.acceptContract()},
+																			]
+																		)
+																	}
+																/>
+															</View>
+														</View>
+													:
+														<Text>Kontrak Disetujui</Text>
+												}
 											</View>
-										</TouchableOpacity>
-									</View>
-									<View style={{marginTop: 10, flexDirection: 'row'}}>
-										<View style={{flex: 1}}>
-											<Button raised title='Revisi' onPress={this._toggleModal} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
-										</View>
-										<View style={{flex: 1}}>
-											<Button raised title='Setuju' backgroundColor="green" containerViewStyle={{width: '100%', marginLeft: 0}} />
-										</View>
-									</View>
+										:
+											<View />
+									}
 								</View>
 							</CardSection>
 						:
@@ -261,10 +316,10 @@ class OrderDetail extends Component {
 							<CardSection>
 								<View style={{alignItems: 'center', flex: 1}}>
 									<Rating
-									  imageSize={20}
-									  readonly
-									  startingValue={3.5}
-									  // style={{ styles.rating }}
+										imageSize={20}
+										readonly
+										startingValue={3.5}
+										// style={{ styles.rating }}
 									/>
 									<Text style={{textAlign: 'center'}}>Ini isinya komentar yang dikasih pembeli buat nelayan. bisa suka bisa gasuka</Text>
 								</View>									
@@ -281,7 +336,10 @@ class OrderDetail extends Component {
 					<View style={{ flex: 1, justifyContent: 'center' }}>
 						<View style={{backgroundColor: 'white', borderRadius: 2, padding: 10}}>
 							<Text style={{textAlign: 'center', marginBottom: 20}}>Catatan Revisi</Text>
-							<FormInput />
+							<FormInput 
+								multiline
+								autoCorrect={false}
+							/>
 							<Button raised title='Kirim' backgroundColor="blue" containerViewStyle={{marginTop: 20}} />
 						</View>
 					</View>

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { ordersFetch } from '../actions'
 import { Card, CardSection, Spinner } from '../components/common'
+import { BASE_URL } from '../constants'
 
 class OrderList extends Component {
 	static navigationOptions = {
@@ -23,13 +24,13 @@ class OrderList extends Component {
 					<View style={styles.thumbnailContainerStyle}>
 						<Image 
 							style={styles.thumbnailStyle}
-							source={require('../../assets/ikan.jpg')} 
+							source={{uri: `${BASE_URL}/images/${item.Request.Transaction.photo}`}} 
 						/>
 					</View>
 					<View style={styles.headerContentStyle}>
-						<Text style={styles.hedaerTextStyle}>{item.Request.Transaction.describe} - {item.Request.Transaction.size} Kg</Text>
+						<Text style={styles.hedaerTextStyle}>{item.Request.Transaction.Fish.name} - {item.Request.Transaction.size} Kg</Text>
 						<View style={{flexDirection: 'row'}}>
-							<Text style={{flex: 1}}>{item.Request.User.name}</Text>
+							<Text style={{flex: 1}}>{item.Request.Buyer.name}</Text>
 						</View>
 						<View style={{flexDirection: 'row'}}>
 							<Image 
@@ -55,7 +56,7 @@ class OrderList extends Component {
 						</View>
 					</View>
 					<View style={styles.headerContentStyle2}>
-						<Text style={{textAlign: 'right'}}>Proses Kontrak</Text>
+						<Text style={{textAlign: 'right'}}>Status Sekarang</Text>
 						<Text style={{textAlign: 'right'}}>21/08/2018</Text>
 					</View>
 				</View>
