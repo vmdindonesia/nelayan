@@ -62,7 +62,7 @@ class RequestDetail extends Component {
 			this.setState({loading: false})
 			Alert.alert(
 				'Sukses!',
-				`Terima kasih telah mengambil tawaran ${data.User.name}\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
+				`Terima kasih telah mengambil tawaran ${data.Buyer.name}\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
 				[]
 			)
 		})
@@ -132,11 +132,11 @@ class RequestDetail extends Component {
 						<View style={{flexDirection: 'column', flex: 1}}>
 							<Image 
 								style={styles.thumbnailStyle}
-								source={require('../../assets/11.jpg')} 
+								source={{uri: `${BASE_URL}/images/${data.Buyer.photo}`}} 
 							/>
 						</View>
 						<View style={{justifyContent: 'space-around', flex: 2}}>
-							<Text style={styles.buyerName}>{data.User ? data.User.name : ''}</Text>
+							<Text style={styles.buyerName}>{data.Buyer ? data.Buyer.name : ''}</Text>
 							<Text style={styles.productName}>{data.Transaction ? data.Transaction.Fish.name : ''} - {data.Transaction ? data.Transaction.quantity : ''} Kg</Text>
 							<Text style={{textAlign: 'right'}}>{moment(data.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
 							<Text style={{textAlign: 'right'}}>{data.Status ? data.Status.name : ''}</Text>
@@ -148,8 +148,8 @@ class RequestDetail extends Component {
 
 				<View style={styles.detail}>
 					<Text style={{fontSize: 18, fontWeight: 'bold'}}>Alamat Buyer</Text>
-					<Text>{data.User.subDistrict}</Text>
-					<Text>{data.User.village}</Text>
+					<Text>{data.Buyer.subDistrict}</Text>
+					<Text>{data.Buyer.village}</Text>
 					<Text>{moment(data.createdAt).format('DD MMM YYYY')}</Text>
 				</View>
 				<View style={styles.detail}>

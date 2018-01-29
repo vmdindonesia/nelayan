@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { requestsFetch } from '../actions'
 import { Card, CardSection, Spinner } from '../components/common'
+import { BASE_URL } from '../constants'
 
 class RequestList extends Component {
 	static navigationOptions = {
@@ -25,11 +26,11 @@ class RequestList extends Component {
 							<View style={{flexDirection: 'column'}}>
 								<Image 
 									style={styles.thumbnailStyle}
-									source={require('../../assets/11.jpg')} 
+									source={{uri: `${BASE_URL}/images/${item.Buyer.photo}`}} 
 								/>
 							</View>
 							<View style={{justifyContent: 'space-around', flex: 1}}>
-								<Text style={styles.buyerName}>{item.User.name}</Text>
+								<Text style={styles.buyerName}>{item.Buyer.name}</Text>
 								<Text style={styles.productName}>{item.Transaction.Fish.name} - {item.Transaction.quantity} Kg</Text>
 								<Text style={{textAlign: 'right'}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
 								<Text style={{textAlign: 'right'}}>{item.Status.name}</Text>
