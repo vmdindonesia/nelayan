@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, Text, Picker, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback } from 'react-native'
+import { ScrollView, Text, Picker, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
+import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 import AutoComplete from '../components/AutoComplete'
@@ -17,7 +18,7 @@ class Register extends Component {
 		this.state = {
 			organizationType: 'Kelompok Nelayan',
 			organization: '',
-			cityId: '',
+			CityId: '',
 			subDistrict: '',
 			village: '',
 
@@ -32,7 +33,23 @@ class Register extends Component {
 			suggestions: [],
 			values: [],
 			FishIds: [],
+			loadings: [false, false, false, false, false],
+
+			loadingCity: false,
+			suggestionsCity: [],
+			valueCity: '',
+
+			photo: null,
+			idPhoto: null,
 		}
+	}
+
+	onCitySelected = (item) => {
+		this.setState({
+			suggestionsCity: [],
+			CityId: item.id,
+			valueCity: item.name
+		})
 	}
 
 	onItemSelected = (index, item) => {
@@ -51,19 +68,51 @@ class Register extends Component {
 		this.setState({[name]: v})
 	}
 
-	querySuggestion = (index, text) => {
-		const { values, suggestions } = this.state
-		values[index] = text
+	selectPhotoTapped = (name) => {
+		const options = {
+			quality: 1.0,
+			maxWidth: 500,
+			maxHeight: 500,
+			storageOptions: {
+				skipBackup: true
+			}
+		}
 
-		this.setState({values})
+		ImagePicker.showImagePicker(options, (response) => {
+			console.log('Response = ', response);
 
-		axios.get(`${BASE_URL}/fishes/search?key=${text}`, {
-			headers: {'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNCwibmFtZSI6ImFyaWYiLCJlbWFpbCI6ImFyaWZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMxMjMiLCJwaG9uZSI6IjA4MjExMTEyMjEiLCJwaG90byI6bnVsbCwiYWRkcmVzcyI6ImFsZGlyb24iLCJyb2xlIjoic3VwcGxpZXIiLCJwb2ludEFtb3VudCI6MCwiaWROdW1iZXIiOiIzMjQ3MDI0NDQiLCJvcmdhbml6YXRpb24iOiJtaXRyYSBrYXNpaCIsInR5cGVPcmdhbml6YXRpb24iOiJwdCIsImFjdGl2ZSI6ZmFsc2UsInZlcmlmeSI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiJ9LCJpYXQiOjE1MTU0OTExNDYsImV4cCI6MTUxNjA5NTk0Nn0.3X3XEV50K2vEZXsvd-BaXc8ElHE8qj2i_N-n-x9stUM'}
+			if (response.didCancel) {
+				console.log('User cancelled photo picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else if (response.customButton) {
+				console.log('User tapped custom button: ', response.customButton);
+			}
+			else {
+				let source = { uri: response.uri };
+
+				// You can also display the image using data:
+				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+				this.setState({
+					[name]: source
+				});
+			}
+		});
+	}
+
+	queryCitySuggestion = (text) => {
+		this.setState({
+			valueCity: text,
+			loadingCity: true
 		})
+		
+		axios.get(`${BASE_URL}/cities/search?key=${text}`)
 		.then(response => {
 			res = response.data.data
-			suggestions[index] = res
-			this.setState({suggestions})
+			this.setState({suggestionsCity: res, loadingCity: false})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -72,6 +121,35 @@ class Register extends Component {
 			else {
 				alert('Koneksi internet bermasalah')
 			}
+			this.setState({loadingCity: false})
+		})
+	}
+
+	querySuggestion = (index, text) => {
+		const { values, suggestions, loadings } = this.state
+		values[index] = text
+		loadings[index] = true
+
+		this.setState({
+			values, loadings
+		})
+
+		axios.get(`${BASE_URL}/fishes/search?key=${text}`)
+		.then(response => {
+			res = response.data.data
+			suggestions[index] = res
+			loadings[index] = false
+			this.setState({suggestions, loadings})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			loadings[index] = false
+			this.setState({loadings})
 		})
 	}
 
@@ -81,29 +159,56 @@ class Register extends Component {
 	register = () => {
 		Keyboard.dismiss()
 		this.setState({loading: true})
-
+		
 		const data = this.state
 
-		axios.post(`${BASE_URL}/register-supplier`, data)
+		let formData = new FormData()
+		// organization data
+		formData.append('organizationType', data.organizationType)
+		formData.append('CityId', data.CityId)
+		formData.append('subDistrict', data.subDistrict)
+		formData.append('village', data.village)
+		// personal data
+		formData.append('photo', {
+			uri: data.photo.uri,
+			type: 'image/jpeg',
+			name: 'photoImage'
+		})
+		formData.append('name', data.name)
+		formData.append('idNumber', data.idNumber)
+		formData.append('idPhoto', {
+			uri: data.idPhoto.uri,
+			type: 'image/jpeg',
+			name: 'idPhotoImage'
+		})
+		formData.append('phone', data.phone)
+		formData.append('email', data.email)
+		formData.append('password', data.password)
+		// komoditas data
+		data.FishIds.map((item, index) =>
+			formData.append(`FishIds[${index}]`, item)
+		)
+
+		axios.post(`${BASE_URL}/supplier/register`, formData, {
+			headers: { 'Content-Type': 'multipart/form-data' }
+		})
 		.then(response => {
 			console.log(response.status)
-			if (response.status === 200) {
-				const resetAction = NavigationActions.reset({
-					index: 0,
-					actions: [
-						NavigationActions.navigate({ routeName: 'Login'})
-					]
-				})
-				this.props.navigation.dispatch(resetAction)
-				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
-			}
-			else {
-				alert(response.data.message)
-			}
+
+			const resetAction = NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Login'})
+				]
+			})
+			this.props.navigation.dispatch(resetAction)
+			Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
 
 			this.setState({loading: false})
 		})
 		.catch(error => {
+			console.log(error.response)
+
 			if (error.response) {
 				alert(error.response.data.message)
 			}
@@ -141,7 +246,7 @@ class Register extends Component {
 	render() {
 		const { 
 			organizationType,
-			cityId,
+			CityId,
 			subDistrict,
 			village,
 
@@ -154,6 +259,14 @@ class Register extends Component {
 
 			suggestions,
 			values,
+			loadings,
+
+			loadingCity,
+			suggestionsCity,
+			valueCity,
+
+			idPhoto,
+			photo
 		} = this.state
 
 		console.log(this.state)
@@ -185,20 +298,30 @@ class Register extends Component {
 						</View>
 					</ContainerSection>
 					<ContainerSection>
-						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Kota/Kabupaten</Text>
-							<View style={styles.pickerStyle}>
-								<Picker
-									style={{ flex: 1 }}
-									selectedValue={cityId}
-									onValueChange={v => this.onChangeInput('cityId', v)}
-								>
-									<Picker.Item label="- Pilih Kota/Kabupaten" value="" />
-									<Picker.Item label="Jakarta" value="1" />
-									<Picker.Item label="Pangandaran" value="2" />
-								</Picker>
-							</View>
-						</View>
+						<AutoComplete
+							label="Kota / Kabupaten"
+							suggestions={suggestionsCity}
+							onChangeText={text => this.queryCitySuggestion(text)}
+							value={valueCity}
+						>
+						{
+							loadingCity ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestionsCity && suggestionsCity.map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onCitySelected(item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
+						}
+						</AutoComplete>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
@@ -225,6 +348,14 @@ class Register extends Component {
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
+						<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+							<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+							{ photo === null ? <Text>Select a Photo</Text> :
+								<Image style={styles.avatar} source={photo} />
+							}
+							</View>
+						</TouchableOpacity>
+
 						<Input
 							label='Nama Lengkap'
 							placeholder='contoh: Ahmad Darudi'
@@ -241,13 +372,22 @@ class Register extends Component {
 							onChangeText={v => this.onChangeInput('idNumber', v)}
 						/>
 					</ContainerSection>
-					<Text style={styles.pickerTextStyle}>Upload Foto KTP</Text>
+
+					<Text style={[styles.pickerTextStyle, {marginLeft: 5, marginTop: 10}]}>Upload Foto KTP</Text>
 					<ContainerSection>
 						<TouchableWithoutFeedback>
 							<View style={{flex: 1, padding: 8}}>
-								<Image
-									source={require('../../assets/uploader-ktp.png')} 
-								/>
+								<TouchableOpacity onPress={() => this.selectPhotoTapped('idPhoto')}>
+									<View>
+									{ idPhoto === null ? 
+										<Image
+											source={require('../../assets/uploader-ktp.png')} 
+										/>
+									:
+										<Image style={{height: 200}} source={idPhoto} />
+									}
+									</View>
+								</TouchableOpacity>
 							</View>
 						</TouchableWithoutFeedback>
 					</ContainerSection>
@@ -301,16 +441,21 @@ class Register extends Component {
 							value={values[0]}
 						>
 						{
-							suggestions[0] && suggestions[0].map(item => 
-								<TouchableOpacity 
-									key={item.id} 
-									onPress={() => this.onItemSelected(0, item)}
-								>
-									<View style={styles.containerItemAutoSelect}>
-										<Text>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							)
+							loadings[0] ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestions[0] && suggestions[0].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(0, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
 						}
 						</AutoComplete>
 					</ContainerSection>
@@ -322,16 +467,21 @@ class Register extends Component {
 							value={values[1]}
 						>
 						{
-							suggestions[1] && suggestions[1].map(item => 
-								<TouchableOpacity 
-									key={item.id} 
-									onPress={() => this.onItemSelected(1, item)}
-								>
-									<View style={styles.containerItemAutoSelect}>
-										<Text>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							)
+							loadings[1] ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestions[1] && suggestions[1].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(1, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
 						}
 						</AutoComplete>
 					</ContainerSection>	
@@ -343,16 +493,21 @@ class Register extends Component {
 							value={values[2]}
 						>
 						{
-							suggestions[2] && suggestions[2].map(item => 
-								<TouchableOpacity 
-									key={item.id} 
-									onPress={() => this.onItemSelected(2, item)}
-								>
-									<View style={styles.containerItemAutoSelect}>
-										<Text>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							)
+							loadings[2] ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestions[2] && suggestions[2].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(2, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
 						}
 						</AutoComplete>
 					</ContainerSection>
@@ -364,16 +519,21 @@ class Register extends Component {
 							value={values[3]}
 						>
 						{
-							suggestions[3] && suggestions[3].map(item => 
-								<TouchableOpacity 
-									key={item.id} 
-									onPress={() => this.onItemSelected(3, item)}
-								>
-									<View style={styles.containerItemAutoSelect}>
-										<Text>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							)
+							loadings[3] ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestions[3] && suggestions[3].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(3, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
 						}
 						</AutoComplete>
 					</ContainerSection>
@@ -385,16 +545,21 @@ class Register extends Component {
 							value={values[4]}
 						>
 						{
-							suggestions[4] && suggestions[4].map(item => 
-								<TouchableOpacity 
-									key={item.id} 
-									onPress={() => this.onItemSelected(4, item)}
-								>
-									<View style={styles.containerItemAutoSelect}>
-										<Text>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							)
+							loadings[4] ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestions[4] && suggestions[4].map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(4, item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
 						}
 						</AutoComplete>
 					</ContainerSection>					
@@ -439,6 +604,18 @@ const styles = {
 		borderColor: '#ddd',
 		position: 'relative'
 	},
+	avatarContainer: {
+		borderColor: '#9B9B9B',
+		borderWidth: 1 / PixelRatio.get(),
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginRight: 10
+	},
+	avatar: {
+		borderRadius: 75,
+		width: 100,
+		height: 100
+	}
 }
 
 export default Register
