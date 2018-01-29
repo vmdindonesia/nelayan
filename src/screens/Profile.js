@@ -75,10 +75,10 @@ class Profile extends Component {
 					<View style={profileImageContainer}>
 						<Image 
 							style={profileImage}
-							source={require('../../assets/photo.png')} 
+							source={{uri: `${BASE_URL}/images/${this.props.user.data.photo}`}} 
 						/>
 					</View>
-					<Text style={profileName}>Suhardi Suharman</Text>
+					<Text style={profileName}>{this.props.user.data.name}</Text>
 				</View>
 				<View style={menuContainerStyle}>
 					<Container>
@@ -155,16 +155,14 @@ const styles = {
 		flex: 5,
 	},
 	profileImageContainer: {
-		backgroundColor: 'yellow',
-		height: 60,
-		width: 60,
-		borderRadius: 30,
+		height: 70,
+		width: 70,
 		alignSelf: 'center',
 	},
 	profileImage: {
-		margin: 5,
-		height: 50,
-		width: 50
+		height: 70,
+		width: 70,
+		borderRadius: 50,
 	},
 	profileName: {
 		textAlign: 'center',

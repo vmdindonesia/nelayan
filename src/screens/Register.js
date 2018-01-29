@@ -172,14 +172,14 @@ class Register extends Component {
 		formData.append('photo', {
 			uri: data.photo.uri,
 			type: 'image/jpeg',
-			name: 'photoImage'
+			name: 'profile.jpg'
 		})
 		formData.append('name', data.name)
 		formData.append('idNumber', data.idNumber)
 		formData.append('idPhoto', {
 			uri: data.idPhoto.uri,
 			type: 'image/jpeg',
-			name: 'idPhotoImage'
+			name: 'ktp.jpg'
 		})
 		formData.append('phone', data.phone)
 		formData.append('email', data.email)

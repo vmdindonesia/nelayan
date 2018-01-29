@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback, A
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { logout, setUserToken } from '../actions'
+import { BASE_URL } from '../constants'
 
 class Home extends Component {
 	static navigationOptions = {
@@ -44,7 +45,7 @@ class Home extends Component {
 					<View style={profileImageContainer}>
 						<Image 
 							style={profileImage}
-							source={require('../../assets/photo.png')} 
+							source={{uri: `${BASE_URL}/images/${this.props.user.data.photo}`}} 
 						/>
 					</View>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
@@ -166,16 +167,14 @@ const styles = {
 		paddingTop: 20
 	},
 	profileImageContainer: {
-		backgroundColor: 'yellow',
-		height: 60,
-		width: 60,
-		borderRadius: 30,
+		height: 70,
+		width: 70,
 		alignSelf: 'center',
 	},
 	profileImage: {
-		margin: 5,
-		height: 50,
-		width: 50
+		height: 70,
+		width: 70,
+		borderRadius: 50,
 	},
 	profileName: {
 		textAlign: 'center',
