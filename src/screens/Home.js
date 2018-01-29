@@ -36,6 +36,8 @@ class Home extends Component {
 			menuItemStyle, menuIcon
 		} = styles
 
+		console.log(this.props.user, 'props')
+
 		return (
 			<View style={containerStyle}>
 				<View style={headerHomeStyle}>
@@ -45,7 +47,7 @@ class Home extends Component {
 							source={require('../../assets/photo.png')} 
 						/>
 					</View>
-					<Text style={profileName}>Suhardi Suharman</Text>
+					<Text style={profileName}>{this.props.user.data.name}</Text>
 					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
 						<View style={{ flexDirection: 'row', marginTop: 10}}>
 							<View style={{flex: 1}}>
