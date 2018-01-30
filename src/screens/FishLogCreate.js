@@ -129,6 +129,9 @@ class FishLogCreate extends Component {
 			if (error.response) {
 				alert(error.response.data.message)
 			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
 
 			this.setState({loading: false})
 		})

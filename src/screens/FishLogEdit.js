@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { NavigationActions } from 'react-navigation'
-import { View, ScrollView, Text, Picker, Keyboard, KeyboardAvoidingView, Alert, Image, TouchableWithoutFeedback, TouchableNativeFeedback, BackHandler } from 'react-native'
+import { View, ScrollView, Text, Picker, Keyboard, TouchableOpacity, Alert, Image, TouchableWithoutFeedback, TouchableNativeFeedback, BackHandler } from 'react-native'
 import axios from 'axios'
+import ImagePicker from 'react-native-image-picker'
 import { BASE_URL } from '../constants'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 
@@ -47,6 +48,7 @@ class FishLogEdit extends Component {
 			loading: false,
 			loadingPage: true,
 			data: {},
+			photo: null
 		}
 	}
 
@@ -112,8 +114,22 @@ class FishLogEdit extends Component {
 		Keyboard.dismiss()
 		this.setState({loading: true})
 
-		axios.put(`${BASE_URL}/fishlogs/${id}`, data, {
-			headers: {token}
+		let formData = new FormData()
+		formData.append('FishId', data.FishId)
+		formData.append('size', data.size)
+		formData.append('quantity', data.quantity)
+		formData.append('price', data.price)
+		formData.append('photo', {
+			uri: this.state.photo.uri,
+			type: 'image/jpeg',
+			name: 'fishlog.jpg'
+		})
+
+		axios.put(`${BASE_URL}/fishlogs/${id}`, formData, {
+			headers: {
+				token,
+				headers: { 'Content-Type': 'multipart/form-data' }
+			},
 		})
 		.then(response => {
 			this.props.navigation.setParams({change: false})
@@ -130,7 +146,6 @@ class FishLogEdit extends Component {
 			this.setState({loading: false})
 		})
 		.catch(error => {
-			console.log(error.response)
 			if (error.response) {
 				alert(error.response.data.message)
 			}
@@ -140,6 +155,41 @@ class FishLogEdit extends Component {
 
 			this.setState({loading: false})
 		})
+	}
+
+	selectPhotoTapped = (name) => {
+		const options = {
+			quality: 1.0,
+			maxWidth: 500,
+			maxHeight: 500,
+			storageOptions: {
+				skipBackup: true
+			}
+		}
+
+		ImagePicker.launchCamera(options, (response) => {
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled photo picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else if (response.customButton) {
+				console.log('User tapped custom button: ', response.customButton);
+			}
+			else {
+				let source = { uri: response.uri };
+
+				// You can also display the image using data:
+				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+				this.setState({
+					[name]: source
+				});
+			}
+		});
 	}
 
 	renderButton = () => {
@@ -166,7 +216,8 @@ class FishLogEdit extends Component {
 	}
 
 	render() {
-		const { data, loadingPage } = this.state
+		const { data, loadingPage, photo } = this.state
+		console.log(this.state.photo, 'photo nih')
 
 		if (loadingPage) {
 			return (
@@ -182,10 +233,18 @@ class FishLogEdit extends Component {
 					<ContainerSection>
 						<TouchableWithoutFeedback>
 							<View style={{flex: 1, padding: 8}}>
-								<Image 
-									style={{width: '100%', height: 160}}
-									source={{uri: `${BASE_URL}/images/${data.photo}`}} 
-								/>
+								<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+									<View>
+									{ photo === null ? 
+										<Image 
+											style={{width: '100%', height: 160}}
+											source={{uri: `${BASE_URL}/images/${data.photo}`}} 
+										/>
+									:
+										<Image style={{height: 200}} source={photo} />
+									}
+									</View>
+								</TouchableOpacity>
 							</View>
 						</TouchableWithoutFeedback>
 					</ContainerSection>
