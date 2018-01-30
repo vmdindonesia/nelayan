@@ -33,12 +33,18 @@ class OrderDetail extends Component {
 			dpExpanded: false,
 			deliveryExpanded: false,
 			paidExpanded: false,
-			doneExpanded: false
+			doneExpanded: false,
+
+			declineNotes: ''
 		}
 	}
 
 	componentWillMount() {
 		this.fetchDetail()
+	}
+
+	onChangeInput = (name, value) => {
+		this.setState({[name]: value})
 	}
 
 	fetchDetail = () => {
@@ -94,8 +100,42 @@ class OrderDetail extends Component {
 		})
 	}
 
+	declineContract = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		this.setState({loading: true})
+
+		let data = {
+			approval: 0,
+			text: this.state.declineNotes
+		}
+
+		console.log(data, 'data')
+
+		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
+			headers: {token}
+		})
+		.then(response => {
+			this.fetchDetail()
+			this.setState({loading: false})
+			Alert.alert('Berhasil!', 'Revisi kontrak telah berhasil dibuat', [])
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loading: false})
+		})
+
+		this._toggleModal()
+	}
+
 	render() {
-		const { contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, data } = this.state
+		const { contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, data, declineNotes } = this.state
+		console.log(declineNotes)
 
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -135,24 +175,26 @@ class OrderDetail extends Component {
 						contractExpanded ? 
 							<CardSection>
 								<View style={{flexDirection: 'column'}}>
-									<View>
-										<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
-									</View>
-									<View >
-										<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
-											<CheckBox
-												title='Survei'
-												checked="true"
-											/>
-											<CheckBox
-												title='Sample'
-												checked="true"
-											/>
+									{
+										<View>
+											<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
 										</View>
-									</View>
-									<View style={{marginTop: 10}}>
-										<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} onPress={() => this.acceptContract()} />
-									</View>
+										// <View >
+										// 	<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+										// 		<CheckBox
+										// 			title='Survei'
+										// 			checked="true"
+										// 		/>
+										// 		<CheckBox
+										// 			title='Sample'
+										// 			checked="true"
+										// 		/>
+										// 	</View>
+										// </View>
+										// <View style={{marginTop: 10}}>
+										// 	<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} onPress={() => this.acceptContract()} />
+										// </View>
+									}
 									{
 										data.Contract ?
 											<View>
@@ -191,7 +233,7 @@ class OrderDetail extends Component {
 															</View>
 														</View>
 													:
-														<Text>Kontrak Disetujui</Text>
+														<Text>Status: {data.Contract.Status.name}</Text>
 												}
 											</View>
 										:
@@ -339,8 +381,24 @@ class OrderDetail extends Component {
 							<FormInput 
 								multiline
 								autoCorrect={false}
+								onChangeText={v => this.onChangeInput('declineNotes', v)}
 							/>
-							<Button raised title='Kirim' backgroundColor="blue" containerViewStyle={{marginTop: 20}} />
+							<Button 
+								raised 
+								title='Kirim' 
+								backgroundColor="blue" 
+								containerViewStyle={{marginTop: 20}}
+								onPress={
+									() => Alert.alert(
+										'Yakin ingin merevisi kontrak?',
+										'Revisi kontrak akan terkirim ke buyer',
+										[
+											{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+											{text: 'Ya', onPress: () => this.declineContract()},
+										]
+									)
+								}
+							/>
 						</View>
 					</View>
 				</Modal>
