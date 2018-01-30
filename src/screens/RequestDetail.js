@@ -132,7 +132,7 @@ class RequestDetail extends Component {
 						<View style={{flexDirection: 'column', flex: 1}}>
 							<Image 
 								style={styles.thumbnailStyle}
-								source={{uri: `${BASE_URL}/images/${data.Buyer.photo}`}} 
+								source={{uri: `${BASE_URL}/images/${data.Transaction.photo}`}} 
 							/>
 						</View>
 						<View style={{justifyContent: 'space-around', flex: 2}}>

@@ -26,7 +26,7 @@ class RequestList extends Component {
 							<View style={{flexDirection: 'column'}}>
 								<Image 
 									style={styles.thumbnailStyle}
-									source={{uri: `${BASE_URL}/images/${item.Buyer.photo}`}} 
+									source={{uri: `${BASE_URL}/images/${item.Transaction.photo}`}} 
 								/>
 							</View>
 							<View style={{justifyContent: 'space-around', flex: 1}}>

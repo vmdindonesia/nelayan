@@ -135,7 +135,6 @@ class OrderDetail extends Component {
 
 	render() {
 		const { contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, data, declineNotes } = this.state
-		console.log(declineNotes)
 
 		if (this.state.loading) {
 			return <Spinner size='large' />
