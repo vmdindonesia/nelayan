@@ -169,18 +169,22 @@ class Register extends Component {
 		formData.append('subDistrict', data.subDistrict)
 		formData.append('village', data.village)
 		// personal data
-		formData.append('photo', {
-			uri: data.photo.uri,
-			type: 'image/jpeg',
-			name: 'profile.jpg'
-		})
+		if (data.photo) {
+			formData.append('photo', {
+				uri: data.photo.uri,
+				type: 'image/jpeg',
+				name: 'profile.jpg'
+			})
+		}
 		formData.append('name', data.name)
 		formData.append('idNumber', data.idNumber)
-		formData.append('idPhoto', {
-			uri: data.idPhoto.uri,
-			type: 'image/jpeg',
-			name: 'ktp.jpg'
-		})
+		if (data.idPhoto) {
+			formData.append('idPhoto', {
+				uri: data.idPhoto.uri,
+				type: 'image/jpeg',
+				name: 'ktp.jpg'
+			})
+		}
 		formData.append('phone', data.phone)
 		formData.append('email', data.email)
 		formData.append('password', data.password)
@@ -350,7 +354,7 @@ class Register extends Component {
 					<ContainerSection>
 						<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
 							<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
-							{ photo === null ? <Text>Select a Photo</Text> :
+							{ photo === null ? <Text>Foto profil</Text> :
 								<Image style={styles.avatar} source={photo} />
 							}
 							</View>

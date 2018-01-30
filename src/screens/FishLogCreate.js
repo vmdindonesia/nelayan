@@ -59,7 +59,6 @@ class FishLogCreate extends Component {
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			const { params } = this.props.navigation.state
-			console.log(params)
 			
 			if (params && params.change === true) {
 				Alert.alert(
@@ -97,11 +96,13 @@ class FishLogCreate extends Component {
 		formData.append('size', data.size)
 		formData.append('quantity', data.quantity)
 		formData.append('price', data.price)
-		formData.append('photo', {
-			uri: data.photo.uri,
-			type: 'image/jpeg',
-			name: 'fishlog.jpg'
-		})
+		if (data.photo) {
+			formData.append('photo', {
+				uri: data.photo.uri,
+				type: 'image/jpeg',
+				name: 'fishlog.jpg'
+			})
+		}
 
 		axios.post(`${BASE_URL}/fishlogs`, formData, {
 			headers: {

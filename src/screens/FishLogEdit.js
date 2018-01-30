@@ -119,11 +119,13 @@ class FishLogEdit extends Component {
 		formData.append('size', data.size)
 		formData.append('quantity', data.quantity)
 		formData.append('price', data.price)
-		formData.append('photo', {
-			uri: this.state.photo.uri,
-			type: 'image/jpeg',
-			name: 'fishlog.jpg'
-		})
+		if (this.state.photo) {
+			formData.append('photo', {
+				uri: this.state.photo.uri,
+				type: 'image/jpeg',
+				name: 'fishlog.jpg'
+			})
+		}
 
 		axios.put(`${BASE_URL}/fishlogs/${id}`, formData, {
 			headers: {
