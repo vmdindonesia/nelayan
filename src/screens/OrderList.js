@@ -28,7 +28,7 @@ class OrderList extends Component {
 						/>
 					</View>
 					<View style={styles.headerContentStyle}>
-						<Text style={styles.hedaerTextStyle}>{item.Request.Transaction.Fish.name} - {item.Request.Transaction.size} Kg</Text>
+						<Text style={styles.hedaerTextStyle}>{item.Request.Transaction.Fish.name}</Text>
 						<View style={{flexDirection: 'row'}}>
 							<Text style={{flex: 1}}>{item.Request.Buyer.name}</Text>
 						</View>
