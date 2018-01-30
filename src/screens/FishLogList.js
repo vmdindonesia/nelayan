@@ -32,7 +32,8 @@ class FishLogList extends Component {
 					<View style={styles.headerContentStyle}>
 						<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
 						<View style={{flexDirection: 'row'}}>
-							<Text style={{flex: 1}}>{item.size} Kg</Text>
+							<Text style={{flex: 1}}>{item.quantity} Kg</Text>
+							<Text style={{flex: 1}}>{item.size} Cm</Text>
 							<Text style={{flex: 1, textAlign: 'right'}}>Rp {numeral(item.price).format('0,0')}</Text>
 						</View>
 						<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>

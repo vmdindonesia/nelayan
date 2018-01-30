@@ -80,7 +80,6 @@ class FishLogCreate extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-		// if (name === 'price') { v = numeral(parseInt(v)).format('0,0').replace(/\./g, '') }
 		this.setState({[name]: v})
 
 		this.props.navigation.setParams({change: true})
