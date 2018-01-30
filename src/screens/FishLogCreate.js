@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
 import moment from 'moment'
-import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, BackHandler, TouchableWithoutFeedback } from 'react-native'
+import ImagePicker from 'react-native-image-picker'
+import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, TouchableOpacity, BackHandler, TouchableWithoutFeedback } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 
@@ -46,11 +47,12 @@ class FishLogCreate extends Component {
 		this.state = {
 			loading: false,
 			UserId: '1',
+
 			FishId: '1',
 			size: '',
 			quantity: '',
 			price: '',
-			photo: 'ikan.jpg',
+			photo: null,
 		}
 	}
 
@@ -90,8 +92,22 @@ class FishLogCreate extends Component {
 		const data = this.state
 		let token = this.props.user.token
 
-		axios.post(`${BASE_URL}/fishlogs`, data, {
-			headers: {token}
+		let formData = new FormData()
+		formData.append('FishId', data.FishId)
+		formData.append('size', data.size)
+		formData.append('quantity', data.quantity)
+		formData.append('price', data.price)
+		formData.append('photo', {
+			uri: data.photo.uri,
+			type: 'image/jpeg',
+			name: 'fishlog.jpg'
+		})
+
+		axios.post(`${BASE_URL}/fishlogs`, formData, {
+			headers: {
+				token,
+				headers: { 'Content-Type': 'multipart/form-data' }
+			},
 		})
 		.then(response => {
 			console.log(response)
@@ -116,6 +132,41 @@ class FishLogCreate extends Component {
 
 			this.setState({loading: false})
 		})
+	}
+
+	selectPhotoTapped = (name) => {
+		const options = {
+			quality: 1.0,
+			maxWidth: 500,
+			maxHeight: 500,
+			storageOptions: {
+				skipBackup: true
+			}
+		}
+
+		ImagePicker.launchCamera(options, (response) => {
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled photo picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else if (response.customButton) {
+				console.log('User tapped custom button: ', response.customButton);
+			}
+			else {
+				let source = { uri: response.uri };
+
+				// You can also display the image using data:
+				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+				this.setState({
+					[name]: source
+				});
+			}
+		});
 	}
 
 	renderButton = () => {
@@ -158,10 +209,18 @@ class FishLogCreate extends Component {
 					<ContainerSection>
 						<TouchableWithoutFeedback>
 							<View style={{flex: 1, padding: 8}}>
-								<Image
-									style={{width: '100%'}}
-									source={require('../../assets/uploader.png')} 
-								/>
+								<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+									<View>
+									{ photo === null ? 
+										<Image
+											style={{width: '100%'}}
+											source={require('../../assets/uploader.png')} 
+										/>
+									:
+										<Image style={{height: 200}} source={photo} />
+									}
+									</View>
+								</TouchableOpacity>
 							</View>
 						</TouchableWithoutFeedback>
 					</ContainerSection>

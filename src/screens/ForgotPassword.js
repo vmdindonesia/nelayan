@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
-import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { connect } from 'react-redux'
+import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 
 class ForgotPassword extends Component {
 	static navigationOptions = {

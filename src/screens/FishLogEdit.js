@@ -183,8 +183,8 @@ class FishLogEdit extends Component {
 						<TouchableWithoutFeedback>
 							<View style={{flex: 1, padding: 8}}>
 								<Image 
-									style={{width: '100%'}}
-									source={require('../../assets/ikan.jpg')} 
+									style={{width: '100%', height: 160}}
+									source={{uri: `${BASE_URL}/images/${data.photo}`}} 
 								/>
 							</View>
 						</TouchableWithoutFeedback>

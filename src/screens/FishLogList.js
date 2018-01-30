@@ -6,6 +6,7 @@ import ActionButton from 'react-native-action-button'
 import numeral from 'numeral'
 import { fishLogsFetch } from '../actions'
 import { Spinner } from '../components/common'
+import { BASE_URL } from '../constants'
 
 class FishLogList extends Component {
 	static navigationOptions = {
@@ -25,7 +26,7 @@ class FishLogList extends Component {
 					<View style={styles.thumbnailContainerStyle}>
 						<Image 
 							style={styles.thumbnailStyle}
-							source={require('../../assets/ikan.jpg')} 
+							source={{uri: `${BASE_URL}/images/${item.photo}`}} 
 						/>
 					</View>
 					<View style={styles.headerContentStyle}>
