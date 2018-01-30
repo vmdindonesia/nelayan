@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import numeral from 'numeral'
 import { NavigationActions } from 'react-navigation'
 import { View, ScrollView, Text, Picker, Keyboard, TouchableOpacity, Alert, Image, TouchableWithoutFeedback, TouchableNativeFeedback, BackHandler } from 'react-native'
 import axios from 'axios'
@@ -219,7 +220,6 @@ class FishLogEdit extends Component {
 
 	render() {
 		const { data, loadingPage, photo } = this.state
-		console.log(this.state.photo, 'photo nih')
 
 		if (loadingPage) {
 			return (
@@ -290,8 +290,8 @@ class FishLogEdit extends Component {
 						<Input
 							label="Harga/Kg"
 							keyboardType="numeric"
-							value={data.price && data.price.toString()}
-							onChangeText={v => this.onChangeInput('price', v)}
+							value={data.price ? numeral(parseInt(data.price)).format('0,0') : ''}
+							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
 						/>
 					</ContainerSection>
 					<ContainerSection>

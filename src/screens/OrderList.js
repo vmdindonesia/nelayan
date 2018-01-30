@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import { connect } from 'react-redux'
-import moment from 'moment'
 import { ordersFetch } from '../actions'
-import { Card, CardSection, Spinner } from '../components/common'
+import { Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 
 class OrderList extends Component {

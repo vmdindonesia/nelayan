@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
 import moment from 'moment'
+import numeral from 'numeral'
 import ImagePicker from 'react-native-image-picker'
 import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, TouchableOpacity, BackHandler, TouchableWithoutFeedback } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
@@ -79,6 +80,7 @@ class FishLogCreate extends Component {
 	}
 
 	onChangeInput = (name, v) => {
+		// if (name === 'price') { v = numeral(parseInt(v)).format('0,0').replace(/\./g, '') }
 		this.setState({[name]: v})
 
 		this.props.navigation.setParams({change: true})
@@ -197,7 +199,6 @@ class FishLogCreate extends Component {
 	}
 
 	render() {
-		console.log(this.props.navigation.state.params)
 		const {
 			UserId,
 			FishId,
@@ -206,6 +207,7 @@ class FishLogCreate extends Component {
 			price,
 			photo
 		} = this.state
+		console.log(price)
 
 		return (
 			<ScrollView keyboardShouldPersistTaps="always">
@@ -268,8 +270,8 @@ class FishLogCreate extends Component {
 						<Input
 							label="Harga/Kg"
 							keyboardType="numeric"
-							value={price}
-							onChangeText={v => this.onChangeInput('price', v)}
+							value={price ? numeral(parseInt(price)).format('0,0') : ''}
+							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
 						/>
 					</ContainerSection>
 					<ContainerSection>
