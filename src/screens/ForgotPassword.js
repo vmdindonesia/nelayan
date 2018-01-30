@@ -16,6 +16,10 @@ class ForgotPassword extends Component {
 		}
 	}
 
+	onChange = (name, value) => {
+		this.setState({ [name]: value })
+	}
+
 	renderButton = () => {
 		if (this.props.user.loading) {
 			return <Spinner size='large' />
