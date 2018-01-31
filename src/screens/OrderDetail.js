@@ -13,7 +13,7 @@ class OrderDetail extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: `Order ${navigation.state.params.id}`,
 		headerRight: 
-			<TouchableOpacity>
+			<TouchableOpacity onPress={() => navigation.navigate('Message', {id: navigation.state.params.id})}>
 				<View>
 					<Icon style={{marginRight: 20}} size={30} name="md-chatboxes" />
 				</View>

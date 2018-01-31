@@ -25,6 +25,7 @@ import MemberList from './src/screens/MemberList'
 import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
+import Message from './src/screens/Message'
 
 numeral.register('locale', 'id', {
   delimiters: {
@@ -65,6 +66,7 @@ const Routes = StackNavigator({
   MemberList: { screen: MemberList },
   Information: { screen: Information },
   Reward: { screen: Reward },
+  Message: { screen: Message },
 
 }, {
   cardStyle: { backgroundColor: '#fff' },
