@@ -25,6 +25,7 @@ class Message extends Component {
 		this.state = {
 			loading: true,
 			data: {},
+			text: ''
 		}
 	}
 
@@ -34,6 +35,10 @@ class Message extends Component {
 		this.props.navigation.setParams({
 			refresh: this.fetchMessage
 		})
+	}
+
+	onChangeInput = (name, v) => {
+		this.setState({[name]: v})
 	}
 
 	fetchMessage = () => {
@@ -59,8 +64,32 @@ class Message extends Component {
 		})
 	}
 
+	postMessage = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+
+		let formData = new FormData()
+		formData.append('text', this.state.text)
+
+		axios.post(`${BASE_URL}/orders/${id}/messages`, formData, {
+			headers: {token}
+		})
+		.then(response => {
+			this.setState({text: ''})
+			this.fetchMessage()
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
+	}
+
 	render() {
-		const { loading, data } = this.state
+		const { loading, data, text } = this.state
 		console.log(data)
 
 		if (loading) {
@@ -93,12 +122,15 @@ class Message extends Component {
 							<InputChat
 								placeholder="Tulis pesan di sini"
 								multiline
+								value={text}
+								onChangeText={v => this.onChangeInput('text', v)}
 							/>
 							<Button
 								title='Kirim'
 								backgroundColor="blue"
 								containerViewStyle={{marginTop: 15}}
 								buttonStyle={{padding: 10}}
+								onPress={() => this.postMessage()}
 							/>
 						</ContainerSection>
 					</Container>
