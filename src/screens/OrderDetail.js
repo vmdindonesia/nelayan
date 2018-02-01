@@ -255,72 +255,78 @@ class OrderDetail extends Component {
 				}
 
 				{
-					data.Contract &&
-					<Card>
-						<CardSection>
-							<TouchableWithoutFeedback onPress={() => this.setState({contractExpanded: !contractExpanded})}>
-								<View style={{flex: 1, flexDirection: 'row'}}>
-									<Text style={{flex: 1, fontSize: 20}}>Kontrak</Text>
-									<View style={{flex: 1}}>
-										<Icon size={30} style={{alignSelf: 'flex-end'}} name={contractExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
+					data.Contract ?
+						<Card>
+							<CardSection>
+								<TouchableWithoutFeedback onPress={() => this.setState({contractExpanded: !contractExpanded})}>
+									<View style={{flex: 1, flexDirection: 'row'}}>
+										<Text style={{flex: 1, fontSize: 20}}>Kontrak</Text>
+										<View style={{flex: 1}}>
+											<Icon size={30} style={{alignSelf: 'flex-end'}} name={contractExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
+										</View>
 									</View>
-								</View>
-							</TouchableWithoutFeedback>
-						</CardSection>
-						{
-							contractExpanded ? 
-								<CardSection>
-									<View style={{flexDirection: 'column', flex: 1}}>
-										{
-											data.Contract ?
-												<View>
-													<View> 
-														<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/files/${data.Contract.file}`).catch(err => console.error('An error occurred', err))}>
-															<View style={{marginTop: 10, flexDirection: 'row'}}>
-																<Text style={{color: 'blue'}}>File Kontrak.pdf</Text>
-																<Icon size={20} style={{color: 'blue', marginLeft: 5}} name="md-download" />
-															</View>
-														</TouchableOpacity>
+								</TouchableWithoutFeedback>
+							</CardSection>
+							{
+								contractExpanded ? 
+									<CardSection>
+										<View style={{flexDirection: 'column', flex: 1}}>
+											{
+												data.Contract ?
+													<View>
+														<View> 
+															<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/files/${data.Contract.file}`).catch(err => console.error('An error occurred', err))}>
+																<View style={{marginTop: 10, flexDirection: 'row'}}>
+																	<Text style={{color: 'blue'}}>File Kontrak.pdf</Text>
+																	<Icon size={20} style={{color: 'blue', marginLeft: 5}} name="md-download" />
+																</View>
+															</TouchableOpacity>
+														</View>
+														{
+															data.Contract.StatusId === 4 ?
+																<View style={{marginTop: 10, flexDirection: 'row'}}>
+																	<View style={{flex: 1}}>
+																		<Button raised title='Revisi' onPress={this._toggleModal} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
+																	</View>
+																	<View style={{flex: 1}}>
+																		<Button
+																			raised 
+																			title='Setuju' 
+																			backgroundColor="green" 
+																			containerViewStyle={{width: '100%', marginLeft: 0}} 
+																			onPress={
+																				() => Alert.alert(
+																					'Yakin ingin menyetujui kontrak?',
+																					'Kontrak yang telah disetujui tidak dapat diubah',
+																					[
+																						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+																						{text: 'Ya', onPress: () => this.acceptContract()},
+																					]
+																				)
+																			}
+																		/>
+																	</View>
+																</View>
+															:
+																<Text>Status: {data.Contract.Status.name}</Text>
+														}
 													</View>
-													{
-														data.Contract.StatusId === 4 ?
-															<View style={{marginTop: 10, flexDirection: 'row'}}>
-																<View style={{flex: 1}}>
-																	<Button raised title='Revisi' onPress={this._toggleModal} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
-																</View>
-																<View style={{flex: 1}}>
-																	<Button
-																		raised 
-																		title='Setuju' 
-																		backgroundColor="green" 
-																		containerViewStyle={{width: '100%', marginLeft: 0}} 
-																		onPress={
-																			() => Alert.alert(
-																				'Yakin ingin menyetujui kontrak?',
-																				'Kontrak yang telah disetujui tidak dapat diubah',
-																				[
-																					{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-																					{text: 'Ya', onPress: () => this.acceptContract()},
-																				]
-																			)
-																		}
-																	/>
-																</View>
-															</View>
-														:
-															<Text>Status: {data.Contract.Status.name}</Text>
-													}
-												</View>
-											:
-												<View />
-										}
-									</View>
-								</CardSection>
-							:
-								<View />
-						}
-						
-					</Card>
+												:
+													<View />
+											}
+										</View>
+									</CardSection>
+								:
+									<View />
+							}
+							
+						</Card>
+					:
+						<Card>
+							<CardSection>
+								<Text>Menunggu pembeli membuat kontrak</Text>
+							</CardSection>
+						</Card>
 				}
 
 				{
