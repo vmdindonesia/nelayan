@@ -9,10 +9,10 @@ import { Card, CardSection, Container, ContainerSection, Spinner, InputChat } fr
 import { BASE_URL } from '../constants'
 
 class Message extends Component {
-	static navigationOptions = () => ({
+	static navigationOptions = ({navigation}) => ({
 		title: 'Diskusi',
 		headerRight: 
-			<TouchableOpacity>
+			<TouchableOpacity onPress={navigation.state.params.refresh}>
 				<View>
 					<Icon style={{marginRight: 20}} size={30} name="md-refresh" />
 				</View>
@@ -23,16 +23,22 @@ class Message extends Component {
 		super(props)
 	
 		this.state = {
-			loading: true,
+			loading: false,
 			data: {},
 		}
 	}
 
 	componentDidMount() {
 		this.fetchMessage()
+
+		this.props.navigation.setParams({
+      refresh: this.fetchMessage
+    })
 	}
 
 	fetchMessage = () => {
+		this.setState({loading: true})
+
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
 
