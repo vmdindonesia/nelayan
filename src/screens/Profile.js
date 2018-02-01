@@ -4,13 +4,23 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { BASE_URL } from '../constants'
-import { Card, CardSection, Container, ContainerSection, Button, Input, Spinner } from '../components/common'
+import { Button } from 'react-native-elements'
+import { Card, CardSection, Container, ContainerSection, Input, Spinner } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
 
 class Profile extends Component {
-	static navigationOptions = {
-		title: 'Profil'
-	}
+	static navigationOptions = ({navigation}) => ({
+		title: 'Profil',
+		headerRight:
+			<Button
+				title='Ubah'
+				backgroundColor="#eaeaea"
+				containerViewStyle={{marginRight: 10}}
+				buttonStyle={{padding: 10}}
+				color="black"
+				onPress={() => navigation.navigate('ProfileEdit')}
+			/>
+	})
 
 	constructor(props) {
 		super(props)
