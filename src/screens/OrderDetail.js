@@ -29,6 +29,7 @@ class OrderDetail extends Component {
 			checked: false,
 			isModalVisible: false,
 
+			sampleExpanded: false,
 			contractExpanded: false,
 			dpExpanded: false,
 			deliveryExpanded: false,
@@ -133,8 +134,39 @@ class OrderDetail extends Component {
 		this._toggleModal()
 	}
 
+	confirmRequestSample = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		this.setState({loading: true})
+
+		let data = {
+			approval: 1
+		}
+
+		axios.put(`${BASE_URL}/supplier/orders/${id}/samples`, data, {
+			headers: {token}
+		})
+		.then(response => {
+			this.fetchDetail()
+			this.setState({loading: false})
+			Alert.alert('Berhasil!', 'Request survey dan sample berhasil disetujui', [])
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loading: false})
+		})
+	}
+
 	render() {
-		const { contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, data, declineNotes } = this.state
+		const { 
+			sampleExpanded, contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
+			data 
+		} = this.state
 
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -159,6 +191,69 @@ class OrderDetail extends Component {
 					</ContainerSection>
 				</Container>
 
+				{
+					data.Sample &&
+					<Card>
+						<CardSection>
+							<TouchableWithoutFeedback onPress={() => this.setState({sampleExpanded: !sampleExpanded})}>
+								<View style={{flex: 1, flexDirection: 'row'}}>
+									<Text style={{fontSize: 20}}>Survey & Sample</Text>
+									<View style={{flex: 1}}>
+										<Icon size={30} style={{alignSelf: 'flex-end'}} name={sampleExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
+									</View>
+								</View>
+							</TouchableWithoutFeedback>
+						</CardSection>
+						{
+							sampleExpanded ? 
+								<CardSection>
+									<View style={{flexDirection: 'column'}}>
+										<View>
+											<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survey lokasi.</Text>
+										</View>
+										<View >
+											<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
+												<CheckBox
+													title='Survey'
+													checked={data.Sample.survey}
+												/>
+												<CheckBox
+													title='Sample'
+													checked={data.Sample.sample}
+												/>
+											</View>
+										</View>
+										<View style={{marginTop: 10}}>
+										{
+											data.Sample.StatusId === 16 ?
+												<Button 
+													raised 
+													title='Konfirmasi' 
+													backgroundColor="blue" 
+													containerViewStyle={{width: '100%', marginLeft: 0}} 
+													onPress={
+														() => Alert.alert(
+															'',
+															'Yakin ingin konfirmasi request survey dan sample?',
+															[
+																{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+																{text: 'Ya', onPress: () => this.confirmRequestSample()},
+															]
+														)
+													}
+												/>
+											:
+												<Text>Request Disetujui</Text>
+										}
+										</View>
+									</View>
+								</CardSection>
+							:
+								<View />
+						}
+					</Card>
+				}
+
 				<Card>
 					<CardSection>
 						<TouchableWithoutFeedback onPress={() => this.setState({contractExpanded: !contractExpanded})}>
@@ -175,29 +270,8 @@ class OrderDetail extends Component {
 							<CardSection>
 								<View style={{flexDirection: 'column'}}>
 									{
-										<View>
-											<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survei lokasi.</Text>
-										</View>
-										// <View >
-										// 	<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
-										// 		<CheckBox
-										// 			title='Survei'
-										// 			checked="true"
-										// 		/>
-										// 		<CheckBox
-										// 			title='Sample'
-										// 			checked="true"
-										// 		/>
-										// 	</View>
-										// </View>
-										// <View style={{marginTop: 10}}>
-										// 	<Button raised title='Konfirmasi' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} onPress={() => this.acceptContract()} />
-										// </View>
-									}
-									{
 										data.Contract ?
 											<View>
-												<View style={{height: 20, borderBottomWidth: 1, borderColor: '#eaeaea'}} />
 												<View> 
 													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/files/${data.Contract.file}`).catch(err => console.error('An error occurred', err))}>
 														<View style={{marginTop: 15, flexDirection: 'row'}}>
