@@ -270,13 +270,13 @@ class OrderDetail extends Component {
 						{
 							contractExpanded ? 
 								<CardSection>
-									<View style={{flexDirection: 'column'}}>
+									<View style={{flexDirection: 'column', flex: 1}}>
 										{
 											data.Contract ?
 												<View>
 													<View> 
 														<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/files/${data.Contract.file}`).catch(err => console.error('An error occurred', err))}>
-															<View style={{marginTop: 15, flexDirection: 'row'}}>
+															<View style={{marginTop: 10, flexDirection: 'row'}}>
 																<Text style={{color: 'blue'}}>File Kontrak.pdf</Text>
 																<Icon size={20} style={{color: 'blue', marginLeft: 5}} name="md-download" />
 															</View>
