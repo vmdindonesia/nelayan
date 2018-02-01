@@ -23,7 +23,7 @@ class Message extends Component {
 		super(props)
 	
 		this.state = {
-			loading: false,
+			loading: true,
 			data: {},
 		}
 	}
@@ -32,8 +32,8 @@ class Message extends Component {
 		this.fetchMessage()
 
 		this.props.navigation.setParams({
-      refresh: this.fetchMessage
-    })
+			refresh: this.fetchMessage
+		})
 	}
 
 	fetchMessage = () => {
@@ -70,9 +70,15 @@ class Message extends Component {
 		return (
 			<View style={styles.container}>
 
-				<ScrollView style={styles.body}>
+				<ScrollView
+					style={styles.body}
+					ref={ref => this.scrollView = ref}
+					onContentSizeChange={(contentWidth, contentHeight) => {
+						this.scrollView.scrollToEnd({animated: true})
+					}}
+				>
 					{
-						data && data.map(item =>
+						data !== undefined && data.map(item =>
 							<View key={item.id} style={styles.messageContainer}>
 								<Text style={{textAlign: item.SupplierId === this.props.user.data.id ? 'right' : 'left', fontSize: 16}}>{item.text}</Text>
 								<Text style={{textAlign: item.SupplierId === this.props.user.data.id ? 'right' : 'left', fontSize: 9}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
