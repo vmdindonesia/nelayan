@@ -523,12 +523,18 @@ class OrderDetail extends Component {
 						{
 							paidExpanded ? 
 								<CardSection>
-									<View style={{flexDirection: 'column'}}>
+									<View style={{flexDirection: 'column', flex: 1}}>
 										<View>
-											<Text style={{marginBottom: 10}}>Pembeli telah melakukan pelunasan pada tanggal 30/12/17.</Text>
-											<Text>Total Pembayaran	Rp 4.000.000</Text>
-											<Text>Pembayaran DP		Rp 2.500.000</Text>
-											<Text>Sisa Pelunanasan	Rp 1.500.000</Text>
+											<Text>Status: {data.finalPayment.Status.name}</Text>
+											<Text>{moment(data.finalPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
+											<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.finalPayment.photo}`).catch(err => console.error('An error occurred', err))}>
+												<View>
+													<Image 
+														style={{width: '100%', height: 150}}
+														source={{uri: `${BASE_URL}/images/${data.finalPayment.photo}`}} 
+													/>
+												</View>
+											</TouchableOpacity>
 										</View>									
 									</View>
 								</CardSection>
