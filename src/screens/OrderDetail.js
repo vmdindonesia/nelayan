@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { ScrollView, View, Text, Alert, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Modal from 'react-native-modal'
+import moment from 'moment'
 import numeral from 'numeral'
 import axios from 'axios'
 import { CheckBox, Button, FormInput, Rating } from 'react-native-elements'
@@ -36,7 +37,7 @@ class OrderDetail extends Component {
 			paidExpanded: false,
 			doneExpanded: false,
 
-			declineNotes: ''
+			declineNotes: '',
 		}
 	}
 
@@ -56,7 +57,20 @@ class OrderDetail extends Component {
 			headers: {token}
 		})
 		.then(response => {
-			this.setState({data: response.data.data, loading: false})
+			console.log(response.data)
+
+			let data = this.state.data
+
+			data = response.data.data
+			data.downPayment = response.data.downPayment
+			data.shipping = response.data.shipping
+			data.shippingDelivered = response.data.shippingDelivered
+			data.finalPayment = response.data.finalPayment
+
+			this.setState({
+				data,
+				loading: false,
+			})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -110,8 +124,6 @@ class OrderDetail extends Component {
 			approval: 0,
 			text: this.state.declineNotes
 		}
-
-		console.log(data, 'data')
 
 		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
 			headers: {token}
@@ -167,6 +179,8 @@ class OrderDetail extends Component {
 			sampleExpanded, contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
 			data 
 		} = this.state
+
+		console.log(data)
 
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -330,7 +344,7 @@ class OrderDetail extends Component {
 				}
 
 				{
-					data.DownPayment &&
+					data.downPayment &&
 					<Card>
 						<CardSection>
 							<TouchableWithoutFeedback onPress={() => this.setState({dpExpanded: !dpExpanded})}>
@@ -345,11 +359,18 @@ class OrderDetail extends Component {
 						{
 							dpExpanded ? 
 								<CardSection>
-									<View style={{flexDirection: 'column'}}>
+									<View style={{flexDirection: 'column', flex: 1}}>
 										<View>
-											<Text>Pembeli telah melakukan pembayaran DP pada tanggal 27/07/18.</Text>
-											<Text>Total Pembayaran	Rp 4.000.000</Text>
-											<Text>Pembayaran DP		Rp 2.500.000</Text>
+											<Text>Status: {data.downPayment.Status.name}</Text>
+											<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
+											<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.downPayment.photo}`).catch(err => console.error('An error occurred', err))}>
+												<View>
+													<Image 
+														style={{width: '100%', height: 150}}
+														source={{uri: `${BASE_URL}/images/${data.downPayment.photo}`}} 
+													/>
+												</View>
+											</TouchableOpacity>
 										</View>									
 									</View>
 								</CardSection>
@@ -360,7 +381,7 @@ class OrderDetail extends Component {
 				}
 
 				{
-					data.Shipping &&
+					data.shipping &&
 					<Card>
 						<CardSection>
 							<TouchableWithoutFeedback onPress={() => this.setState({deliveryExpanded: !deliveryExpanded})}>
@@ -403,7 +424,7 @@ class OrderDetail extends Component {
 				}
 
 				{
-					data.FinalPayment &&
+					data.finalPayment &&
 					<Card>
 						<CardSection>
 							<TouchableWithoutFeedback onPress={() => this.setState({paidExpanded: !paidExpanded})}>
