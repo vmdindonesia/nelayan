@@ -130,9 +130,9 @@ class FishLogEdit extends Component {
 
 		axios.put(`${BASE_URL}/fishlogs/${id}`, formData, {
 			headers: {
-				token,
-				headers: { 'Content-Type': 'multipart/form-data' }
-			},
+				'Content-Type': 'multipart/form-data',
+				token
+			}
 		})
 		.then(response => {
 			this.props.navigation.setParams({change: false})

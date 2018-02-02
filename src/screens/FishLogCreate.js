@@ -107,9 +107,9 @@ class FishLogCreate extends Component {
 
 		axios.post(`${BASE_URL}/fishlogs`, formData, {
 			headers: {
-				token,
-				headers: { 'Content-Type': 'multipart/form-data' }
-			},
+				'Content-Type': 'multipart/form-data',
+				token
+			}
 		})
 		.then(response => {
 			console.log(response)

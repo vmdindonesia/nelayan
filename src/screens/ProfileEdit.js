@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
 import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker'
 import axios from 'axios'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
@@ -40,17 +41,6 @@ class ProfileEdit extends Component {
 		})
 	}
 
-	onItemSelected = (index, item) => {
-		const { FishIds, values } = this.state
-		FishIds[index] = item.id
-		values[index] = item.name
-
-		this.setState({
-			suggestions: [],
-			FishIds,
-			values
-		})
-	}
 
 	onChangeInput = (name, v) => {
 		let data = this.state.data
@@ -138,6 +128,109 @@ class ProfileEdit extends Component {
 		})
 	}
 
+	updateProfile = () => {
+		Keyboard.dismiss()
+		this.setState({loading: true})
+		let token = this.props.user.token
+		
+		const data = this.state.data
+
+		let formData = new FormData()
+		// organization data
+		formData.append('organizationType', data.organizationType)
+		formData.append('CityId', data.CityId)
+		formData.append('subDistrict', data.subDistrict)
+		formData.append('village', data.village)
+		// personal data
+		if (this.state.photo) {
+			formData.append('photo', {
+				uri: this.state.photo.uri,
+				type: 'image/jpeg',
+				name: 'profile.jpg'
+			})
+		}
+		formData.append('name', data.name)
+		formData.append('idNumber', data.idNumber)
+		if (this.state.idPhoto) {
+			formData.append('idPhoto', {
+				uri: this.state.idPhoto.uri,
+				type: 'image/jpeg',
+				name: 'ktp.jpg'
+			})
+		}
+		formData.append('phone', data.phone)
+		formData.append('email', data.email)
+		formData.append('password', data.password)
+
+		// axios.post(`${BASE_URL}/supplier/profile`, formData, {
+		// 	headers: {
+		// 		'Content-Type': 'multipart/form-data',
+		// 		token
+		// 	}
+		// })
+		// .then(response => {
+		// 	console.log(response)
+
+		// 	const resetAction = NavigationActions.reset({
+		// 		index: 1,
+		// 		actions: [
+		// 			NavigationActions.navigate({ routeName: 'Home'}),
+		// 			NavigationActions.navigate({ routeName: 'Profile'})
+		// 		]
+		// 	})
+		// 	this.props.navigation.dispatch(resetAction)
+
+		// 	this.setState({loading: false})
+		// 	Alert.alert('', 'Ubah profil berhasil', [])
+		// })
+		// .catch(error => {
+		// 	console.log(error)
+		// 	const resetAction = NavigationActions.reset({
+		// 		index: 1,
+		// 		actions: [
+		// 			NavigationActions.navigate({ routeName: 'Home'}),
+		// 			NavigationActions.navigate({ routeName: 'Profile'})
+		// 		]
+		// 	})
+		// 	this.props.navigation.dispatch(resetAction)
+		// 	this.setState({loading: false})
+		// })
+
+		axios.post(`${BASE_URL}/supplier/profile`, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				token
+			}
+		})
+
+		.then(response => {
+			console.log(response)
+
+			const resetAction = NavigationActions.reset({
+				index: 1,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Home'}),
+					NavigationActions.navigate({ routeName: 'Profile'})
+				]
+			})
+
+			this.setState({loading: false})
+			this.props.navigation.dispatch(resetAction)
+			Alert.alert('', 'Ubah profil berhasil', [])
+		})
+		.catch(error => {
+			console.log(error.response)
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+
+			this.setState({loading: false})
+		})
+	}
+
 	renderButton = () => {
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -151,7 +244,7 @@ class ProfileEdit extends Component {
 						'Yakin sudah mengisi informasi profil anda dengan tepat?',
 						[
 							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-							{text: 'Ya', onPress: () => this.register()},
+							{text: 'Ya', onPress: () => this.updateProfile()},
 						]
 					)
 				}
@@ -209,7 +302,7 @@ class ProfileEdit extends Component {
 							label="Kota / Kabupaten"
 							suggestions={suggestionsCity}
 							onChangeText={text => this.queryCitySuggestion(text)}
-							value={valueCity}
+							value={valueCity ? valueCity : data.City.name}
 						>
 						{
 							loadingCity ?
