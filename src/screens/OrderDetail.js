@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { ScrollView, View, Text, Alert, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import ImagePicker from 'react-native-image-picker'
 import Modal from 'react-native-modal'
 import moment from 'moment'
 import numeral from 'numeral'
@@ -29,6 +30,7 @@ class OrderDetail extends Component {
 			data: {},
 			checked: false,
 			isModalVisible: false,
+			isModalUploadVisible: false,
 
 			sampleExpanded: false,
 			contractExpanded: false,
@@ -38,6 +40,8 @@ class OrderDetail extends Component {
 			doneExpanded: false,
 
 			declineNotes: '',
+
+			photo: null
 		}
 	}
 
@@ -83,8 +87,8 @@ class OrderDetail extends Component {
 		})
 	}
 
-	_toggleModal = () => {
-		this.setState({ isModalVisible: !this.state.isModalVisible })
+	_toggleModal = (name) => {
+		this.setState({ [name]: !this.state[name] })
 	}
 
 	acceptContract = () => {
@@ -143,7 +147,7 @@ class OrderDetail extends Component {
 			this.setState({loading: false})
 		})
 
-		this._toggleModal()
+		this._toggleModal('isModalVisible')
 	}
 
 	confirmRequestSample = () => {
@@ -174,10 +178,80 @@ class OrderDetail extends Component {
 		})
 	}
 
+	selectPhotoTapped = (name) => {
+		const options = {
+			quality: 1.0,
+			maxWidth: 500,
+			maxHeight: 500,
+			storageOptions: {
+				skipBackup: true
+			}
+		}
+
+		ImagePicker.launchCamera(options, (response) => {
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled photo picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else if (response.customButton) {
+				console.log('User tapped custom button: ', response.customButton);
+			}
+			else {
+				let source = { uri: response.uri };
+
+				// You can also display the image using data:
+				// let source = { uri: 'data:image/jpeg;base64,' + response.data };				
+				this.setState({
+					[name]: source
+				});
+
+				this._toggleModal('isModalUploadVisible')
+			}
+		});
+	}
+
+	uploadShippingPhoto = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		this.setState({loading: true})
+
+		let formData = new FormData()
+		if (this.state.photo) {
+			formData.append('photo', {
+				uri: this.state.photo.uri,
+				type: 'image/jpeg',
+				name: 'shipping.jpg'
+			})
+		}
+
+		axios.post(`${BASE_URL}/supplier/orders/${id}/shippings`, formData, {
+			headers: {token}
+		})
+		.then(response => {
+			this.fetchDetail()
+			this._toggleModal('isModalUploadVisible')
+			this.setState({loading: false})
+			Alert.alert('Berhasil!', 'Unggah bukti pengiriman berhasil', [])
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loading: false})
+		})
+	}
+
 	render() {
 		const { 
 			sampleExpanded, contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
-			data 
+			data, photo
 		} = this.state
 
 		console.log(data)
@@ -300,7 +374,7 @@ class OrderDetail extends Component {
 															data.Contract.StatusId === 4 ?
 																<View style={{marginTop: 10, flexDirection: 'row'}}>
 																	<View style={{flex: 1}}>
-																		<Button raised title='Revisi' onPress={this._toggleModal} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
+																		<Button raised title='Revisi' onPress={() => this._toggleModal('isModalVisible')} backgroundColor="red" containerViewStyle={{width: '100%', marginLeft: 0}} />
 																	</View>
 																	<View style={{flex: 1}}>
 																		<Button
@@ -381,7 +455,7 @@ class OrderDetail extends Component {
 				}
 
 				{
-					data.shipping &&
+					data.downPayment && data.downPayment.StatusId === 26 &&
 					<Card>
 						<CardSection>
 							<TouchableWithoutFeedback onPress={() => this.setState({deliveryExpanded: !deliveryExpanded})}>
@@ -397,24 +471,34 @@ class OrderDetail extends Component {
 							deliveryExpanded ? 
 								<CardSection>
 									<View style={{flexDirection: 'column', flex: 1}}>
-
-										<View style={{flexDirection: 'row'}}>
-											<View style={{flex: 1}}>
-												<Text>Penerima</Text>
-												<Text>Nama</Text>
-												<Text>No. Telp</Text>
-												<Text>Alamat</Text>
-											</View>
-											<View style={{flex: 1}}>
-												<Text>Penerima</Text>
-												<Text>Nama</Text>
-												<Text>No. Telp</Text>
-												<Text>Alamat</Text>
-											</View>
+										<View>
+											{ 
+												data.shipping &&
+												<Image 
+													style={{width: '100%', height: 150}}
+													source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
+												/>
+											}
 										</View>
-										<View style={{marginTop: 20}}>
-											<Button raised title='Unggah Bukti' backgroundColor="blue" containerViewStyle={{width: '100%', marginLeft: 0}} />
-										</View>
+										
+										{
+											data.shipping && [28, 29].includes(data.shipping.StatusId) ?
+												<View style={{marginTop: 10}}>
+													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
+												</View>
+											:
+												<View style={{marginTop: 10}}>
+													<Button 
+														raised 
+														title='Unggah Bukti' 
+														backgroundColor="blue" 
+														containerViewStyle={{width: '100%', marginLeft: 0}} 
+														onPress={() => this.selectPhotoTapped('photo')}
+													/>
+													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
+												</View>
+										}
+										
 									</View>
 								</CardSection>
 							:
@@ -513,6 +597,28 @@ class OrderDetail extends Component {
 										]
 									)
 								}
+							/>
+						</View>
+					</View>
+				</Modal>
+
+				<Modal
+					isVisible={this.state.isModalUploadVisible}
+					onBackdropPress={() => this.setState({ isModalUploadVisible: false })}
+				>
+					<View style={{ flex: 1, justifyContent: 'center' }}>
+						<View style={{backgroundColor: 'white', borderRadius: 2, padding: 10}}>
+							<Text style={{textAlign: 'center', marginBottom: 20}}>Unggah Bukti Pengiriman</Text>
+							{ 
+								photo &&
+								<Image style={{height: 200}} source={photo} />
+							}
+							<Button 
+								raised 
+								title='Unggah' 
+								backgroundColor="blue" 
+								containerViewStyle={{marginTop: 20}}
+								onPress={() => this.uploadShippingPhoto()}
 							/>
 						</View>
 					</View>
