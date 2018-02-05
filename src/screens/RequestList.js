@@ -21,7 +21,7 @@ class RequestList extends Component {
 				onPress={() => this.props.navigation.navigate('RequestDetail', {id: item.id})}
 			>
 				<View>
-					<Card>
+					<Card style={{backgroundColor: item.StatusId === 3 ? '#eaeaea' : '#fff'}}>
 						<CardSection style={{flexDirection: 'row'}}>
 							<View style={{flexDirection: 'column'}}>
 								<Image 

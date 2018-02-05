@@ -63,7 +63,18 @@ class RequestDetail extends Component {
 			Alert.alert(
 				'Sukses!',
 				`Terima kasih telah mengambil tawaran ${data.Buyer.name}\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
-				[]
+				[
+					{text: 'Ok', onPress: () => {
+						const resetAction = NavigationActions.reset({
+							index: 1,
+							actions: [
+								NavigationActions.navigate({ routeName: 'Home'}),
+								NavigationActions.navigate({ routeName: 'RequestList'})
+							]
+						})
+						this.props.navigation.dispatch(resetAction)
+					}}
+				]
 			)
 		})
 		.catch(error => {
