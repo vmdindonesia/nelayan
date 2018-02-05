@@ -41,7 +41,10 @@ class OrderDetail extends Component {
 
 			declineNotes: '',
 
-			photo: null
+			photo: null,
+
+			survey: false,
+			sample: false
 		}
 	}
 
@@ -74,6 +77,8 @@ class OrderDetail extends Component {
 			this.setState({
 				data,
 				loading: false,
+				survey: data.Sample ? data.Sample.survey : false,
+				sample: data.Sample ? data.Sample.sample : false
 			})
 		})
 		.catch(error => {
@@ -156,7 +161,8 @@ class OrderDetail extends Component {
 		this.setState({loading: true})
 
 		let data = {
-			approval: 1
+			survey: this.state.survey ? 1 : 0,
+			sample: this.state.sample ? 1 : 0,
 		}
 
 		axios.put(`${BASE_URL}/supplier/orders/${id}/samples`, data, {
@@ -248,10 +254,16 @@ class OrderDetail extends Component {
 		})
 	}
 
+	toggleCheckBox = (name) => {
+		if (this.state.data.Sample[name] === true) {
+			this.setState({[name]: !this.state[name]})
+		}
+	}
+
 	render() {
 		const { 
 			sampleExpanded, contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
-			data, photo
+			data, photo, survey, sample
 		} = this.state
 
 		console.log(data)
@@ -295,19 +307,23 @@ class OrderDetail extends Component {
 						{
 							sampleExpanded ? 
 								<CardSection>
-									<View style={{flexDirection: 'column'}}>
+									<View style={{flexDirection: 'column', flex: 1}}>
 										<View>
-											<Text>Pembeli mengirim permintaan untuk produk sampel dan melakukan survey lokasi.</Text>
+											<Text>
+												Pembeli mengirim permintaan untuk:
+											</Text>
 										</View>
 										<View >
 											<View style={{flexDirection: 'row', justifyContent: 'space-around' }}>
 												<CheckBox
 													title='Survey'
-													checked={data.Sample.survey}
+													checked={survey}
+													onPress={() => this.toggleCheckBox('survey')}
 												/>
 												<CheckBox
 													title='Sample'
-													checked={data.Sample.sample}
+													checked={sample}
+													onPress={() => this.toggleCheckBox('sample')}
 												/>
 											</View>
 										</View>
@@ -322,7 +338,7 @@ class OrderDetail extends Component {
 													onPress={
 														() => Alert.alert(
 															'',
-															'Yakin ingin konfirmasi request survey dan sample?',
+															'Yakin ingin konfirmasi request survey dan/atau sample?',
 															[
 																{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 																{text: 'Ya', onPress: () => this.confirmRequestSample()},
@@ -331,7 +347,7 @@ class OrderDetail extends Component {
 													}
 												/>
 											:
-												<Text>Request Disetujui</Text>
+												<Text>Request Telah Dikonfirmasi</Text>
 										}
 										</View>
 									</View>
