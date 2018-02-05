@@ -435,6 +435,8 @@ class OrderDetail extends Component {
 								<CardSection>
 									<View style={{flexDirection: 'column', flex: 1}}>
 										<View>
+											<Text>Status: {data.downPayment.Status.name}</Text>
+											<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
 											<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.downPayment.photo}`).catch(err => console.error('An error occurred', err))}>
 												<View>
 													<Image 
@@ -443,8 +445,6 @@ class OrderDetail extends Component {
 													/>
 												</View>
 											</TouchableOpacity>
-											<Text>Status: {data.downPayment.Status.name}</Text>
-											<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
 										</View>									
 									</View>
 								</CardSection>
@@ -471,6 +471,23 @@ class OrderDetail extends Component {
 							deliveryExpanded ? 
 								<CardSection>
 									<View style={{flexDirection: 'column', flex: 1}}>
+										{
+											data.shipping && [28, 29].includes(data.shipping.StatusId) ?
+												<View>
+													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
+												</View>
+											:
+												<View>
+													<Button 
+														raised 
+														title='Unggah Bukti' 
+														backgroundColor="blue" 
+														containerViewStyle={{width: '100%', marginLeft: 0}} 
+														onPress={() => this.selectPhotoTapped('photo')}
+													/>
+													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
+												</View>
+										}
 										<View>
 											{ 
 												data.shipping &&
@@ -484,25 +501,6 @@ class OrderDetail extends Component {
 												</TouchableOpacity>
 											}
 										</View>
-										
-										{
-											data.shipping && [28, 29].includes(data.shipping.StatusId) ?
-												<View style={{marginTop: 10}}>
-													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
-												</View>
-											:
-												<View style={{marginTop: 10}}>
-													<Button 
-														raised 
-														title='Unggah Bukti' 
-														backgroundColor="blue" 
-														containerViewStyle={{width: '100%', marginLeft: 0}} 
-														onPress={() => this.selectPhotoTapped('photo')}
-													/>
-													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
-												</View>
-										}
-										
 									</View>
 								</CardSection>
 							:
