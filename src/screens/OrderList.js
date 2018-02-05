@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import { ordersFetch } from '../actions'
 import { Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
@@ -12,6 +13,40 @@ class OrderList extends Component {
 
 	componentWillMount() {
 		this.props.ordersFetch(this.props.user.token)
+	}
+
+	imageIcon = (item, index) => {
+		if (index <= item.StatusHistories.length) {
+			switch (index) {
+				case 1:
+					return require('../../assets/status1f.png')
+				case 2:
+					return require('../../assets/status2f.png')
+				case 3:
+					return require('../../assets/status3f.png')
+				case 4:
+					return require('../../assets/status4f.png')
+				case 5:
+					return require('../../assets/status5f.png')
+				default:
+					return require('../../assets/status1f.png')
+			}
+		}
+		
+		switch (index) {
+			case 1:
+				return require('../../assets/status1.png')
+			case 2:
+				return require('../../assets/status2.png')
+			case 3:
+				return require('../../assets/status3.png')
+			case 4:
+				return require('../../assets/status4.png')
+			case 5:
+				return require('../../assets/status5.png')
+			default:
+				return require('../../assets/status1.png')
+		}
 	}
 
 	renderItem = (item) => {
@@ -34,29 +69,29 @@ class OrderList extends Component {
 						<View style={{flexDirection: 'row'}}>
 							<Image 
 								style={styles.statusIcon}
-								source={require('../../assets/status1.png')} 
+								source={this.imageIcon(item, 1)}
 							/>
 							<Image 
 								style={styles.statusIcon}
-								source={require('../../assets/status2.png')} 
+								source={this.imageIcon(item, 2)}
 							/>
 							<Image 
 								style={styles.statusIcon}
-								source={require('../../assets/status3.png')} 
+								source={this.imageIcon(item, 3)}
 							/>
 							<Image 
 								style={styles.statusIcon}
-								source={require('../../assets/status4.png')} 
+								source={this.imageIcon(item, 4)}
 							/>
 							<Image 
 								style={styles.statusIcon}
-								source={require('../../assets/status5.png')} 
+								source={this.imageIcon(item, 5)}
 							/>
 						</View>
 					</View>
 					<View style={styles.headerContentStyle2}>
-						<Text style={{textAlign: 'right'}}>Status Sekarang</Text>
-						<Text style={{textAlign: 'right'}}>21/08/2018</Text>
+						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Menunggu Kontrak'}</Text>
+						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? moment(item.StatusHistories.updatedAt).format('DD/MM/YYYY') : ''}</Text>
 					</View>
 				</View>
 			</TouchableNativeFeedback>
