@@ -435,8 +435,6 @@ class OrderDetail extends Component {
 								<CardSection>
 									<View style={{flexDirection: 'column', flex: 1}}>
 										<View>
-											<Text>Status: {data.downPayment.Status.name}</Text>
-											<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
 											<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.downPayment.photo}`).catch(err => console.error('An error occurred', err))}>
 												<View>
 													<Image 
@@ -445,6 +443,8 @@ class OrderDetail extends Component {
 													/>
 												</View>
 											</TouchableOpacity>
+											<Text>Status: {data.downPayment.Status.name}</Text>
+											<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
 										</View>									
 									</View>
 								</CardSection>
