@@ -474,10 +474,14 @@ class OrderDetail extends Component {
 										<View>
 											{ 
 												data.shipping &&
-												<Image 
-													style={{width: '100%', height: 150}}
-													source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
-												/>
+												<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.shipping.photo}`).catch(err => console.error('An error occurred', err))}>
+													<View>
+														<Image 
+															style={{width: '100%', height: 150}}
+															source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
+														/>
+													</View>
+												</TouchableOpacity>
 											}
 										</View>
 										
