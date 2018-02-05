@@ -19,7 +19,8 @@ class ProductForm extends Component {
 			loading: false,
 			suggestions: [],
 			value: '',
-			FishId: ''
+			FishId: '',
+			loadingProduct: false
 		}
 	}
 
@@ -83,14 +84,17 @@ class ProductForm extends Component {
 	}
 
 	querySuggestion = (text) => {
-		this.setState({value: text})
+		this.setState({
+			value: text,
+			loadingProduct: true
+		})
 
 		axios.get(`${BASE_URL}/fishes/search?key=${text}`, {
 			headers: {'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozNCwibmFtZSI6ImFyaWYiLCJlbWFpbCI6ImFyaWZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIxMjMxMjMiLCJwaG9uZSI6IjA4MjExMTEyMjEiLCJwaG90byI6bnVsbCwiYWRkcmVzcyI6ImFsZGlyb24iLCJyb2xlIjoic3VwcGxpZXIiLCJwb2ludEFtb3VudCI6MCwiaWROdW1iZXIiOiIzMjQ3MDI0NDQiLCJvcmdhbml6YXRpb24iOiJtaXRyYSBrYXNpaCIsInR5cGVPcmdhbml6YXRpb24iOiJwdCIsImFjdGl2ZSI6ZmFsc2UsInZlcmlmeSI6ZmFsc2UsImNyZWF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiIsInVwZGF0ZWRBdCI6IjIwMTgtMDEtMDlUMDc6NDc6MTAuMDAwWiJ9LCJpYXQiOjE1MTU0OTExNDYsImV4cCI6MTUxNjA5NTk0Nn0.3X3XEV50K2vEZXsvd-BaXc8ElHE8qj2i_N-n-x9stUM'}
 		})
 		.then(response => {
 			res = response.data.data
-			this.setState({suggestions: res})
+			this.setState({suggestions: res, loadingProduct: false})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -99,6 +103,7 @@ class ProductForm extends Component {
 			else {
 				alert('Koneksi internet bermasalah')
 			}
+			this.setState({loadingProduct: false})
 		})
 	}
 
@@ -117,7 +122,7 @@ class ProductForm extends Component {
 	}
 
 	render() {
-		const { suggestions, value } = this.state
+		const { suggestions, value, loadingProduct } = this.state
 
 		return (
 			<ScrollView 
@@ -133,16 +138,21 @@ class ProductForm extends Component {
 							value={value}
 						>
 						{
-							suggestions && suggestions.map(item => 
-								<TouchableOpacity 
-									key={item.id} 
-									onPress={() => this.onItemSelected(item)}
-								>
-									<View style={styles.containerItemAutoSelect}>
-										<Text>{item.name}</Text>
-									</View>
-								</TouchableOpacity>
-							)
+							loadingProduct ?
+								<View style={{flex: 1}}>
+									<Spinner size='large' />
+								</View>
+							:
+								suggestions && suggestions.map(item => 
+									<TouchableOpacity 
+										key={item.id} 
+										onPress={() => this.onItemSelected(item)}
+									>
+										<View style={styles.containerItemAutoSelect}>
+											<Text>{item.name}</Text>
+										</View>
+									</TouchableOpacity>
+								)
 						}
 						</AutoComplete>
 					</ContainerSection>

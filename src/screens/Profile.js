@@ -69,7 +69,7 @@ class Profile extends Component {
 			labelStyle, dataStyle
 		} = styles
 
-		const { data, FishId, value, loading } = this.state
+		const { data, loading } = this.state
 
 		if (loading) {
 			return (
