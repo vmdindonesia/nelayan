@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, Picker, KeyboardAvoidingView, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
+import { ScrollView, Text, Picker, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, TouchableNativeFeedback, PixelRatio, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker'
@@ -9,9 +9,37 @@ import AutoComplete from '../components/AutoComplete'
 import { BASE_URL } from '../constants'
 
 class ProfileEdit extends Component {
-	static navigationOptions = {
-		title: 'Ubah Profil'
-	}
+	static navigationOptions = ({ navigation }) => ({
+		title: 'Ubah Profil',
+		headerLeft: 
+			<TouchableNativeFeedback
+				onPress={() => 
+					{
+						if (navigation.state.params && navigation.state.params.change) {
+							Alert.alert(
+								'',
+								'Batal mengubah profil?',
+								[
+									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+									{text: 'Ya', onPress: () => {
+										navigation.setParams({change: false})
+										navigation.goBack()
+									}},
+								]
+							)
+						}
+						else {
+							navigation.goBack()
+						}
+					}
+				}
+			>
+				<Image 
+					style={{marginLeft: 15, height: 26, width: 26}}
+					source={require('../../assets/back-icon.png')} 
+				/>
+			</TouchableNativeFeedback>
+	})
 
 	constructor(props) {
 		super(props)
@@ -29,8 +57,30 @@ class ProfileEdit extends Component {
 		}
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.getData()
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			const { params } = this.props.navigation.state
+			
+			if (params && params.change === true) {
+				Alert.alert(
+					'',
+					'Batal mengubah profil?',
+					[
+						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+						{text: 'Ya', onPress: () => {
+							this.props.navigation.setParams({change: false})
+							this.props.navigation.goBack()
+						}},
+					]
+				)
+
+				return true
+			}
+		})
 	}
 
 	onCitySelected = (item) => {
@@ -47,6 +97,8 @@ class ProfileEdit extends Component {
 		data[name] = v
 
 		this.setState({data})
+
+		this.props.navigation.setParams({change: true})
 	}
 
 	getData = () => {
@@ -162,40 +214,6 @@ class ProfileEdit extends Component {
 		formData.append('email', data.email)
 		formData.append('password', data.password)
 
-		// axios.post(`${BASE_URL}/supplier/profile`, formData, {
-		// 	headers: {
-		// 		'Content-Type': 'multipart/form-data',
-		// 		token
-		// 	}
-		// })
-		// .then(response => {
-		// 	console.log(response)
-
-		// 	const resetAction = NavigationActions.reset({
-		// 		index: 1,
-		// 		actions: [
-		// 			NavigationActions.navigate({ routeName: 'Home'}),
-		// 			NavigationActions.navigate({ routeName: 'Profile'})
-		// 		]
-		// 	})
-		// 	this.props.navigation.dispatch(resetAction)
-
-		// 	this.setState({loading: false})
-		// 	Alert.alert('', 'Ubah profil berhasil', [])
-		// })
-		// .catch(error => {
-		// 	console.log(error)
-		// 	const resetAction = NavigationActions.reset({
-		// 		index: 1,
-		// 		actions: [
-		// 			NavigationActions.navigate({ routeName: 'Home'}),
-		// 			NavigationActions.navigate({ routeName: 'Profile'})
-		// 		]
-		// 	})
-		// 	this.props.navigation.dispatch(resetAction)
-		// 	this.setState({loading: false})
-		// })
-
 		axios.post(`${BASE_URL}/supplier/profile`, formData, {
 			headers: {
 				'Content-Type': 'multipart/form-data',
@@ -241,7 +259,7 @@ class ProfileEdit extends Component {
 				onPress={
 					() => Alert.alert(
 						'',
-						'Yakin sudah mengisi informasi profil anda dengan tepat?',
+						'Simpan perubahan profil?',
 						[
 							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 							{text: 'Ya', onPress: () => this.updateProfile()},
