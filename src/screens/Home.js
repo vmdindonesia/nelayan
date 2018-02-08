@@ -54,7 +54,7 @@ class Home extends Component {
 							<View style={{flexDirection: 'row'}}>
 								<Image 
 									style={coin}
-									source={require('../../assets/coin.png')} 
+									source={require('../../assets/coin.png')}
 								/>
 								<Text style={point}>{this.props.user.data.pointAmount}</Text>
 							</View>
