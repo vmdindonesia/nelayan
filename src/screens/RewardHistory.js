@@ -5,7 +5,11 @@ class RewardHistory extends Component {
 	render() {
 		return (
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			  <Text>Reward History</Text>
+				<Text style={{textAlign: 'center'}}>
+					Anda belum memiliki 
+					{'\n'}
+					riwayat penukaran poin saat ini
+				</Text>
 			</View>
 		)
 	}
