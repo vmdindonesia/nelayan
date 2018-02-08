@@ -64,15 +64,9 @@ class OrderDetail extends Component {
 			headers: {token}
 		})
 		.then(response => {
-			console.log(response.data)
-
 			let data = this.state.data
 
 			data = response.data.data
-			data.downPayment = response.data.downPayment
-			data.shipping = response.data.shipping
-			data.shippingDelivered = response.data.shippingDelivered
-			data.finalPayment = response.data.finalPayment
 
 			this.setState({
 				data,
