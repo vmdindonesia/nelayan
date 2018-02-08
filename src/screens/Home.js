@@ -50,14 +50,14 @@ class Home extends Component {
 					</View>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
 					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-						<View style={{ flexDirection: 'row', marginTop: 10}}>
-							<View style={{flex: 1}}>
+						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+							<View style={{flexDirection: 'row'}}>
 								<Image 
 									style={coin}
 									source={require('../../assets/coin.png')} 
 								/>
+								<Text style={point}>{this.props.user.data.pointAmount}</Text>
 							</View>
-							<Text style={point}>100</Text>
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
@@ -185,10 +185,9 @@ const styles = {
 	coin: {
 		height: 30,
 		width: 30,
-		alignSelf: 'flex-end'
+		alignSelf: 'center'
 	},
 	point: {
-		flex: 1, 
 		marginTop: 1, 
 		marginLeft: 5,
 		color: '#fff',
