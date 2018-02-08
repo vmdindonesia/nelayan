@@ -37,7 +37,7 @@ class Reward extends Component {
 						/>
 					</View>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
-					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
+					<TouchableWithoutFeedback>
 						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
 							<View style={{flexDirection: 'row'}}>
 								<Image 
