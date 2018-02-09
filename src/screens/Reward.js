@@ -44,7 +44,7 @@ class Reward extends Component {
 									style={coin}
 									source={require('../../assets/coin.png')} 
 								/>
-								<Text style={point}>{this.props.user.data.pointAmount}</Text>
+								<Text style={point}>{this.props.user.data.pointNow}</Text>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>

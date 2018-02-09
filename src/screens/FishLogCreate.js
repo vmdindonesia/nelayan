@@ -8,6 +8,7 @@ import ImagePicker from 'react-native-image-picker'
 import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, TouchableOpacity, BackHandler, TouchableWithoutFeedback } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
+import { setUserToken } from '../actions'
 
 class FishLogCreate extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -111,8 +112,8 @@ class FishLogCreate extends Component {
 				token
 			}
 		})
-		.then(response => {
-			console.log(response)
+		.then(response => {			
+			this.props.setUserToken(response.data.refreshToken)
 			this.props.navigation.setParams({change: false})
 
 			const resetAction = NavigationActions.reset({
@@ -123,7 +124,6 @@ class FishLogCreate extends Component {
 				]
 			})
 			this.props.navigation.dispatch(resetAction)
-	
 
 			this.setState({loading: false})
 		})
@@ -315,4 +315,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(FishLogCreate)
+export default connect(mapStateToProps, { setUserToken })(FishLogCreate)
