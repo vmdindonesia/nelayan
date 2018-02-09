@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { FlatList, View, Text, Image } from 'react-native'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import { BASE_URL } from '../constants'
 import { Spinner } from '../components/common'
 import { rewardHistoriesFetch } from '../actions'

@@ -90,7 +90,7 @@ class OrderList extends Component {
 						</View>
 					</View>
 					<View style={styles.headerContentStyle2}>
-						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? item.StatusHistories[0].Status.name : 'Menunggu Kontrak'}</Text>
+						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Menunggu Kontrak'}</Text>
 						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? moment(item.StatusHistories.updatedAt).format('DD/MM/YYYY') : ''}</Text>
 					</View>
 				</View>
