@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FlatList, View, Image, Text, TouchableNativeFeedback, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { itemsFetch } from '../actions'
+import { itemsFetch, rewardHistoriesFetch } from '../actions'
 import { Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 
@@ -22,7 +22,7 @@ class RewardItemList extends Component {
 	itemPressed = (item) => {
 		Alert.alert(
 			'Tukarkan Poin',
-			`Apakah benar ingin menukarkan ${item.pointAmount} poin dengan ${item.name} ?`,
+			`Yakin ingin menukarkan ${item.pointAmount} poin dengan ${item.name} ?`,
 			[
 				{text: 'Batal', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 				{text: 'Tukar', onPress: () => this.buyItem(item)},
@@ -51,6 +51,8 @@ class RewardItemList extends Component {
 				`Berhail menukarkan poin dengan ${item.name}`,
 				[]
 			)
+
+			this.props.rewardHistoriesFetch(token)
 		})
 		.catch(error => {
 			if (error.response) {
@@ -77,7 +79,7 @@ class RewardItemList extends Component {
 					</View>
 					<View style={styles.headerContentStyle}>
 						<View style={{flexDirection: 'row'}}>
-							<Text style={{flex: 1}}>{item.name}</Text>
+							<Text style={{flex: 1}}>{item.name} ({item.pointAmount}) poin</Text>
 						</View>
 					</View>
 				</View>
@@ -145,5 +147,5 @@ const mapStateToProps = state => {
 	return { items, user }
 }
 
-export default connect(mapStateToProps, {itemsFetch})(RewardItemList)
+export default connect(mapStateToProps, { itemsFetch, rewardHistoriesFetch })(RewardItemList)
 

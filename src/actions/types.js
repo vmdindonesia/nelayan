@@ -11,3 +11,5 @@ export const REQUESTS_FETCH_SUCCESS = 'requests_fetch_success'
 export const ORDERS_FETCH_SUCCESS = 'orders_fetch_success'
 
 export const ITEMS_FETCH_SUCCESS = 'items_fetch_success'
+
+export const REWARD_HISTORIES_FETCH_SUCCESS = 'reward_histories_fetch_success'

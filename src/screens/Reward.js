@@ -24,18 +24,12 @@ class Reward extends Component {
 	render() {
 		const { 
 			containerStyle, headerHomeStyle, menuContainerStyle, 
-			profileImageContainer, profileImage, profileName, coin, point,
+			profileName, coin, point,
 		} = styles
 
 		return (
 			<View style={containerStyle}>
 				<View style={headerHomeStyle}>
-					<View style={profileImageContainer}>
-						<Image 
-							style={profileImage}
-							source={{uri: `${BASE_URL}/images/${this.props.user.data.photo}`}} 
-						/>
-					</View>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
 					<TouchableWithoutFeedback>
 						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -63,7 +57,7 @@ const styles = {
 	},
 	headerHomeStyle: {
 		paddingTop: 10,
-		flex: 2,
+		flex: 1,
 		justifyContent: 'center',
 		alignSelf: 'center',
 		backgroundColor: '#56bde6',
