@@ -10,6 +10,8 @@ import axios from 'axios'
 import { CheckBox, Button, FormInput, Rating } from 'react-native-elements'
 import { Card, CardSection, Container, ContainerSection, Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
+import { ordersFetch } from '../actions'
+
 
 class OrderDetail extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -106,6 +108,7 @@ class OrderDetail extends Component {
 			this.fetchDetail()
 			this.setState({loading: false})
 			Alert.alert('Berhasil!', 'Kontrak berhasil disetujui', [])
+			this.props.ordersFetch(token)
 		})
 		.catch(error => {
 			if (error.response) {
@@ -135,6 +138,7 @@ class OrderDetail extends Component {
 			this.fetchDetail()
 			this.setState({loading: false})
 			Alert.alert('Berhasil!', 'Permintaan revisi kontrak telah dikirim ke pembeli', [])
+			this.props.ordersFetch(token)
 		})
 		.catch(error => {
 			if (error.response) {
@@ -236,6 +240,7 @@ class OrderDetail extends Component {
 			this._toggleModal('isModalUploadVisible')
 			this.setState({loading: false})
 			Alert.alert('Berhasil!', 'Unggah bukti pengiriman berhasil', [])
+			this.props.ordersFetch(token)
 		})
 		.catch(error => {
 			if (error.response) {
@@ -680,4 +685,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(OrderDetail)
+export default connect(mapStateToProps, {ordersFetch})(OrderDetail)
