@@ -139,7 +139,7 @@ class Login extends Component {
 
 const styles = {
 	container: {
-		marginTop: 100,
+		flex: 1,
 		justifyContent: 'center'
 	},
 	errorTextStyle: {

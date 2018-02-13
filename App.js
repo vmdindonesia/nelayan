@@ -11,6 +11,7 @@ import reducers from './src/reducers'
 import Login from './src/screens/Login'
 import Register from './src/screens/Register'
 import Home from './src/screens/Home'
+import StartScreen from './src/screens/StartScreen'
 
 import FishLogList from './src/screens/FishLogList'
 import FishLogEdit from './src/screens/FishLogEdit'
@@ -46,6 +47,7 @@ numeral.locale('id')
 // Routes
 const Routes = StackNavigator({
   Home: { screen: Home },
+  StartScreen: { screen: StartScreen },
   Login: { screen: Login },
   Register: { screen: Register },
   ForgotPassword: { screen: ForgotPassword },
