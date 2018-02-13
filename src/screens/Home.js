@@ -3,31 +3,42 @@ import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback, A
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { logout, setUserToken } from '../actions'
-import { BASE_URL } from '../constants'
+import { BASE_URL, COLORS } from '../constants'
 
 class Home extends Component {
 	static navigationOptions = {
 		header: null
 	}
 
+	constructor(props) {
+		super(props)
+	
+		this.state = {
+			splash: true
+		}
+	}
+
 	componentWillMount() {
 		// to do: check token expired
 
-		AsyncStorage.getItem('token', (err, result) => {
-			console.log(result, 'Token');
-			if (!result || result === '') {
-				const resetAction = NavigationActions.reset({
-					index: 0,
-					actions: [
-						NavigationActions.navigate({ routeName: 'Login'})
-					]
-				})
-				this.props.navigation.dispatch(resetAction)
-			} 
-			else {
-				this.props.setUserToken(result)
-			}
-		})
+		setTimeout(() => {
+			AsyncStorage.getItem('token', (err, result) => {
+				console.log(result, 'Token');
+				if (!result || result === '') {
+					const resetAction = NavigationActions.reset({
+						index: 0,
+						actions: [
+							NavigationActions.navigate({ routeName: 'Login'})
+						]
+					})
+					this.props.navigation.dispatch(resetAction)
+				} 
+				else {
+					this.props.setUserToken(result)
+					this.setState({splash: false})
+				}
+			})
+		}, 1000)
 	}
 
 	render() {
@@ -38,6 +49,21 @@ class Home extends Component {
 		} = styles
 
 		console.log(this.props.user, 'props')
+
+		if (this.state.splash) {
+			return (
+				<View 
+					style={{
+						backgroundColor: COLORS.secondary_a,
+						flex: 1,
+						justifyContent: 'center', 
+						alignItems: 'center'
+					}}
+				>
+					<Image source={require('../../assets/Ic_aruna_logogram.png')} />
+				</View>
+			)
+		}
 
 		return (
 			<View style={containerStyle}>
