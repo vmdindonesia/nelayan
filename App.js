@@ -29,6 +29,7 @@ import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
 import Message from './src/screens/Message'
 
+import { COLOR } from './src/constants'
 
 numeral.register('locale', 'id', {
   delimiters: {
@@ -74,6 +75,18 @@ const Routes = StackNavigator({
 
 }, {
   cardStyle: { backgroundColor: '#fff' },
+  navigationOptions: {
+    headerTitleStyle: {
+      alignSelf: 'center',
+      color: '#fff',
+      fontFamily: 'Muli-Bold',
+      fontWeight: '300',
+    },
+    headerStyle: {
+      backgroundColor: COLOR.secondary_a,
+    },
+    headerTintColor: '#fff',
+  }
 })
 
 // font

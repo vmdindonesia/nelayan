@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableNativeFeedback } from 'react-native'
-import { COLORS } from '../../constants'
+import { COLOR } from '../../constants'
 
 class Button extends Component {
 	render() {
@@ -30,7 +30,7 @@ const styles = {
 	},
 	secondaryTextStyle: {
 		alignSelf: 'center',
-		color: COLORS.secondary_a,
+		color: COLOR.secondary_a,
 		fontSize: 16,
 		paddingTop: 12,
 		paddingBottom: 12,
@@ -39,7 +39,7 @@ const styles = {
 	primaryButtonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: COLORS.secondary_a,
+		backgroundColor: COLOR.secondary_a,
 		borderRadius: 8,
 	},
 	secondaryButtonStyle: {

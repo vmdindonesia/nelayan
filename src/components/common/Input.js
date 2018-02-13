@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, TextInput, Image } from 'react-native'
-import { COLORS } from '../../constants'
+import { COLOR } from '../../constants'
 
 class Input extends Component {
 	constructor(props) {
@@ -13,7 +13,6 @@ class Input extends Component {
 	onFocus = () => {
 		this.setState({
 			isFocus: true,
-			underlineColor: '#30B2EC'
 		})
 	}
 
@@ -42,7 +41,7 @@ class Input extends Component {
 					label ?
 						<Text style={labelStyle}>{label}</Text>
 					:
-						<Text />
+						<View />
 				}
 
 				<View style={{...styles.formWrapper, ...((editable === false) ? styles.lockedForm : {}), ...((this.state.isFocus === true) ? styles.onFocus : {}) }}>
@@ -84,19 +83,21 @@ const styles = {
 		opacity: 0.4
 	},
 	inputStyle: {
-		fontSize: 16,
+		fontSize: 14,
 		flex: 1,
 		padding: 8,
 		fontFamily: 'Muli-Regular'
 	},
 	labelStyle: {
-		color: '#2a2a2a',
+		color: '#5e5e5e',
 		fontSize: 14,
 		flex: 1,
-		fontFamily: 'Muli-Regular'
+		fontFamily: 'Muli-Regular',
+		marginBottom: 10,
+		marginTop: 10,
 	},
 	onFocus: {
-		borderColor: COLORS.secondary_a
+		borderColor: COLOR.secondary_a
 	},
 	containerStyle: {
 		flex: 1

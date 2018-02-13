@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback, A
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { logout, setUserToken } from '../actions'
-import { BASE_URL, COLORS } from '../constants'
+import { BASE_URL, COLOR } from '../constants'
 
 class Home extends Component {
 	static navigationOptions = {
@@ -54,7 +54,7 @@ class Home extends Component {
 			return (
 				<View 
 					style={{
-						backgroundColor: COLORS.secondary_a,
+						backgroundColor: COLOR.secondary_a,
 						flex: 1,
 						justifyContent: 'center', 
 						alignItems: 'center'

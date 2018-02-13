@@ -4,12 +4,13 @@ import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { BASE_URL } from '../constants'
+import { BASE_URL, COLOR } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
 class Register extends Component {
 	static navigationOptions = {
-		title: 'Registrasi'
+		headerTitle: 'Pendaftaran Akun',
+		headerRight: (<View />),
 	}
 
 	constructor(props) {
@@ -224,6 +225,14 @@ class Register extends Component {
 		})
 	}
 
+	handleScroll = (event) => {
+		let currentPosition = event.nativeEvent.contentOffset.y
+		if (currentPosition + this.state.currentPosition > 500) {
+			this.setState({name: ''})
+		}
+		console.log(event.nativeEvent.contentOffset)
+	}
+
 	renderButton = () => {
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -250,7 +259,6 @@ class Register extends Component {
 	render() {
 		const { 
 			organizationType,
-			CityId,
 			subDistrict,
 			village,
 
@@ -278,12 +286,14 @@ class Register extends Component {
 		return (
 			<ScrollView 
 				style={styles.containerStyle}
+				onScrollEndDrag={this.handleScroll}
+				scrollEventThrottle={16}
 				keyboardShouldPersistTaps="always"
 			>
 				<Container>
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
-							INFORMASI LEMBAGA
+							Informasi Lembaga
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
@@ -294,6 +304,7 @@ class Register extends Component {
 									style={{ flex: 1 }}
 									selectedValue={organizationType}
 									onValueChange={v => this.onChangeInput('organizationType', v)}
+									textStyle={{fontSize: 24}}
 								>
 									<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
 									<Picker.Item label="Personal" value="Personal" />
@@ -301,12 +312,19 @@ class Register extends Component {
 							</View>
 						</View>
 					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Lokasi Nelayan
+						</Text>
+					</ContainerSection>
 					<ContainerSection>
 						<AutoComplete
 							label="Kota / Kabupaten"
 							suggestions={suggestionsCity}
 							onChangeText={text => this.queryCitySuggestion(text)}
 							value={valueCity}
+							ref="input"
 						>
 						{
 							loadingCity ?
@@ -348,18 +366,27 @@ class Register extends Component {
 				<Container>
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
-							INFORMASI PERSONAL
+							Informasi Personal
 						</Text>
 					</ContainerSection>
-					<ContainerSection>
-						<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
-							<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
-							{ photo === null ? <Text>Foto profil</Text> :
-								<Image style={styles.avatar} source={photo} />
-							}
-							</View>
-						</TouchableOpacity>
 
+					<Text style={[styles.pickerTextStyle, {marginLeft: 5, marginTop: 10}]}>Upload Foto Profil</Text>
+					<ContainerSection>
+						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+							<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+								<View>
+								{ photo === null ? 
+										<Image
+											source={require('../../assets/ic_add_a_photo.png')} 
+										/>
+									:
+										<Image style={styles.avatar} source={photo} />
+								}
+								</View>
+							</TouchableOpacity>
+						</View>
+					</ContainerSection>
+					<ContainerSection>
 						<Input
 							label='Nama Lengkap'
 							placeholder='contoh: Ahmad Darudi'
@@ -379,21 +406,19 @@ class Register extends Component {
 
 					<Text style={[styles.pickerTextStyle, {marginLeft: 5, marginTop: 10}]}>Upload Foto KTP</Text>
 					<ContainerSection>
-						<TouchableWithoutFeedback>
-							<View style={{flex: 1, padding: 8}}>
-								<TouchableOpacity onPress={() => this.selectPhotoTapped('idPhoto')}>
-									<View>
-									{ idPhoto === null ? 
-										<Image
-											source={require('../../assets/uploader-ktp.png')} 
-										/>
-									:
-										<Image style={{height: 200}} source={idPhoto} />
-									}
-									</View>
-								</TouchableOpacity>
-							</View>
-						</TouchableWithoutFeedback>
+						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+							<TouchableOpacity onPress={() => this.selectPhotoTapped('idPhoto')}>
+								<View>
+								{ idPhoto === null ? 
+									<Image
+										source={require('../../assets/ic_add_a_photo.png')} 
+									/>
+								:
+									<Image style={{height: 200, width: 300}} source={idPhoto} />
+								}
+								</View>
+							</TouchableOpacity>
+						</View>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
@@ -434,12 +459,12 @@ class Register extends Component {
 				<Container>
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
-							PRODUK UNGGULAN
+							Informasi Komoditas
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<AutoComplete
-							label="Nama Komoditas 1"
+							label="Nama Komoditas"
 							suggestions={suggestions[0]}
 							onChangeText={text => this.querySuggestion(0, text)}
 							value={values[0]}
@@ -465,7 +490,7 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<AutoComplete
-							label="Nama Komoditas 2"
+							label="Nama Komoditas"
 							suggestions={suggestions[1]}
 							onChangeText={text => this.querySuggestion(1, text)}
 							value={values[1]}
@@ -491,7 +516,7 @@ class Register extends Component {
 					</ContainerSection>	
 					<ContainerSection>
 						<AutoComplete
-							label="Nama Komoditas 3"
+							label="Nama Komoditas"
 							suggestions={suggestions[2]}
 							onChangeText={text => this.querySuggestion(2, text)}
 							value={values[2]}
@@ -517,7 +542,7 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<AutoComplete
-							label="Nama Komoditas 4"
+							label="Nama Komoditas"
 							suggestions={suggestions[3]}
 							onChangeText={text => this.querySuggestion(3, text)}
 							value={values[3]}
@@ -543,7 +568,7 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<AutoComplete
-							label="Nama Komoditas 5"
+							label="Nama Komoditas"
 							suggestions={suggestions[4]}
 							onChangeText={text => this.querySuggestion(4, text)}
 							value={values[4]}
@@ -566,54 +591,50 @@ class Register extends Component {
 								)
 						}
 						</AutoComplete>
-					</ContainerSection>					
+					</ContainerSection>
+
+					<View style={{marginTop: 20, marginBottom: 20}}>
+						<ContainerSection>
+							{this.renderButton()}
+						</ContainerSection>
+					</View>
+					
 				</Container>
-				<ContainerSection>
-					{this.renderButton()}
-				</ContainerSection>
 			</ScrollView>
 		)
 	}
 }
 
 const styles = {
-	containerStyle: {
-		
-	},
 	headerStyle: {
-		marginLeft: 5
+		color: COLOR.secondary_a,
+		fontSize: 18
 	},
 	pickerContainer: {
 		flex: 1, 
-		height: 65,
 		marginBottom: 5
 	},
 	pickerStyle: {
-		flex: 1,
-		borderBottomWidth: 1,
-		borderColor: '#716c6c',
-		marginRight: 3,
-		marginLeft: 3,
+		borderColor: '#a9a9a9',
+		borderRadius: 5,
+		paddingLeft: 7,
+		borderWidth: 1,
 	},
 	pickerTextStyle: {
-		color: '#8e8e8e',
-		fontSize: 16,
-		paddingLeft: 5
+		color: '#5e5e5e',
+		fontSize: 14,
+		flex: 1,
+		marginTop: 10,
+		marginBottom: 10
 	},
 	containerItemAutoSelect: {
-		borderBottomWidth: 1, 
 		padding: 10,
-		justifyContent: 'flex-start',
-		flexDirection: 'row',
-		borderColor: '#ddd',
-		position: 'relative'
 	},
 	avatarContainer: {
 		borderColor: '#9B9B9B',
 		borderWidth: 1 / PixelRatio.get(),
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 10
 	},
 	avatar: {
 		borderRadius: 75,

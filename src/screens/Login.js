@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { login } from '../actions'
-import { COLORS } from '../constants'
+import { COLOR } from '../constants'
 
 class Login extends Component {
 	static navigationOptions = {
@@ -91,7 +91,6 @@ class Login extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							label='Email'
 							onChangeText={val => this.onChange('email', val)}
 							placeholder="Username / Email"
 							value={email}
@@ -100,7 +99,6 @@ class Login extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							label='Password'
 							secureTextEntry
 							onChangeText={val => this.onChange('password', val)}
 							placeholder="Password"
@@ -111,9 +109,11 @@ class Login extends Component {
 
 					{this.renderError()}
 
-					<ContainerSection>
-						{this.renderButton()}
-					</ContainerSection>
+					<View style={{marginTop: 10}}>
+						<ContainerSection>
+							{this.renderButton()}
+						</ContainerSection>
+					</View>
 				</Container>
 				
 				<View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 10}}>
@@ -121,14 +121,14 @@ class Login extends Component {
 						Belum punya akun?
 					</Text>
 					<TouchableOpacity onPress={() => navigate('Register')}>
-						<Text style={{ color: COLORS.secondary_a}}> 
+						<Text style={{ color: COLOR.secondary_a}}> 
 							{` Daftar`}
 						</Text>
 					</TouchableOpacity>
 				</View>
 
 				<TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-					<Text style={{ textAlign: 'center', marginTop: 10, color: COLORS.secondary_a}}>
+					<Text style={{ textAlign: 'center', marginTop: 10, color: COLOR.secondary_a}}>
 						Lupa Kata Sandi?
 					</Text>
 				</TouchableOpacity>
