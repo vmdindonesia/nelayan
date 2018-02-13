@@ -30,7 +30,7 @@ const styles = {
 	buttonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: COLORS.primary,
+		backgroundColor: COLORS.secondary_a,
 		borderRadius: 8,
 	}
 }

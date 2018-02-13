@@ -3,7 +3,7 @@ export const BASE_URL = 'http://139.59.243.28/aruna/api/v1'
 
 // Colors
 export const COLORS = {
-	primary: '#3c97f4',
+	primary: '#006aaf',
 	
 	secondary_a: '#009ad3',
 	element_a1: '#7ec3de',

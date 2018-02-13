@@ -121,14 +121,14 @@ class Login extends Component {
 						Belum punya akun?
 					</Text>
 					<TouchableOpacity onPress={() => navigate('Register')}>
-						<Text style={{ color: COLORS.primary}}> 
+						<Text style={{ color: COLORS.secondary_a}}> 
 							{` Daftar`}
 						</Text>
 					</TouchableOpacity>
 				</View>
 
 				<TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-					<Text style={{ textAlign: 'center', marginTop: 10, color: COLORS.primary}}>
+					<Text style={{ textAlign: 'center', marginTop: 10, color: COLORS.secondary_a}}>
 						Lupa Kata Sandi?
 					</Text>
 				</TouchableOpacity>
