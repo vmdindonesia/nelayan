@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { StackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import ReduxThunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import numeral from 'numeral'
+import { setCustomText } from 'react-native-global-props'
 
 import reducers from './src/reducers'
 
@@ -26,6 +27,7 @@ import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
 import Message from './src/screens/Message'
+
 
 numeral.register('locale', 'id', {
   delimiters: {
@@ -71,6 +73,15 @@ const Routes = StackNavigator({
 }, {
   cardStyle: { backgroundColor: '#fff' },
 })
+
+// font
+const customTextProps = { 
+  style: { 
+    fontFamily: 'Muli-Regular'
+  }
+}
+
+setCustomText(customTextProps)
 
 export default class App extends Component<{}> {
   render() {

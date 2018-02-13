@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableNativeFeedback } from 'react-native'
+import { COLORS } from '../../constants'
 
 class Button extends Component {
 	render() {
@@ -22,17 +23,15 @@ const styles = {
 		alignSelf: 'center',
 		color: '#fff',
 		fontSize: 16,
-		fontWeight: '600',
-		paddingTop: 10,
-		paddingBottom: 10,
+		paddingTop: 12,
+		paddingBottom: 12,
+		fontFamily: 'Muli-Bold'
 	},
 	buttonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: '#007aff',
-		borderRadius: 2,
-		marginLeft: 5,
-		marginRight: 5,
+		backgroundColor: COLORS.primary,
+		borderRadius: 8,
 	}
 }
 
