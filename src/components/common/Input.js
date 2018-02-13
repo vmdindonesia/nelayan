@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Text, View, TextInput, Image } from 'react-native'
+import { COLORS } from '../../constants'
 
 class Input extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			underlineColor: '#ddd',
 			isFocus: false
 		}
 	}
@@ -20,7 +20,6 @@ class Input extends Component {
 	onBlur = () => {
 		this.setState({
 			isFocus: false,
-			underlineColor: '#ddd'
 		})
 	}
 
@@ -97,7 +96,7 @@ const styles = {
 		fontFamily: 'Muli-Regular'
 	},
 	onFocus: {
-		borderColor: '#009ad3'
+		borderColor: COLORS.secondary_a
 	},
 	containerStyle: {
 		flex: 1
