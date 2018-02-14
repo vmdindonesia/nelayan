@@ -18,7 +18,7 @@ class MenuItem extends Component {
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
-								source={require('../../assets/katalog.png')} 
+								source={require('../../assets/menu1.png')} 
 							/>
 							<Text style={{textAlign: 'center'}}>Profil</Text>
 						</View>
@@ -27,7 +27,7 @@ class MenuItem extends Component {
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
-								source={require('../../assets/fishlog.png')} 
+								source={require('../../assets/menu2.png')} 
 							/>
 							<Text style={{textAlign: 'center'}}>Fish Log</Text>
 						</View>
@@ -36,36 +36,36 @@ class MenuItem extends Component {
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
-								source={require('../../assets/permintaan.png')} 
+								source={require('../../assets/menu3.png')} 
 							/>
-							<Text style={{textAlign: 'center'}}>Request</Text>
+							<Text style={{textAlign: 'center'}}>PO</Text>
 						</View>
 					</TouchableNativeFeedback>
 				</View>
 				<View style={{flexDirection: 'row'}}>
-					<TouchableNativeFeedback>
-						<View style={menuItemStyle}>
-							<Image 
-								style={menuIcon}
-								source={require('../../assets/transaksi.png')} 
-							/>
-							<Text style={{textAlign: 'center'}}>Diskusi</Text>
-						</View>
-					</TouchableNativeFeedback>
 					<TouchableNativeFeedback onPress={() => this.props.navi.navigate('MemberList')}>
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
-								source={require('../../assets/anggota.png')} 
+								source={require('../../assets/menu4.png')} 
 							/>
 							<Text style={{textAlign: 'center'}}>Anggota</Text>
+						</View>
+					</TouchableNativeFeedback>
+					<TouchableNativeFeedback>
+						<View style={menuItemStyle}>
+							<Image 
+								style={menuIcon}
+								source={require('../../assets/menu5.png')} 
+							/>
+							<Text style={{textAlign: 'center'}}>Diskusi</Text>
 						</View>
 					</TouchableNativeFeedback>
 					<TouchableNativeFeedback onPress={() => this.props.navi.navigate('Information')}>
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
-								source={require('../../assets/informasi.png')} 
+								source={require('../../assets/menu6.png')} 
 							/>
 							<Text style={{textAlign: 'center'}}>Informasi</Text>
 						</View>
@@ -124,8 +124,7 @@ const styles = {
 	},
 	menuIcon: {
 		alignSelf: 'center',
-		marginTop: 8,
-		marginBottom: 5,
+		marginTop: 10,
 		height: 50,
 		width: 50,
 	}
