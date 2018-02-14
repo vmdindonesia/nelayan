@@ -9,7 +9,8 @@ import { Container, ContainerSection, Spinner } from '../components/common'
 
 class RequestDetail extends Component {
 	static navigationOptions = {
-		title: 'Request Detail'
+		title: 'Request Detail',
+		headerRight: <View />
 	}
 
 	constructor(props) {

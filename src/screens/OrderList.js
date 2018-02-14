@@ -8,7 +8,8 @@ import { BASE_URL } from '../constants'
 
 class OrderList extends Component {
 	static navigationOptions = {
-		title: 'Order'
+		title: 'Order',
+		headerRight: <View />
 	}
 
 	componentWillMount() {

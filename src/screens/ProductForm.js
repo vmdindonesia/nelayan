@@ -9,7 +9,8 @@ import { Container, ContainerSection, Button, Spinner } from '../components/comm
 
 class ProductForm extends Component {
 	static navigationOptions = {
-		title: 'Pilih Komoditas'
+		title: 'Pilih Komoditas',
+		headerRight: <View />
 	}
 
 	constructor(props) {

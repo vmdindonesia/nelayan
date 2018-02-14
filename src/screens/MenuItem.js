@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableNativeFeedback, Image } from 'react-native'
+import { View, Text, TouchableNativeFeedback, Image, TouchableWithoutFeedback } from 'react-native'
+import { connect } from 'react-redux'
+import { NavigationActions } from 'react-navigation'
+
+import { logout } from '../actions'
 
 class MenuItem extends Component {
 	render() {
@@ -39,13 +43,13 @@ class MenuItem extends Component {
 					</TouchableNativeFeedback>
 				</View>
 				<View style={{flexDirection: 'row'}}>
-					<TouchableNativeFeedback onPress={() => this.props.navi.navigate('OrderList')}>
+					<TouchableNativeFeedback>
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
 								source={require('../../assets/transaksi.png')} 
 							/>
-							<Text style={{textAlign: 'center'}}>Order</Text>
+							<Text style={{textAlign: 'center'}}>Diskusi</Text>
 						</View>
 					</TouchableNativeFeedback>
 					<TouchableNativeFeedback onPress={() => this.props.navi.navigate('MemberList')}>
@@ -76,21 +80,21 @@ class MenuItem extends Component {
 					</Text>
 				</View>
 				{
-					// <TouchableWithoutFeedback 
-					// 	onPress={() => this.props.logout(() => {
-					// 		const resetAction = NavigationActions.reset({
-					// 			index: 0,
-					// 			actions: [
-					// 				NavigationActions.navigate({ routeName: 'Login'})
-					// 			]
-					// 		})
-					// 		this.props.navi.dispatch(resetAction)
-					// 	})}
-					// >
-					// 	<View>
-					// 		<Text style={{textAlign: 'center'}}>Logout</Text>
-					// 	</View>
-					// </TouchableWithoutFeedback>
+					<TouchableWithoutFeedback 
+						onPress={() => this.props.logout(() => {
+							const resetAction = NavigationActions.reset({
+								index: 0,
+								actions: [
+									NavigationActions.navigate({ routeName: 'Login'})
+								]
+							})
+							this.props.navi.dispatch(resetAction)
+						})}
+					>
+						<View>
+							<Text style={{textAlign: 'center'}}>Logout</Text>
+						</View>
+					</TouchableWithoutFeedback>
 				}
 			</View>
 		)
@@ -127,4 +131,9 @@ const styles = {
 	}
 }
 
-export default MenuItem
+const mapStateToProps = state => {
+	const { user } = state
+	return { user }
+}
+
+export default connect(mapStateToProps, { logout })(MenuItem)

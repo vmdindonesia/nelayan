@@ -5,7 +5,8 @@ import { Container, ContainerSection, Input, Button, Spinner } from '../componen
 
 class ForgotPassword extends Component {
 	static navigationOptions = {
-		title: 'Lupa Password'
+		title: 'Lupa Password',
+		headerRight: <View />
 	}
 
 	constructor(props) {

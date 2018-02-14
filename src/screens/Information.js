@@ -3,7 +3,8 @@ import { View, Text } from 'react-native'
 
 class Information extends Component {
 	static navigationOptions = {
-		title: 'Informasi'
+		title: 'Informasi',
+		headerRight: <View />
 	}
 
 	render() {

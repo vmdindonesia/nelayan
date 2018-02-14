@@ -40,7 +40,8 @@ class FishLogCreate extends Component {
 					style={{marginLeft: 15, height: 26, width: 26}}
 					source={require('../../assets/back-icon.png')} 
 				/>
-			</TouchableNativeFeedback>	
+			</TouchableNativeFeedback>,
+		headerRight: <View />
 	})
 
 	constructor(props) {

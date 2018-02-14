@@ -3,7 +3,8 @@ import { View, Text } from 'react-native'
 
 class MemberList extends Component {
 	static navigationOptions = {
-		title: 'Anggota Nelayan'
+		title: 'Anggota Nelayan',
+		headerRight: <View />
 	}
 
 	render() {

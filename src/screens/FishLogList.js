@@ -10,7 +10,8 @@ import { BASE_URL } from '../constants'
 
 class FishLogList extends Component {
 	static navigationOptions = {
-		title: 'Fishlog'
+		title: 'Fishlog',
+		headerRight: <View />
 	}
 
 	componentWillMount() {
