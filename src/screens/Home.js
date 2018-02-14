@@ -1,44 +1,15 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback, AsyncStorage } from 'react-native'
+import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
-import { logout, setUserToken } from '../actions'
+import { logout } from '../actions'
 import { BASE_URL, COLOR } from '../constants'
 
 class Home extends Component {
 	static navigationOptions = {
-		header: null
-	}
-
-	constructor(props) {
-		super(props)
-	
-		this.state = {
-			splash: true
-		}
-	}
-
-	componentWillMount() {
-		// to do: check token expired
-
-		setTimeout(() => {
-			AsyncStorage.getItem('token', (err, result) => {
-				console.log(result, 'Token');
-				if (!result || result === '') {
-					const resetAction = NavigationActions.reset({
-						index: 0,
-						actions: [
-							NavigationActions.navigate({ routeName: 'StartScreen'})
-						]
-					})
-					this.props.navigation.dispatch(resetAction)
-				} 
-				else {
-					this.props.setUserToken(result)
-					this.setState({splash: false})
-				}
-			})
-		}, 1000)
+		headerTitle: 'Nelayan Aruna',
+		headerLeft: (<View />),
+		headerRight: (<View />),
 	}
 
 	render() {
@@ -47,23 +18,6 @@ class Home extends Component {
 			profileImageContainer, profileImage, profileName, coin, point,
 			menuItemStyle, menuIcon
 		} = styles
-
-		console.log(this.props.user, 'props')
-
-		if (this.state.splash) {
-			return (
-				<View 
-					style={{
-						backgroundColor: COLOR.secondary_a,
-						flex: 1,
-						justifyContent: 'center', 
-						alignItems: 'center'
-					}}
-				>
-					<Image source={require('../../assets/Ic_aruna_logogram.png')} />
-				</View>
-			)
-		}
 
 		return (
 			<View style={containerStyle}>
@@ -252,4 +206,4 @@ const mapStateToProps = (state) => {
 	return { user }
 }
 
-export default connect(mapStateToProps, { logout, setUserToken })(Home)
+export default connect(mapStateToProps, { logout })(Home)

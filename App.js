@@ -8,6 +8,7 @@ import { setCustomText } from 'react-native-global-props'
 
 import reducers from './src/reducers'
 
+import SplashScreen from './src/screens/SplashScreen'
 import Login from './src/screens/Login'
 import Register from './src/screens/Register'
 import Home from './src/screens/Home'
@@ -47,6 +48,7 @@ numeral.locale('id')
 
 // Routes
 const Routes = StackNavigator({
+  SplashScreen: { screen: SplashScreen },
   Home: { screen: Home },
   StartScreen: { screen: StartScreen },
   Login: { screen: Login },
