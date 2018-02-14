@@ -76,7 +76,7 @@ const Routes = StackNavigator({
   Message: { screen: Message },
 
 }, {
-  cardStyle: { backgroundColor: '#fff' },
+  cardStyle: { backgroundColor: '#fafafa' },
   navigationOptions: {
     headerTitleStyle: {
       alignSelf: 'center',
@@ -97,7 +97,6 @@ const customTextProps = {
     fontFamily: 'Muli-Regular'
   }
 }
-
 setCustomText(customTextProps)
 
 export default class App extends Component<{}> {

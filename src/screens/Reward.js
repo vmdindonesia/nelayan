@@ -10,7 +10,7 @@ import RewardHistory from './RewardHistory'
 const RewardTab = TabNavigator({
   'Tukar Poin': { screen: RewardItemList },
   Riwayat: { screen: RewardHistory },
-});
+})
 
 class Reward extends Component {
 	static navigationOptions = {

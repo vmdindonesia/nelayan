@@ -52,7 +52,7 @@ class OrderList extends Component {
 	renderItem = (item) => {
 		return (
 			<TouchableNativeFeedback
-				onPress={() => this.props.navigation.navigate('OrderDetail', {id: item.id})}
+				onPress={() => this.props.navi.navigate('OrderDetail', {id: item.id})}
 			>
 				<View style={styles.itemContainerStyle}>
 					<View style={styles.thumbnailContainerStyle}>
