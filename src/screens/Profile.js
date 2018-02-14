@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, Image, TouchableOpacity, AsyncStorage } from 'react-native'
+import { ScrollView, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { BASE_URL } from '../constants'
-import { Button } from 'react-native-elements'
-import { Card, CardSection, Container, ContainerSection, Input, Spinner } from '../components/common'
-import AutoComplete from '../components/AutoComplete'
+import Icon from 'react-native-vector-icons/Ionicons'
+// import { Button } from 'react-native-elements'
+
+import { BASE_URL, COLOR } from '../constants'
+import { Card, CardSection, Spinner, ContainerSection, Button } from '../components/common'
 
 class Profile extends Component {
 	static navigationOptions = ({navigation}) => ({
@@ -14,10 +14,10 @@ class Profile extends Component {
 		headerRight:
 			<Button
 				title='Ubah'
-				backgroundColor="#eaeaea"
+				backgroundColor="transparent"
 				containerViewStyle={{marginRight: 10}}
 				buttonStyle={{padding: 10}}
-				color="black"
+				color="#fff"
 				onPress={() => navigation.navigate('ProfileEdit')}
 			/>
 	})
@@ -32,7 +32,10 @@ class Profile extends Component {
 
 			suggestions: [],
 			value: '',
-			FishId: ''
+			FishId: '',
+
+			screen: 'Profile'
+
 		}
 	}
 
@@ -62,14 +65,97 @@ class Profile extends Component {
 		})
 	}
 
+	renderProfile = (data) => {
+		return (
+			<View style={styles.card}>
+				<View style={styles.cardSection}>
+					<Text style={{color: COLOR.secondary_a}}>Data Pribadi</Text>
+				</View>
+
+				<View style={{borderWidth: 1, borderColor: '#eaeaea', width: '96%', marginLeft: '2%', margin: 5}} />
+
+				<View style={styles.cardSection}>
+					<Text style={styles.labelStyle}>Alamat</Text>
+					<Text style={styles.dataStyle}>
+						{`${data.subDistrict} \n${data.village} \n${data.City && data.City.name}`}
+					</Text>
+				</View>
+				<View style={styles.cardSection}>
+					<Text style={styles.labelStyle}>No. Telp</Text>
+					<Text style={styles.dataStyle}>{data.phone}</Text>
+				</View>
+				<View style={styles.cardSection}>
+					<Text style={styles.labelStyle}>No. Identitas</Text>
+					<Text style={styles.dataStyle}>{data.idNumber}</Text>
+				</View>
+				<View style={styles.cardSection}>
+					<Text style={styles.labelStyle}>Email</Text>
+					<Text style={styles.dataStyle}>{data.email}</Text>
+				</View>
+			</View>
+		)
+	}
+
+	renderProducts = (data) => {
+		return (
+			<ScrollView style={{marginBottom: 20}}>
+				{
+					// <View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20}}>
+					// 	<Text style={{fontWeight: 'bold', fontSize: 20}}>
+					// 		Komoditas
+					// 	</Text>
+					// 	<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm')}>
+					// 		<View style={{width: 35}}>
+					// 			<Icon style={{marginLeft: 10}} name="md-add" size={20} />
+					// 		</View>
+					// 	</TouchableOpacity>
+					// </View>
+				}
+				{
+					data.Products && data.Products.map(item =>
+						<Card key={item.id}>
+							<CardSection>
+								<Image
+									style={{width: 100, height: 100}}
+									source={{uri: `${BASE_URL}/images/${item.Fish.photo}`}} 
+								/>
+								<Text style={{color: COLOR.secondary_a, fontSize: 20, marginLeft: 10}}>{item.Fish && item.Fish.name}</Text>
+								<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
+									<View style={{width: 35, marginTop: 5}}>
+										<Icon style={{marginLeft: 10}} name="md-create" size={20} />
+									</View>
+								</TouchableOpacity>
+							</CardSection>
+						</Card>
+					)
+				}
+
+				<View style={{margin: 10}}>
+					<ContainerSection>
+						<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
+							Tambah Komoditas
+						</Button>
+					</ContainerSection>
+				</View>
+			</ScrollView>
+		)
+	}
+
+	renderScreen = (data) => {
+		if (this.state.screen === 'Products') {
+			return this.renderProducts(data)
+		}
+		
+		return this.renderProfile(data)
+	}
+
 	render() {
 		const { 
 			containerStyle, headerHomeStyle, menuContainerStyle,
-			profileImageContainer, profileImage, profileName,
-			labelStyle, dataStyle
+			profileImageContainer, profileImage, profileName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive, 
 		} = styles
 
-		const { data, loading } = this.state
+		const { data, loading, screen } = this.state
 
 		if (loading) {
 			return (
@@ -80,7 +166,7 @@ class Profile extends Component {
 		}
 
 		return (
-			<ScrollView style={containerStyle}>
+			<View style={containerStyle}>
 				<View style={headerHomeStyle}>
 					<View style={profileImageContainer}>
 						<Image 
@@ -89,61 +175,39 @@ class Profile extends Component {
 						/>
 					</View>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
+					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
+						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+							<View style={{flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5}}>
+								<Image 
+									style={coin}
+									source={require('../../assets/coin.png')}
+								/>
+								<Text style={point}>{this.props.user.data.pointNow}</Text>
+							</View>
+						</View>
+					</TouchableWithoutFeedback>
 				</View>
 				<View style={menuContainerStyle}>
-					<Container>
-						<ContainerSection>
-							<Text style={labelStyle}>Data Lembaga</Text>
-							<Text style={dataStyle}>
-								{`${data.subDistrict} \n${data.village} \n${data.City && data.City.name}`}
-							</Text>
-						</ContainerSection>
-						<ContainerSection>
-							<Text style={labelStyle}>No. KTP</Text>
-							<Text style={dataStyle}>{data.idNumber}</Text>
-						</ContainerSection>
-						<ContainerSection>
-							<Text style={labelStyle}>No. Handphone</Text>
-							<Text style={dataStyle}>{data.phone}</Text>
-						</ContainerSection>
-						<ContainerSection>
-							<Text style={labelStyle}>Email</Text>
-							<Text style={dataStyle}>{data.email}</Text>
-						</ContainerSection>
-					</Container>
-
-					<View style={{paddingBottom: 20}}>
-						<View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20}}>
-							<Text style={{fontWeight: 'bold', fontSize: 20}}>
-								Komoditas
-							</Text>
-							<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm')}>
-								<View style={{width: 35}}>
-									<Icon style={{marginLeft: 10}} name="md-add" size={20} />
+					<View style={{flexDirection: 'row', marginBottom: 10}}>
+						<View style={{flex: 1}}>
+							<TouchableNativeFeedback onPress={() => this.setState({screen: 'Profile'})}>
+								<View style={screen === 'Profile' ? tabContainerActive : tabContainer}>
+									<Text style={screen === 'Profile' ? tabTextActive : tabText}>Profil</Text>
 								</View>
-							</TouchableOpacity>
+							</TouchableNativeFeedback>
 						</View>
-						<Card>
-							{
-								data.Products && data.Products.map(item =>
-									<CardSection key={item.id}>
-										<Image
-											style={{width: 60, height: 60, borderRadius: 3}}
-											source={require('../../assets/ikan.jpg')} 
-										/>
-										<Text key={item.id}>{item.Fish && item.Fish.name}</Text>
-										<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
-											<View style={{width: 35}}>
-												<Icon style={{marginLeft: 10}} name="md-create" size={20} />
-											</View>
-										</TouchableOpacity>
-									</CardSection>
-								)
-							}
-						</Card>
+						<View style={{flex: 1}}>
+							<TouchableNativeFeedback onPress={() => this.setState({screen: 'Products'})}>
+								<View style={screen === 'Products' ? tabContainerActive : tabContainer}>
+									<Text style={screen === 'Products' ? tabTextActive : tabText}>Komoditas</Text>
+								</View>
+							</TouchableNativeFeedback>
+						</View>
 					</View>
+
+					{this.renderScreen(data)}
 				</View>
-			</ScrollView>
+			</View>
 		)
 	}
 }
@@ -153,32 +217,44 @@ const styles = {
 		flex: 1
 	},
 	headerHomeStyle: {
+		paddingTop: 20,
+		paddingBottom: 10,
 		flex: 2,
 		justifyContent: 'center',
 		alignSelf: 'center',
-		backgroundColor: '#56bde6',
-		width: '100%',
-		paddingTop: 20,
-		paddingBottom: 20
+		backgroundColor: COLOR.secondary_a,
+		width: '100%'
 	},
 	menuContainerStyle: {
-		flex: 5,
+		flex: 4,
 	},
 	profileImageContainer: {
-		height: 70,
-		width: 70,
+		height: 90,
+		width: 90,
 		alignSelf: 'center',
 	},
 	profileImage: {
-		height: 70,
-		width: 70,
+		height: 90,
+		width: 90,
 		borderRadius: 50,
 	},
 	profileName: {
 		textAlign: 'center',
 		marginTop: 5,
+		marginBottom: 5,
 		color: '#fff',
-		fontSize: 18
+		fontSize: 20,
+		fontFamily: 'Muli-Bold'
+	},
+	coin: {
+		height: 24,
+		width: 24,
+		alignSelf: 'center'
+	},
+	point: {
+		marginTop: 1, 
+		marginLeft: 5,
+		fontSize: 15,
 	},
 	labelStyle: {
 		fontWeight: 'bold',
@@ -187,6 +263,47 @@ const styles = {
 	dataStyle: {
 		flex: 1
 	},
+	tabContainer: {
+		backgroundColor: COLOR.element_a3,
+		height: 50,
+		justifyContent: 'center'
+	},
+	tabContainerActive: {
+		backgroundColor: COLOR.element_a4,
+		height: 50,
+		justifyContent: 'center'
+	},
+	tabText: {
+		color: '#eaeaea',
+		textAlign: 'center',
+		fontSize: 18
+	},
+	tabTextActive: {
+		color: '#fff',
+		textAlign: 'center',
+		fontSize: 18
+	},
+	card: {
+		borderWidth: 1, 
+		borderColor: '#ddd',
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.1,
+		shadowRadius: 2,
+		elevation: 1,
+		marginLeft: 15,
+		marginRight: 15,
+		marginTop: 10,
+		padding: 10,
+		paddingLeft: 15,
+		paddingRight: 15,
+	},
+	cardSection: {
+		padding: 5,
+		justifyContent: 'flex-start',
+		flexDirection: 'row',
+		position: 'relative'
+	}
 }
 
 const mapStateToProps = state => {

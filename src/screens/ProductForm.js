@@ -167,7 +167,6 @@ class ProductForm extends Component {
 
 const styles = {
 	containerItemAutoSelect: {
-		borderBottomWidth: 1, 
 		padding: 10,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',

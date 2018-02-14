@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
-import { TabNavigator } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { logout } from '../actions'
