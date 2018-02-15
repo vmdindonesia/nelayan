@@ -97,6 +97,7 @@ class RequestDetail extends Component {
 			headers: {token}
 		})
 		.then(() => {
+			this.fetchDetail()
 			this.setState({loading: false})
 			Alert.alert(
 				'Sukses!',
@@ -107,6 +108,7 @@ class RequestDetail extends Component {
 			this.props.requestsFetch(token)
 		})
 		.catch(error => {
+			this.fetchDetail()
 			this.setState({loading: false})
 			if (error.response) {
 				alert(error.response.data.message)
@@ -142,7 +144,7 @@ class RequestDetail extends Component {
 					</View>
 					<View style={{marginTop: 5, marginBottom: 10}}>
 						<Text>Pengiriman Ke</Text>
-						<Text style={styles.productName}>{data.Buyer ? (`${data.Buyer.organizationType ? data.Buyer.organizationType : ''}${data.Buyer.organization ? data.Buyer.organization : data.Buyer.name}`) : ''}</Text>
+						<Text style={styles.productName}>{data.Buyer ? (`${data.Buyer.organizationType ? data.Buyer.organizationType : ''} ${data.Buyer.organization ? data.Buyer.organization : data.Buyer.name}`) : ''}</Text>
 					</View>
 
 					<View style={styles.detail}>
@@ -194,7 +196,7 @@ class RequestDetail extends Component {
 							</View>
 						:
 							<View style={styles.actionButton}>
-								<Text>{data.Status.id === 2 ? 'Menunggu Konfirmasi dari pembeli' : ''}</Text>
+								<Text>{data.Status.id === 2 ? 'Menunggu Konfirmasi dari pembeli' : 'PO Ditolak'}</Text>
 							</View>
 					}
 				</View>
