@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { BASE_URL, COLOR } from '../constants'
 import { Spinner } from '../components/common'
+import { requestsFetch } from '../actions'
 
 class RequestDetail extends Component {
 	static navigationOptions = {
@@ -63,22 +64,14 @@ class RequestDetail extends Component {
 		.then(() => {
 			this.fetchDetail()
 			this.setState({loading: false})
+
 			Alert.alert(
 				'Sukses!',
-				`Terima kasih telah mengambil tawaran ${data.Buyer.name}\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
-				[
-					{text: 'Ok', onPress: () => {
-						const resetAction = NavigationActions.reset({
-							index: 1,
-							actions: [
-								NavigationActions.navigate({ routeName: 'Home'}),
-								NavigationActions.navigate({ routeName: 'RequestList'})
-							]
-						})
-						this.props.navigation.dispatch(resetAction)
-					}}
-				]
+				`Terima kasih telah mengambil PO ${data.Buyer.name}\n\nTunggu kabar dari kami untuk transaksi selanjutnya`,
+				[]
 			)
+
+			this.props.requestsFetch(token)
 		})
 		.catch(error => {
 			this.setState({loading: false})
@@ -88,6 +81,8 @@ class RequestDetail extends Component {
 			else {
 				alert('Koneksi internet bermasalah')
 			}
+
+			this.props.requestsFetch(token)
 		})
 	}
 
@@ -95,7 +90,6 @@ class RequestDetail extends Component {
 		this.setState({loading: true})
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
-		let { data } = this.state
 
 		let formData = {approval: 0}
 
@@ -106,20 +100,11 @@ class RequestDetail extends Component {
 			this.setState({loading: false})
 			Alert.alert(
 				'Sukses!',
-				'Request telah ditolak',
-				[
-					{text: 'Ok', onPress: () => {
-						const resetAction = NavigationActions.reset({
-							index: 1,
-							actions: [
-								NavigationActions.navigate({ routeName: 'Home'}),
-								NavigationActions.navigate({ routeName: 'RequestList'})
-							]
-						})
-						this.props.navigation.dispatch(resetAction)
-					}}
-				]
+				'PO telah ditolak',
+				[]
 			)
+
+			this.props.requestsFetch(token)
 		})
 		.catch(error => {
 			this.setState({loading: false})
@@ -129,6 +114,8 @@ class RequestDetail extends Component {
 			else {
 				alert('Koneksi internet bermasalah')
 			}
+			
+			this.props.requestsFetch(token)
 		})
 	}
 
@@ -155,16 +142,17 @@ class RequestDetail extends Component {
 					</View>
 					<View style={{marginTop: 5, marginBottom: 10}}>
 						<Text>Pengiriman Ke</Text>
-						<Text style={styles.productName}>{data.Buyer ? (`${data.Buyer.organizationType} ${data.Buyer.organization}`) : ''}</Text>
-						<Text style={{marginTop: 10}}>{data.Buyer ? data.Buyer.address : ''}</Text>
+						<Text style={styles.productName}>{data.Buyer ? (`${data.Buyer.organizationType ? data.Buyer.organizationType : ''}${data.Buyer.organization ? data.Buyer.organization : data.Buyer.name}`) : ''}</Text>
 					</View>
 
 					<View style={styles.detail}>
 						<View style={{flex: 1, justifyContent: 'center'}}>
-							<Icon name="md-information-circle" size={24} />
+							<Icon name="md-information-circle" size={32} />
 						</View>
 						<View style={{flex: 6}}>
-							<Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus officiis eum fugiat consequatur</Text>
+							<Text>
+								Pengambilan PO terakhir dapat dilakukan pada tanggal {moment(data.expiredAt).format('DD/MM/YYYY')} pukul {moment(data.expiredAt).format('HH:mm')} WIB
+							</Text>
 						</View>
 					</View>
 
@@ -275,4 +263,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(RequestDetail)
+export default connect(mapStateToProps, {requestsFetch})(RequestDetail)
