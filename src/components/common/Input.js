@@ -80,7 +80,7 @@ const styles = {
 		paddingLeft: 7
 	},
 	lockedForm: {
-		opacity: 0.4
+		opacity: 0.6
 	},
 	inputStyle: {
 		fontSize: 14,

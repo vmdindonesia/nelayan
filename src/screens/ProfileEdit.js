@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker'
 import axios from 'axios'
+import Icon from 'react-native-vector-icons/Ionicons'
+
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
 import { BASE_URL } from '../constants'
@@ -34,10 +36,7 @@ class ProfileEdit extends Component {
 					}
 				}
 			>
-				<Image 
-					style={{marginLeft: 15, height: 26, width: 26}}
-					source={require('../../assets/back-icon.png')} 
-				/>
+				<Icon style={{marginLeft: 20, color: '#fff'}} name="md-arrow-back" size={24} />
 			</TouchableNativeFeedback>,
 		headerRight: <View />
 	})

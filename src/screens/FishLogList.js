@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
 import numeral from 'numeral'
 import { fishLogsFetch } from '../actions'
-import { Spinner } from '../components/common'
-import { BASE_URL } from '../constants'
+import { Spinner, Card } from '../components/common'
+import { BASE_URL, COLOR } from '../constants'
 
 class FishLogList extends Component {
 	static navigationOptions = {
@@ -20,27 +20,29 @@ class FishLogList extends Component {
 
 	renderItem = (item) => {
 		return (
-			<TouchableNativeFeedback 
-				onPress={() => this.props.navigation.navigate('FishLogEdit', {id: item.id})}
-			>
-				<View style={styles.itemContainerStyle}>
-					<View style={styles.thumbnailContainerStyle}>
-						<Image 
-							style={styles.thumbnailStyle}
-							source={{uri: `${BASE_URL}/images/${item.photo}`}} 
-						/>
-					</View>
-					<View style={styles.headerContentStyle}>
-						<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
-						<View style={{flexDirection: 'row'}}>
-							<Text style={{flex: 1}}>{item.quantity} Kg</Text>
-							<Text style={{flex: 1}}>{item.size} Cm</Text>
-							<Text style={{flex: 1, textAlign: 'right'}}>Rp {numeral(item.price).format('0,0')}</Text>
+			<Card>
+				<TouchableNativeFeedback 
+					onPress={() => this.props.navigation.navigate('FishLogEdit', {id: item.id})}
+				>
+					<View style={styles.itemContainerStyle}>
+						<View style={styles.thumbnailContainerStyle}>
+							<Image 
+								style={styles.thumbnailStyle}
+								source={{uri: `${BASE_URL}/images/${item.photo}`}} 
+							/>
 						</View>
-						<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+						<View style={styles.headerContentStyle}>
+							<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+							<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
+							<View style={{flexDirection: 'row'}}>
+								<Text style={{flex: 1}}>{item.quantity} Kg</Text>
+								<Text style={{flex: 1}}>{item.size} Cm</Text>
+								<Text style={{flex: 1, textAlign: 'right'}}>Rp {numeral(item.price).format('0,0')}</Text>
+							</View>
+						</View>
 					</View>
-				</View>
-			</TouchableNativeFeedback>
+				</TouchableNativeFeedback>
+			</Card>
 		)
 	}
 
@@ -62,7 +64,7 @@ class FishLogList extends Component {
 				/>
 
 				<ActionButton
-					buttonColor="rgba(231,76,60,1)"
+					buttonColor={COLOR.secondary_b}
 					onPress={() => this.props.navigation.navigate('FishLogCreate')}
 				/>
 
@@ -74,7 +76,6 @@ class FishLogList extends Component {
 const styles = {
 	itemContainerStyle: {
 		borderBottomWidth: 1, 
-		padding: 5,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
 		borderColor: '#ddd',
@@ -82,12 +83,11 @@ const styles = {
 	thumbnailContainerStyle: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		margin: 15,
+		margin: 10,
 	},
 	thumbnailStyle: {
-		height: 80,
-		width: 80,
-		borderRadius: 5
+		height: 100,
+		width: 100,
 	},
 	headerContentStyle: {
 		flex: 1,
@@ -99,6 +99,7 @@ const styles = {
 	},
 	hedaerTextStyle: {
 		fontSize: 20,
+		color: COLOR.secondary_a
 	}
 }
 

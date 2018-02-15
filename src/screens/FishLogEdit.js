@@ -3,17 +3,19 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import numeral from 'numeral'
 import { NavigationActions } from 'react-navigation'
-import { View, ScrollView, Text, Picker, Keyboard, TouchableOpacity, Alert, Image, TouchableWithoutFeedback, TouchableNativeFeedback, BackHandler } from 'react-native'
+import { View, ScrollView, Text, Picker, Keyboard, TouchableOpacity, Alert, Image, TouchableNativeFeedback, BackHandler } from 'react-native'
 import axios from 'axios'
+import Icon from 'react-native-vector-icons/Ionicons'
+
 import ImagePicker from 'react-native-image-picker'
-import { BASE_URL } from '../constants'
+import { BASE_URL, COLOR } from '../constants'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 
 class FishLogEdit extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: 'Ubah Fishlog',
 		headerLeft: 
-			<TouchableNativeFeedback
+			<TouchableOpacity
 				onPress={() => 
 					{
 						if (navigation.state.params && navigation.state.params.change) {
@@ -35,11 +37,8 @@ class FishLogEdit extends Component {
 					}
 				}
 			>
-				<Image 
-					style={{marginLeft: 15, height: 26, width: 26}}
-					source={require('../../assets/back-icon.png')} 
-				/>
-			</TouchableNativeFeedback>,
+				<Icon style={{marginLeft: 20, color: '#fff'}} name="md-arrow-back" size={24} />
+			</TouchableOpacity>,
 		headerRight: <View />
 	})
 
@@ -234,28 +233,9 @@ class FishLogEdit extends Component {
 			<ScrollView keyboardShouldPersistTaps="always">
 				<Container>
 					<ContainerSection>
-						<TouchableWithoutFeedback>
-							<View style={{flex: 1, padding: 8}}>
-								<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
-									<View>
-									{ photo === null ? 
-										<Image 
-											style={{width: '100%', height: 160}}
-											source={{uri: `${BASE_URL}/images/${data.photo}`}} 
-										/>
-									:
-										<Image style={{height: 200}} source={photo} />
-									}
-									</View>
-								</TouchableOpacity>
-							</View>
-						</TouchableWithoutFeedback>
-					</ContainerSection>
-					<ContainerSection>
-						<Text style={{color: '#8e8e8e', paddingLeft: 5, fontSize: 16}}>Tanggal</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<Text style={{paddingLeft: 5, fontSize: 16, marginBottom: 5}}>{moment(data.createdAt).format('DD/MM/YYYY')}</Text>
+						<Text style={styles.headerStyle}>
+							Info komoditas
+						</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
@@ -272,15 +252,25 @@ class FishLogEdit extends Component {
 						</View>
 					</ContainerSection>
 					<ContainerSection>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal</Text>
+					</ContainerSection>
+					<ContainerSection>
 						<Input
-							label="Jumlah"
+							value={moment(data.createdAt).format('DD/MM/YYYY')}
+							editable={false}
+						/>	
+					</ContainerSection>
+					<ContainerSection>
+						<Text style={{color: '#5e5e5e', paddingLeft: 5, fontSize: 14}}>Jumlah & Ukuran</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
 							keyboardType="numeric"
 							value={data.quantity && data.quantity.toString()}
 							onChangeText={v => this.onChangeInput('quantity', v)}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
 						<Input
-							label="Ukuran"
 							keyboardType="numeric"
 							value={data.size && data.size.toString()}
 							onChangeText={v => this.onChangeInput('size', v)}
@@ -296,8 +286,35 @@ class FishLogEdit extends Component {
 						/>
 					</ContainerSection>
 					<ContainerSection>
-						{this.renderButton()}
+						<Text style={styles.headerStyle}>
+							Foto Komoditas
+						</Text>
 					</ContainerSection>
+					<ContainerSection>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Ambil Foto Komoditas</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5}}>
+							<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+								<View>
+								{ photo === null ? 
+										<Image
+											source={{uri: `${BASE_URL}/images/${data.photo}`}}
+											style={{height: 200, width: 300}}
+										/>
+									:
+										<Image style={{height: 200, width: 300}} source={photo} />
+								}
+								</View>
+							</TouchableOpacity>
+						</View>
+					</ContainerSection>
+					
+					<View style={{marginTop: 20, marginBottom: 20}}>
+						<ContainerSection>
+							{this.renderButton()}
+						</ContainerSection>
+					</View>
 				</Container>
 			</ScrollView>
 		)
@@ -305,30 +322,44 @@ class FishLogEdit extends Component {
 }
 
 const styles = {
+	headerStyle: {
+		color: COLOR.secondary_a,
+		fontSize: 18,
+	},
 	pickerContainer: {
 		flex: 1, 
-		height: 65,
-		marginBottom: 5
+		marginBottom: 5,
 	},
 	pickerStyle: {
-		flex: 1,
-		borderBottomWidth: 1,
-		borderColor: '#716c6c',
-		marginRight: 3,
-		marginLeft: 3,
+		borderColor: '#a9a9a9',
+		borderRadius: 5,
+		paddingLeft: 7,
+		borderWidth: 1,
 	},
 	pickerTextStyle: {
-		color: '#8e8e8e',
-		paddingLeft: 5,
-		fontSize: 16
+		color: '#5e5e5e',
+		fontSize: 14,
+		flex: 1,
+		marginTop: 10,
+		marginBottom: 10
 	},
 	imageStyle: {
 		
 	},
 	unitStyle: {
-		marginTop: 30, 
-		paddingRight: 30
-	}
+		marginTop: 25, 
+		paddingRight: 20,
+		marginLeft: 5
+	},
+	formWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderWidth: 1,
+		borderColor: '#a9a9a9',
+		borderRadius: 5,
+		paddingLeft: 7
+	},
 }
 
 const mapStateToProps = state => {
