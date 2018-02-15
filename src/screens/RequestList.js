@@ -8,7 +8,7 @@ import { BASE_URL } from '../constants'
 
 class RequestList extends Component {
 	static navigationOptions = {
-		title: 'Request List',
+		title: 'PO',
 		headerRight: <View />
 	}
 
@@ -31,10 +31,14 @@ class RequestList extends Component {
 								/>
 							</View>
 							<View style={{justifyContent: 'space-around', flex: 1}}>
-								<Text style={styles.buyerName}>{item.Buyer.name}</Text>
-								<Text style={styles.productName}>{item.Transaction.Fish.name} - {item.Transaction.quantity} Kg</Text>
-								<Text style={{textAlign: 'right'}}>{moment(item.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
-								<Text style={{textAlign: 'right'}}>{item.Status.name}</Text>
+								<View>
+									<Text style={styles.buyerName}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+									<Text style={styles.productName}>{item.Transaction.Fish.name}</Text>
+									<Text style={styles.productName}>{item.Transaction.quantity} Kg</Text>
+								</View>
+								<View>
+									<Text style={styles.buyerName}>{item.Status.name}</Text>
+								</View>
 							</View>
 						</CardSection>
 					</Card>
@@ -66,17 +70,16 @@ class RequestList extends Component {
 
 const styles = {
 	thumbnailStyle: {
-		height: 80,
-		width: 80,
-		borderRadius: 5
+		height: 100,
+		width: 100,
 	},
 	buyerName: {
 		textAlign: 'left',
 		marginLeft: 10
 	},
 	productName: {
-		textAlign: 'right',
 		fontSize: 18,
+		marginLeft: 10,
 		color: '#000'
 	}
 }

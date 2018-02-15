@@ -4,12 +4,14 @@ import { NavigationActions } from 'react-navigation'
 import moment from 'moment'
 import { Alert, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import axios from 'axios'
-import { BASE_URL } from '../constants'
-import { Container, ContainerSection, Spinner } from '../components/common'
+import Icon from 'react-native-vector-icons/Ionicons'
+
+import { BASE_URL, COLOR } from '../constants'
+import { Spinner } from '../components/common'
 
 class RequestDetail extends Component {
 	static navigationOptions = {
-		title: 'Request Detail',
+		title: 'Detail PO',
 		headerRight: <View />
 	}
 
@@ -132,129 +134,131 @@ class RequestDetail extends Component {
 
 	render() {
 		const { data } = this.state
+		console.log(data)
 
 		if (this.state.loading) {
 			return <Spinner size='large' />
 		}
 
 		return (
-			<View>
-				<Container>
-					<ContainerSection>
-						<View style={{flexDirection: 'column', flex: 1}}>
-							<Image 
-								style={styles.thumbnailStyle}
-								source={{uri: `${BASE_URL}/images/${data.Transaction.photo}`}} 
-							/>
-						</View>
-						<View style={{justifyContent: 'space-around', flex: 2}}>
-							<Text style={styles.buyerName}>{data.Buyer ? data.Buyer.name : ''}</Text>
-							<Text style={styles.productName}>{data.Transaction ? data.Transaction.Fish.name : ''} - {data.Transaction ? data.Transaction.quantity : ''} Kg</Text>
-							<Text style={{textAlign: 'right'}}>{moment(data.createdAt).format('DD/MM/YYYY | HH:mm')} WIB</Text>
-							<Text style={{textAlign: 'right'}}>{data.Status ? data.Status.name : ''}</Text>
-						</View>
-					</ContainerSection>
-				</Container>
-
-				<View style={{height: 10}} />
-
-				<View style={styles.detail}>
-					<Text style={{fontSize: 18, fontWeight: 'bold'}}>Alamat Buyer</Text>
-					<Text>{data.Buyer.subDistrict}</Text>
-					<Text>{data.Buyer.village}</Text>
-					<Text>{moment(data.createdAt).format('DD MMM YYYY')}</Text>
+			<View style={styles.containerStyle}>
+				<View>
+					<Image 
+						style={styles.thumbnailStyle}
+						source={{uri: `${BASE_URL}/images/${data.Transaction.photo}`}} 
+					/>
 				</View>
-				<View style={styles.detail}>
-					<Text>Status: {data.Status.name}</Text>
-				</View>
+				<View style={{margin: 5}}>
+					<View style={{marginTop: 5, marginBottom: 10}}>
+						<Text>{moment(data.createdAt).format('DD/MM/YYYY')}</Text>
+						<Text style={styles.productName}>{data.Transaction ? data.Transaction.Fish.name : ''} - {data.Transaction ? data.Transaction.quantity : ''} Kg</Text>
+					</View>
+					<View style={{marginTop: 5, marginBottom: 10}}>
+						<Text>Pengiriman Ke</Text>
+						<Text style={styles.productName}>{data.Buyer ? (`${data.Buyer.organizationType} ${data.Buyer.organization}`) : ''}</Text>
+						<Text style={{marginTop: 10}}>{data.Buyer ? data.Buyer.address : ''}</Text>
+					</View>
 
-				{
-					data.Status && data.Status.id === 1 ?
-						<View style={styles.actionButton}>
-							<TouchableNativeFeedback
-								onPress={() =>
-									Alert.alert(
-										'Ambil Request Order',
-										'Yakin ambil request order?',
-										[
-											{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-											{text: 'Ya', onPress: () => this.acceptRequest()},
-										]
-									)
-								}
-							>
-								<View style={styles.buttonStyle}>
-									<Text style={styles.textStyle}>Ambil</Text>
-								</View>
-							</TouchableNativeFeedback>
-							<TouchableNativeFeedback
-								onPress={() =>
-									Alert.alert(
-										'Tolak Request Order',
-										'Yakin menolak request order?',
-										[
-											{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-											{text: 'Ya', onPress: () => this.declineRequest()},
-										]
-									)
-								}
-							>
-								<View style={styles.buttonStyle2}>
-									<Text style={styles.textStyle}>Tolak</Text>
-								</View>
-							</TouchableNativeFeedback>
+					<View style={styles.detail}>
+						<View style={{flex: 1, justifyContent: 'center'}}>
+							<Icon name="md-information-circle" size={24} />
 						</View>
-					:
-						<View style={styles.actionButton}>
-							<Text style={{margin: 15}}>{data.Status.id === 2 ? 'Menunggu Konfirmasi dari pembeli' : ''}</Text>
+						<View style={{flex: 6}}>
+							<Text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus officiis eum fugiat consequatur</Text>
 						</View>
-				}
+					</View>
+
+					{
+						data.Status && data.Status.id === 1 ?
+							<View style={styles.actionButton}>
+								<TouchableNativeFeedback
+									onPress={() =>
+										Alert.alert(
+											'Ambil PO',
+											'Yakin ambil PO?',
+											[
+												{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+												{text: 'Ya', onPress: () => this.acceptRequest()},
+											]
+										)
+									}
+								>
+									<View style={styles.buttonStyle}>
+										<Text style={styles.textStyle}>Ambil</Text>
+									</View>
+								</TouchableNativeFeedback>
+								<TouchableNativeFeedback
+									onPress={() =>
+										Alert.alert(
+											'Tolak PO',
+											'Yakin menolak PO?',
+											[
+												{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+												{text: 'Ya', onPress: () => this.declineRequest()},
+											]
+										)
+									}
+								>
+									<View style={styles.buttonStyle2}>
+										<Text style={styles.textStyle}>Tolak</Text>
+									</View>
+								</TouchableNativeFeedback>
+							</View>
+						:
+							<View style={styles.actionButton}>
+								<Text>{data.Status.id === 2 ? 'Menunggu Konfirmasi dari pembeli' : ''}</Text>
+							</View>
+					}
+				</View>
 			</View>
 		)
 	}
 }
 
 const styles = {
+	containerStyle: {
+		padding: 20
+	},
 	thumbnailStyle: {
-		height: 100,
-		width: 100,
-		borderRadius: 5
+		height: 180,
+		width: '100%',
+		borderRadius: 2
 	},
 	buyerName: {
 		textAlign: 'left'
 	},
 	productName: {
-		textAlign: 'right',
-		fontSize: 18,
+		fontSize: 20,
 		color: '#000'
 	},
 	detail: {
-		// marginTop: 10,
-		padding: 20,
+		// flex: 1,
+		flexDirection: 'row',
+		marginTop: 10,
+		padding: 10,
 		borderWidth: 1,
-		borderColor: '#eaeaea'
+		borderColor: '#dfdfdf',
+		borderRadius: 2
 	},
 	actionButton: {
-		padding: 5,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
-		position: 'relative'
+		position: 'relative',
+		marginTop: 10
 	},
 	buttonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: 'green',
-		borderRadius: 2,
-		marginLeft: 5,
+		backgroundColor: COLOR.secondary_a,
+		borderRadius: 8,
 		marginRight: 5,
 	},
 	buttonStyle2: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: 'red',
-		borderRadius: 2,
+		backgroundColor: COLOR.element_b4,
+		borderRadius: 8,
 		marginLeft: 5,
-		marginRight: 5,
 	},
 	textStyle: {
 		alignSelf: 'center',
