@@ -12,14 +12,12 @@ class Profile extends Component {
 	static navigationOptions = ({navigation}) => ({
 		title: 'Profil',
 		headerRight:
-			<Button
-				title='Ubah'
-				backgroundColor="transparent"
-				containerViewStyle={{marginRight: 10}}
-				buttonStyle={{padding: 10}}
-				color="#fff"
+			<Button 
+				style={{margin: 5, marginRight: 10}} 
 				onPress={() => navigation.navigate('ProfileEdit')}
-			/>
+			>
+				Ubah
+			</Button>
 	})
 
 	constructor(props) {

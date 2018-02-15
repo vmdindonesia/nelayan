@@ -4,14 +4,14 @@ import { COLOR } from '../../constants'
 
 class Button extends Component {
 	render() {
-		const { secondary } = this.props
+		const { secondary, style } = this.props
 
 		return (
 			<TouchableNativeFeedback
 				onPress={this.props.onPress}
 				background={TouchableNativeFeedback.SelectableBackground()}
 			>
-				<View style={secondary ? styles.secondaryButtonStyle : styles.primaryButtonStyle}>
+				<View style={[secondary ? styles.secondaryButtonStyle : styles.primaryButtonStyle, style]}>
 					<Text style={secondary ? styles.secondaryTextStyle : styles.primaryTextStyle}>{this.props.children}</Text>
 				</View>
 			</TouchableNativeFeedback>
