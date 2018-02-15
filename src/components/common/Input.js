@@ -62,6 +62,7 @@ class Input extends Component {
 						onFocus={() => this.onFocus()}
 						underlineColorAndroid={'transparent'}
 						numberOfLines={lines || 1}
+						textAlignVertical="top"
 					/>
 				</View>
 			</View>

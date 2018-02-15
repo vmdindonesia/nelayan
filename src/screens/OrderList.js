@@ -3,8 +3,8 @@ import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-nati
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { ordersFetch } from '../actions'
-import { Spinner } from '../components/common'
-import { BASE_URL } from '../constants'
+import { Spinner, Card } from '../components/common'
+import { BASE_URL, COLOR } from '../constants'
 
 class OrderList extends Component {
 	static navigationOptions = {
@@ -52,54 +52,53 @@ class OrderList extends Component {
 
 	renderItem = (item) => {
 		return (
-			<TouchableNativeFeedback
-				onPress={() => this.props.navi.navigate('OrderDetail', {id: item.id})}
-			>
-				<View style={styles.itemContainerStyle}>
-					<View style={styles.thumbnailContainerStyle}>
-						<Image 
-							style={styles.thumbnailStyle}
-							source={{uri: `${BASE_URL}/images/${item.Request.Transaction.photo}`}} 
-						/>
-					</View>
-					<View style={styles.headerContentStyle}>
-						<Text style={styles.hedaerTextStyle}>{item.Request.Transaction.Fish.name}</Text>
-						<View style={{flexDirection: 'row'}}>
-							<Text style={{flex: 1}}>{item.Request.Buyer.name}</Text>
-						</View>
-						<View style={{flexDirection: 'row'}}>
+			<Card>
+				<TouchableNativeFeedback
+					onPress={() => this.props.navi.navigate('OrderDetail', {id: item.id})}
+				>
+					<View style={styles.itemContainerStyle}>
+						<View style={styles.thumbnailContainerStyle}>
 							<Image 
-								style={styles.statusIcon}
-								source={this.imageIcon(item, 1)}
-							/>
-							<Image 
-								style={styles.statusIcon}
-								source={this.imageIcon(item, 2)}
-							/>
-							<Image 
-								style={styles.statusIcon}
-								source={this.imageIcon(item, 3)}
-							/>
-							<Image 
-								style={styles.statusIcon}
-								source={this.imageIcon(item, 4)}
-							/>
-							<Image 
-								style={styles.statusIcon}
-								source={this.imageIcon(item, 5)}
+								style={styles.thumbnailStyle}
+								source={{uri: `${BASE_URL}/images/${item.Request.Transaction.photo}`}} 
 							/>
 						</View>
+						<View style={styles.headerContentStyle}>
+							<Text>No. PO {item.id}</Text>
+							<Text>{item.Request.Transaction.Fish.name}</Text>
+							<Text>{item.Request.Buyer.name}</Text>
+							<Text style={styles.hedaerTextStyle}>{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Menunggu Kontrak'}</Text>
+							<View style={{flexDirection: 'row'}}>
+								<Image 
+									style={styles.statusIcon}
+									source={this.imageIcon(item, 1)}
+								/>
+								<Image 
+									style={styles.statusIcon}
+									source={this.imageIcon(item, 2)}
+								/>
+								<Image 
+									style={styles.statusIcon}
+									source={this.imageIcon(item, 3)}
+								/>
+								<Image 
+									style={styles.statusIcon}
+									source={this.imageIcon(item, 4)}
+								/>
+								<Image 
+									style={styles.statusIcon}
+									source={this.imageIcon(item, 5)}
+								/>
+							</View>
+						</View>
 					</View>
-					<View style={styles.headerContentStyle2}>
-						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Menunggu Kontrak'}</Text>
-						<Text style={{textAlign: 'right'}}>{item.StatusHistories.length > 0 ? moment(item.StatusHistories[item.StatusHistories.length - 1].updatedAt).format('DD/MM/YYYY') : ''}</Text>
-					</View>
-				</View>
-			</TouchableNativeFeedback>
+				</TouchableNativeFeedback>
+			</Card>
 		)
 	}
 
 	render() {
+		console.log(this.props.orders.data)
 		if (this.props.orders.loading) {
 			return (
 				<View style={{flex: 1}}>
@@ -123,7 +122,6 @@ class OrderList extends Component {
 const styles = {
 	itemContainerStyle: {
 		borderBottomWidth: 1, 
-		padding: 5,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
 		borderColor: '#ddd',
@@ -134,9 +132,8 @@ const styles = {
 		margin: 10,
 	},
 	thumbnailStyle: {
-		height: 80,
-		width: 80,
-		borderRadius: 5
+		height: 100,
+		width: 100,
 	},
 	headerContentStyle: {
 		flex: 1,
@@ -149,12 +146,12 @@ const styles = {
 		marginTop: 8,
 	},
 	hedaerTextStyle: {
-		// fontSize: 20,
+		color: COLOR.secondary_a
 	},
 	statusIcon: {
 		height: 25,
 		width: 25,
-		marginRight: 2
+		marginRight: 3
 	}
 }
 
