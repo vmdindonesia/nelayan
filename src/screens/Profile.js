@@ -100,18 +100,6 @@ class Profile extends Component {
 		return (
 			<ScrollView style={{marginBottom: 20}}>
 				{
-					// <View style={{flexDirection: 'row', paddingTop: 20, paddingLeft: 20}}>
-					// 	<Text style={{fontWeight: 'bold', fontSize: 20}}>
-					// 		Komoditas
-					// 	</Text>
-					// 	<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm')}>
-					// 		<View style={{width: 35}}>
-					// 			<Icon style={{marginLeft: 10}} name="md-add" size={20} />
-					// 		</View>
-					// 	</TouchableOpacity>
-					// </View>
-				}
-				{
 					data.Products && data.Products.map(item =>
 						<Card key={item.id}>
 							<CardSection>
@@ -120,11 +108,13 @@ class Profile extends Component {
 									source={{uri: `${BASE_URL}/images/${item.Fish.photo}`}} 
 								/>
 								<Text style={{color: COLOR.secondary_a, fontSize: 20, marginLeft: 10}}>{item.Fish && item.Fish.name}</Text>
-								<TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
-									<View style={{width: 35, marginTop: 5}}>
-										<Icon style={{marginLeft: 10}} name="md-create" size={20} />
-									</View>
-								</TouchableOpacity>
+								{
+									// <TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
+									// 	<View style={{width: 35, marginTop: 5}}>
+									// 		<Icon style={{marginLeft: 10}} name="md-create" size={20} />
+									// 	</View>
+									// </TouchableOpacity>
+								}
 							</CardSection>
 						</Card>
 					)
