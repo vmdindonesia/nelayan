@@ -597,8 +597,9 @@ class OrderDetail extends Component {
 								<ContainerSection>
 									<Input
 										multiline
-										lines={5}
+										lines={10}
 										onChangeText={v => this.onChangeInput('declineNotes', v)}
+										textAlignVertical="top"
 									/>
 								</ContainerSection>
 								<ContainerSection>

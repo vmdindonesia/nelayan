@@ -32,7 +32,7 @@ class Input extends Component {
 	}
 
 	render() {
-		const { label, value, onChangeText, placeholder, secureTextEntry, keyboardType, multiline, lines, editable, icon } = this.props
+		const { label, value, onChangeText, placeholder, secureTextEntry, keyboardType, multiline, lines, editable, icon, textAlignVertical } = this.props
 		const { inputStyle, labelStyle, containerStyle } = styles
 
 		return (
@@ -62,7 +62,7 @@ class Input extends Component {
 						onFocus={() => this.onFocus()}
 						underlineColorAndroid={'transparent'}
 						numberOfLines={lines || 1}
-						textAlignVertical="top"
+						textAlignVertical={textAlignVertical}
 					/>
 				</View>
 			</View>
