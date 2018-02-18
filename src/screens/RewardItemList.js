@@ -74,7 +74,12 @@ class RewardItemList extends Component {
 					<View style={styles.thumbnailContainerStyle}>
 						<Image 
 							style={styles.thumbnailStyle}
-							source={require('../../assets/coin.png')}
+							source={
+								item.photo ?
+									{uri: `${BASE_URL}/images/${item.photo}`}
+								:
+									require('../../assets/coin.png')	
+							}
 						/>
 					</View>
 					<View style={styles.headerContentStyle}>

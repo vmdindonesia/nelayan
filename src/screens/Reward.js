@@ -3,18 +3,33 @@ import { View, Text, Image, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import { TabNavigator } from 'react-navigation'
 import { logout, setUserToken } from '../actions'
-import { BASE_URL } from '../constants'
+import { COLOR } from '../constants'
 import RewardItemList from './RewardItemList'
 import RewardHistory from './RewardHistory'
 
 const RewardTab = TabNavigator({
-  'Tukar Poin': { screen: RewardItemList },
-  Riwayat: { screen: RewardHistory },
+	'Tukar Poin': { screen: RewardItemList },
+	Riwayat: { screen: RewardHistory },
+}, {
+	tabBarOptions: {
+		upperCaseLabel: false,
+		activeTintColor: 'white',
+		indicatorStyle: {
+			borderBottomColor: COLOR.element_a4,
+			borderBottomWidth: 100,
+		},
+		style: {
+			backgroundColor: COLOR.element_a3,
+		},
+		labelStyle: {
+      fontSize: 18,
+    },
+	}
 })
 
 class Reward extends Component {
 	static navigationOptions = {
-		title: 'Reward',
+		title: 'Poin',
 		headerTitleStyle: {
 			alignSelf: 'center'
 		},
@@ -60,7 +75,7 @@ const styles = {
 		flex: 1,
 		justifyContent: 'center',
 		alignSelf: 'center',
-		backgroundColor: '#56bde6',
+		backgroundColor: COLOR.secondary_a,
 		width: '100%'
 	},
 	menuContainerStyle: {
