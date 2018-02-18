@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
-import { connect } from 'react-redux'
+import { View, Text, Image, Alert } from 'react-native'
+import axios from 'axios'
+
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { COLOR } from '../constants'
+import { COLOR, BASE_URL } from '../constants'
 
 class ForgotPassword extends Component {
 	static navigationOptions = {
@@ -14,6 +15,7 @@ class ForgotPassword extends Component {
 	
 		this.state = {
 			email: '',
+			loading: false
 		}
 	}
 
@@ -21,13 +23,38 @@ class ForgotPassword extends Component {
 		this.setState({ [name]: value })
 	}
 
+	onSubmit = () => {
+		this.setState({loading: true})
+		const data = {
+			email: this.state.email
+		}
+
+		axios.post(`${BASE_URL}/forgot-password`, data)
+		.then(() => {
+			Alert.alert('Berhasil', `Silahkan cek email anda ${this.state.email} untuk melakukan penyetelan ulang kata sandi`, [])
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			console.log(error.response)
+
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+
+			this.setState({loading: false})
+		})
+	}
+
 	renderButton = () => {
-		if (this.props.user.loading) {
+		if (this.state.loading) {
 			return <Spinner size='large' />
 		}
 
 		return (
-			<Button>
+			<Button onPress={() => this.onSubmit()}>
 				Kirim 
 			</Button>
 		)
@@ -74,9 +101,5 @@ class ForgotPassword extends Component {
 	}
 }
 
-const mapStateToProps = (state) => {
-	return {user: state.user}
-}
-
-export default connect(mapStateToProps, {})(ForgotPassword)
+export default ForgotPassword
 
