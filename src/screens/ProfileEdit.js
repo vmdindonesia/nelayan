@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
-import { BASE_URL } from '../constants'
+import { BASE_URL, COLOR } from '../constants'
 
 class ProfileEdit extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -297,7 +297,7 @@ class ProfileEdit extends Component {
 				<Container>
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
-							INFORMASI LEMBAGA
+							Informasi Lembaga
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
@@ -314,6 +314,12 @@ class ProfileEdit extends Component {
 								</Picker>
 							</View>
 						</View>
+					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Lokasi Nelayan
+						</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<AutoComplete
@@ -362,20 +368,27 @@ class ProfileEdit extends Component {
 				<Container>
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
-							INFORMASI PERSONAL
+							Informasi Personal
 						</Text>
 					</ContainerSection>
-					<ContainerSection>
-						<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
-							<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
-							{ photo === null ? 
-									<Image style={styles.avatar} source={{uri: `${BASE_URL}/images/${data.photo}`}} />
-								:
-									<Image style={styles.avatar} source={photo} />
-							}
-							</View>
-						</TouchableOpacity>
 
+					<Text style={[styles.pickerTextStyle, {marginLeft: 5, marginTop: 10}]}>Upload Foto Profil</Text>
+					<ContainerSection>
+						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+							<TouchableWithoutFeedback 
+								// onPress={() => this.selectPhotoTapped('photo')}
+							>
+								<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+								{ photo === null ? 
+										<Image style={styles.avatar} source={{uri: `${BASE_URL}/images/${data.photo}`}} />
+									:
+										<Image style={styles.avatar} source={photo} />
+								}
+								</View>
+							</TouchableWithoutFeedback>
+						</View>
+					</ContainerSection>
+					<ContainerSection>
 						<Input
 							label='Nama Lengkap'
 							placeholder='contoh: Ahmad Darudi'
@@ -386,6 +399,7 @@ class ProfileEdit extends Component {
 					<ContainerSection>
 						<Input
 							label='No. KTP'
+							editable={false}
 							placeholder='contoh: 321317989029'
 							keyboardType="numeric"
 							value={data ? data.idNumber : ''}
@@ -395,19 +409,19 @@ class ProfileEdit extends Component {
 
 					<Text style={[styles.pickerTextStyle, {marginLeft: 5, marginTop: 10}]}>Upload Foto KTP</Text>
 					<ContainerSection>
-						<TouchableWithoutFeedback>
-							<View style={{flex: 1, padding: 8}}>
-								<TouchableOpacity onPress={() => this.selectPhotoTapped('idPhoto')}>
-									<View>
-									{ idPhoto === null ? 
-										<Image style={{height: 200}} source={{uri: `${BASE_URL}/images/${data.idPhoto}`}} />
-									:
-										<Image style={{height: 200}} source={idPhoto} />
-									}
-									</View>
-								</TouchableOpacity>
-							</View>
-						</TouchableWithoutFeedback>
+						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+							<TouchableWithoutFeedback 
+								// onPress={() => this.selectPhotoTapped('idPhoto')}
+							>
+								<View>
+								{ idPhoto === null ? 
+									<Image style={{height: 200, width: 300}} source={{uri: `${BASE_URL}/images/${data.idPhoto}`}} />
+								:
+									<Image style={{height: 200, width: 300}} source={idPhoto} />
+								}
+								</View>
+							</TouchableWithoutFeedback>
+						</View>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
@@ -421,34 +435,39 @@ class ProfileEdit extends Component {
 					<ContainerSection>
 						<Input
 							label='Email'
+							editable={false}
 							placeholder='contoh: erwin@gmail.com'
 							value={data ? data.email : ''}
 							onChangeText={v => this.onChangeInput('email', v)}
 						/>
 					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Password'
-							placeholder='minimal 6 karakter'
-							secureTextEntry
-							value={data ? data.password : ''}
-							onChangeText={v => this.onChangeInput('password', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Konfirmasi Password'
-							placeholder='minimal 6 karakter'
-							secureTextEntry
-							value={data ? data.confirmPassword : ''}
-							onChangeText={v => this.onChangeInput('confirmPassword', v)}
-						/>
-					</ContainerSection>
-				</Container>
+					{
+						// <ContainerSection>
+						// 	<Input
+						// 		label='Password'
+						// 		placeholder='minimal 6 karakter'
+						// 		secureTextEntry
+						// 		value={data ? data.password : ''}
+						// 		onChangeText={v => this.onChangeInput('password', v)}
+						// 	/>
+						// </ContainerSection>
+						// <ContainerSection>
+						// 	<Input
+						// 		label='Konfirmasi Password'
+						// 		placeholder='minimal 6 karakter'
+						// 		secureTextEntry
+						// 		value={data ? data.confirmPassword : ''}
+						// 		onChangeText={v => this.onChangeInput('confirmPassword', v)}
+						// 	/>
+						// </ContainerSection>
+					}
 
-				<ContainerSection>
-					{this.renderButton()}
-				</ContainerSection>
+					<View style={{marginTop: 20, marginBottom: 20}}>
+						<ContainerSection>
+							{this.renderButton()}
+						</ContainerSection>
+					</View>
+				</Container>
 			</ScrollView>
 		)
 	}
@@ -456,39 +475,34 @@ class ProfileEdit extends Component {
 
 const styles = {
 	headerStyle: {
-		marginLeft: 5
+		color: COLOR.secondary_a,
+		fontSize: 18
 	},
 	pickerContainer: {
 		flex: 1, 
-		height: 65,
 		marginBottom: 5
 	},
 	pickerStyle: {
-		flex: 1,
-		borderBottomWidth: 1,
-		borderColor: '#716c6c',
-		marginRight: 3,
-		marginLeft: 3,
+		borderColor: '#a9a9a9',
+		borderRadius: 5,
+		paddingLeft: 7,
+		borderWidth: 1,
 	},
 	pickerTextStyle: {
-		color: '#8e8e8e',
-		fontSize: 16,
-		paddingLeft: 5
+		color: '#5e5e5e',
+		fontSize: 14,
+		flex: 1,
+		marginTop: 10,
+		marginBottom: 10
 	},
 	containerItemAutoSelect: {
-		borderBottomWidth: 1, 
 		padding: 10,
-		justifyContent: 'flex-start',
-		flexDirection: 'row',
-		borderColor: '#ddd',
-		position: 'relative'
 	},
 	avatarContainer: {
 		borderColor: '#9B9B9B',
 		borderWidth: 1 / PixelRatio.get(),
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginRight: 10
 	},
 	avatar: {
 		borderRadius: 75,
