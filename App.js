@@ -29,6 +29,7 @@ import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
 import Message from './src/screens/Message'
+import Help from './src/screens/Help'
 
 import { COLOR } from './src/constants'
 
@@ -74,6 +75,7 @@ const Routes = StackNavigator({
   Information: { screen: Information },
   Reward: { screen: Reward },
   Message: { screen: Message },
+  Help: { screen: Help },
 
 }, {
   cardStyle: { backgroundColor: '#fafafa' },

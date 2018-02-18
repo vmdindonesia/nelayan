@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableNativeFeedback, Image, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, TouchableNativeFeedback, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 
 import { logout } from '../actions'
+import { COLOR } from '../constants'
 
 class MenuItem extends Component {
 	render() {
@@ -71,13 +72,17 @@ class MenuItem extends Component {
 						</View>
 					</TouchableNativeFeedback>
 				</View>
-				<View>
-					<Text style={{textAlign: 'center', marginTop: 10}}>
+				<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10}}>
+					<Text style={{textAlign: 'center'}}>
 						Butuh bantuan? 
-						<Text
-							style={{ color: 'green' }}
-						> Hubungi Aruna</Text>
 					</Text>
+					<TouchableOpacity onPress={() => this.props.navi.navigate('Help')}>
+						<View>
+							<Text
+								style={{ color: COLOR.secondary_a }}
+							> Hubungi Aruna</Text>
+						</View>
+					</TouchableOpacity>
 				</View>
 				{
 					<TouchableWithoutFeedback 
