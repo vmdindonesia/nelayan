@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, Keyboard, Image, AsyncStorage, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
+
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { login, setUserToken } from '../actions'
 import { COLOR } from '../constants'
@@ -27,12 +28,11 @@ class Login extends Component {
 	onLoginComplete(props) {
 		if (props.user.token) {
 			AsyncStorage.setItem('token', props.user.token).then(console.log('token tersimpan'))
-			this.props.setUserToken(props.user.token)
 
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
-					NavigationActions.navigate({ routeName: 'Home'})
+					NavigationActions.navigate({ routeName: 'SplashScreen'})
 				]
 			})
 			this.props.navigation.dispatch(resetAction)
