@@ -49,32 +49,14 @@ class FishLogEdit extends Component {
 			loading: false,
 			loadingPage: true,
 			data: {},
-			photo: null
+			photo: null,
+			fishes: []
 		}
 	}
 
 	componentWillMount() {
-		let id = this.props.navigation.state.params.id
-		let token = this.props.user.token
-		
-		axios.get(`${BASE_URL}/fishlogs/${id}`, {
-			headers: {token}
-		})
-		.then(response => {
-			this.setState({
-				data: response.data.data,
-				loadingPage: false
-			})
-		})
-		.catch(error => {
-			if (error.response) {
-				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
-			}
-			this.setState({loadingPage: false})
-		})
+		this.fetchData()
+		this.fetchProducts()
 	}
 
 	componentDidMount() {
@@ -113,40 +95,95 @@ class FishLogEdit extends Component {
 		let token = this.props.user.token
 
 		Keyboard.dismiss()
-		this.setState({loading: true})
 
-		let formData = new FormData()
-		formData.append('FishId', data.FishId)
-		formData.append('size', data.size)
-		formData.append('quantity', data.quantity)
-		formData.append('price', data.price)
-		if (this.state.photo) {
-			formData.append('photo', {
-				uri: this.state.photo.uri,
-				type: 'image/jpeg',
-				name: 'fishlog.jpg'
+		// form validation
+		if (data.FishId === '') {
+			Alert.alert('', 'Anda belum pilih komoditas', [])
+		}
+		else {
+			this.setState({loading: true})
+
+			let formData = new FormData()
+			formData.append('FishId', data.FishId)
+			formData.append('size', data.size)
+			formData.append('quantity', data.quantity)
+			formData.append('price', data.price)
+			if (this.state.photo) {
+				formData.append('photo', {
+					uri: this.state.photo.uri,
+					type: 'image/jpeg',
+					name: 'fishlog.jpg'
+				})
+			}
+
+			axios.put(`${BASE_URL}/fishlogs/${id}`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					token
+				}
+			})
+			.then(response => {
+				this.props.navigation.setParams({change: false})
+				
+				const resetAction = NavigationActions.reset({
+					index: 1,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Home'}),
+						NavigationActions.navigate({ routeName: 'FishLogList'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+
+				this.setState({loading: false})
+			})
+			.catch(error => {
+				if (error.response) {
+					alert(error.response.data.message)
+				}
+				else {
+					alert('Koneksi internet bermasalah')
+				}
+
+				this.setState({loading: false})
 			})
 		}
+	}
 
-		axios.put(`${BASE_URL}/fishlogs/${id}`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				token
-			}
+	fetchData = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+		
+		axios.get(`${BASE_URL}/fishlogs/${id}`, {
+			headers: {token}
 		})
 		.then(response => {
-			this.props.navigation.setParams({change: false})
-			
-			const resetAction = NavigationActions.reset({
-				index: 1,
-				actions: [
-					NavigationActions.navigate({ routeName: 'Home'}),
-					NavigationActions.navigate({ routeName: 'FishLogList'})
-				]
+			this.setState({
+				data: response.data.data,
+				loadingPage: false
 			})
-			this.props.navigation.dispatch(resetAction)
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loadingPage: false})
+		})
+	}
 
-			this.setState({loading: false})
+	fetchProducts = () => {
+		this.setState({loadingPage: true})
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/fishes/products`, {
+			headers: {token}
+		})
+		.then(response => {			
+			this.setState({fishes: response.data.data})
+
+			this.setState({loadingPage: false})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -156,7 +193,7 @@ class FishLogEdit extends Component {
 				alert('Koneksi internet bermasalah')
 			}
 
-			this.setState({loading: false})
+			this.setState({loadingPage: false})
 		})
 	}
 
@@ -219,7 +256,8 @@ class FishLogEdit extends Component {
 	}
 
 	render() {
-		const { data, loadingPage, photo } = this.state
+		const { data, loadingPage, photo, fishes } = this.state
+		console.log(data, 'data')
 
 		if (loadingPage) {
 			return (
@@ -242,11 +280,15 @@ class FishLogEdit extends Component {
 							<Text style={styles.pickerTextStyle}>Komoditas</Text>
 							<View style={styles.pickerStyle}>
 								<Picker
-									selectedValue={data.FishId && data.FishId.toString()}
+									selectedValue={data.FishId}
 									onValueChange={v => this.onChangeInput('FishId', v)}
 								>
-									<Picker.Item label="Tongkol" value="1" />
-									<Picker.Item label="Tuna" value="2" />
+									<Picker.Item label="-- Pilih Komoditas --" value="" />
+									{
+										fishes && fishes.map((item, index) => 
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
 								</Picker>
 							</View>
 						</View>

@@ -7,7 +7,7 @@ import numeral from 'numeral'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableNativeFeedback, TouchableOpacity, BackHandler } from 'react-native'
+import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableOpacity, BackHandler } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 import { setUserToken } from '../actions'
@@ -48,14 +48,19 @@ class FishLogCreate extends Component {
 	
 		this.state = {
 			loading: false,
-			UserId: '1',
-
-			FishId: '1',
+			// form
+			FishId: '',
 			size: '',
 			quantity: '',
 			price: '',
 			photo: null,
+			//data
+			fishes: []
 		}
+	}
+
+	componentWillMount() {
+		this.fetchProducts()
 	}
 
 	componentDidMount() {
@@ -88,42 +93,73 @@ class FishLogCreate extends Component {
 
 	onSubmit = () => {
 		Keyboard.dismiss()
-		this.setState({loading: true})
 
 		const data = this.state
-		let token = this.props.user.token
+		// form validation
+		if (data.FishId === '') {
+			Alert.alert('', 'Anda belum pilih komoditas', [])
+		}
+		else {
+			this.setState({loading: true})
 
-		let formData = new FormData()
-		formData.append('FishId', data.FishId)
-		formData.append('size', data.size)
-		formData.append('quantity', data.quantity)
-		formData.append('price', data.price)
-		if (data.photo) {
-			formData.append('photo', {
-				uri: data.photo.uri,
-				type: 'image/jpeg',
-				name: 'fishlog.jpg'
+			let token = this.props.user.token
+
+			let formData = new FormData()
+			formData.append('FishId', data.FishId)
+			formData.append('size', data.size)
+			formData.append('quantity', data.quantity)
+			formData.append('price', data.price)
+			if (data.photo) {
+				formData.append('photo', {
+					uri: data.photo.uri,
+					type: 'image/jpeg',
+					name: 'fishlog.jpg'
+				})
+			}
+
+			axios.post(`${BASE_URL}/fishlogs`, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+					token
+				}
+			})
+			.then(response => {			
+				this.props.setUserToken(response.data.refreshToken)
+				this.props.navigation.setParams({change: false})
+
+				const resetAction = NavigationActions.reset({
+					index: 1,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Home'}),
+						NavigationActions.navigate({ routeName: 'FishLogList'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+
+				this.setState({loading: false})
+			})
+			.catch(error => {
+				if (error.response) {
+					alert(error.response.data.message)
+				}
+				else {
+					alert('Koneksi internet bermasalah')
+				}
+
+				this.setState({loading: false})
 			})
 		}
+	}
 
-		axios.post(`${BASE_URL}/fishlogs`, formData, {
-			headers: {
-				'Content-Type': 'multipart/form-data',
-				token
-			}
+	fetchProducts = () => {
+		this.setState({loading: true})
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/fishes/products`, {
+			headers: {token}
 		})
 		.then(response => {			
-			this.props.setUserToken(response.data.refreshToken)
-			this.props.navigation.setParams({change: false})
-
-			const resetAction = NavigationActions.reset({
-				index: 1,
-				actions: [
-					NavigationActions.navigate({ routeName: 'Home'}),
-					NavigationActions.navigate({ routeName: 'FishLogList'})
-				]
-			})
-			this.props.navigation.dispatch(resetAction)
+			this.setState({fishes: response.data.data})
 
 			this.setState({loading: false})
 		})
@@ -203,9 +239,9 @@ class FishLogCreate extends Component {
 			size,
 			quantity,
 			price,
-			photo
+			photo,
+			fishes
 		} = this.state
-		console.log(price)
 
 		return (
 			<ScrollView keyboardShouldPersistTaps="always">
@@ -223,8 +259,12 @@ class FishLogCreate extends Component {
 									selectedValue={FishId}
 									onValueChange={v => this.onChangeInput('FishId', v)}
 								>
-									<Picker.Item label="Tongkol" value="1" />
-									<Picker.Item label="Tuna" value="2" />
+									<Picker.Item label="-- Pilih Komoditas --" value="" />
+									{
+										fishes && fishes.map((item, index) => 
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
 								</Picker>
 							</View>
 						</View>
