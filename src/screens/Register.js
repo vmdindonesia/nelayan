@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, Text, Picker, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
+import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
@@ -113,7 +113,7 @@ class Register extends Component {
 		axios.get(`${BASE_URL}/cities/search?key=${text}`)
 		.then(response => {
 			res = response.data.data
-			this.setState({suggestionsCity: res, loadingCity: false})
+			this.setState({suggestionsCity: res, loadingCity: false})			
 		})
 		.catch(error => {
 			if (error.response) {
@@ -124,6 +124,10 @@ class Register extends Component {
 			}
 			this.setState({loadingCity: false})
 		})
+
+		if (text.length === 1) {
+			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar kota', ToastAndroid.SHORT)
+		}
 	}
 
 	querySuggestion = (index, text) => {
@@ -152,6 +156,10 @@ class Register extends Component {
 			loadings[index] = false
 			this.setState({loadings})
 		})
+
+		if (text.length === 1) {
+			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar Komoditas', ToastAndroid.SHORT)
+		}
 	}
 
 	// to do: form validation
@@ -225,14 +233,6 @@ class Register extends Component {
 		})
 	}
 
-	handleScroll = (event) => {
-		let currentPosition = event.nativeEvent.contentOffset.y
-		if (currentPosition + this.state.currentPosition > 500) {
-			this.setState({name: ''})
-		}
-		console.log(event.nativeEvent.contentOffset)
-	}
-
 	renderButton = () => {
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -286,8 +286,6 @@ class Register extends Component {
 		return (
 			<ScrollView 
 				style={styles.containerStyle}
-				onScrollEndDrag={this.handleScroll}
-				scrollEventThrottle={16}
 				keyboardShouldPersistTaps="always"
 			>
 				<Container>
