@@ -32,6 +32,7 @@ import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
 import ResetPassword from './src/screens/ResetPassword'
 import Message from './src/screens/Message'
+import MessageList from './src/screens/MessageList'
 import Help from './src/screens/Help'
 
 import { COLOR } from './src/constants'
@@ -80,6 +81,7 @@ const Routes = StackNavigator({
   Information: { screen: Information },
   Reward: { screen: Reward },
   Message: { screen: Message },
+  MessageList: { screen: MessageList },
   Help: { screen: Help },
 
 }, {

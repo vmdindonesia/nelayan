@@ -52,7 +52,7 @@ class MenuItem extends Component {
 							<Text style={{textAlign: 'center'}}>Anggota</Text>
 						</View>
 					</TouchableNativeFeedback>
-					<TouchableNativeFeedback>
+					<TouchableNativeFeedback onPress={() => this.props.navi.navigate('MessageList')}>
 						<View style={menuItemStyle}>
 							<Image 
 								style={menuIcon}
