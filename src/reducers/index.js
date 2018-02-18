@@ -5,6 +5,7 @@ import requests from './RequestReducer'
 import orders from './OrderReducer'
 import items from './ItemReducer'
 import rewardHistories from './RewardHistoryReducer'
+import members from './MemberReducer'
 
 export default combineReducers({
 	user,
@@ -12,5 +13,6 @@ export default combineReducers({
 	requests,
 	orders,
 	items,
-	rewardHistories
+	rewardHistories,
+	members
 })
