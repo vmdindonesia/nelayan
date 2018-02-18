@@ -30,6 +30,7 @@ import NotificationList from './src/screens/NotificationList'
 import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
+import ResetPassword from './src/screens/ResetPassword'
 import Message from './src/screens/Message'
 import Help from './src/screens/Help'
 
@@ -57,6 +58,7 @@ const Routes = StackNavigator({
   Login: { screen: Login },
   Register: { screen: Register },
   ForgotPassword: { screen: ForgotPassword },
+  ResetPassword: { screen: ResetPassword },
 
   FishLogList: { screen: FishLogList },
   FishLogEdit: { screen: FishLogEdit },

@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { COLOR, BASE_URL } from '../constants'
 
-class ForgotPassword extends Component {
+class ResetPassword extends Component {
 	static navigationOptions = {
 		header: null
 	}
@@ -14,7 +14,8 @@ class ForgotPassword extends Component {
 		super(props)
 	
 		this.state = {
-			email: '',
+			password: '',
+			confirmPassword: '',
 			loading: false
 		}
 	}
@@ -24,18 +25,21 @@ class ForgotPassword extends Component {
 	}
 
 	onSubmit = () => {
-		if (this.state.email === '') {
+		if (this.state.password === '') {
 			alert('Email harus diisi')
+		}
+		else if (this.state.password !== this.state.confirmPassword) {
+			alert('Password dan Ulangi Password tidak cocok')
 		}
 		else {
 			this.setState({loading: true})
 			const data = {
-				email: this.state.email
+				password: this.state.password
 			}
 
-			axios.post(`${BASE_URL}/forgot-password`, data)
+			axios.post(`${BASE_URL}/reset-password`, data)
 			.then(() => {
-				Alert.alert('Berhasil', `Silahkan cek email anda ${this.state.email} untuk melakukan penyetelan ulang kata sandi`, [])
+				Alert.alert('Berhasil', `Password berhasil disetel ulang. Silahkan coba login dengan password baru`, [])
 				this.setState({loading: false})
 			})
 			.catch(error => {
@@ -66,7 +70,7 @@ class ForgotPassword extends Component {
 	}
 
 	render() {
-		const { email } = this.state
+		const { password, confirmPassword } = this.state
 
 		return (
 			<View style={{flex: 1, paddingTop: 100, backgroundColor: '#2b76d2'}}>
@@ -78,33 +82,40 @@ class ForgotPassword extends Component {
 						/>
 					</ContainerSection>
 				</Container>
-				<Container>
-					<ContainerSection>
-						<Text style={{color: '#fff'}}>Kami akan mengirimkan konfirmasi & tautan penyetelan ulang kata sandi anda ke email.</Text>
-					</ContainerSection>
-				</Container>
 				
 				<Container>
 					<ContainerSection>
-						<Text style={{color: '#fff', marginBottom: -15}}>Masukkan email</Text>
+						<Text style={{color: '#fff', marginBottom: -15}}>Masukkan password baru</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							label='Email'
-							placeholder='Alamat email Anda'
-							onChangeText={val => this.onChange('email', val)}
-							value={email}
+							label='Password'
+							placeholder="Password"
+							secureTextEntry
+							onChangeText={val => this.onChange('password', val)}
+							value={password}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Ulangi Password'
+							placeholder="Ulangi Password"
+							secureTextEntry
+							onChangeText={val => this.onChange('confirmPassword', val)}
+							value={confirmPassword}
 						/>
 					</ContainerSection>
 
-					<ContainerSection>
-						{this.renderButton()}
-					</ContainerSection>
+					<View style={{marginTop: 20, marginBottom: 20}}>
+						<ContainerSection>
+							{this.renderButton()}
+						</ContainerSection>
+					</View>
 				</Container>
 			</View>
 		)
 	}
 }
 
-export default ForgotPassword
+export default ResetPassword
 
