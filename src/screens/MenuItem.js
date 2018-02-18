@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableNativeFeedback, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
-import { NavigationActions } from 'react-navigation'
 
 import { logout } from '../actions'
 import { COLOR } from '../constants'
@@ -84,23 +83,6 @@ class MenuItem extends Component {
 						</View>
 					</TouchableOpacity>
 				</View>
-				{
-					<TouchableWithoutFeedback 
-						onPress={() => this.props.logout(() => {
-							const resetAction = NavigationActions.reset({
-								index: 0,
-								actions: [
-									NavigationActions.navigate({ routeName: 'Login'})
-								]
-							})
-							this.props.navi.dispatch(resetAction)
-						})}
-					>
-						<View>
-							<Text style={{textAlign: 'center'}}>Logout</Text>
-						</View>
-					</TouchableWithoutFeedback>
-				}
 			</View>
 		)
 	}
