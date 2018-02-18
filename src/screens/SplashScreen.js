@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { View, Image, AsyncStorage } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
-import OneSignal from 'react-native-onesignal'
-import jwtDecode from 'jwt-decode'
 
 import { setUserToken } from '../actions'
 import { COLOR } from '../constants'
@@ -37,13 +35,6 @@ class SplashScreen extends Component {
 						]
 					})
 					this.props.navigation.dispatch(resetAction)
-
-					// OneSignal
-					const decoded = jwtDecode(result)
-					OneSignal.sendTags({userid: decoded.user.id })
-					OneSignal.getTags((receivedTags) => {
-						console.log(receivedTags, 'Get Tag')
-					})
 				}
 			})
 		}, 1000)

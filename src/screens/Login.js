@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { View, Text, Keyboard, Image, AsyncStorage, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
+import OneSignal from 'react-native-onesignal'
+import jwtDecode from 'jwt-decode'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { login, setUserToken } from '../actions'
@@ -27,12 +29,19 @@ class Login extends Component {
 
 	onLoginComplete(props) {
 		if (props.user.token) {
+			// OneSignal
+			const decoded = jwtDecode(props.user.token)
+			OneSignal.sendTags({userid: decoded.user.id })
+			OneSignal.getTags((receivedTags) => {
+				console.log(receivedTags, 'Get Tag')
+			})
+			
 			AsyncStorage.setItem('token', props.user.token).then(console.log('token tersimpan'))
 
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
-					NavigationActions.navigate({ routeName: 'SplashScreen'})
+					NavigationActions.navigate({ routeName: 'Home'})
 				]
 			})
 			this.props.navigation.dispatch(resetAction)
