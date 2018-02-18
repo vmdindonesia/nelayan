@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
-import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-native'
+import { FlatList, View, Image, Text, TouchableNativeFeedback, Picker } from 'react-native'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
 import numeral from 'numeral'
+import Icon from 'react-native-vector-icons/Ionicons'
+import axios from 'axios'
+
 import { fishLogsFetch } from '../actions'
 import { Spinner, Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
@@ -14,8 +17,41 @@ class FishLogList extends Component {
 		headerRight: <View />
 	}
 
+	constructor(props) {
+		super(props)
+	
+		this.state = {
+			FishId: '',
+			fishes: []
+		}
+	}
+
 	componentWillMount() {
 		this.props.fishLogsFetch(this.props.user.token)
+		this.fetchProducts()
+	}
+
+	onChangeInput = (name, v) => {
+		this.setState({[name]: v})
+	}
+
+	fetchProducts = () => {
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/fishes/products`, {
+			headers: {token}
+		})
+		.then(response => {			
+			this.setState({fishes: response.data.data})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+		})
 	}
 
 	renderItem = (item) => {
@@ -47,6 +83,8 @@ class FishLogList extends Component {
 	}
 
 	render() {	
+		const { FishId, fishes } = this.state
+
 		if (this.props.fishLogs.loading) {
 			return (
 				<View style={{flex: 1}}>
@@ -57,6 +95,23 @@ class FishLogList extends Component {
 
 		return (
 			<View style={{flex: 1}}>
+				<View style={styles.pickerContainer}>
+					<View style={styles.pickerStyle}>
+						<Icon name='md-search' size={24} style={{position: 'absolute', margin: 13}} />
+						<Picker
+							selectedValue={FishId}
+							onValueChange={v => this.onChangeInput('FishId', v)}
+						>
+							<Picker.Item label="       Cari Fishlog..." value="" />
+							{
+								fishes && fishes.map((item, index) => 
+									<Picker.Item key={index} label={`       ${item.name}`} value={item.id} />
+								)
+							}
+						</Picker>
+					</View>
+				</View>
+
 				<FlatList
 					data={this.props.fishLogs.data}
 					renderItem={({item}) => this.renderItem(item)}
@@ -74,6 +129,22 @@ class FishLogList extends Component {
 }
 
 const styles = {
+	pickerContainer: {
+		margin: 15,
+		marginBottom: 5,
+	},
+	pickerStyle: {
+		borderRadius: 2,
+		paddingLeft: 7,
+		elevation: 1
+	},
+	pickerTextStyle: {
+		color: '#5e5e5e',
+		fontSize: 14,
+		flex: 1,
+		marginTop: 10,
+		marginBottom: 10
+	},
 	itemContainerStyle: {
 		borderBottomWidth: 1, 
 		justifyContent: 'flex-start',
