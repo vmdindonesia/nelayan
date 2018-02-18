@@ -157,10 +157,10 @@ class Home extends Component {
 							<Icon size={25} name="md-menu" color="#fff" />
 						</TouchableOpacity>
 						<Text style={styles.headerText}>Nelayan Aruna</Text>
-						<TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
 							<Image 
 								style={{height: 20, width: 15}}
-								source={require('../../assets/ic_notification_on.png')} 
+								source={require('../../assets/ic_notification.png')} 
 							/>
 						</TouchableOpacity>
 					</View>

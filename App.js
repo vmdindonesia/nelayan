@@ -26,6 +26,7 @@ import OrderDetail from './src/screens/OrderDetail'
 import RequestList from './src/screens/RequestList'
 import RequestDetail from './src/screens/RequestDetail'
 import MemberList from './src/screens/MemberList'
+import NotificationList from './src/screens/NotificationList'
 import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
 import ForgotPassword from './src/screens/ForgotPassword'
@@ -73,6 +74,7 @@ const Routes = StackNavigator({
   OrderDetail: { screen: OrderDetail },
 
   MemberList: { screen: MemberList },
+  NotificationList: { screen: NotificationList },
   Information: { screen: Information },
   Reward: { screen: Reward },
   Message: { screen: Message },
