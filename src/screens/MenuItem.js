@@ -71,7 +71,7 @@ class MenuItem extends Component {
 						</View>
 					</TouchableNativeFeedback>
 				</View>
-				<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 10}}>
+				<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 					<Text style={{textAlign: 'center'}}>
 						Butuh bantuan? 
 					</Text>
@@ -91,7 +91,7 @@ class MenuItem extends Component {
 const styles = {
 	containerStyle: {
 		alignSelf: 'center',
-		paddingTop: 20
+		paddingTop: 15
 	},
 	menuItemStyle: {
 		// borderWidth: 1, 

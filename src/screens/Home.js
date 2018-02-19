@@ -234,6 +234,7 @@ const styles = {
 	},
 	headerHomeStyle: {
 		paddingTop: 20,
+		paddingBottom: 10,
 		flex: 2,
 		justifyContent: 'center',
 		alignSelf: 'center',
