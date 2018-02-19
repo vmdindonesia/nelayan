@@ -223,6 +223,7 @@ class ProfileEdit extends Component {
 
 		.then(response => {
 			console.log(response)
+			this.props.navigation.setParams({change: false})
 
 			const resetAction = NavigationActions.reset({
 				index: 1,
@@ -231,9 +232,9 @@ class ProfileEdit extends Component {
 					NavigationActions.navigate({ routeName: 'Profile'})
 				]
 			})
+			this.props.navigation.dispatch(resetAction)
 
 			this.setState({loading: false})
-			this.props.navigation.dispatch(resetAction)
 			Alert.alert('', 'Ubah profil berhasil', [])
 		})
 		.catch(error => {
