@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Alert } from 'react-native'
+import { View, Text, Image, Alert, AsyncStorage } from 'react-native'
 import axios from 'axios'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { COLOR, BASE_URL } from '../constants'
+import { BASE_URL } from '../constants'
 
 class ForgotPassword extends Component {
 	static navigationOptions = {
@@ -35,7 +35,10 @@ class ForgotPassword extends Component {
 
 			axios.post(`${BASE_URL}/forgot-password`, data)
 			.then(() => {
-				Alert.alert('Berhasil', `Silahkan cek email anda ${this.state.email} untuk melakukan penyetelan ulang kata sandi`, [])
+				AsyncStorage.setItem('email', this.state.email).then(console.log('email tersimpan'))
+
+				this.props.navigation.navigate('ResetPassword')
+				Alert.alert('Berhasil', `Silahkan cek email anda ${this.state.email} untuk mendapatkan kode penyetelan ulang password`, [])
 				this.setState({loading: false})
 			})
 			.catch(error => {

@@ -16,7 +16,7 @@ class SplashScreen extends Component {
 
 		setTimeout(() => {
 			AsyncStorage.getItem('token', (err, result) => {
-				console.log(result, 'Token');
+				console.log(result, 'Token')
 				if (!result || result === '') {
 					const resetAction = NavigationActions.reset({
 						index: 0,

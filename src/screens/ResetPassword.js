@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Alert } from 'react-native'
+import { View, Text, Image, Alert, AsyncStorage } from 'react-native'
 import axios from 'axios'
+import { NavigationActions } from 'react-navigation'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { COLOR, BASE_URL } from '../constants'
+import { BASE_URL } from '../constants'
 
 class ResetPassword extends Component {
 	static navigationOptions = {
@@ -14,10 +15,30 @@ class ResetPassword extends Component {
 		super(props)
 	
 		this.state = {
+			token: '',
+			email: '',
 			password: '',
 			confirmPassword: '',
 			loading: false
 		}
+	}
+
+	componentWillMount() {
+		AsyncStorage.getItem('email', (err, result) => {
+			console.log(result, 'Email')
+			if (!result || result === '') {
+				const resetAction = NavigationActions.reset({
+					index: 0,
+					actions: [
+						NavigationActions.navigate({ routeName: 'ForgotPassword'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+			} 
+			else {
+				this.setState({email: result})
+			}
+		})
 	}
 
 	onChange = (name, value) => {
@@ -31,16 +52,29 @@ class ResetPassword extends Component {
 		else if (this.state.password !== this.state.confirmPassword) {
 			alert('Password dan Ulangi Password tidak cocok')
 		}
+		else if (this.state.token === '') {
+			alert('Kode harus diisi')
+		}
 		else {
 			this.setState({loading: true})
 			const data = {
-				password: this.state.password
+				email: this.state.email,
+				password: this.state.password,
+				token: this.state.token
 			}
 
 			axios.post(`${BASE_URL}/reset-password`, data)
 			.then(() => {
 				Alert.alert('Berhasil', `Password berhasil disetel ulang. Silahkan coba login dengan password baru`, [])
 				this.setState({loading: false})
+
+				const resetAction = NavigationActions.reset({
+					index: 0,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Login'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
 			})
 			.catch(error => {
 				console.log(error.response)
@@ -70,10 +104,10 @@ class ResetPassword extends Component {
 	}
 
 	render() {
-		const { password, confirmPassword } = this.state
+		const { password, confirmPassword, token } = this.state
 
 		return (
-			<View style={{flex: 1, paddingTop: 100, backgroundColor: '#2b76d2'}}>
+			<View style={{flex: 1, paddingTop: 30, backgroundColor: '#2b76d2'}}>
 				<Container>
 					<ContainerSection>
 						<Image
@@ -103,6 +137,18 @@ class ResetPassword extends Component {
 							secureTextEntry
 							onChangeText={val => this.onChange('confirmPassword', val)}
 							value={confirmPassword}
+						/>
+					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={{color: '#fff', marginBottom: -15, marginTop: 20}}>Masukkan Kode yang dikirim ke email</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Kode dari Email'
+							placeholder="Kode dari Email"
+							onChangeText={val => this.onChange('token', val)}
+							value={token}
 						/>
 					</ContainerSection>
 
