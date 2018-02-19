@@ -56,12 +56,7 @@ export const unreadNotifFetch = (token) => async (dispatch) => {
 		})
 	})
 	.catch(error => {
-		if (error.response) {
-			alert(error.response.data.message)
-		}
-		else {
-			alert('Koneksi internet bermasalah')
-		}
+		console.log(error)
 	})
 }
 
