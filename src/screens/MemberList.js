@@ -14,45 +14,49 @@ class MemberList extends Component {
 	}
 
 	componentWillMount() {
-		// this.props.membersFetch(this.props.user.token)
+		this.props.membersFetch(this.props.user.token)
 	}
 
 	renderItem = (item) => {
 		return (
-			<View />
+			<Card>
+				<TouchableNativeFeedback 
+					onPress={() => this.props.navigation.navigate('MemberEdit', {id: item.id})}
+				>
+					<View style={styles.itemContainerStyle}>
+						<View style={styles.thumbnailContainerStyle}>
+							<Image 
+								style={styles.thumbnailStyle}
+								source={{uri: `${BASE_URL}/images/${item.photo}`}} 
+							/>
+						</View>
+						<View style={styles.headerContentStyle}>
+							<Text style={styles.hedaerTextStyle}>{item.name}</Text>
+							<Text>{item.address}</Text>
+							<Text>{item.phone}</Text>
+						</View>
+					</View>
+				</TouchableNativeFeedback>
+			</Card>
 		)
 	}
 
 	render() {
-		// if (this.props.members.loading) {
-		// 	return (
-		// 		<View style={{flex: 1}}>
-		// 			<Spinner size='large' />
-		// 		</View>
-		// 	)
-		// }
+		if (this.props.members.loading) {
+			return (
+				<View style={{flex: 1}}>
+					<Spinner size='large' />
+				</View>
+			)
+		}
 
 		return (
 			<View style={{flex: 1}}>
-				<Card>
-					<TouchableNativeFeedback 
-						onPress={() => this.props.navigation.navigate('MemberEdit', {id: 1})}
-					>
-						<View style={styles.itemContainerStyle}>
-							<View style={styles.thumbnailContainerStyle}>
-								<Image 
-									style={styles.thumbnailStyle}
-									source={{uri: `${BASE_URL}/images/${'1517799513313profile.jpg'}`}} 
-								/>
-							</View>
-							<View style={styles.headerContentStyle}>
-								<Text style={styles.hedaerTextStyle}>Dudi Komaladi</Text>
-								<Text>Tobelo, Maluku Utara</Text>
-								<Text>08562101792</Text>
-							</View>
-						</View>
-					</TouchableNativeFeedback>
-				</Card>
+				<FlatList
+					data={this.props.members.data}
+					renderItem={({item}) => this.renderItem(item)}
+					keyExtractor={(item, index) => index}
+				/>
 				
 				<ActionButton
 					buttonColor={COLOR.secondary_b}
