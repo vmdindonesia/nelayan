@@ -105,7 +105,7 @@ class FishLogList extends Component {
 						<Icon name='md-search' size={24} style={{position: 'absolute', margin: 13}} />
 						<Picker
 							selectedValue={fishName}
-							onValueChange={v => this.onChangeInput('FishId', v)}
+							onValueChange={v => this.onChangeInput('fishName', v)}
 						>
 							<Picker.Item label="       Cari Fishlog..." value="" />
 							{
