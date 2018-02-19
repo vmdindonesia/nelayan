@@ -4,8 +4,10 @@ import {
 	FISHLOGS_FETCH_SUCCESS
 } from './types'
 
-export const fishLogsFetch = (token) => async (dispatch) => {
-	axios.get(`${BASE_URL}/fishlogs`, {
+export const fishLogsFetch = (token, params) => async (dispatch) => {
+  const paramEncoded = encodeURI(params)
+
+	axios.get(`${BASE_URL}/fishlogs?${paramEncoded}`, {
 		headers: {token}
 	})
 	.then(response => {

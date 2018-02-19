@@ -21,18 +21,23 @@ class FishLogList extends Component {
 		super(props)
 	
 		this.state = {
-			FishId: '',
+			fishName: '',
 			fishes: []
 		}
 	}
 
 	componentWillMount() {
-		this.props.fishLogsFetch(this.props.user.token)
+		this.props.fishLogsFetch(this.props.user.token, '')
+
 		this.fetchProducts()
 	}
 
 	onChangeInput = (name, v) => {
 		this.setState({[name]: v})
+
+		// search params
+		let params = `key=${v}`
+		this.props.fishLogsFetch(this.props.user.token, params)
 	}
 
 	fetchProducts = () => {
@@ -83,7 +88,7 @@ class FishLogList extends Component {
 	}
 
 	render() {	
-		const { FishId, fishes } = this.state
+		const { fishName, fishes } = this.state
 
 		if (this.props.fishLogs.loading) {
 			return (
@@ -99,13 +104,13 @@ class FishLogList extends Component {
 					<View style={styles.pickerStyle}>
 						<Icon name='md-search' size={24} style={{position: 'absolute', margin: 13}} />
 						<Picker
-							selectedValue={FishId}
+							selectedValue={fishName}
 							onValueChange={v => this.onChangeInput('FishId', v)}
 						>
 							<Picker.Item label="       Cari Fishlog..." value="" />
 							{
 								fishes && fishes.map((item, index) => 
-									<Picker.Item key={index} label={`       ${item.name}`} value={item.id} />
+									<Picker.Item key={index} label={`       ${item.name}`} value={item.name} />
 								)
 							}
 						</Picker>
