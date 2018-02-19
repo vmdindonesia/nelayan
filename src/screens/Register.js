@@ -628,12 +628,6 @@ const styles = {
 	containerItemAutoSelect: {
 		padding: 10,
 	},
-	avatarContainer: {
-		borderColor: '#9B9B9B',
-		borderWidth: 1 / PixelRatio.get(),
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	avatar: {
 		borderRadius: 75,
 		width: 100,

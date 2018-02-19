@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { View, ScrollView, Text, Picker, Keyboard, Alert, ToastAndroid, Image, TouchableOpacity, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
@@ -7,7 +8,6 @@ import numeral from 'numeral'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { View, ScrollView, Text, Picker, Keyboard, Alert, Image, TouchableOpacity, BackHandler } from 'react-native'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 import { setUserToken } from '../actions'
@@ -137,6 +137,7 @@ class FishLogCreate extends Component {
 				this.props.navigation.dispatch(resetAction)
 
 				this.setState({loading: false})
+				ToastAndroid.show('Berhasil tambah fishlog', ToastAndroid.SHORT)
 			})
 			.catch(error => {
 				if (error.response) {

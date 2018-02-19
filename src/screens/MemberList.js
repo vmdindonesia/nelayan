@@ -34,6 +34,7 @@ class MemberList extends Component {
 							<Text style={styles.hedaerTextStyle}>{item.name}</Text>
 							<Text>{item.address}</Text>
 							<Text>{item.phone}</Text>
+							<Text>No. KTP: {item.idNumber}</Text>
 						</View>
 					</View>
 				</TouchableNativeFeedback>
