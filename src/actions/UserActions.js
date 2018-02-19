@@ -7,7 +7,8 @@ import {
 	USER_LOGIN_SUCCESS,
 	USER_LOGIN_FAIL,
 	USER_LOGOUT,
-	SET_USER_TOKEN
+	SET_USER_TOKEN,
+	USER_FETCH_UNREAD_SUCCESS
 } from './types'
 
 export const login = (email, password) => {
@@ -42,6 +43,26 @@ export const setUserToken = (token) => {
 		type: SET_USER_TOKEN,
 		payload: {token, data: decoded.user}
 	}
+}
+
+export const unreadNotifFetch = (token) => async (dispatch) => {
+	axios.get(`${BASE_URL}/notifications/unread`, {
+		headers: {token}
+	})
+	.then(response => {
+		dispatch({
+			type: USER_FETCH_UNREAD_SUCCESS,
+			payload: response.data.amount
+		})
+	})
+	.catch(error => {
+		if (error.response) {
+			alert(error.response.data.message)
+		}
+		else {
+			alert('Koneksi internet bermasalah')
+		}
+	})
 }
 
 const loading = (dispatch) => {

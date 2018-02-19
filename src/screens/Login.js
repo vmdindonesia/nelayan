@@ -39,6 +39,8 @@ class Login extends Component {
 			AsyncStorage.setItem('token', props.user.token).then(console.log('token tersimpan'))
 			this.props.setUserToken(props.user.token)
 
+			console.log('masuk sini')
+
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [

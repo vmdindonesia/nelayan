@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { logout } from '../actions'
+import { logout, unreadNotifFetch } from '../actions'
 import { BASE_URL, COLOR } from '../constants'
 import { ContainerSection } from '../components/common'
 
@@ -20,8 +20,12 @@ class Home extends Component {
 		super(props)
 	
 		this.state = {
-			screen: 'MenuItem'
+			screen: 'MenuItem',
 		}
+	}
+
+	componentWillMount() {
+		this.props.unreadNotifFetch(this.props.user.token)
 	}
 
 	renderScreen = () => {
@@ -160,7 +164,12 @@ class Home extends Component {
 						<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
 							<Image 
 								style={{height: 20, width: 15}}
-								source={require('../../assets/ic_notification.png')} 
+								source={
+									this.props.user.unreadNotif > 0 ?
+										require('../../assets/ic_notification_on.png')
+									:
+										require('../../assets/ic_notification.png')
+								} 
 							/>
 						</TouchableOpacity>
 					</View>
@@ -308,4 +317,4 @@ const mapStateToProps = (state) => {
 	return { user }
 }
 
-export default connect(mapStateToProps, { logout })(Home)
+export default connect(mapStateToProps, { logout, unreadNotifFetch })(Home)

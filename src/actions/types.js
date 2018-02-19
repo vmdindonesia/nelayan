@@ -3,6 +3,7 @@ export const USER_LOGIN_SUCCESS = 'user_login_success'
 export const USER_LOGIN_FAIL = 'user_login_fail'
 export const USER_LOGOUT = 'user_logout'
 export const SET_USER_TOKEN = 'set_user_token'
+export const USER_FETCH_UNREAD_SUCCESS = 'user_fetch_unread_success'
 
 export const FISHLOGS_FETCH_SUCCESS = 'fishlogs_fetch_success'
 

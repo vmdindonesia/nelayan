@@ -3,14 +3,16 @@ import {
 	USER_LOGIN_SUCCESS,
 	USER_LOGIN_FAIL,
 	USER_LOGOUT,
-	SET_USER_TOKEN
+	SET_USER_TOKEN,
+	USER_FETCH_UNREAD_SUCCESS
 } from '../actions/types'
 
 const INITIAL_STATE = {
 	token: '',
 	loading: false,
 	error: '',
-	data: {}
+	data: {},
+	unreadNotif: 0
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -27,6 +29,8 @@ export default (state = INITIAL_STATE, action) => {
 			return {...state, token: '', data: {}}
 		case SET_USER_TOKEN:
 			return {...state, token: action.payload.token, data: action.payload.data}
+		case USER_FETCH_UNREAD_SUCCESS:
+			return {...state, unreadNotif: action.payload}
 		default:
 			return state
 	}
