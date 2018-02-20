@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Text, Picker, Alert, Keyboard, TouchableOpacity, View, Image, TouchableWithoutFeedback, TouchableNativeFeedback, PixelRatio, BackHandler } from 'react-native'
+import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image, TouchableWithoutFeedback, TouchableNativeFeedback, PixelRatio, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import ImagePicker from 'react-native-image-picker'
@@ -190,6 +190,7 @@ class ProfileEdit extends Component {
 		let formData = new FormData()
 		// organization data
 		formData.append('organizationType', data.organizationType)
+		formData.append('organization', data.organization)
 		formData.append('CityId', data.CityId)
 		formData.append('subDistrict', data.subDistrict)
 		formData.append('village', data.village)
@@ -235,15 +236,15 @@ class ProfileEdit extends Component {
 			this.props.navigation.dispatch(resetAction)
 
 			this.setState({loading: false})
-			Alert.alert('', 'Ubah profil berhasil', [])
+			ToastAndroid.show('Ubah profil berhasil', ToastAndroid.SHORT)
 		})
 		.catch(error => {
 			console.log(error.response)
 			if (error.response) {
-				alert(error.response.data.message)
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
 			else {
-				alert('Koneksi internet bermasalah')
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 			}
 
 			this.setState({loading: false})
@@ -303,7 +304,7 @@ class ProfileEdit extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Jenis Nelayan</Text>
+							<Text style={styles.pickerTextStyle}>Jenis Lembaga</Text>
 							<View style={styles.pickerStyle}>
 								<Picker
 									style={{ flex: 1 }}
@@ -315,6 +316,13 @@ class ProfileEdit extends Component {
 								</Picker>
 							</View>
 						</View>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Nama Lembaga'
+							value={data ? data.organization : ''}
+							onChangeText={v => this.onChangeInput('organization', v)}
+						/>
 					</ContainerSection>
 
 					<ContainerSection>
@@ -439,7 +447,13 @@ class ProfileEdit extends Component {
 							editable={false}
 							placeholder='contoh: erwin@gmail.com'
 							value={data ? data.email : ''}
-							onChangeText={v => this.onChangeInput('email', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Username'
+							editable={false}
+							value={data ? data.username : ''}
 						/>
 					</ContainerSection>
 					{

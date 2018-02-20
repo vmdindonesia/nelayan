@@ -17,7 +17,7 @@ class Register extends Component {
 		super(props)
 	
 		this.state = {
-			organizationType: 'Kelompok Nelayan',
+			organizationType: '',
 			organization: '',
 			CityId: '',
 			subDistrict: '',
@@ -27,6 +27,7 @@ class Register extends Component {
 			idNumber: '',
 			phone: '',
 			email: '',
+			username: '',
 			password: '',
 			confirmPassword: '',
 
@@ -162,75 +163,84 @@ class Register extends Component {
 		}
 	}
 
-	// to do: form validation
-	// 
-
 	register = () => {
 		Keyboard.dismiss()
-		this.setState({loading: true})
 		
 		const data = this.state
 
-		let formData = new FormData()
-		// organization data
-		formData.append('organizationType', data.organizationType)
-		formData.append('CityId', data.CityId)
-		formData.append('subDistrict', data.subDistrict)
-		formData.append('village', data.village)
-		// personal data
-		if (data.photo) {
-			formData.append('photo', {
-				uri: data.photo.uri,
-				type: 'image/jpeg',
-				name: 'profile.jpg'
+		// Form Validation
+		if (data.organizationType === '') {
+			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
+		}
+		else if (data.password !== data.confirmPassword) {
+			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
+		}
+		else {
+			this.setState({loading: true})
+
+			let formData = new FormData()
+			// organization data
+			formData.append('organizationType', data.organizationType)
+			formData.append('organization', data.organization)
+			formData.append('CityId', data.CityId)
+			formData.append('subDistrict', data.subDistrict)
+			formData.append('village', data.village)
+			// personal data
+			if (data.photo) {
+				formData.append('photo', {
+					uri: data.photo.uri,
+					type: 'image/jpeg',
+					name: 'profile.jpg'
+				})
+			}
+			formData.append('name', data.name)
+			formData.append('idNumber', data.idNumber)
+			if (data.idPhoto) {
+				formData.append('idPhoto', {
+					uri: data.idPhoto.uri,
+					type: 'image/jpeg',
+					name: 'ktp.jpg'
+				})
+			}
+			formData.append('phone', data.phone)
+			formData.append('email', data.email)
+			formData.append('username', data.username)
+			formData.append('password', data.password)
+			// komoditas data
+			data.FishIds.map((item, index) =>
+				formData.append(`FishIds[${index}]`, item)
+			)
+
+			axios.post(`${BASE_URL}/supplier/register`, formData, {
+				headers: { 'Content-Type': 'multipart/form-data' }
+			})
+			.then(response => {
+				console.log(response.status)
+
+				const resetAction = NavigationActions.reset({
+					index: 0,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Login'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
+
+				this.setState({loading: false})
+			})
+			.catch(error => {
+				console.log(error.response)
+
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+
+				this.setState({loading: false})
 			})
 		}
-		formData.append('name', data.name)
-		formData.append('idNumber', data.idNumber)
-		if (data.idPhoto) {
-			formData.append('idPhoto', {
-				uri: data.idPhoto.uri,
-				type: 'image/jpeg',
-				name: 'ktp.jpg'
-			})
-		}
-		formData.append('phone', data.phone)
-		formData.append('email', data.email)
-		formData.append('password', data.password)
-		// komoditas data
-		data.FishIds.map((item, index) =>
-			formData.append(`FishIds[${index}]`, item)
-		)
-
-		axios.post(`${BASE_URL}/supplier/register`, formData, {
-			headers: { 'Content-Type': 'multipart/form-data' }
-		})
-		.then(response => {
-			console.log(response.status)
-
-			const resetAction = NavigationActions.reset({
-				index: 0,
-				actions: [
-					NavigationActions.navigate({ routeName: 'Login'})
-				]
-			})
-			this.props.navigation.dispatch(resetAction)
-			Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
-
-			this.setState({loading: false})
-		})
-		.catch(error => {
-			console.log(error.response)
-
-			if (error.response) {
-				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
-			}
-
-			this.setState({loading: false})
-		})
 	}
 
 	renderButton = () => {
@@ -259,6 +269,7 @@ class Register extends Component {
 	render() {
 		const { 
 			organizationType,
+			organization,
 			subDistrict,
 			village,
 
@@ -266,6 +277,7 @@ class Register extends Component {
 			idNumber,
 			phone,
 			email,
+			username,
 			password,
 			confirmPassword,
 
@@ -296,7 +308,7 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Jenis Nelayan</Text>
+							<Text style={styles.pickerTextStyle}>Jenis Lembaga</Text>
 							<View style={styles.pickerStyle}>
 								<Picker
 									style={{ flex: 1 }}
@@ -304,11 +316,19 @@ class Register extends Component {
 									onValueChange={v => this.onChangeInput('organizationType', v)}
 									textStyle={{fontSize: 24}}
 								>
+									<Picker.Item label="-- Pilih Jenis Lembaga --" value="" />
 									<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
 									<Picker.Item label="Personal" value="Personal" />
 								</Picker>
 							</View>
 						</View>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Nama Lembaga'
+							value={organization}
+							onChangeText={v => this.onChangeInput('organization', v)}
+						/>
 					</ContainerSection>
 
 					<ContainerSection>
@@ -433,6 +453,14 @@ class Register extends Component {
 							placeholder='contoh: erwin@gmail.com'
 							value={email}
 							onChangeText={v => this.onChangeInput('email', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Username'
+							placeholder='contoh: erwin95'
+							value={username}
+							onChangeText={v => this.onChangeInput('username', v)}
 						/>
 					</ContainerSection>
 					<ContainerSection>
