@@ -6,6 +6,7 @@ import { createStore, applyMiddleware } from 'redux'
 import numeral from 'numeral'
 import { setCustomText } from 'react-native-global-props'
 import OneSignal from 'react-native-onesignal'
+import codePush from 'react-native-code-push'
 
 import reducers from './src/reducers'
 
@@ -112,7 +113,7 @@ const customTextProps = {
 }
 setCustomText(customTextProps)
 
-export default class App extends Component<{}> {
+class App extends Component<{}> {
   componentWillMount() {
     OneSignal.addEventListener('received', this.onReceived)
     OneSignal.addEventListener('opened', this.onOpened)
@@ -160,4 +161,8 @@ export default class App extends Component<{}> {
     )
   }
 }
+
+App = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(App)
+
+export default App
 
