@@ -138,8 +138,8 @@ class Message extends Component {
 							disabled={text === ''} 
 							onPress={() => this.postMessage()}
 						>
-							<View style={{marginLeft: 10, marginTop: -4}}>
-								<Icon size={52} color={text === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
+							<View style={{marginLeft: 10}}>
+								<Icon size={46} color={text === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
 							</View>
 						</TouchableOpacity>
 					</ContainerSection>
