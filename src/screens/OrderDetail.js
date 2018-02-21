@@ -17,7 +17,13 @@ class OrderDetail extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: `No. PO ${navigation.state.params.id}`,
 		headerRight: 
-			<TouchableOpacity onPress={() => navigation.navigate('Message', {id: navigation.state.params.id})}>
+			<TouchableOpacity 
+				onPress={() => navigation.navigate('Message', {
+					id: navigation.state.params.id,
+					organizationType: navigation.state.params.organizationType,
+					organization: navigation.state.params.organization
+				})}
+			>
 				<View>
 					<Image 
 						style={{height: 20, width: 20, margin: 20}}

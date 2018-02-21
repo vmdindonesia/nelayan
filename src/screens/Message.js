@@ -4,17 +4,17 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
-import { CheckBox, Button, FormInput, Rating } from 'react-native-elements'
-import { Card, CardSection, Container, ContainerSection, Spinner, InputChat } from '../components/common'
-import { BASE_URL } from '../constants'
+
+import { Card, CardSection, Container, ContainerSection, Spinner, Input } from '../components/common'
+import { BASE_URL, COLOR } from '../constants'
 
 class Message extends Component {
 	static navigationOptions = ({navigation}) => ({
-		title: 'Diskusi',
+		title: `${navigation.state.params.organizationType ? navigation.state.params.organizationType : 'Diskusi'} ${navigation.state.params.organization ? navigation.state.params.organization : ''}`,
 		headerRight: 
 			<TouchableOpacity onPress={navigation.state.params.refresh}>
 				<View>
-					<Icon style={{marginRight: 20}} size={30} name="md-refresh" />
+					<Icon style={{marginRight: 20}} color="#fff" size={30} name="md-refresh" />
 				</View>
 			</TouchableOpacity>
 	})
@@ -74,7 +74,7 @@ class Message extends Component {
 		axios.post(`${BASE_URL}/orders/${id}/messages`, formData, {
 			headers: {token}
 		})
-		.then(response => {
+		.then(() => {
 			this.setState({text: ''})
 			this.fetchMessage()
 		})
@@ -99,6 +99,16 @@ class Message extends Component {
 		return (
 			<View style={styles.container}>
 
+				<View style={{marginTop: 5}}>
+					<Card style={{backgroundColor: '#fff', padding: 5, justifyContent: 'center', alignItems: 'center'}}>
+						<ContainerSection>
+							<Text style={{textAlign: 'center'}}>
+								No. PO {this.props.navigation.state.params.id}
+							</Text>
+						</ContainerSection>
+					</Card>
+				</View>
+
 				<ScrollView
 					style={styles.body}
 					ref={ref => this.scrollView = ref}
@@ -117,23 +127,22 @@ class Message extends Component {
 				</ScrollView>
 
 				<View style={styles.send}>
-					<Container>
-						<ContainerSection>
-							<InputChat
-								placeholder="Tulis pesan di sini"
-								multiline
-								value={text}
-								onChangeText={v => this.onChangeInput('text', v)}
-							/>
-							<Button
-								title='Kirim'
-								backgroundColor="blue"
-								containerViewStyle={{marginTop: 15}}
-								buttonStyle={{padding: 10}}
-								onPress={() => this.postMessage()}
-							/>
-						</ContainerSection>
-					</Container>
+					<ContainerSection>
+						<Input
+							onChangeText={val => this.onChangeInput('text', val)}
+							placeholder="Tulis Pesan..."
+							value={text}
+							multiline
+						/>
+						<TouchableOpacity 
+							disabled={text === ''} 
+							onPress={() => this.postMessage()}
+						>
+							<View style={{marginLeft: 10, marginTop: -4}}>
+								<Icon size={52} color={text === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
+							</View>
+						</TouchableOpacity>
+					</ContainerSection>
 				
 				</View>
 			</View>
@@ -150,13 +159,12 @@ const styles = {
 		flex: 1
 	},
 	send: {
-		backgroundColor: '#eaeaea',
-		height: 80,
+		margin: 10
 	},
 	messageContainer: {
 		padding: 15,
-		borderWidth: 1,
-		borderColor: '#eaeaea'
+		paddingLeft: 18,
+		paddingRight: 18,
 	},
 }
 
