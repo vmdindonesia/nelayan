@@ -77,7 +77,7 @@ const styles = {
 		justifyContent: 'center',
 		borderWidth: 1,
 		borderColor: '#a9a9a9',
-		borderRadius: 5,
+		borderRadius: 4,
 		paddingLeft: 7,
 		backgroundColor: '#fff'
 	},
