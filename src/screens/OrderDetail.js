@@ -523,7 +523,7 @@ class OrderDetail extends Component {
 						</View>
 					}
 					{
-						data.finalPayment &&
+						data.shippingDelivered &&
 						<View style={styles.card}>
 							<ContainerSection>
 								<TouchableWithoutFeedback onPress={() => this.setState({paidExpanded: !paidExpanded})}>
@@ -539,18 +539,25 @@ class OrderDetail extends Component {
 								paidExpanded ? 
 									<ContainerSection>
 										<View style={{flexDirection: 'column', flex: 1}}>
-											<View>
-												<Text>Status: {data.finalPayment.Status.name}</Text>
-												<Text>{moment(data.finalPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
-												<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.finalPayment.photo}`).catch(err => console.error('An error occurred', err))}>
+											{
+												data.finalPayment ?
 													<View>
-														<Image 
-															style={{width: '100%', height: 150}}
-															source={{uri: `${BASE_URL}/images/${data.finalPayment.photo}`}} 
-														/>
+														<Text>Status: {data.finalPayment.Status.name}</Text>
+														<Text>{moment(data.finalPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
+														<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.finalPayment.photo}`).catch(err => console.error('An error occurred', err))}>
+															<View>
+																<Image 
+																	style={{width: '100%', height: 150}}
+																	source={{uri: `${BASE_URL}/images/${data.finalPayment.photo}`}} 
+																/>
+															</View>
+														</TouchableOpacity>
+													</View>	
+												:
+													<View>
+														<Text>Status: {data.shippingDelivered.Status.name}</Text>
 													</View>
-												</TouchableOpacity>
-											</View>									
+											}								
 										</View>
 									</ContainerSection>
 								:
