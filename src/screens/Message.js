@@ -21,7 +21,6 @@ class Message extends Component {
 			loading: true,
 			data: {},
 			text: '',
-			millisconds: 0
 		}
 	}
 
@@ -34,7 +33,7 @@ class Message extends Component {
 	}
 
 	fetchMessage = () => {
-		console.log('masuk')
+		console.log('masuk rekursif')
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
 
