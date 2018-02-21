@@ -5,18 +5,13 @@ import moment from 'moment'
 import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
 
-import { Card, CardSection, Container, ContainerSection, Spinner, Input } from '../components/common'
+import { Card, ContainerSection, Spinner, Input } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class Message extends Component {
 	static navigationOptions = ({navigation}) => ({
 		title: `${navigation.state.params.organizationType ? navigation.state.params.organizationType : 'Diskusi'} ${navigation.state.params.organization ? navigation.state.params.organization : ''}`,
-		headerRight: 
-			<TouchableOpacity onPress={navigation.state.params.refresh}>
-				<View>
-					<Icon style={{marginRight: 20}} color="#fff" size={30} name="md-refresh" />
-				</View>
-			</TouchableOpacity>
+		headerRight: <View />
 	})
 
 	constructor(props) {
@@ -25,16 +20,13 @@ class Message extends Component {
 		this.state = {
 			loading: true,
 			data: {},
-			text: ''
+			text: '',
+			millisconds: 0
 		}
 	}
 
 	componentDidMount() {
 		this.fetchMessage()
-
-		this.props.navigation.setParams({
-			refresh: this.fetchMessage
-		})
 	}
 
 	onChangeInput = (name, v) => {
@@ -42,8 +34,7 @@ class Message extends Component {
 	}
 
 	fetchMessage = () => {
-		this.setState({loading: true})
-
+		console.log('masuk')
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
 
@@ -62,6 +53,8 @@ class Message extends Component {
 			}
 			this.setState({loading: false})
 		})
+
+		setTimeout(() => this.fetchMessage(), 5000)
 	}
 
 	postMessage = () => {
