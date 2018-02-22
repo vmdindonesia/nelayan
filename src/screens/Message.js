@@ -127,11 +127,11 @@ class Message extends Component {
 							multiline
 						/>
 						<TouchableOpacity 
-							disabled={!text.match(/^[0-9a-z]+$/)} 
+							disabled={text === ''} 
 							onPress={() => this.postMessage()}
 						>
 							<View style={{marginLeft: 10}}>
-								<Icon size={46} color={!text.match(/^[0-9a-z]+$/) ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
+								<Icon size={46} color={text === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
 							</View>
 						</TouchableOpacity>
 					</ContainerSection>
