@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity,ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -45,10 +45,10 @@ class Message extends Component {
 		})
 		.catch(error => {
 			if (error.response) {
-				alert(error.response.data.message)
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
 			else {
-				alert('Koneksi internet bermasalah')
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 			}
 			this.setState({loading: false})
 		})
@@ -127,11 +127,11 @@ class Message extends Component {
 							multiline
 						/>
 						<TouchableOpacity 
-							disabled={text === ''} 
+							disabled={!text.match(/^[0-9a-z]+$/)} 
 							onPress={() => this.postMessage()}
 						>
 							<View style={{marginLeft: 10}}>
-								<Icon size={46} color={text === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
+								<Icon size={46} color={!text.match(/^[0-9a-z]+$/) ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
 							</View>
 						</TouchableOpacity>
 					</ContainerSection>
@@ -151,7 +151,9 @@ const styles = {
 		flex: 1
 	},
 	send: {
-		margin: 10
+		margin: 10,
+		marginLeft: 12,
+		marginRight: 12
 	},
 	messageContainer: {
 		padding: 15,
