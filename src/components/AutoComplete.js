@@ -65,7 +65,8 @@ const styles = {
 		borderWidth: 1,
 		borderColor: '#a9a9a9',
 		borderRadius: 5,
-		paddingLeft: 7
+		paddingLeft: 7,
+		backgroundColor: '#fff'
 	},
 	lockedForm: {
 		opacity: 0.4

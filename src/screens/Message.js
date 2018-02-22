@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, TouchableOpacity,ToastAndroid } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -53,7 +53,11 @@ class Message extends Component {
 			this.setState({loading: false})
 		})
 
-		setTimeout(() => this.fetchMessage(), 5000)
+		this.timer = setTimeout(() => this.fetchMessage(), 5000)
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.timer)
 	}
 
 	postMessage = () => {
