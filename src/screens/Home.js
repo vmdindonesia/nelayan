@@ -51,7 +51,7 @@ class Home extends Component {
 				screen: 'Profile'
 			},
 			{
-				label: 'Fihslog',
+				label: 'Fishlog',
 				icon: require('../../assets/menu2_white.png'),
 				screen: 'FishLogList'
 			},
