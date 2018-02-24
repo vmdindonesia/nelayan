@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableNativeFeedback } from 'react-native'
+import { COLOR } from '../../constants'
 
 class Button extends Component {
 	render() {
+		const { secondary, style } = this.props
+
 		return (
 			<TouchableNativeFeedback
 				onPress={this.props.onPress}
 				background={TouchableNativeFeedback.SelectableBackground()}
 			>
-				<View style={styles.buttonStyle}>
-					<Text style={styles.textStyle}>{this.props.children}</Text>
+				<View style={[secondary ? styles.secondaryButtonStyle : styles.primaryButtonStyle, style]}>
+					<Text style={secondary ? styles.secondaryTextStyle : styles.primaryTextStyle}>{this.props.children}</Text>
 				</View>
 			</TouchableNativeFeedback>
 		)
@@ -17,21 +20,33 @@ class Button extends Component {
 }
 
 const styles = {
-	textStyle: {
+	primaryTextStyle: {
 		alignSelf: 'center',
 		color: '#fff',
 		fontSize: 16,
-		fontWeight: '600',
-		paddingTop: 10,
-		paddingBottom: 10,
+		paddingTop: 12,
+		paddingBottom: 12,
+		fontFamily: 'Muli-Bold'
 	},
-	buttonStyle: {
+	secondaryTextStyle: {
+		alignSelf: 'center',
+		color: COLOR.secondary_a,
+		fontSize: 16,
+		paddingTop: 12,
+		paddingBottom: 12,
+		fontFamily: 'Muli-Bold'
+	},
+	primaryButtonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
-		backgroundColor: '#007aff',
-		borderRadius: 2,
-		marginLeft: 5,
-		marginRight: 5,
+		backgroundColor: COLOR.secondary_a,
+		borderRadius: 8,
+	},
+	secondaryButtonStyle: {
+		flex: 1,
+		alignSelf: 'stretch',
+		backgroundColor: '#fff',
+		borderRadius: 8,
 	}
 }
 

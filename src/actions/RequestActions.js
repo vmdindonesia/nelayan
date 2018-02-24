@@ -1,0 +1,26 @@
+import axios from 'axios'
+import { BASE_URL } from '../constants'
+import {
+	REQUESTS_FETCH_SUCCESS
+} from './types'
+
+export const requestsFetch = (token) => async (dispatch) => {
+	axios.get(`${BASE_URL}/supplier/requests`, {
+		headers: {token}
+	})
+	.then(response => {
+		dispatch({
+			type: REQUESTS_FETCH_SUCCESS,
+			payload: response.data.data
+		})
+	})
+	.catch(error => {
+		if (error.response) {
+			alert(error.response.data.message)
+		}
+		else {
+			alert('Koneksi internet bermasalah')
+		}
+	})
+}
+
