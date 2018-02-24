@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableNativeFeedback, Image, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableNativeFeedback, Image, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 
 import { logout } from '../actions'
@@ -29,7 +29,7 @@ class MenuItem extends Component {
 								style={menuIcon}
 								source={require('../../assets/menu2.png')} 
 							/>
-							<Text style={{textAlign: 'center'}}>Fish Log</Text>
+							<Text style={{textAlign: 'center'}}>Fishlog</Text>
 						</View>
 					</TouchableNativeFeedback>
 					<TouchableNativeFeedback onPress={() => this.props.navi.navigate('RequestList')}>
