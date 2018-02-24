@@ -4,10 +4,7 @@
 npm install -g eslint
 ```
 
-2. Install Package Control
-```
-Buka (https://packagecontrol.io/installation) lalu ikuti langkah-langkahnya
-```
+2. Install Package Control: Buka https://packagecontrol.io/installation lalu ikuti langkah-langkahnya
 
 3. Install eslint configuration
 ```
