@@ -29,10 +29,10 @@ npm install --save-dev eslint-config-rallycoding
 }
 ```
 
-5. Install linter di sublime: klik `ctrl+p`, pilih `Package Control: Install Package` lalu pilih `Pilih Sublimelinter`
+5. Install linter di sublime: klik `ctrl+shift+p` (untuk windows), pilih `Package Control: Install Package` lalu pilih `Pilih Sublimelinter`
 
 
-6. Install eslint di sublime: klik `ctrl+p`, pilih `Package Control: Install Package`lalu pilih `SublimeLinter-contrib-eslint` atau `SublimeLinter-eslint`
+6. Install eslint di sublime: klik `ctrl+shift+p` (untuk windows), pilih `Package Control: Install Package`lalu pilih `SublimeLinter-contrib-eslint` atau `SublimeLinter-eslint`
 
 7. Quit sublime, lalu buka lagi. Coba kasih ; di akhir line, pasti ada error merah2
 
