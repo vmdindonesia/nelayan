@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableNativeFeedback, Image, FlatList } from 'react-native'
-import moment from 'moment'
+import { View, Text, FlatList, Image, TouchableNativeFeedback } from 'react-native'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { messagesFetch } from '../actions'
-import { Card } from '../components/common'
+import { Spinner, Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class MessageList extends Component {
@@ -17,29 +17,67 @@ class MessageList extends Component {
 		this.props.messagesFetch(this.props.user.token, '')
 	}
 
+	renderItem = (item) => {
+		return (
+			<Card>
+				<TouchableNativeFeedback 
+					onPress={() => this.props.navigation.navigate('Message', 
+						{
+							id: item.id,
+							organizationType: item.Request.Buyer.organizationType,
+							organization: item.Request.Buyer.organization
+						})}
+				>
+					<View style={styles.itemContainerStyle}>
+						<View style={styles.thumbnailContainerStyle}>
+							<Image 
+								style={styles.thumbnailStyle}
+								source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+							/>
+						</View>
+
+						<View style={styles.headerContentStyle}>
+							<Text>No. PO {item.Request.codeNumber}</Text>
+							<Text style={{fontSize: 12}}>{moment(item.lastUpdatedAt).format('DD MMM YYYY, HH:mm')}</Text>
+							<Text style={styles.hedaerTextStyle}>
+								{item.Request.Buyer.organizationType} 
+								{
+									item.Request.Buyer.organization ? 
+									`\n${item.Request.Buyer.organization}`
+								: 
+									item.Request.Buyer.name
+								}
+							</Text>
+						</View>
+
+						{
+							item.unread > 0 && 
+							<View style={{backgroundColor: 'red', borderRadius: 50, marginTop: 5, width: 20, height: 20}}>
+								<Text style={{color: '#fff', fontFamily: 'Muli-Bold', textAlign: 'center'}}>{item.unread}</Text>
+							</View>
+						}
+					</View>
+				</TouchableNativeFeedback>
+			</Card>
+		)
+	}
+
 	render() {
+		if (this.props.messages.loading) {
+			return (
+				<View style={{flex: 1}}>
+					<Spinner size='large' />
+				</View>
+			)
+		}
+
 		return (
 			<View style={{flex: 1}}>
-				<Card>
-					<TouchableNativeFeedback 
-						onPress={() => this.props.navigation.navigate('Message', {id: item.id})}
-					>
-						<View style={styles.itemContainerStyle}>
-							<View style={styles.thumbnailContainerStyle}>
-								<Image 
-									style={styles.thumbnailStyle}
-									source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
-								/>
-							</View>
-
-							<View style={styles.headerContentStyle}>
-								<Text>No. PO 123132</Text>
-								<Text style={{fontSize: 12}}>{moment().format('DD MMM YYYY, HH:mm')}</Text>
-								<Text style={styles.hedaerTextStyle}>PT Bandar udara</Text>
-							</View>
-						</View>
-					</TouchableNativeFeedback>
-				</Card>
+				<FlatList
+					data={this.props.messages.data}
+					renderItem={({item}) => this.renderItem(item)}
+					keyExtractor={(item, index) => index}
+				/>
 			</View>
 		)
 	}
@@ -51,6 +89,7 @@ const styles = {
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
 		borderColor: '#ddd',
+		backgroundColor: '#fff'
 	},
 	thumbnailContainerStyle: {
 		justifyContent: 'center',
@@ -70,7 +109,7 @@ const styles = {
 		justifyContent: 'space-around'
 	},
 	hedaerTextStyle: {
-		fontSize: 16,
+		fontSize: 14,
 		color: COLOR.secondary_a
 	}
 }
@@ -82,4 +121,3 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {messagesFetch})(MessageList)
-

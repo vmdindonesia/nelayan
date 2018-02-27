@@ -28,6 +28,10 @@ class Message extends Component {
 		this.fetchMessage()
 	}
 
+	componentWillUnmount() {
+		clearTimeout(this.timer)
+	}
+
 	onChangeInput = (name, v) => {
 		this.setState({[name]: v})
 	}
@@ -54,10 +58,6 @@ class Message extends Component {
 		})
 
 		this.timer = setTimeout(() => this.fetchMessage(), 5000)
-	}
-
-	componentWillUnmount() {
-		clearTimeout(this.timer)
 	}
 
 	postMessage = () => {
