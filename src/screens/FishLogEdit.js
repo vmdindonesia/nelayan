@@ -177,7 +177,7 @@ class FishLogEdit extends Component {
 		this.setState({loadingPage: true})
 		let token = this.props.user.token
 
-		axios.get(`${BASE_URL}/fishes/products`, {
+		axios.get(`${BASE_URL}/fishes-products`, {
 			headers: {token}
 		})
 		.then(response => {			

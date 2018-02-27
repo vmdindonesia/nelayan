@@ -43,7 +43,7 @@ class FishLogList extends Component {
 	fetchProducts = () => {
 		let token = this.props.user.token
 
-		axios.get(`${BASE_URL}/fishes/products`, {
+		axios.get(`${BASE_URL}/fishes-products`, {
 			headers: {token}
 		})
 		.then(response => {			
