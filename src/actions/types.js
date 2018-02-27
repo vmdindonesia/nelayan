@@ -18,3 +18,5 @@ export const REWARD_HISTORIES_FETCH_SUCCESS = 'reward_histories_fetch_success'
 export const MEMBERS_FETCH_SUCCESS = 'members_fetch_success'
 
 export const MESSAGES_FETCH_SUCCESS = 'messages_fetch_success'
+
+export const NOTIFICATIONS_FETCH_SUCCESS = 'notifications_fetch_success'
