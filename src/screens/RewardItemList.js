@@ -117,11 +117,11 @@ class RewardItemList extends Component {
 const styles = {
 	itemContainerStyle: {
 		flex: 1,
-		borderWidth: 1,
 		margin: 5,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
-		borderColor: '#ddd',
+		elevation: 1,
+		backgroundColor: '#fff'
 	},
 	thumbnailContainerStyle: {
 		justifyContent: 'center',

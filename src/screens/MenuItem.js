@@ -94,13 +94,7 @@ const styles = {
 		paddingTop: 15
 	},
 	menuItemStyle: {
-		// borderWidth: 1, 
 		borderRadius: 2,
-		// borderColor: '#ddd',
-		// shadowColor: '#000',
-		// shadowOffset: { width: 5, height: 5 },
-		// shadowOpacity: 0.7,
-		// shadowRadius: 3,
 		elevation: 1,
 		marginLeft: 10,
 		marginRight: 10,
