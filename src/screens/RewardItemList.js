@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FlatList, View, Image, Text, TouchableNativeFeedback, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { itemsFetch, rewardHistoriesFetch } from '../actions'
+import { itemsFetch, rewardHistoriesFetch, setUserToken } from '../actions'
 import { Spinner } from '../components/common'
 import { BASE_URL } from '../constants'
 
@@ -53,6 +53,7 @@ class RewardItemList extends Component {
 			)
 
 			this.props.rewardHistoriesFetch(token)
+			this.props.setUserToken(response.data.refreshToken)
 		})
 		.catch(error => {
 			if (error.response) {
@@ -152,5 +153,5 @@ const mapStateToProps = state => {
 	return { items, user }
 }
 
-export default connect(mapStateToProps, { itemsFetch, rewardHistoriesFetch })(RewardItemList)
+export default connect(mapStateToProps, { itemsFetch, rewardHistoriesFetch, setUserToken })(RewardItemList)
 
