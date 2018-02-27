@@ -76,9 +76,9 @@ const styles = {
 }
 
 const mapStateToProps = state => {
-	const { members, user } = state
+	const { messages, user } = state
 
-	return { members, user }
+	return { messages, user }
 }
 
 export default connect(mapStateToProps, {messagesFetch})(MessageList)

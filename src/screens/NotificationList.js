@@ -95,7 +95,8 @@ const styles = {
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
 		borderColor: '#ddd',
-		padding: 10
+		padding: 10,
+		backgroundColor: '#fff'
 	},
 	thumbnailContainerStyle: {
 		justifyContent: 'center',
