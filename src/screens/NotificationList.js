@@ -6,6 +6,7 @@ import axios from 'axios'
 
 import { BASE_URL } from '../constants'
 import { Spinner, Card } from '../components/common'
+import { unreadNotifFetch } from '../actions'
 
 class NotificationList extends Component {
 	static navigationOptions = {
@@ -24,6 +25,7 @@ class NotificationList extends Component {
 
 	componentWillMount() {
 		this.getData()
+		this.props.unreadNotifFetch(this.props.user.token)
 	}
 
 	getData = () => {
@@ -126,4 +128,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(NotificationList)
+export default connect(mapStateToProps, {unreadNotifFetch})(NotificationList)
