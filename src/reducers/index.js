@@ -6,6 +6,7 @@ import orders from './OrderReducer'
 import items from './ItemReducer'
 import rewardHistories from './RewardHistoryReducer'
 import members from './MemberReducer'
+import messages from './MessageReducer'
 
 export default combineReducers({
 	user,
@@ -14,5 +15,6 @@ export default combineReducers({
 	orders,
 	items,
 	rewardHistories,
-	members
+	members,
+	messages
 })
