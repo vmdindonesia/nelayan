@@ -24,6 +24,7 @@ class MessageList extends Component {
 					onPress={() => this.props.navigation.navigate('Message', 
 						{
 							id: item.id,
+							codeNumber: item.Request.codeNumber,
 							organizationType: item.Request.Buyer.organizationType,
 							organization: item.Request.Buyer.organization
 						})}

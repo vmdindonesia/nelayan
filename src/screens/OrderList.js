@@ -56,6 +56,7 @@ class OrderList extends Component {
 				<TouchableNativeFeedback
 					onPress={() => this.props.navi.navigate('OrderDetail', {
 						id: item.id,
+						codeNumber: item.Request.codeNumber,
 						organizationType: item.Request.Buyer.organizationType,
 						organization: item.Request.Buyer.organization
 					})}
@@ -68,7 +69,7 @@ class OrderList extends Component {
 							/>
 						</View>
 						<View style={styles.headerContentStyle}>
-							<Text>No. PO {item.id}</Text>
+							<Text>No. PO {item.Request.codeNumber}</Text>
 							<Text>{item.Request.Transaction.Fish.name}</Text>
 							<Text>{item.Request.Buyer.name}</Text>
 							<Text style={styles.hedaerTextStyle}>{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Menunggu Kontrak'}</Text>

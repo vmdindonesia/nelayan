@@ -15,11 +15,12 @@ import { ordersFetch } from '../actions'
 
 class OrderDetail extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: `No. PO ${navigation.state.params.id}`,
+		title: `No. PO ${navigation.state.params.codeNumber}`,
 		headerRight: 
 			<TouchableOpacity 
 				onPress={() => navigation.navigate('Message', {
 					id: navigation.state.params.id,
+					codeNumber: navigation.state.params.codeNumber,
 					organizationType: navigation.state.params.organizationType,
 					organization: navigation.state.params.organization
 				})}
@@ -30,7 +31,11 @@ class OrderDetail extends Component {
 						source={require('../../assets/ic_diskusi_alt_white.png')} 
 					/>
 				</View>
-			</TouchableOpacity>
+			</TouchableOpacity>,
+		headerTitleStyle: {
+      alignSelf: 'center',
+			fontSize: 14
+		}
 	})
 
 	constructor(props) {

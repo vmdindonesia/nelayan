@@ -99,7 +99,7 @@ class Message extends Component {
 					<Card style={{backgroundColor: '#fff', padding: 5, justifyContent: 'center', alignItems: 'center'}}>
 						<ContainerSection>
 							<Text style={{textAlign: 'center'}}>
-								No. PO {this.props.navigation.state.params.id}
+								No. PO {this.props.navigation.state.params.codeNumber}
 							</Text>
 						</ContainerSection>
 					</Card>
