@@ -106,13 +106,6 @@ class Profile extends Component {
 									source={{uri: `${BASE_URL}/images/${item.Fish.photo}`}} 
 								/>
 								<Text style={{color: COLOR.secondary_a, fontSize: 20, marginLeft: 10}}>{item.Fish && item.Fish.name}</Text>
-								{
-									// <TouchableOpacity onPress={() => this.props.navigation.navigate('ProductForm', {FishId: item.Fish.id, value: item.Fish.name, ProductId: item.id})}>
-									// 	<View style={{width: 35, marginTop: 5}}>
-									// 		<Icon style={{marginLeft: 10}} name="md-create" size={20} />
-									// 	</View>
-									// </TouchableOpacity>
-								}
 							</CardSection>
 						</Card>
 					)
@@ -285,6 +278,7 @@ const styles = {
 		padding: 10,
 		paddingLeft: 15,
 		paddingRight: 15,
+		backgroundColor: '#fff'
 	},
 	cardSection: {
 		padding: 5,

@@ -108,6 +108,7 @@ const styles = {
 		marginBottom: 10,
 		width: 90,
 		height: 90,
+		backgroundColor: '#fff'
 	},
 	menuIcon: {
 		alignSelf: 'center',
