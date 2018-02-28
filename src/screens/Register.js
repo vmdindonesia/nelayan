@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image, TouchableWithoutFeedback, PixelRatio } from 'react-native'
+import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
@@ -10,7 +10,7 @@ import AutoComplete from '../components/AutoComplete'
 class Register extends Component {
 	static navigationOptions = {
 		headerTitle: 'Pendaftaran Akun',
-		headerRight: (<View />),
+		headerRight: <View />,
 	}
 
 	constructor(props) {
@@ -30,6 +30,10 @@ class Register extends Component {
 			username: '',
 			password: '',
 			confirmPassword: '',
+
+			bank: '',
+			bankBranch: '',
+			bankAccount: '',
 
 			loading: false,
 			suggestions: [],
@@ -206,6 +210,10 @@ class Register extends Component {
 			formData.append('email', data.email)
 			formData.append('username', data.username)
 			formData.append('password', data.password)
+			// bank data
+			formData.append('bank', data.bank)
+			formData.append('bankBranch', data.bankBranch)
+			formData.append('bankAccount', data.bankAccount)
 			// komoditas data
 			data.FishIds.map((item, index) =>
 				formData.append(`FishIds[${index}]`, item)
@@ -280,6 +288,10 @@ class Register extends Component {
 			username,
 			password,
 			confirmPassword,
+
+			bank,
+			bankBranch,
+			bankAccount,
 
 			suggestions,
 			values,
@@ -482,6 +494,37 @@ class Register extends Component {
 						/>
 					</ContainerSection>
 				</Container>
+
+				<Container>
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Informasi Rekening
+						</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Nama Bank'
+							value={bank}
+							onChangeText={v => this.onChangeInput('bank', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Cabang'
+							value={bankBranch}
+							onChangeText={v => this.onChangeInput('bankBranch', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Nomor Rekening'
+							keyboardType="numeric"
+							value={bankAccount}
+							onChangeText={v => this.onChangeInput('bankAccount', v)}
+						/>
+					</ContainerSection>
+				</Container>
+
 				<Container>
 					<ContainerSection>
 						<Text style={styles.headerStyle}>

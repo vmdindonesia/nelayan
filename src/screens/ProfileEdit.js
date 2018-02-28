@@ -215,6 +215,10 @@ class ProfileEdit extends Component {
 		formData.append('phone', data.phone)
 		formData.append('email', data.email)
 		formData.append('password', data.password)
+		// bank data
+		formData.append('bank', data.bank)
+		formData.append('bankBranch', data.bankBranch)
+		formData.append('bankAccount', data.bankAccount)
 
 		axios.post(`${BASE_URL}/supplier/profile`, formData, {
 			headers: {
@@ -478,6 +482,36 @@ class ProfileEdit extends Component {
 						// 	/>
 						// </ContainerSection>
 					}
+				</Container>
+
+				<Container>
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Informasi Rekening
+						</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Nama Bank'
+							value={data ? data.bank : ''}
+							onChangeText={v => this.onChangeInput('bank', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Cabang'
+							value={data ? data.bankBranch : ''}
+							onChangeText={v => this.onChangeInput('bankBranch', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Nomor Rekening'
+							keyboardType="numeric"
+							value={data ? data.bankAccount : ''}
+							onChangeText={v => this.onChangeInput('bankAccount', v)}
+						/>
+					</ContainerSection>
 
 					<View style={{marginTop: 20, marginBottom: 20}}>
 						<ContainerSection>
