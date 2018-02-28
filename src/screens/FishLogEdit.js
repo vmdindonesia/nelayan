@@ -325,7 +325,7 @@ class FishLogEdit extends Component {
 						</View>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal</Text>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal Penangkapan</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
