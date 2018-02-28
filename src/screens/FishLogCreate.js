@@ -50,17 +50,21 @@ class FishLogCreate extends Component {
 			loading: false,
 			// form
 			FishId: '',
+			ProvinceId: '',
 			size: '',
 			quantity: '',
 			price: '',
 			photo: null,
+			unit: 'Kg',
 			//data
-			fishes: []
+			fishes: [],
+			provinces: []
 		}
 	}
 
 	componentWillMount() {
 		this.fetchProducts()
+		this.fetchProvinces()
 	}
 
 	componentDidMount() {
@@ -97,7 +101,10 @@ class FishLogCreate extends Component {
 		const data = this.state
 		// form validation
 		if (data.FishId === '') {
-			Alert.alert('', 'Anda belum pilih komoditas', [])
+			ToastAndroid.show('Anda belum pilih komoditas', ToastAndroid.SHORT)
+		}
+		else if (data.ProvinceId === '') {
+			ToastAndroid.show('Anda belum pilih Provinsi', ToastAndroid.SHORT)
 		}
 		else {
 			this.setState({loading: true})
@@ -106,8 +113,10 @@ class FishLogCreate extends Component {
 
 			let formData = new FormData()
 			formData.append('FishId', data.FishId)
+			formData.append('ProvinceId', data.ProvinceId)
 			formData.append('size', data.size)
 			formData.append('quantity', data.quantity)
+			formData.append('unit', data.unit)
 			formData.append('price', data.price)
 			if (data.photo) {
 				formData.append('photo', {
@@ -166,10 +175,34 @@ class FishLogCreate extends Component {
 		})
 		.catch(error => {
 			if (error.response) {
-				alert(error.response.data.message)
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
 			else {
-				alert('Koneksi internet bermasalah')
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+			}
+
+			this.setState({loading: false})
+		})
+	}
+
+	fetchProvinces = () => {
+		this.setState({loading: true})
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/provinces`, {
+			headers: {token}
+		})
+		.then(response => {			
+			this.setState({provinces: response.data.data})
+
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+			}
+			else {
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 			}
 
 			this.setState({loading: false})
@@ -237,11 +270,14 @@ class FishLogCreate extends Component {
 	render() {
 		const {
 			FishId,
+			ProvinceId,
 			size,
 			quantity,
 			price,
 			photo,
-			fishes
+			fishes,
+			unit,
+			provinces
 		} = this.state
 
 		return (
@@ -280,21 +316,51 @@ class FishLogCreate extends Component {
 						/>						
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', paddingLeft: 5, fontSize: 14}}>Jumlah & Ukuran</Text>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Lokasi Penangkapan</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={ProvinceId}
+									onValueChange={v => this.onChangeInput('ProvinceId', v)}
+								>
+									<Picker.Item label="-- Pilih Provinsi --" value="" />
+									{
+										provinces && provinces.map((item, index) => 
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
+						</View>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
+							label="Jumlah"
 							keyboardType="numeric"
 							value={quantity}
 							onChangeText={v => this.onChangeInput('quantity', v)}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
+					</ContainerSection>
+					<ContainerSection>
 						<Input
+							label="Ukuran"
 							keyboardType="numeric"
 							value={size}
 							onChangeText={v => this.onChangeInput('size', v)}
 						/>
-						<Text style={styles.unitStyle}>Cm</Text>
+						<View style={{marginTop: 50, marginLeft: 10, flex: 1}}>
+							<View style={styles.pickerUnitStyle}>
+								<Picker
+									selectedValue={unit}
+									onValueChange={v => this.onChangeInput('unit', v)}
+								>
+									<Picker.Item label="Kg" value="Kg" />
+									<Picker.Item label="Cm" value="Cm" />
+									<Picker.Item label="Ekor/Kg" value="Ekor/Kg" />
+								</Picker>
+							</View>
+						</View>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
@@ -352,6 +418,15 @@ const styles = {
 		borderRadius: 5,
 		paddingLeft: 7,
 		borderWidth: 1,
+		backgroundColor: '#fff'
+	},
+	pickerUnitStyle: {
+		borderColor: '#a9a9a9',
+		borderRadius: 5,
+		paddingLeft: 7,
+		borderWidth: 1,
+		height: 46,
+		backgroundColor: '#fff'
 	},
 	pickerTextStyle: {
 		color: '#5e5e5e',
@@ -360,13 +435,12 @@ const styles = {
 		marginTop: 10,
 		marginBottom: 10
 	},
-	imageStyle: {
-		
-	},
 	unitStyle: {
-		marginTop: 25, 
-		paddingRight: 20,
-		marginLeft: 5
+		marginTop: 55, 
+		flex: 1,
+		marginLeft: 20,
+		fontSize: 16,
+		color: '#000'
 	},
 	formWrapper: {
 		flexDirection: 'row',

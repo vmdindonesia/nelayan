@@ -688,6 +688,7 @@ const styles = {
 		borderRadius: 5,
 		paddingLeft: 7,
 		borderWidth: 1,
+		backgroundColor: '#fff'
 	},
 	pickerTextStyle: {
 		color: '#5e5e5e',
