@@ -34,6 +34,7 @@ class Register extends Component {
 			bank: '',
 			bankBranch: '',
 			bankAccount: '',
+			bankAccountName: '',
 
 			loading: false,
 			suggestions: [],
@@ -214,6 +215,7 @@ class Register extends Component {
 			formData.append('bank', data.bank)
 			formData.append('bankBranch', data.bankBranch)
 			formData.append('bankAccount', data.bankAccount)
+			formData.append('bankAccountName', data.bankAccountName)
 			// komoditas data
 			data.FishIds.map((item, index) =>
 				formData.append(`FishIds[${index}]`, item)
@@ -292,6 +294,7 @@ class Register extends Component {
 			bank,
 			bankBranch,
 			bankAccount,
+			bankAccountName,
 
 			suggestions,
 			values,
@@ -521,6 +524,13 @@ class Register extends Component {
 							keyboardType="numeric"
 							value={bankAccount}
 							onChangeText={v => this.onChangeInput('bankAccount', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Atas Nama'
+							value={bankAccountName}
+							onChangeText={v => this.onChangeInput('bankAccountName', v)}
 						/>
 					</ContainerSection>
 				</Container>

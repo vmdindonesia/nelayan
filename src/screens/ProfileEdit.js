@@ -219,6 +219,7 @@ class ProfileEdit extends Component {
 		formData.append('bank', data.bank)
 		formData.append('bankBranch', data.bankBranch)
 		formData.append('bankAccount', data.bankAccount)
+		formData.append('bankAccountName', data.bankAccountName)
 
 		axios.post(`${BASE_URL}/supplier/profile`, formData, {
 			headers: {
@@ -510,6 +511,13 @@ class ProfileEdit extends Component {
 							keyboardType="numeric"
 							value={data ? data.bankAccount : ''}
 							onChangeText={v => this.onChangeInput('bankAccount', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Atas Nama'
+							value={data ? data.bankAccountName : ''}
+							onChangeText={v => this.onChangeInput('bankAccountName', v)}
 						/>
 					</ContainerSection>
 

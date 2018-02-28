@@ -110,6 +110,10 @@ class Profile extends Component {
 						<Text style={styles.labelStyle}>Nomor Rekening</Text>
 						<Text style={styles.dataStyle}>{data.bankAccount}</Text>
 					</View>
+					<View style={styles.cardSection}>
+						<Text style={styles.labelStyle}>Atas Nama</Text>
+						<Text style={styles.dataStyle}>{data.bankAccountName}</Text>
+					</View>
 				</View>
 			</ScrollView>
 		)
