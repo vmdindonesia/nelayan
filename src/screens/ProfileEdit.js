@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
 import { BASE_URL, COLOR } from '../constants'
+import { setUserToken } from '../actions'
 
 class ProfileEdit extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -225,6 +226,7 @@ class ProfileEdit extends Component {
 		.then(response => {
 			console.log(response)
 			this.props.navigation.setParams({change: false})
+			this.props.setUserToken(response.data.refreshToken)
 
 			const resetAction = NavigationActions.reset({
 				index: 1,
@@ -335,7 +337,7 @@ class ProfileEdit extends Component {
 							label="Kota / Kabupaten"
 							suggestions={suggestionsCity}
 							onChangeText={text => this.queryCitySuggestion(text)}
-							value={valueCity ? valueCity : data.City.name}
+							value={valueCity || data.City.name}
 						>
 						{
 							loadingCity ?
@@ -531,4 +533,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(ProfileEdit)
+export default connect(mapStateToProps, {setUserToken})(ProfileEdit)
