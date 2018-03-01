@@ -14,6 +14,9 @@ class NotificationList extends Component {
 
 	componentWillMount() {
 		this.props.notificationsFetch(this.props.user.token, '')
+	}
+
+	componentDidMount() {
 		this.props.unreadNotifFetch(this.props.user.token)
 	}
 
