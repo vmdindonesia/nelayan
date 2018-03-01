@@ -153,7 +153,7 @@ class RequestDetail extends Component {
 						</View>
 						<View style={{flex: 6}}>
 							<Text>
-								Pengambilan PO terakhir dapat dilakukan pada tanggal {moment(data.expiredAt).format('DD/MM/YYYY')} pukul {moment(data.expiredAt).format('HH:mm')} WIB
+								Pengambilan PO terakhir dapat dilakukan pada tanggal {moment(data.Transaction.expiredAt).format('DD/MM/YYYY')} pukul {moment(data.Transaction.expiredAt).format('HH:mm')} WIB
 							</Text>
 						</View>
 					</View>
