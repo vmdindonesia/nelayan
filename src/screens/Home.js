@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableNativeFeedback, TouchableOpacity, Touchable
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
+import OneSignal from 'react-native-onesignal'
 
 import { logout, unreadNotifFetch } from '../actions'
 import { BASE_URL, COLOR } from '../constants'
@@ -21,11 +22,47 @@ class Home extends Component {
 	
 		this.state = {
 			screen: 'MenuItem',
+			redirectToNotification: false
 		}
 	}
 
 	componentWillMount() {
+		OneSignal.addEventListener('received', this.onReceived)
+		OneSignal.addEventListener('opened', this.onOpened)
+		OneSignal.addEventListener('registered', this.onRegistered)
+		OneSignal.addEventListener('ids', this.onIds)
+
 		this.props.unreadNotifFetch(this.props.user.token)
+	}
+
+	componentDidMount() {
+		OneSignal.configure({})
+	}
+
+	componentWillUnmount() {
+		OneSignal.removeEventListener('received', this.onReceived)
+		OneSignal.removeEventListener('opened', this.onOpened)
+		OneSignal.removeEventListener('registered', this.onRegistered)
+		OneSignal.removeEventListener('ids', this.onIds)
+	}
+
+	onReceived(notification) {
+		console.log('Notification received: ', notification)
+	}
+
+	onOpened(openResult) {
+		console.log('Message: ', openResult.notification.payload.body)
+		console.log('Data: ', openResult.notification.payload.additionalData)
+		console.log('isActive: ', openResult.notification.isAppInFocus)
+		console.log('openResult: ', openResult)
+	}
+
+	onRegistered(notifData) {
+		console.log('Device had been registered for push notifications!', notifData)
+	}
+
+	onIds(device) {
+		console.log('Device info: ', device)
 	}
 
 	renderScreen = () => {
@@ -37,12 +74,20 @@ class Home extends Component {
 	}
 
 	render() {
+		const { screen, redirectToNotification } = this.state
+
+		console.log(this.props.user.unreadNotif, 'jumlah unread')
+
+		if (this.props.user.unreadNotif > 0 && redirectToNotification === false) {
+			this.props.navigation.navigate('NotificationList')
+			this.setState({redirectToNotification: true})
+		}
+
 		const { 
 			containerStyle, headerHomeStyle, menuContainerStyle, 
 			profileImageContainer, profileImage, profileName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
 		} = styles
 
-		const { screen } = this.state
 
 		const menus = [
 			{
