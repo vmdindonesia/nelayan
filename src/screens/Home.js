@@ -47,6 +47,7 @@ class Home extends Component {
 	}
 
 	onReceived(notification) {
+		OneSignal.inFocusDisplaying(2)
 		console.log('Notification received: ', notification)
 	}
 
