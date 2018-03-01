@@ -5,6 +5,7 @@ import ReduxThunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import numeral from 'numeral'
 import { setCustomText } from 'react-native-global-props'
+import OneSignal from 'react-native-onesignal'
 import codePush from 'react-native-code-push'
 
 import reducers from './src/reducers'
@@ -113,6 +114,43 @@ const customTextProps = {
 setCustomText(customTextProps)
 
 class App extends Component<{}> {
+  componentWillMount() {
+    OneSignal.addEventListener('received', this.onReceived)
+    OneSignal.addEventListener('opened', this.onOpened)
+    OneSignal.addEventListener('registered', this.onRegistered)
+    OneSignal.addEventListener('ids', this.onIds)
+  }
+
+  componentDidMount() {
+    OneSignal.configure({})
+  }
+
+  componentWillUnmount() {
+    OneSignal.removeEventListener('received', this.onReceived)
+    OneSignal.removeEventListener('opened', this.onOpened)
+    OneSignal.removeEventListener('registered', this.onRegistered)
+    OneSignal.removeEventListener('ids', this.onIds)
+  }
+
+  onReceived(notification) {
+    console.log('Notification received: ', notification)
+  }
+
+  onOpened(openResult) {
+    console.log('Message: ', openResult.notification.payload.body)
+    console.log('Data: ', openResult.notification.payload.additionalData)
+    console.log('isActive: ', openResult.notification.isAppInFocus)
+    console.log('openResult: ', openResult)
+  }
+
+  onRegistered(notifData) {
+    console.log('Device had been registered for push notifications!', notifData)
+  }
+
+  onIds(device) {
+    console.log('Device info: ', device)
+  }
+
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
 
