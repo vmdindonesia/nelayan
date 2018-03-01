@@ -1,15 +1,25 @@
 import React, { Component } from 'react'
-import { FlatList, View, Text, TouchableNativeFeedback } from 'react-native'
+import { FlatList, View, Text, TouchableNativeFeedback, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import axios from 'axios'
 
 import { Spinner, Card } from '../components/common'
 import { notificationsFetch, unreadNotifFetch } from '../actions'
+import { BASE_URL } from '../constants'
 
 class NotificationList extends Component {
 	static navigationOptions = {
 		title: 'Notifikasi',
 		headerRight: <View />
+	}
+
+	constructor(props) {
+		super(props)
+	
+		this.state = {
+			loading: false,
+		}
 	}
 
 	componentWillMount() {
@@ -20,10 +30,47 @@ class NotificationList extends Component {
 		this.props.unreadNotifFetch(this.props.user.token)
 	}
 
+	fetchDetail = (type, id) => {
+		this.setState({loading: true})
+		let token = this.props.user.token
+		
+		axios.get(`${BASE_URL}/supplier/${type}/${id.toString()}`, {
+			headers: {token}
+		})
+		.then(response => {
+			let link = 'RequestDetail'
+			let additionalProps = {id}
+			let item = response.data.data
+
+			if (type === 'orders') {
+				link = 'OrderDetail'
+
+				additionalProps = {
+					id: item.id,
+					codeNumber: item.Request.codeNumber,
+					organizationType: item.Request.Buyer.organizationType,
+					organization: item.Request.Buyer.organization
+				}
+			}
+	
+			this.props.navigation.navigate(link, additionalProps)
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+			}
+			else {
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+			}
+			this.setState({loading: false})
+		})
+	}
+
 	renderItem = (item) => {
 		return (
 			<Card>
-				<TouchableNativeFeedback>
+				<TouchableNativeFeedback onPress={() => this.fetchDetail(item.type, item.typeId)}>
 					<View style={styles.itemContainerStyle}>
 						<View style={styles.headerContentStyle}>
 							<View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -40,7 +87,7 @@ class NotificationList extends Component {
 	}
 
 	render() {
-		if (this.props.notifications.loading) {
+		if (this.props.notifications.loading || this.state.loading) {
 			return (
 				<View style={{flex: 1}}>
 					<Spinner size='large' />
