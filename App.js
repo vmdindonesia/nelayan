@@ -36,6 +36,7 @@ import ResetPassword from './src/screens/ResetPassword'
 import Message from './src/screens/Message'
 import MessageList from './src/screens/MessageList'
 import Help from './src/screens/Help'
+import Term from './src/screens/Term'
 
 import { COLOR } from './src/constants'
 
@@ -87,6 +88,7 @@ const Routes = StackNavigator({
   Message: { screen: Message },
   MessageList: { screen: MessageList },
   Help: { screen: Help },
+  Term: { screen: Term },
 
 }, {
   cardStyle: { backgroundColor: '#fafafa' },

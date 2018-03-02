@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
+import { View, ScrollView, Text, Image, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -124,8 +124,8 @@ class Home extends Component {
 		]
 
 		const menuDrawer = (
-			<View style={{flex: 1, backgroundColor: COLOR.secondary_a}}>
-				<View style={{padding: 30}}>
+			<ScrollView style={{flex: 1, backgroundColor: COLOR.secondary_a}}>
+				<View style={{padding: 30, paddingTop: 20}}>
 					<ContainerSection>
 						<View style={{flexDirection: 'row', flex: 1}}>
 							<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
@@ -139,6 +139,7 @@ class Home extends Component {
 						</View>
 					</ContainerSection>
 					<View style={{borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10}} />
+					
 					{
 						menus.map((item, index) =>
 							<TouchableOpacity 
@@ -157,7 +158,20 @@ class Home extends Component {
 							</TouchableOpacity>
 						)
 					}
+
 					<View style={{borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10}} />
+
+					<TouchableOpacity onPress={() => this.props.navigation.navigate('Term')}>
+						<View style={{marginBottom: 20}}>
+							<ContainerSection>
+								<Image 
+									style={styles.menuIcon}
+									source={require('../../assets/dokumen.png')} 
+								/>
+								<Text style={styles.drawerItemText}>Term & Condition</Text>
+							</ContainerSection>
+						</View>
+					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Help')}>
 						<View style={{marginBottom: 20}}>
 							<ContainerSection>
@@ -191,7 +205,7 @@ class Home extends Component {
 						</View>
 					</TouchableOpacity>
 				</View>
-			</View>
+			</ScrollView>
 		)
 
 		return (
