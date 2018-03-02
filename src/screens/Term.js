@@ -3,7 +3,7 @@ import { Text, View } from 'react-native'
 
 class Term extends Component {
 	static navigationOptions = {
-		title: 'Term & Condition',
+		title: 'Terms & Conditions',
 		headerRight: <View />
 	}
 

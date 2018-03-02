@@ -10,7 +10,7 @@ import { BASE_URL, COLOR } from '../constants'
 
 class Message extends Component {
 	static navigationOptions = ({navigation}) => ({
-		title: `${navigation.state.params.organizationType ? navigation.state.params.organizationType : 'Diskusi'} ${navigation.state.params.organization ? navigation.state.params.organization : ''}`,
+		title: `${navigation.state.params.organizationType || ''} ${navigation.state.params.organization ? navigation.state.params.organization : ''}`,
 		headerRight: <View />
 	})
 

@@ -33,8 +33,13 @@ class NotificationList extends Component {
 	fetchDetail = (type, id) => {
 		this.setState({loading: true})
 		let token = this.props.user.token
+		let newType = type
+
+		if (type === 'messages') {
+			newType = 'orders'
+		}
 		
-		axios.get(`${BASE_URL}/supplier/${type}/${id.toString()}`, {
+		axios.get(`${BASE_URL}/supplier/${newType}/${id}`, {
 			headers: {token}
 		})
 		.then(response => {
@@ -44,6 +49,16 @@ class NotificationList extends Component {
 
 			if (type === 'orders') {
 				link = 'OrderDetail'
+
+				additionalProps = {
+					id: item.id,
+					codeNumber: item.Request.codeNumber,
+					organizationType: item.Request.Buyer.organizationType,
+					organization: item.Request.Buyer.organization
+				}
+			}
+			else if (type === 'messages') {
+				link = 'Message'
 
 				additionalProps = {
 					id: item.id,
