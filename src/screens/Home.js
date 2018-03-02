@@ -168,7 +168,7 @@ class Home extends Component {
 									style={styles.menuIcon}
 									source={require('../../assets/dokumen.png')} 
 								/>
-								<Text style={styles.drawerItemText}>Term & Condition</Text>
+								<Text style={styles.drawerItemText}>Terms & Conditions</Text>
 							</ContainerSection>
 						</View>
 					</TouchableOpacity>
