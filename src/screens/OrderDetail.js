@@ -51,6 +51,7 @@ class OrderDetail extends Component {
 			sampleExpanded: false,
 			contractExpanded: false,
 			dpExpanded: false,
+			processExpanded: false,
 			deliveryExpanded: false,
 			paidExpanded: false,
 			doneExpanded: false,
@@ -118,7 +119,7 @@ class OrderDetail extends Component {
 		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
 			headers: {token}
 		})
-		.then(response => {
+		.then(() => {
 			this.fetchDetail()
 			this.setState({loading: false})
 			Alert.alert('Berhasil!', 'Kontrak berhasil disetujui', [])
@@ -148,7 +149,7 @@ class OrderDetail extends Component {
 		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
 			headers: {token}
 		})
-		.then(response => {
+		.then(() => {
 			this.fetchDetail()
 			this.setState({loading: false})
 			Alert.alert('Berhasil!', 'Permintaan revisi kontrak telah dikirim ke pembeli', [])
@@ -180,7 +181,7 @@ class OrderDetail extends Component {
 		axios.put(`${BASE_URL}/supplier/orders/${id}/samples`, data, {
 			headers: {token}
 		})
-		.then(response => {
+		.then(() => {
 			this.fetchDetail()
 			this.setState({loading: false})
 			Alert.alert('Berhasil!', 'Request survey dan sample berhasil disetujui', [])
@@ -249,7 +250,7 @@ class OrderDetail extends Component {
 		axios.post(`${BASE_URL}/supplier/orders/${id}/shippings`, formData, {
 			headers: {token}
 		})
-		.then(response => {
+		.then(() => {
 			this.fetchDetail()
 			this._toggleModal('isModalUploadVisible')
 			this.setState({loading: false})
@@ -275,7 +276,7 @@ class OrderDetail extends Component {
 
 	render() {
 		const { 
-			sampleExpanded, contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
+			sampleExpanded, contractExpanded, dpExpanded, processExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
 			data, photo, survey, sample
 		} = this.state
 
@@ -470,6 +471,65 @@ class OrderDetail extends Component {
 													</View>
 												</TouchableOpacity>
 											</View>									
+										</View>
+									</ContainerSection>
+								:
+									<View />
+							}
+						</View>
+					}
+					{
+						// data.downPayment && data.downPayment.StatusId === 26 &&
+						<View style={styles.card}>
+							<ContainerSection>
+								<TouchableWithoutFeedback onPress={() => this.setState({processExpanded: !processExpanded})}>
+									<View style={{flex: 1, flexDirection: 'row'}}>
+										<Text style={processExpanded ? styles.statusTextActive : styles.statusText}>Pemrosesan</Text>
+										<View style={{flex: 1}}>
+											<Icon size={30} style={{alignSelf: 'flex-end'}} name={processExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
+										</View>
+									</View>
+								</TouchableWithoutFeedback>
+							</ContainerSection>
+							{
+								processExpanded ? 
+									<ContainerSection>
+										<View style={{flexDirection: 'column', flex: 1}}>
+											<View>
+												<Text>1. Pengumpulan</Text>
+												{ 
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`).catch(err => console.error('An error occurred', err))}>
+														<View style={{marginBottom: 10}}>
+															<Image 
+																style={{width: '100%', height: 150}}
+																source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+															/>
+														</View>
+													</TouchableOpacity>
+												}
+												<Text>2. Produksi</Text>
+												{ 
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`).catch(err => console.error('An error occurred', err))}>
+														<View style={{marginBottom: 10}}>
+															<Image 
+																style={{width: '100%', height: 150}}
+																source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+															/>
+														</View>
+													</TouchableOpacity>
+												}
+												<Text>3. Penyimpanan</Text>
+												{ 
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`).catch(err => console.error('An error occurred', err))}>
+														<View style={{marginBottom: 10}}>
+															<Image 
+																style={{width: '100%', height: 150}}
+																source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+															/>
+														</View>
+													</TouchableOpacity>
+												}
+											</View>
 										</View>
 									</ContainerSection>
 								:
