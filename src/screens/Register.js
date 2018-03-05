@@ -338,13 +338,16 @@ class Register extends Component {
 							</View>
 						</View>
 					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Nama Lembaga'
-							value={organization}
-							onChangeText={v => this.onChangeInput('organization', v)}
-						/>
-					</ContainerSection>
+					{
+						organizationType !== 'Personal' &&
+						<ContainerSection>
+							<Input
+								label='Nama Lembaga'
+								value={organization}
+								onChangeText={v => this.onChangeInput('organization', v)}
+							/>
+						</ContainerSection>
+					}
 
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
