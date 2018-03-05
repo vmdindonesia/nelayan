@@ -59,6 +59,7 @@ class OrderDetail extends Component {
 			declineNotes: '',
 
 			photo: null,
+			photoStatus: '',
 
 			survey: false,
 			sample: false
@@ -197,7 +198,7 @@ class OrderDetail extends Component {
 		})
 	}
 
-	selectPhotoTapped = (name) => {
+	selectPhotoTapped = (name, status) => {
 		const options = {
 			quality: 1.0,
 			maxWidth: 500,
@@ -225,7 +226,8 @@ class OrderDetail extends Component {
 				// You can also display the image using data:
 				// let source = { uri: 'data:image/jpeg;base64,' + response.data };				
 				this.setState({
-					[name]: source
+					[name]: source,
+					photoStatus: status
 				});
 
 				this._toggleModal('isModalUploadVisible')
@@ -233,9 +235,10 @@ class OrderDetail extends Component {
 		});
 	}
 
-	uploadShippingPhoto = () => {
+	uploadPhoto = () => {
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
+		let { photoStatus } = this.state
 		this.setState({loading: true})
 
 		let formData = new FormData()
@@ -243,28 +246,28 @@ class OrderDetail extends Component {
 			formData.append('photo', {
 				uri: this.state.photo.uri,
 				type: 'image/jpeg',
-				name: 'shipping.jpg'
+				name: `${photoStatus}.jpg`
 			})
 		}
 
-		axios.post(`${BASE_URL}/supplier/orders/${id}/shippings`, formData, {
+		axios.post(`${BASE_URL}/supplier/orders/${id}/${photoStatus}`, formData, {
 			headers: {token}
 		})
 		.then(() => {
 			this.fetchDetail()
 			this._toggleModal('isModalUploadVisible')
-			this.setState({loading: false})
-			Alert.alert('Berhasil!', 'Unggah bukti pengiriman berhasil', [])
+			this.setState({loading: false, photoStatus: ''})
+			Alert.alert('Berhasil!', 'Unggah bukti berhasil', [])
 			this.props.ordersFetch(token)
 		})
 		.catch(error => {
 			if (error.response) {
-				alert(error.response.data.message)
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
 			else {
-				alert('Koneksi internet bermasalah')
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 			}
-			this.setState({loading: false})
+			this.setState({loading: false, photoStatus: ''})
 		})
 	}
 
@@ -277,7 +280,7 @@ class OrderDetail extends Component {
 	render() {
 		const { 
 			sampleExpanded, contractExpanded, dpExpanded, processExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
-			data, photo, survey, sample
+			data, photo, photoStatus, survey, sample
 		} = this.state
 
 		console.log(data)
@@ -479,7 +482,7 @@ class OrderDetail extends Component {
 						</View>
 					}
 					{
-						// data.downPayment && data.downPayment.StatusId === 26 &&
+						data.downPayment && data.downPayment.StatusId === 26 &&
 						<View style={styles.card}>
 							<ContainerSection>
 								<TouchableWithoutFeedback onPress={() => this.setState({processExpanded: !processExpanded})}>
@@ -495,36 +498,78 @@ class OrderDetail extends Component {
 								processExpanded ? 
 									<ContainerSection>
 										<View style={{flexDirection: 'column', flex: 1}}>
-											<View>
-												<Text>1. Pengumpulan</Text>
+											<Text>1. Pengumpulan</Text>
+											<View style={{marginBottom: 20, marginTop: 10}}>
+												{
+													data.collection && [41, 42].includes(data.collection.StatusId) ?
+														<Text>Status: {data.collection ? data.collection.Status.name : '-'}</Text>
+													:
+														<View>
+															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
+															<Button onPress={() => this.selectPhotoTapped('photo', 'collections')}>
+																Unggah Bukti
+															</Button>
+														</View>
+												}
 												{ 
-													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`).catch(err => console.error('An error occurred', err))}>
+													data.collection &&
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.collection.photo}`).catch(err => console.error('An error occurred', err))}>
 														<View style={{marginBottom: 10}}>
 															<Image 
 																style={{width: '100%', height: 150}}
-																source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+																source={{uri: `${BASE_URL}/images/${data.collection.photo}`}} 
 															/>
 														</View>
 													</TouchableOpacity>
 												}
-												<Text>2. Produksi</Text>
+											</View>
+
+											<Text>2. Produksi</Text>
+											<View style={{marginBottom: 20, marginTop: 10}}>
+												{
+													data.production && [41, 42].includes(data.production.StatusId) ?
+														<Text>Status: {data.production ? data.production.Status.name : '-'}</Text>
+													:
+														<View>
+															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
+															<Button onPress={() => this.selectPhotoTapped('photo', 'productions')}>
+																Unggah Bukti
+															</Button>
+														</View>
+												}
 												{ 
-													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`).catch(err => console.error('An error occurred', err))}>
+													data.production &&
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.production.photo}`).catch(err => console.error('An error occurred', err))}>
 														<View style={{marginBottom: 10}}>
 															<Image 
 																style={{width: '100%', height: 150}}
-																source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+																source={{uri: `${BASE_URL}/images/${data.production.photo}`}} 
 															/>
 														</View>
 													</TouchableOpacity>
 												}
-												<Text>3. Penyimpanan</Text>
+											</View>
+
+											<Text>3. Penyimpanan</Text>
+											<View style={{marginBottom: 20, marginTop: 10}}>
+												{
+													data.storage && [41, 42].includes(data.storage.StatusId) ?
+														<Text>Status: {data.storage ? data.storage.Status.name : '-'}</Text>
+													:
+														<View>
+															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
+															<Button onPress={() => this.selectPhotoTapped('photo', 'storages')}>
+																Unggah Bukti
+															</Button>
+														</View>
+												}
 												{ 
-													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`).catch(err => console.error('An error occurred', err))}>
+													data.storage &&
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.storage.photo}`).catch(err => console.error('An error occurred', err))}>
 														<View style={{marginBottom: 10}}>
 															<Image 
 																style={{width: '100%', height: 150}}
-																source={{uri: `${BASE_URL}/images/1516800725941PPN Kabayan Aplikasi.jpeg`}} 
+																source={{uri: `${BASE_URL}/images/${data.storage.photo}`}} 
 															/>
 														</View>
 													</TouchableOpacity>
@@ -538,7 +583,7 @@ class OrderDetail extends Component {
 						</View>
 					}
 					{
-						data.downPayment && data.downPayment.StatusId === 26 &&
+						data.storage && data.storage.StatusId === 48 &&
 						<View style={styles.card}>
 							<ContainerSection>
 								<TouchableWithoutFeedback onPress={() => this.setState({deliveryExpanded: !deliveryExpanded})}>
@@ -556,9 +601,7 @@ class OrderDetail extends Component {
 										<View style={{flexDirection: 'column', flex: 1}}>
 											{
 												data.shipping && [28, 29].includes(data.shipping.StatusId) ?
-													<View>
-														<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
-													</View>
+													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
 												:
 													<View>
 														<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Bukti Pengiriman'}</Text>
@@ -567,19 +610,17 @@ class OrderDetail extends Component {
 														</Button>
 													</View>
 											}
-											<View>
-												{ 
-													data.shipping &&
-													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.shipping.photo}`).catch(err => console.error('An error occurred', err))}>
-														<View>
-															<Image 
-																style={{width: '100%', height: 150}}
-																source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
-															/>
-														</View>
-													</TouchableOpacity>
-												}
-											</View>
+											{ 
+												data.shipping &&
+												<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.shipping.photo}`).catch(err => console.error('An error occurred', err))}>
+													<View>
+														<Image 
+															style={{width: '100%', height: 150}}
+															source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
+														/>
+													</View>
+												</TouchableOpacity>
+											}
 										</View>
 									</ContainerSection>
 								:
@@ -707,7 +748,7 @@ class OrderDetail extends Component {
 				>
 					<View style={{ flex: 1, justifyContent: 'center' }}>
 						<View style={{backgroundColor: 'white', borderRadius: 2, padding: 10}}>
-							<Text style={{textAlign: 'center'}}>Unggah Bukti Pengiriman</Text>
+							<Text style={{textAlign: 'center'}}>Unggah Bukti</Text>
 							<View style={{margin: 10}}>
 								<View style={{margin: 5}}>
 									{ 
@@ -716,7 +757,7 @@ class OrderDetail extends Component {
 									}
 								</View>
 								<ContainerSection>
-									<Button onPress={() => this.uploadShippingPhoto()}>
+									<Button onPress={() => this.uploadPhoto()}>
 										Unggah
 									</Button>
 								</ContainerSection>
