@@ -51,7 +51,6 @@ class OrderDetail extends Component {
 			sampleExpanded: false,
 			contractExpanded: false,
 			dpExpanded: false,
-			processExpanded: false,
 			deliveryExpanded: false,
 			paidExpanded: false,
 			doneExpanded: false,
@@ -279,7 +278,7 @@ class OrderDetail extends Component {
 
 	render() {
 		const { 
-			sampleExpanded, contractExpanded, dpExpanded, processExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
+			sampleExpanded, contractExpanded, dpExpanded, deliveryExpanded, paidExpanded, doneExpanded, 
 			data, photo, photoStatus, survey, sample
 		} = this.state
 
@@ -485,17 +484,17 @@ class OrderDetail extends Component {
 						data.downPayment && data.downPayment.StatusId === 26 &&
 						<View style={styles.card}>
 							<ContainerSection>
-								<TouchableWithoutFeedback onPress={() => this.setState({processExpanded: !processExpanded})}>
+								<TouchableWithoutFeedback onPress={() => this.setState({deliveryExpanded: !deliveryExpanded})}>
 									<View style={{flex: 1, flexDirection: 'row'}}>
-										<Text style={processExpanded ? styles.statusTextActive : styles.statusText}>Pemrosesan</Text>
+										<Text style={deliveryExpanded ? styles.statusTextActive : styles.statusText}>Pengiriman</Text>
 										<View style={{flex: 1}}>
-											<Icon size={30} style={{alignSelf: 'flex-end'}} name={processExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
+											<Icon size={30} style={{alignSelf: 'flex-end'}} name={deliveryExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
 							</ContainerSection>
 							{
-								processExpanded ? 
+								deliveryExpanded ? 
 									<ContainerSection>
 										<View style={{flexDirection: 'column', flex: 1}}>
 											<Text>1. Pengumpulan</Text>
@@ -550,77 +549,31 @@ class OrderDetail extends Component {
 												}
 											</View>
 
-											<Text>3. Penyimpanan</Text>
+											<Text>3. Pengiriman</Text>
 											<View style={{marginBottom: 20, marginTop: 10}}>
 												{
-													data.storage && [41, 42].includes(data.storage.StatusId) ?
-														<Text>Status: {data.storage ? data.storage.Status.name : '-'}</Text>
+													data.shipping && [28, 29].includes(data.shipping.StatusId) ?
+														<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
 													:
 														<View>
 															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
-															<Button onPress={() => this.selectPhotoTapped('photo', 'storages')}>
+															<Button onPress={() => this.selectPhotoTapped('photo', 'shippings')}>
 																Unggah Bukti
 															</Button>
 														</View>
 												}
 												{ 
-													data.storage &&
-													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.storage.photo}`).catch(err => console.error('An error occurred', err))}>
-														<View style={{marginBottom: 10}}>
+													data.shipping &&
+													<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.shipping.photo}`).catch(err => console.error('An error occurred', err))}>
+														<View>
 															<Image 
 																style={{width: '100%', height: 150}}
-																source={{uri: `${BASE_URL}/images/${data.storage.photo}`}} 
+																source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
 															/>
 														</View>
 													</TouchableOpacity>
 												}
 											</View>
-										</View>
-									</ContainerSection>
-								:
-									<View />
-							}
-						</View>
-					}
-					{
-						data.storage && data.storage.StatusId === 48 &&
-						<View style={styles.card}>
-							<ContainerSection>
-								<TouchableWithoutFeedback onPress={() => this.setState({deliveryExpanded: !deliveryExpanded})}>
-									<View style={{flex: 1, flexDirection: 'row'}}>
-										<Text style={deliveryExpanded ? styles.statusTextActive : styles.statusText}>Pengiriman</Text>
-										<View style={{flex: 1}}>
-											<Icon size={30} style={{alignSelf: 'flex-end'}} name={deliveryExpanded ? 'md-arrow-dropup' : 'md-arrow-dropdown'} />
-										</View>
-									</View>
-								</TouchableWithoutFeedback>
-							</ContainerSection>
-							{
-								deliveryExpanded ? 
-									<ContainerSection>
-										<View style={{flexDirection: 'column', flex: 1}}>
-											{
-												data.shipping && [28, 29].includes(data.shipping.StatusId) ?
-													<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
-												:
-													<View>
-														<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Bukti Pengiriman'}</Text>
-														<Button onPress={() => this.selectPhotoTapped('photo')}>
-															Unggah Bukti
-														</Button>
-													</View>
-											}
-											{ 
-												data.shipping &&
-												<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.shipping.photo}`).catch(err => console.error('An error occurred', err))}>
-													<View>
-														<Image 
-															style={{width: '100%', height: 150}}
-															source={{uri: `${BASE_URL}/images/${data.shipping.photo}`}} 
-														/>
-													</View>
-												</TouchableOpacity>
-											}
 										</View>
 									</ContainerSection>
 								:
