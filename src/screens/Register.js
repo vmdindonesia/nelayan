@@ -30,6 +30,7 @@ class Register extends Component {
 			username: '',
 			password: '',
 			confirmPassword: '',
+			referralCode: '',
 
 			bank: '',
 			bankBranch: '',
@@ -211,6 +212,7 @@ class Register extends Component {
 			formData.append('email', data.email)
 			formData.append('username', data.username)
 			formData.append('password', data.password)
+			formData.append('referralCode', data.referralCode)
 			// bank data
 			formData.append('bank', data.bank)
 			formData.append('bankBranch', data.bankBranch)
@@ -290,6 +292,7 @@ class Register extends Component {
 			username,
 			password,
 			confirmPassword,
+			referralCode,
 
 			bank,
 			bankBranch,
@@ -497,6 +500,14 @@ class Register extends Component {
 							secureTextEntry
 							value={confirmPassword}
 							onChangeText={v => this.onChangeInput('confirmPassword', v)}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							label='Kode Referral'
+							placeholder='boleh dikosongkan'
+							value={referralCode}
+							onChangeText={v => this.onChangeInput('referralCode', v)}
 						/>
 					</ContainerSection>
 				</Container>
