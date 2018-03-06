@@ -39,8 +39,8 @@ class Register extends Component {
 
 			loading: false,
 			suggestions: [],
-			values: [],
-			FishIds: [],
+			values: ['', '', '', '', ''],
+			FishIds: ['', '', '', '', ''],
 			loadings: [false, false, false, false, false],
 
 			loadingCity: false,
@@ -114,7 +114,8 @@ class Register extends Component {
 	queryCitySuggestion = (text) => {
 		this.setState({
 			valueCity: text,
-			loadingCity: true
+			loadingCity: true,
+			CityId: ''
 		})
 		
 		axios.get(`${BASE_URL}/cities/search?key=${text}`)
@@ -133,14 +134,15 @@ class Register extends Component {
 		})
 
 		if (text.length === 1) {
-			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar kota', ToastAndroid.SHORT)
+			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar pilihan kota', ToastAndroid.SHORT)
 		}
 	}
 
 	querySuggestion = (index, text) => {
-		const { values, suggestions, loadings } = this.state
+		const { values, suggestions, loadings, FishIds } = this.state
 		values[index] = text
 		loadings[index] = true
+		FishIds[index] = ''
 
 		this.setState({
 			values, loadings
@@ -165,14 +167,25 @@ class Register extends Component {
 		})
 
 		if (text.length === 1) {
-			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar Komoditas', ToastAndroid.SHORT)
+			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar pilihan Komoditas', ToastAndroid.SHORT)
 		}
 	}
 
-	register = () => {
+	onSubmitRegister = () => {
 		Keyboard.dismiss()
 		
 		const data = this.state
+
+		console.log(data.FishIds[0], 'FishIds0')
+		console.log(data.values[0], 'values0')
+		console.log(data.FishIds[1], 'FishIds1')
+		console.log(data.values[1], 'values1')
+		console.log(data.FishIds[2], 'FishIds2')
+		console.log(data.values[2], 'values2')
+		console.log(data.FishIds[3], 'FishIds3')
+		console.log(data.values[3], 'values3')
+		console.log(data.FishIds[4], 'FishIds4')
+		console.log(data.values[4], 'values4')
 
 		// Form Validation
 		if (data.organizationType === '') {
@@ -181,78 +194,100 @@ class Register extends Component {
 		else if (data.password !== data.confirmPassword) {
 			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
 		}
+		else if (data.CityId === '') {
+			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[0] === '' && data.values[0] !== '') {
+			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[1] === '' && data.values[1] !== '') {
+			ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[2] === '' && data.values[2] !== '') {
+			ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[3] === '' && data.values[3] !== '') {
+			ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[4] === '' && data.values[4] !== '') {
+			ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
 		else {
-			this.setState({loading: true})
+			this.submitRegister(data)
+		}
+	}
 
-			let formData = new FormData()
-			// organization data
-			formData.append('organizationType', data.organizationType)
-			formData.append('organization', data.organization)
-			formData.append('CityId', data.CityId)
-			formData.append('subDistrict', data.subDistrict)
-			formData.append('village', data.village)
-			// personal data
-			if (data.photo) {
-				formData.append('photo', {
-					uri: data.photo.uri,
-					type: 'image/jpeg',
-					name: 'profile.jpg'
-				})
-			}
-			formData.append('name', data.name)
-			formData.append('idNumber', data.idNumber)
-			if (data.idPhoto) {
-				formData.append('idPhoto', {
-					uri: data.idPhoto.uri,
-					type: 'image/jpeg',
-					name: 'ktp.jpg'
-				})
-			}
-			formData.append('phone', data.phone)
-			formData.append('email', data.email)
-			formData.append('username', data.username)
-			formData.append('password', data.password)
-			formData.append('referralCode', data.referralCode)
-			// bank data
-			formData.append('bank', data.bank)
-			formData.append('bankBranch', data.bankBranch)
-			formData.append('bankAccount', data.bankAccount)
-			formData.append('bankAccountName', data.bankAccountName)
-			// komoditas data
-			data.FishIds.map((item, index) =>
-				formData.append(`FishIds[${index}]`, item)
-			)
+	submitRegister = (data) => {
+		this.setState({loading: true})
 
-			axios.post(`${BASE_URL}/supplier/register`, formData, {
-				headers: { 'Content-Type': 'multipart/form-data' }
-			})
-			.then(response => {
-				console.log(response.status)
-
-				const resetAction = NavigationActions.reset({
-					index: 0,
-					actions: [
-						NavigationActions.navigate({ routeName: 'Login'})
-					]
-				})
-				this.props.navigation.dispatch(resetAction)
-				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
-
-				this.setState({loading: false})
-			})
-			.catch(error => {
-				console.log(error.response)
-
-				if (error.response) {
-					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-				}
-				else {
-					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-				}
-
-				this.setState({loading: false})
+		let formData = new FormData()
+		// organization data
+		formData.append('organizationType', data.organizationType)
+		formData.append('organization', data.organization)
+		formData.append('CityId', data.CityId)
+		formData.append('subDistrict', data.subDistrict)
+		formData.append('village', data.village)
+		// personal data
+		if (data.photo) {
+			formData.append('photo', {
+				uri: data.photo.uri,
+				type: 'image/jpeg',
+				name: 'profile.jpg'
 			})
 		}
+		formData.append('name', data.name)
+		formData.append('idNumber', data.idNumber)
+		if (data.idPhoto) {
+			formData.append('idPhoto', {
+				uri: data.idPhoto.uri,
+				type: 'image/jpeg',
+				name: 'ktp.jpg'
+			})
+		}
+		formData.append('phone', data.phone)
+		formData.append('email', data.email)
+		formData.append('username', data.username)
+		formData.append('password', data.password)
+		formData.append('referralCode', data.referralCode)
+		// bank data
+		formData.append('bank', data.bank)
+		formData.append('bankBranch', data.bankBranch)
+		formData.append('bankAccount', data.bankAccount)
+		formData.append('bankAccountName', data.bankAccountName)
+		// komoditas data
+		data.FishIds.map((item, index) =>
+			(item !== '' ? formData.append(`FishIds[${index}]`, item) : '')
+		)
+
+		axios.post(`${BASE_URL}/supplier/register`, formData, {
+			headers: { 'Content-Type': 'multipart/form-data' }
+		})
+		.then(response => {
+			console.log(response.status)
+
+			const resetAction = NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Login'})
+				]
+			})
+			this.props.navigation.dispatch(resetAction)
+			Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
+
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			console.log(error.response)
+
+			if (error.response) {
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+			}
+			else {
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+			}
+
+			this.setState({loading: false})
+		})
 	}
 
 	renderButton = () => {
@@ -268,7 +303,7 @@ class Register extends Component {
 						'Yakin sudah mengisi informasi profil anda dengan tepat?',
 						[
 							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-							{text: 'Ya', onPress: () => this.register()},
+							{text: 'Ya', onPress: () => this.onSubmitRegister()},
 						]
 					)
 				}
@@ -394,7 +429,7 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							label='Desa/Kelurahan'
+							label='Desa / Kelurahan'
 							placeholder='contoh: Antapani Kidul'
 							value={village}
 							onChangeText={v => this.onChangeInput('village', v)}
