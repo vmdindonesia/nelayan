@@ -445,7 +445,7 @@ class OrderDetail extends Component {
 							</View>
 					}
 					{
-						data.downPayment &&
+						data.Contract && data.Contract.StatusId === 5 &&
 						<View style={styles.card}>
 							<ContainerSection>
 								<TouchableWithoutFeedback onPress={() => this.setState({dpExpanded: !dpExpanded})}>
@@ -461,18 +461,23 @@ class OrderDetail extends Component {
 								dpExpanded ? 
 									<ContainerSection>
 										<View style={{flexDirection: 'column', flex: 1}}>
-											<View>
-												<Text>Status: {data.downPayment.Status.name}</Text>
-												<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
-												<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.downPayment.photo}`).catch(err => console.error('An error occurred', err))}>
+											{
+												data.downPayment ?
 													<View>
-														<Image 
-															style={{width: '100%', height: 150}}
-															source={{uri: `${BASE_URL}/images/${data.downPayment.photo}`}} 
-														/>
-													</View>
-												</TouchableOpacity>
-											</View>									
+														<Text>Status: {data.downPayment.Status.name}</Text>
+														<Text>{moment(data.downPayment.Status.createdAt).format('DD/MM/YYYY')}</Text>
+														<TouchableOpacity onPress={() => Linking.openURL(`${BASE_URL}/images/${data.downPayment.photo}`).catch(err => console.error('An error occurred', err))}>
+															<View>
+																<Image 
+																	style={{width: '100%', height: 150}}
+																	source={{uri: `${BASE_URL}/images/${data.downPayment.photo}`}} 
+																/>
+															</View>
+														</TouchableOpacity>
+													</View>	
+												:
+													<Text>Menunggu DP dari Admin Aruna</Text>
+											}								
 										</View>
 									</ContainerSection>
 								:
