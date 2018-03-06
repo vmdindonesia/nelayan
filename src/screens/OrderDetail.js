@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { ScrollView, View, Text, Alert, Image, TouchableOpacity, TouchableWithoutFeedback, Linking } from 'react-native'
+import { ScrollView, View, Text, Alert, Image, TouchableOpacity, TouchableWithoutFeedback, Linking, ToastAndroid } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import ImagePicker from 'react-native-image-picker'
 import Modal from 'react-native-modal'
@@ -497,14 +497,14 @@ class OrderDetail extends Component {
 								deliveryExpanded ? 
 									<ContainerSection>
 										<View style={{flexDirection: 'column', flex: 1}}>
-											<Text>1. Pengumpulan</Text>
+											<Text style={{fontFamily: 'Muli-Bold'}}>1. Pengumpulan</Text>
 											<View style={{marginBottom: 20, marginTop: 10}}>
 												{
 													data.collection && [41, 42].includes(data.collection.StatusId) ?
 														<Text>Status: {data.collection ? data.collection.Status.name : '-'}</Text>
 													:
-														<View>
-															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
+														<View style={{marginBottom: 10}}>
+															<Text style={{marginBottom: 10}}>Status: {data.collection ? data.collection.Status.name : 'Menunggu Unggah Bukti'}</Text>
 															<Button onPress={() => this.selectPhotoTapped('photo', 'collections')}>
 																Unggah Bukti
 															</Button>
@@ -523,14 +523,14 @@ class OrderDetail extends Component {
 												}
 											</View>
 
-											<Text>2. Produksi</Text>
+											<Text style={{fontFamily: 'Muli-Bold'}}>2. Produksi</Text>
 											<View style={{marginBottom: 20, marginTop: 10}}>
 												{
-													data.production && [41, 42].includes(data.production.StatusId) ?
+													data.production && [44, 45].includes(data.production.StatusId) ?
 														<Text>Status: {data.production ? data.production.Status.name : '-'}</Text>
 													:
-														<View>
-															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
+														<View style={{marginBottom: 10}}>
+															<Text style={{marginBottom: 10}}>Status: {data.production ? data.production.Status.name : 'Menunggu Unggah Bukti'}</Text>
 															<Button onPress={() => this.selectPhotoTapped('photo', 'productions')}>
 																Unggah Bukti
 															</Button>
@@ -549,13 +549,13 @@ class OrderDetail extends Component {
 												}
 											</View>
 
-											<Text>3. Pengiriman</Text>
+											<Text style={{fontFamily: 'Muli-Bold'}}>3. Pengiriman</Text>
 											<View style={{marginBottom: 20, marginTop: 10}}>
 												{
 													data.shipping && [28, 29].includes(data.shipping.StatusId) ?
 														<Text>Status: {data.shipping ? data.shipping.Status.name : '-'}</Text>
 													:
-														<View>
+														<View style={{marginBottom: 10}}>
 															<Text style={{marginBottom: 10}}>Status: {data.shipping ? data.shipping.Status.name : 'Menunggu Unggah Bukti'}</Text>
 															<Button onPress={() => this.selectPhotoTapped('photo', 'shippings')}>
 																Unggah Bukti
