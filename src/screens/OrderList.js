@@ -72,7 +72,9 @@ class OrderList extends Component {
 							<Text>No. PO {item.Request.codeNumber}</Text>
 							<Text>{item.Request.Transaction.Fish.name}</Text>
 							<Text>{item.Request.Buyer.name}</Text>
-							<Text style={styles.hedaerTextStyle}>{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Menunggu Kontrak'}</Text>
+							<Text style={styles.hedaerTextStyle}>
+								{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Proses Kontrak'}
+							</Text>
 							<View style={{flexDirection: 'row'}}>
 								<Image 
 									style={styles.statusIcon}
