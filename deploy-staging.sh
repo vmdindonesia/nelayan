@@ -1,1 +1,0 @@
-code-push release-react aruna_nelayan android
