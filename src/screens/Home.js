@@ -220,7 +220,7 @@ class Home extends Component {
 						<TouchableOpacity onPress={() => this.refs.drawer.openDrawer()}>
 							<Icon size={25} name="md-menu" color="#fff" />
 						</TouchableOpacity>
-						<Text style={styles.headerText}>Nelayan Aruna</Text>
+						<Text style={styles.headerText}>Nelayan Aruna Staging</Text>
 						<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
 							<Image 
 								style={{height: 20, width: 15}}
