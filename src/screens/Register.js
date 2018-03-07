@@ -12,6 +12,7 @@ class Register extends Component {
 		headerTitle: 'Pendaftaran Akun',
 		headerRight: <View />,
 	}
+	yetst testse
 
 	constructor(props) {
 		super(props)
@@ -138,32 +139,7 @@ class Register extends Component {
 		}
 	}
 
-	querySuggestion = (index, text) => {
-		const { values, suggestions, loadings, FishIds } = this.state
-		values[index] = text
-		loadings[index] = true
-		FishIds[index] = ''
-
-		this.setState({
-			values, loadings
-		})
-
-		axios.get(`${BASE_URL}/fishes/search?key=${text}`)
-		.then(response => {
-			res = response.data.data
-			suggestions[index] = res
-			loadings[index] = false
-			this.setState({suggestions, loadings})
-		})
-		.catch(error => {
-			if (error.response) {
-				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
-			}
-			loadings[index] = false
-			this.setState({loadings})
+	setState({loadings})
 		})
 
 		if (text.length === 1) {
