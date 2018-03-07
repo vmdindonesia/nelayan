@@ -6,7 +6,7 @@ import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 import AutoComplete from '../components/AutoComplete'
-
+// tes
 class Register extends Component {
 	static navigationOptions = {
 		headerTitle: 'Pendaftaran Akun',
