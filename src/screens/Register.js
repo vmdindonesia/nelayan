@@ -12,7 +12,6 @@ class Register extends Component {
 		headerTitle: 'Pendaftaran Akun',
 		headerRight: <View />,
 	}
-	yetst testse
 
 	constructor(props) {
 		super(props)
@@ -139,7 +138,32 @@ class Register extends Component {
 		}
 	}
 
-	setState({loadings})
+	querySuggestion = (index, text) => {
+		const { values, suggestions, loadings, FishIds } = this.state
+		values[index] = text
+		loadings[index] = true
+		FishIds[index] = ''
+
+		this.setState({
+			values, loadings
+		})
+
+		axios.get(`${BASE_URL}/fishes/search?key=${text}`)
+		.then(response => {
+			res = response.data.data
+			suggestions[index] = res
+			loadings[index] = false
+			this.setState({suggestions, loadings})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			loadings[index] = false
+			this.setState({loadings})
 		})
 
 		if (text.length === 1) {
@@ -152,16 +176,6 @@ class Register extends Component {
 		
 		const data = this.state
 
-		console.log(data.FishIds[0], 'FishIds0')
-		console.log(data.values[0], 'values0')
-		console.log(data.FishIds[1], 'FishIds1')
-		console.log(data.values[1], 'values1')
-		console.log(data.FishIds[2], 'FishIds2')
-		console.log(data.values[2], 'values2')
-		console.log(data.FishIds[3], 'FishIds3')
-		console.log(data.values[3], 'values3')
-		console.log(data.FishIds[4], 'FishIds4')
-		console.log(data.values[4], 'values4')
 
 		// Form Validation
 		if (data.organizationType === '') {
@@ -172,6 +186,9 @@ class Register extends Component {
 		}
 		else if (data.CityId === '') {
 			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.idNumber.length !== 16) {
+			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
 		}
 		else if (data.FishIds[0] === '' && data.values[0] !== '') {
 			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
@@ -447,7 +464,7 @@ class Register extends Component {
 					<ContainerSection>
 						<Input
 							label='No. KTP'
-							placeholder='contoh: 321317989029'
+							placeholder='contoh: 3213179890294565'
 							keyboardType="numeric"
 							value={idNumber}
 							onChangeText={v => this.onChangeInput('idNumber', v)}

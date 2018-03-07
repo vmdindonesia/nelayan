@@ -16,8 +16,8 @@ class AutoComplete extends Component {
 			})
 		}
 
-		onBlur = () => {sdsdsd
-			this.setStates({
+		onBlur = () => {
+			this.setState({
 				isFocus: false,
 			})
 		}
