@@ -134,7 +134,7 @@ android {
         }
         releaseStaging {
             minifyEnabled enableProguardInReleaseBuilds
-            buildConfigField "String", "CODEPUSH_KEY", '"XSTzBzXQFuoIGbRl2y63a39617-0868-4172-805b-69ab5c87c0f5"'
+            buildConfigField "String", "CODEPUSH_KEY", '"p1CWcYf2B-XSTzBzXQFuoIGbRl2y63a39617-0868-4172-805b-69ab5c87c0f5"'
             signingConfig signingConfigs.release
         }
         release {
