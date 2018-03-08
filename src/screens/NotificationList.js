@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import { Spinner, Card } from '../components/common'
 import { notificationsFetch, unreadNotifFetch } from '../actions'
-import { BASE_URL } from '../constants'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 
 class NotificationList extends Component {
 	static navigationOptions = {
@@ -40,7 +40,8 @@ class NotificationList extends Component {
 		}
 		
 		axios.get(`${BASE_URL}/supplier/${newType}/${id}`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			let link = 'RequestDetail'

@@ -4,7 +4,7 @@ import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
 class Register extends Component {
@@ -253,7 +253,8 @@ class Register extends Component {
 		)
 
 		axios.post(`${BASE_URL}/supplier/register`, formData, {
-			headers: { 'Content-Type': 'multipart/form-data' }
+			headers: { 'Content-Type': 'multipart/form-data' },
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			console.log(response.status)

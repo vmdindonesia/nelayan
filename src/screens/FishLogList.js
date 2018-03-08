@@ -9,7 +9,7 @@ import axios from 'axios'
 
 import { fishLogsFetch } from '../actions'
 import { Card } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 
 class FishLogList extends Component {
 	static navigationOptions = {
@@ -44,7 +44,8 @@ class FishLogList extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {			
 			this.setState({fishes: response.data.data})

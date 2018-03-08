@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import AutoComplete from '../components/AutoComplete'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { setUserToken } from '../actions'
 
 class ProfileEdit extends Component {
@@ -107,7 +107,8 @@ class ProfileEdit extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/profile`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			this.setState({data: response.data.user})
@@ -225,7 +226,8 @@ class ProfileEdit extends Component {
 			headers: {
 				'Content-Type': 'multipart/form-data',
 				token
-			}
+			},
+			timeout: REQUEST_TIME_OUT
 		})
 
 		.then(response => {

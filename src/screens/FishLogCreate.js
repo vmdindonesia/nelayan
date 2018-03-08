@@ -9,7 +9,7 @@ import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { setUserToken } from '../actions'
 
 class FishLogCreate extends Component {
@@ -130,7 +130,8 @@ class FishLogCreate extends Component {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					token
-				}
+				},
+				timeout: REQUEST_TIME_OUT
 			})
 			.then(response => {			
 				this.props.setUserToken(response.data.refreshToken)
@@ -166,7 +167,8 @@ class FishLogCreate extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {			
 			this.setState({fishes: response.data.data})
@@ -190,7 +192,8 @@ class FishLogCreate extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/provinces`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {			
 			this.setState({provinces: response.data.data})
