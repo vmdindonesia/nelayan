@@ -276,7 +276,7 @@ class OrderDetail extends Component {
 	}
 
 	toggleCheckBox = (name) => {
-		if (this.state.data.Sample[name] === true) {
+		if (this.state.data.Sample[name] === true && this.state.data.Contract === null) {
 			this.setState({[name]: !this.state[name]})
 		}
 	}
