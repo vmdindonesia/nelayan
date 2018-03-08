@@ -94,7 +94,7 @@ class RewardItemList extends Component {
 	}
 
 	render() {
-		if (this.props.items.loading || this.state.loading) {
+		if (this.state.loading) {
 			return (
 				<View style={{flex: 1}}>
 					<Spinner size='large' />
@@ -109,6 +109,8 @@ class RewardItemList extends Component {
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
 					numColumns={2}
+					onRefresh={() => this.props.itemsFetch(this.props.user.token)}
+					refreshing={this.props.items.loading}
 				/>
 			</View>
 		)

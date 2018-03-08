@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
 
 import { membersFetch } from '../actions'
-import { Spinner, Card } from '../components/common'
+import { Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class MemberList extends Component {
@@ -43,20 +43,14 @@ class MemberList extends Component {
 	}
 
 	render() {
-		if (this.props.members.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
 					data={this.props.members.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.membersFetch(this.props.user.token)}
+					refreshing={this.props.members.loading}
 				/>
 				
 				<ActionButton

@@ -3,7 +3,7 @@ import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-nati
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { ordersFetch } from '../actions'
-import { Spinner, Card } from '../components/common'
+import { Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class OrderList extends Component {
@@ -106,20 +106,15 @@ class OrderList extends Component {
 
 	render() {
 		console.log(this.props.orders.data)
-		if (this.props.orders.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
+		
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
 					data={this.props.orders.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.ordersFetch(this.props.user.token)}
+					refreshing={this.props.orders.loading}
 				/>
 			</View>
 		)

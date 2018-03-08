@@ -3,7 +3,7 @@ import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-nati
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { requestsFetch } from '../actions'
-import { Card, CardSection, Spinner } from '../components/common'
+import { Card, CardSection } from '../components/common'
 import { BASE_URL } from '../constants'
 
 class RequestList extends Component {
@@ -48,20 +48,14 @@ class RequestList extends Component {
 	}
 
 	render() {
-		if (this.props.requests.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
 					data={this.props.requests.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.requestsFetch(this.props.user.token)}
+					refreshing={this.props.requests.loading}
 				/>
 			</View>
 		)

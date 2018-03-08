@@ -102,7 +102,7 @@ class NotificationList extends Component {
 	}
 
 	render() {
-		if (this.props.notifications.loading || this.state.loading) {
+		if (this.state.loading) {
 			return (
 				<View style={{flex: 1}}>
 					<Spinner size='large' />
@@ -116,6 +116,8 @@ class NotificationList extends Component {
 					data={this.props.notifications.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.notificationsFetch(this.props.user.token, '')}
+					refreshing={this.props.notifications.loading}
 				/>
 			</View>
 		)

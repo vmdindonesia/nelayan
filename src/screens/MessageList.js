@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { messagesFetch } from '../actions'
-import { Spinner, Card } from '../components/common'
+import { Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class MessageList extends Component {
@@ -64,20 +64,14 @@ class MessageList extends Component {
 	}
 
 	render() {
-		if (this.props.messages.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
 		return (
 			<View style={{flex: 1}}>
 				<FlatList
 					data={this.props.messages.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.messagesFetch(this.props.user.token, '')}
+					refreshing={this.props.messages.loading}
 				/>
 			</View>
 		)

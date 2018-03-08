@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
 
 import { fishLogsFetch } from '../actions'
-import { Spinner, Card } from '../components/common'
+import { Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class FishLogList extends Component {
@@ -90,14 +90,6 @@ class FishLogList extends Component {
 	render() {	
 		const { fishName, fishes } = this.state
 
-		if (this.props.fishLogs.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
 		return (
 			<View style={{flex: 1}}>
 				<View style={styles.pickerContainer}>
@@ -121,6 +113,8 @@ class FishLogList extends Component {
 					data={this.props.fishLogs.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.fishLogsFetch(this.props.user.token, '')}
+					refreshing={this.props.fishLogs.loading}
 				/>
 
 				<ActionButton
