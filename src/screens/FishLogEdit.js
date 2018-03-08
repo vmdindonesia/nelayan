@@ -8,7 +8,7 @@ import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import ImagePicker from 'react-native-image-picker'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 
 class FishLogEdit extends Component {
@@ -127,7 +127,8 @@ class FishLogEdit extends Component {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					token
-				}
+				},
+				timeout: REQUEST_TIME_OUT
 			})
 			.then(() => {
 				this.props.navigation.setParams({change: false})
@@ -161,7 +162,9 @@ class FishLogEdit extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/fishlogs/${id}`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
+
 		})
 		.then(response => {
 			this.setState({
@@ -185,7 +188,8 @@ class FishLogEdit extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {			
 			this.setState({fishes: response.data.data})
@@ -209,7 +213,8 @@ class FishLogEdit extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/provinces`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {			
 			this.setState({provinces: response.data.data})

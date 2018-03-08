@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { itemsFetch, rewardHistoriesFetch, setUserToken } from '../actions'
 import { Spinner } from '../components/common'
-import { BASE_URL } from '../constants'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 
 class RewardItemList extends Component {
 	constructor(props) {
@@ -39,7 +39,8 @@ class RewardItemList extends Component {
 		}
 
 		axios.post(`${BASE_URL}/supplier/rewards`, data, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			this.setState({

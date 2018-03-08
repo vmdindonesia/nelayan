@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import axios from 'axios'
 
 import { Card, ContainerSection, Spinner, Input } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 
 class Message extends Component {
 	static navigationOptions = ({navigation}) => ({
@@ -42,7 +42,8 @@ class Message extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/orders/${id}/messages`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			this.setState({data: response.data.data, loading: false})
@@ -68,7 +69,8 @@ class Message extends Component {
 		formData.append('text', this.state.text)
 
 		axios.post(`${BASE_URL}/orders/${id}/messages`, formData, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.setState({text: ''})

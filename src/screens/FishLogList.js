@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, View, Image, Text, TouchableNativeFeedback, Picker } from 'react-native'
+import { FlatList, View, Image, Text, TouchableNativeFeedback, Picker, ToastAndroid } from 'react-native'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
@@ -9,7 +9,7 @@ import axios from 'axios'
 
 import { fishLogsFetch } from '../actions'
 import { Card } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 
 class FishLogList extends Component {
 	static navigationOptions = {
@@ -44,17 +44,18 @@ class FishLogList extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {			
 			this.setState({fishes: response.data.data})
 		})
 		.catch(error => {
 			if (error.response) {
-				alert(error.response.data.message)
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
 			else {
-				alert('Koneksi internet bermasalah')
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 			}
 		})
 	}
@@ -89,6 +90,7 @@ class FishLogList extends Component {
 
 	render() {	
 		const { fishName, fishes } = this.state
+		console.log(this.props.fishLogs.loading, 'loading fishlogs')
 
 		return (
 			<View style={{flex: 1}}>

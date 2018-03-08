@@ -3,7 +3,7 @@ import { ScrollView, View, Text, Image, TouchableWithoutFeedback, TouchableNativ
 import { connect } from 'react-redux'
 import axios from 'axios'
 
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, Spinner, ContainerSection, Button } from '../components/common'
 
 class Profile extends Component {
@@ -44,7 +44,8 @@ class Profile extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/profile`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			this.setState({data: response.data.user})
