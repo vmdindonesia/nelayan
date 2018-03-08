@@ -35,6 +35,7 @@ import ForgotPassword from './src/screens/ForgotPassword'
 import ResetPassword from './src/screens/ResetPassword'
 import Message from './src/screens/Message'
 import MessageList from './src/screens/MessageList'
+import MessageAdmin from './src/screens/MessageAdmin'
 import Help from './src/screens/Help'
 import Term from './src/screens/Term'
 
@@ -87,6 +88,7 @@ const Routes = StackNavigator({
   Reward: { screen: Reward },
   Message: { screen: Message },
   MessageList: { screen: MessageList },
+  MessageAdmin: { screen: MessageAdmin },
   Help: { screen: Help },
   Term: { screen: Term },
 
