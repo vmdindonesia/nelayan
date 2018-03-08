@@ -99,7 +99,7 @@ class MessageAdmin extends Component {
 					<Card style={{backgroundColor: '#fff', padding: 5, justifyContent: 'center', alignItems: 'center'}}>
 						<ContainerSection>
 							<Text style={{textAlign: 'center'}}>
-								Official Diskusi dengan Admin Aruna
+								Akun Resmi Admin Aruna
 							</Text>
 						</ContainerSection>
 					</Card>
