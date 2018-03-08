@@ -1,12 +1,15 @@
 import axios from 'axios'
-import { BASE_URL } from '../constants'
+import { ToastAndroid } from 'react-native'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 import {
-	MEMBERS_FETCH_SUCCESS
+	MEMBERS_FETCH_SUCCESS,
+	MEMBERS_FETCH_FAIL
 } from './types'
 
 export const membersFetch = (token) => async (dispatch) => {
 	axios.get(`${BASE_URL}/supplier/members`, {
-		headers: {token}
+		headers: {token},
+		timeout: REQUEST_TIME_OUT
 	})
 	.then(response => {
 		dispatch({
@@ -16,11 +19,15 @@ export const membersFetch = (token) => async (dispatch) => {
 	})
 	.catch(error => {
 		if (error.response) {
-			alert(error.response.data.message)
+			ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 		}
 		else {
-			alert('Koneksi internet bermasalah')
+			ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 		}
+
+		dispatch({
+			type: MEMBERS_FETCH_FAIL,
+		})
 	})
 }
 
