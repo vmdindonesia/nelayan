@@ -190,6 +190,9 @@ class Register extends Component {
 		else if (data.idNumber.length !== 16) {
 			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
 		}
+		else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
+			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
+		}
 		else if (data.FishIds[0] === '' && data.values[0] !== '') {
 			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
 		}
