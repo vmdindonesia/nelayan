@@ -155,7 +155,7 @@ class OrderDetail extends Component {
 		.then(() => {
 			this.fetchDetail()
 			this.setState({loading: false})
-			Alert.alert('Berhasil!', 'Permintaan revisi kontrak telah dikirim ke pembeli', [])
+			Alert.alert('', 'Revisi kontrak akan dikirim ke pembeli', [])
 			this.props.ordersFetch(token)
 		})
 		.catch(error => {
