@@ -199,7 +199,7 @@ class RequestDetail extends Component {
 							</View>
 						:
 							<View style={styles.actionButton}>
-								<Text>{data.Status.id === 2 ? 'Menunggu Konfirmasi dari pembeli' : 'PO Ditolak'}</Text>
+								<Text>{data.Status.id === 2 ? 'Menunggu konfirmasi dari pembeli' : 'PO Ditolak'}</Text>
 							</View>
 					}
 				</View>

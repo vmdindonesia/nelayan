@@ -79,10 +79,10 @@ class Home extends Component {
 
 		console.log(this.props.user.unreadNotif, 'jumlah unread')
 
-		if (this.props.user.unreadNotif > 0 && redirectToNotification === false) {
-			this.props.navigation.navigate('NotificationList')
-			this.setState({redirectToNotification: true})
-		}
+		// if (this.props.user.unreadNotif > 0 && redirectToNotification === false) {
+		// 	this.props.navigation.navigate('NotificationList')
+		// 	this.setState({redirectToNotification: true})
+		// }
 
 		const { 
 			containerStyle, headerHomeStyle, menuContainerStyle, 
