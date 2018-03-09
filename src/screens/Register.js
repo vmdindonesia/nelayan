@@ -4,7 +4,7 @@ import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
 class Register extends Component {
@@ -176,16 +176,6 @@ class Register extends Component {
 		
 		const data = this.state
 
-		console.log(data.FishIds[0], 'FishIds0')
-		console.log(data.values[0], 'values0')
-		console.log(data.FishIds[1], 'FishIds1')
-		console.log(data.values[1], 'values1')
-		console.log(data.FishIds[2], 'FishIds2')
-		console.log(data.values[2], 'values2')
-		console.log(data.FishIds[3], 'FishIds3')
-		console.log(data.values[3], 'values3')
-		console.log(data.FishIds[4], 'FishIds4')
-		console.log(data.values[4], 'values4')
 
 		// Form Validation
 		if (data.organizationType === '') {
@@ -196,6 +186,12 @@ class Register extends Component {
 		}
 		else if (data.CityId === '') {
 			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.idNumber.length !== 16) {
+			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
+			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
 		}
 		else if (data.FishIds[0] === '' && data.values[0] !== '') {
 			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
@@ -260,7 +256,8 @@ class Register extends Component {
 		)
 
 		axios.post(`${BASE_URL}/supplier/register`, formData, {
-			headers: { 'Content-Type': 'multipart/form-data' }
+			headers: { 'Content-Type': 'multipart/form-data' },
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			console.log(response.status)
@@ -471,7 +468,7 @@ class Register extends Component {
 					<ContainerSection>
 						<Input
 							label='No. KTP'
-							placeholder='contoh: 321317989029'
+							placeholder='contoh: 3213179890294565'
 							keyboardType="numeric"
 							value={idNumber}
 							onChangeText={v => this.onChangeInput('idNumber', v)}

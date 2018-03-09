@@ -8,9 +8,9 @@ import axios from 'axios'
 import { Card, ContainerSection, Spinner, Input } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 
-class Message extends Component {
+class MessageAdmin extends Component {
 	static navigationOptions = ({navigation}) => ({
-		title: `${navigation.state.params.organizationType || ''} ${navigation.state.params.organization ? navigation.state.params.organization : ''}`,
+		title: 'Admin Aruna',
 		headerRight: <View />
 	})
 
@@ -41,7 +41,7 @@ class Message extends Component {
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
 
-		axios.get(`${BASE_URL}/orders/${id}/messages`, {
+		axios.get(`${BASE_URL}/messages/contact-admin/client?sorting=ASC`, {
 			headers: {token},
 			timeout: REQUEST_TIME_OUT
 		})
@@ -68,7 +68,7 @@ class Message extends Component {
 		let formData = new FormData()
 		formData.append('text', this.state.text)
 
-		axios.post(`${BASE_URL}/orders/${id}/messages`, formData, {
+		axios.post(`${BASE_URL}/messages/contact-admin`, formData, {
 			headers: {token},
 			timeout: REQUEST_TIME_OUT
 		})
@@ -101,7 +101,7 @@ class Message extends Component {
 					<Card style={{backgroundColor: '#fff', padding: 5, justifyContent: 'center', alignItems: 'center'}}>
 						<ContainerSection>
 							<Text style={{textAlign: 'center'}}>
-								No. PO {this.props.navigation.state.params.codeNumber}
+								Akun Resmi Admin Aruna
 							</Text>
 						</ContainerSection>
 					</Card>
@@ -173,5 +173,5 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(Message)
+export default connect(mapStateToProps)(MessageAdmin)
 

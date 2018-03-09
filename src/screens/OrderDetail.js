@@ -9,7 +9,7 @@ import numeral from 'numeral'
 import axios from 'axios'
 import { CheckBox, Rating } from 'react-native-elements'
 import { Card, ContainerSection, Spinner, Button, Input } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { ordersFetch } from '../actions'
 
 
@@ -78,7 +78,8 @@ class OrderDetail extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/supplier/orders/${id}`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			let data = this.state.data
@@ -117,7 +118,8 @@ class OrderDetail extends Component {
 		}
 
 		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.fetchDetail()
@@ -147,7 +149,8 @@ class OrderDetail extends Component {
 		}
 
 		axios.put(`${BASE_URL}/supplier/orders/${id}/contracts`, data, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.fetchDetail()
@@ -179,7 +182,8 @@ class OrderDetail extends Component {
 		}
 
 		axios.put(`${BASE_URL}/supplier/orders/${id}/samples`, data, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.fetchDetail()
@@ -250,7 +254,8 @@ class OrderDetail extends Component {
 		}
 
 		axios.post(`${BASE_URL}/supplier/orders/${id}/${photoStatus}`, formData, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.fetchDetail()
@@ -271,7 +276,7 @@ class OrderDetail extends Component {
 	}
 
 	toggleCheckBox = (name) => {
-		if (this.state.data.Sample[name] === true) {
+		if (this.state.data.Sample[name] === true && this.state.data.Contract === null) {
 			this.setState({[name]: !this.state[name]})
 		}
 	}

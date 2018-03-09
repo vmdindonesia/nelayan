@@ -18,3 +18,5 @@ export const COLOR = {
 	element_b4: '#ef3f2c'
 }
 
+// TimeOut constant
+export const REQUEST_TIME_OUT = 10000

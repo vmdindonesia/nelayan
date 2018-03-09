@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { FlatList, View, Text, Image } from 'react-native'
 import { connect } from 'react-redux'
 import { BASE_URL } from '../constants'
-import { Spinner } from '../components/common'
 import { rewardHistoriesFetch } from '../actions'
 
 class RewardHistory extends Component {
@@ -31,20 +30,14 @@ class RewardHistory extends Component {
 	}
 
 	render() {
-		if (this.props.rewardHistories.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
 		return (
 			<View style={{ flex: 1}}>
 				<FlatList
 					data={this.props.rewardHistories.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.rewardHistoriesFetch(this.props.user.token)}
+					refreshing={this.props.rewardHistories.loading}
 				/>
 			</View>
 		)

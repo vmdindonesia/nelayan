@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import { Spinner, Card } from '../components/common'
 import { notificationsFetch, unreadNotifFetch } from '../actions'
-import { BASE_URL } from '../constants'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 
 class NotificationList extends Component {
 	static navigationOptions = {
@@ -40,7 +40,8 @@ class NotificationList extends Component {
 		}
 		
 		axios.get(`${BASE_URL}/supplier/${newType}/${id}`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			let link = 'RequestDetail'
@@ -102,7 +103,7 @@ class NotificationList extends Component {
 	}
 
 	render() {
-		if (this.props.notifications.loading || this.state.loading) {
+		if (this.state.loading) {
 			return (
 				<View style={{flex: 1}}>
 					<Spinner size='large' />
@@ -116,6 +117,8 @@ class NotificationList extends Component {
 					data={this.props.notifications.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.notificationsFetch(this.props.user.token, '')}
+					refreshing={this.props.notifications.loading}
 				/>
 			</View>
 		)

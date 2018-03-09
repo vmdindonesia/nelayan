@@ -6,7 +6,7 @@ import axios from 'axios'
 import ImagePicker from 'react-native-image-picker'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 
 class MemberCreate extends Component {
 	static navigationOptions = {
@@ -62,7 +62,8 @@ class MemberCreate extends Component {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					token
-				}
+				},
+				timeout: REQUEST_TIME_OUT
 			})
 			.then(() => {			
 				const resetAction = NavigationActions.reset({

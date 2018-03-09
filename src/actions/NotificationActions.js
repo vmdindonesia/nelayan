@@ -1,14 +1,17 @@
 import axios from 'axios'
-import { BASE_URL } from '../constants'
+import { ToastAndroid } from 'react-native'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 import {
-	NOTIFICATIONS_FETCH_SUCCESS
+	NOTIFICATIONS_FETCH_SUCCESS,
+	NOTIFICATIONS_FETCH_FAIL
 } from './types'
 
 export const notificationsFetch = (token, params) => async (dispatch) => {
   const paramEncoded = encodeURI(params)
 
 	axios.get(`${BASE_URL}/notifications?${paramEncoded}`, {
-		headers: {token}
+		headers: {token},
+		timeout: REQUEST_TIME_OUT
 	})
 	.then(response => {
 		dispatch({
@@ -18,11 +21,15 @@ export const notificationsFetch = (token, params) => async (dispatch) => {
 	})
 	.catch(error => {
 		if (error.response) {
-			alert(error.response.data.message)
+			ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 		}
 		else {
-			alert('Koneksi internet bermasalah')
+			ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 		}
+
+		dispatch({
+			type: NOTIFICATIONS_FETCH_FAIL,
+		})
 	})
 }
 

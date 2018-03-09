@@ -6,7 +6,7 @@ import { Alert, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import axios from 'axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { BASE_URL, COLOR } from '../constants'
+import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Spinner } from '../components/common'
 import { requestsFetch } from '../actions'
 
@@ -34,7 +34,8 @@ class RequestDetail extends Component {
 		let token = this.props.user.token
 		
 		axios.get(`${BASE_URL}/supplier/requests/${id}`, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			this.setState({data: response.data.data, loading: false})
@@ -59,7 +60,8 @@ class RequestDetail extends Component {
 		let formData = {approval: 1}
 
 		axios.put(`${BASE_URL}/supplier/requests/${id}`, formData, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.fetchDetail()
@@ -94,7 +96,8 @@ class RequestDetail extends Component {
 		let formData = {approval: 0}
 
 		axios.put(`${BASE_URL}/supplier/requests/${id}`, formData, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(() => {
 			this.fetchDetail()

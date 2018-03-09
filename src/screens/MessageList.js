@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { messagesFetch } from '../actions'
-import { Spinner, Card } from '../components/common'
+import { Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
 
 class MessageList extends Component {
@@ -64,20 +64,48 @@ class MessageList extends Component {
 	}
 
 	render() {
-		if (this.props.messages.loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
-
 		return (
 			<View style={{flex: 1}}>
+				<Card>
+					<TouchableNativeFeedback 
+						onPress={() => this.props.navigation.navigate('MessageAdmin', 
+							{
+								id: 1,
+								codeNumber: 'chat admin',
+								organizationType: 'Admin Aruna',
+							})}
+					>
+						<View style={styles.itemContainerStyle}>
+							<View style={styles.thumbnailContainerStyle}>
+								<Image 
+									style={styles.thumbnailStyle}
+									source={require('../../assets/ic_launcher.png')} 
+								/>
+							</View>
+
+							<View style={styles.headerContentStyle}>
+								<Text style={{fontSize: 12}}>{moment().format('DD MMM YYYY, HH:mm')}</Text>
+								<Text style={styles.hedaerTextStyle}>
+									Admin Aruna
+								</Text>
+							</View>
+
+							{
+								// item.unread > 0 && 
+								// <View style={{backgroundColor: 'red', borderRadius: 50, marginTop: 5, width: 20, height: 20}}>
+								// 	<Text style={{color: '#fff', fontFamily: 'Muli-Bold', textAlign: 'center'}}>{item.unread}</Text>
+								// </View>
+							}
+						</View>
+					</TouchableNativeFeedback>
+				</Card>
+
 				<FlatList
 					data={this.props.messages.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
+					onRefresh={() => this.props.messagesFetch(this.props.user.token, '')}
+					refreshing={this.props.messages.loading}
 				/>
 			</View>
 		)

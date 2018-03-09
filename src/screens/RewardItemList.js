@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { itemsFetch, rewardHistoriesFetch, setUserToken } from '../actions'
 import { Spinner } from '../components/common'
-import { BASE_URL } from '../constants'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 
 class RewardItemList extends Component {
 	constructor(props) {
@@ -39,7 +39,8 @@ class RewardItemList extends Component {
 		}
 
 		axios.post(`${BASE_URL}/supplier/rewards`, data, {
-			headers: {token}
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
 			this.setState({
@@ -94,7 +95,7 @@ class RewardItemList extends Component {
 	}
 
 	render() {
-		if (this.props.items.loading || this.state.loading) {
+		if (this.state.loading) {
 			return (
 				<View style={{flex: 1}}>
 					<Spinner size='large' />
@@ -109,6 +110,8 @@ class RewardItemList extends Component {
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
 					numColumns={2}
+					onRefresh={() => this.props.itemsFetch(this.props.user.token)}
+					refreshing={this.props.items.loading}
 				/>
 			</View>
 		)
