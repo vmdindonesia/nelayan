@@ -304,7 +304,7 @@ class OrderDetail extends Component {
 					</View>
 					<View style={{justifyContent: 'space-around', flex: 2}}>
 						<Text style={styles.buyerName}>{data.Request.Transaction.Fish.name}</Text>
-						<Text style={styles.buyerName}>{data.Request.Transaction.quantity} Kg</Text>
+						<Text style={styles.buyerName}>{numeral(data.Request.Transaction.quantity).format('0,0')} Kg</Text>
 						<Text>Rp {numeral(data.Request.Transaction.minBudget).format('0,0')} - {numeral(data.Request.Transaction.maxBudget).format('0,0')}</Text>
 						<Text>{data.Request.Buyer.organizationType} {data.Request.Buyer.organization}</Text>
 					</View>
