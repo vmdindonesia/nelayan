@@ -24,7 +24,7 @@ export const messagesFetch = (token, params) => async (dispatch) => {
 			ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 		}
 		else {
-			ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+			ToastAndroid.show('Koneksi internet bermasalah [4]', ToastAndroid.SHORT)
 		}
 
 		dispatch({
