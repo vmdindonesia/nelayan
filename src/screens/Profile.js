@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, Image, TouchableWithoutFeedback, TouchableNativeFeedback } from 'react-native'
+import { ScrollView, View, Text, Image, TouchableWithoutFeedback, TouchableNativeFeedback, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
@@ -64,59 +64,68 @@ class Profile extends Component {
 
 	renderProfile = (data) => {
 		return (
-			<ScrollView style={{marginBottom: 20}}>
-				<View style={styles.card}>
-					<View style={styles.cardSection}>
-						<Text style={{color: COLOR.secondary_a}}>Data Pribadi</Text>
+			<View style={{marginBottom: 20}}>
+				<ScrollView 
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.loading}
+							onRefresh={() => this.getData()}
+						/>
+					}
+				>
+					<View style={styles.card}>
+						<View style={styles.cardSection}>
+							<Text style={{color: COLOR.secondary_a}}>Data Pribadi</Text>
+						</View>
+
+						<View style={{borderWidth: 1, borderColor: '#eaeaea', width: '96%', marginLeft: '2%', margin: 5}} />
+
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>Alamat</Text>
+							<Text style={styles.dataStyle}>
+								{`${data.subDistrict} \n${data.village} \n${data.City && data.City.name}`}
+							</Text>
+						</View>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>No. Telp</Text>
+							<Text style={styles.dataStyle}>{data.phone}</Text>
+						</View>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>No. Identitas</Text>
+							<Text style={styles.dataStyle}>{data.idNumber}</Text>
+						</View>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>Email</Text>
+							<Text style={styles.dataStyle}>{data.email}</Text>
+						</View>
 					</View>
 
-					<View style={{borderWidth: 1, borderColor: '#eaeaea', width: '96%', marginLeft: '2%', margin: 5}} />
+					<View style={styles.card}>
+						<View style={styles.cardSection}>
+							<Text style={{color: COLOR.secondary_a}}>Data Rekening</Text>
+						</View>
 
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>Alamat</Text>
-						<Text style={styles.dataStyle}>
-							{`${data.subDistrict} \n${data.village} \n${data.City && data.City.name}`}
-						</Text>
-					</View>
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>No. Telp</Text>
-						<Text style={styles.dataStyle}>{data.phone}</Text>
-					</View>
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>No. Identitas</Text>
-						<Text style={styles.dataStyle}>{data.idNumber}</Text>
-					</View>
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>Email</Text>
-						<Text style={styles.dataStyle}>{data.email}</Text>
-					</View>
-				</View>
+						<View style={{borderWidth: 1, borderColor: '#eaeaea', width: '96%', marginLeft: '2%', margin: 5}} />
 
-				<View style={styles.card}>
-					<View style={styles.cardSection}>
-						<Text style={{color: COLOR.secondary_a}}>Data Rekening</Text>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>Bank</Text>
+							<Text style={styles.dataStyle}>{data.bank}</Text>
+						</View>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>Cabang</Text>
+							<Text style={styles.dataStyle}>{data.bankBranch}</Text>
+						</View>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>Nomor Rekening</Text>
+							<Text style={styles.dataStyle}>{data.bankAccount}</Text>
+						</View>
+						<View style={styles.cardSection}>
+							<Text style={styles.labelStyle}>Atas Nama</Text>
+							<Text style={styles.dataStyle}>{data.bankAccountName}</Text>
+						</View>
 					</View>
-
-					<View style={{borderWidth: 1, borderColor: '#eaeaea', width: '96%', marginLeft: '2%', margin: 5}} />
-
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>Bank</Text>
-						<Text style={styles.dataStyle}>{data.bank}</Text>
-					</View>
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>Cabang</Text>
-						<Text style={styles.dataStyle}>{data.bankBranch}</Text>
-					</View>
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>Nomor Rekening</Text>
-						<Text style={styles.dataStyle}>{data.bankAccount}</Text>
-					</View>
-					<View style={styles.cardSection}>
-						<Text style={styles.labelStyle}>Atas Nama</Text>
-						<Text style={styles.dataStyle}>{data.bankAccountName}</Text>
-					</View>
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</View>
 		)
 	}
 
@@ -162,15 +171,7 @@ class Profile extends Component {
 			profileImageContainer, profileImage, profileName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive, 
 		} = styles
 
-		const { data, loading, screen } = this.state
-
-		if (loading) {
-			return (
-				<View style={{flex: 1}}>
-					<Spinner size='large' />
-				</View>
-			)
-		}
+		const { data, screen } = this.state
 
 		return (
 			<View style={containerStyle}>

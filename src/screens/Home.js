@@ -75,7 +75,7 @@ class Home extends Component {
 	}
 
 	render() {
-		const { screen, redirectToNotification } = this.state
+		const { screen } = this.state
 
 		console.log(this.props.user.unreadNotif, 'jumlah unread')
 
