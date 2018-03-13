@@ -1,16 +1,16 @@
-package com.aruna_nelayan;
+package com.nelayanaruna;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.microsoft.codepush.react.CodePush;
-import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.microsoft.codepush.react.CodePush;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,10 +33,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new CodePush(BuildConfig.CODEPUSH_KEY, getApplicationContext(), BuildConfig.DEBUG),
-            new ImagePickerPackage(),
             new VectorIconsPackage(),
-            new ReactNativeOneSignalPackage()
+            new ReactNativeOneSignalPackage(),
+            new ImagePickerPackage(),
+            new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG)
       );
     }
 

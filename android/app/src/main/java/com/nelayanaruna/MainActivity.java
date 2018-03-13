@@ -1,4 +1,4 @@
-package com.aruna_nelayan;
+package com.nelayanaruna;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "aruna_nelayan";
+        return "NelayanAruna";
     }
 }
