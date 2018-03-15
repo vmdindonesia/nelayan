@@ -99,11 +99,11 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.nelayanaruna"
+        applicationId "com.aruna_nelayan"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 19
-        versionName "1.0.19"
+        versionCode 20
+        versionName "1.0.20"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

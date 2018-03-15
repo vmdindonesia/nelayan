@@ -1,4 +1,4 @@
-package com.nelayanaruna;
+package com.aruna_nelayan;
 
 import android.app.Application;
 
