@@ -38,7 +38,7 @@ class MenuItem extends Component {
 						/>
 					}
 				>
-					<View style={{flexDirection: 'row'}}>
+					<View style={{flexDirection: 'row', marginLeft: -4}}>
 						<TouchableNativeFeedback onPress={() => this.props.navi.navigate('Profile')}>
 							<View style={menuItemStyle}>
 								<Image 
@@ -67,7 +67,7 @@ class MenuItem extends Component {
 							</View>
 						</TouchableNativeFeedback>
 					</View>
-					<View style={{flexDirection: 'row'}}>
+					<View style={{flexDirection: 'row', marginLeft: -4}}>
 						<TouchableNativeFeedback onPress={() => this.props.navi.navigate('MemberList')}>
 							<View style={menuItemStyle}>
 								<Image 
@@ -96,7 +96,7 @@ class MenuItem extends Component {
 							</View>
 						</TouchableNativeFeedback>
 					</View>
-					<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+					<View style={{ paddingBottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 						<Text style={{textAlign: 'center'}}>
 							Butuh bantuan? 
 						</Text>
@@ -122,19 +122,18 @@ const styles = {
 	menuItemStyle: {
 		borderRadius: 2,
 		elevation: 1,
-		marginLeft: 10,
-		marginRight: 10,
+		marginLeft: 5,
 		marginTop: 10,
 		marginBottom: 10,
-		width: 90,
-		height: 90,
+		width: 105,
+		height: 105,
 		backgroundColor: '#fff'
 	},
 	menuIcon: {
 		alignSelf: 'center',
-		marginTop: 10,
-		height: 50,
-		width: 50,
+		marginTop: 12,
+		height: 60,
+		width: 60,
 	}
 }
 

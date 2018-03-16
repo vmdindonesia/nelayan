@@ -47,10 +47,10 @@ numeral.register('locale', 'id', {
     decimal: ','
   },
   ordinal: function (number) {
-      return number === 1 ? 'er' : 'ème'
+    return number === 1 ? 'er' : 'ème'
   },
   currency: {
-      symbol: 'Rp'
+    symbol: 'Rp'
   }
 })
 numeral.locale('id')
@@ -73,7 +73,7 @@ const Routes = StackNavigator({
 
   RequestList: { screen: RequestList },
   RequestDetail: { screen: RequestDetail },
-  
+
   Profile: { screen: Profile },
   ProfileEdit: { screen: ProfileEdit },
 
@@ -93,24 +93,26 @@ const Routes = StackNavigator({
   Term: { screen: Term },
 
 }, {
-  cardStyle: { backgroundColor: '#fafafa' },
-  navigationOptions: {
-    headerTitleStyle: {
-      alignSelf: 'center',
-      color: '#fff',
-      fontFamily: 'Muli-Bold',
-      fontWeight: '300',
-    },
-    headerStyle: {
-      backgroundColor: COLOR.secondary_a,
-    },
-    headerTintColor: '#fff',
-  }
-})
+    cardStyle: { backgroundColor: '#fafafa' },
+    navigationOptions: {
+      headerTitleStyle: {
+        alignSelf: 'center',
+        color: '#fff',
+        fontFamily: 'Muli-Bold',
+        fontWeight: '300',
+        textAlign: 'center',
+        flex: 1
+      },
+      headerStyle: {
+        backgroundColor: COLOR.secondary_a,
+      },
+      headerTintColor: '#fff',
+    }
+  })
 
 // font
-const customTextProps = { 
-  style: { 
+const customTextProps = {
+  style: {
     fontFamily: 'Muli-Regular'
   }
 }

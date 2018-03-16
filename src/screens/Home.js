@@ -19,7 +19,7 @@ class Home extends Component {
 
 	constructor(props) {
 		super(props)
-	
+
 		this.state = {
 			screen: 'MenuItem',
 			redirectToNotification: false
@@ -70,7 +70,7 @@ class Home extends Component {
 		if (this.state.screen === 'OrderList') {
 			return <OrderList navi={this.props.navigation} />
 		}
-		
+
 		return <MenuItem navi={this.props.navigation} />
 	}
 
@@ -84,8 +84,8 @@ class Home extends Component {
 		// 	this.setState({redirectToNotification: true})
 		// }
 
-		const { 
-			containerStyle, headerHomeStyle, menuContainerStyle, 
+		const {
+			containerStyle, headerHomeStyle, menuContainerStyle,
 			profileImageContainer, profileImage, profileName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
 		} = styles
 
@@ -124,33 +124,33 @@ class Home extends Component {
 		]
 
 		const menuDrawer = (
-			<ScrollView style={{flex: 1, backgroundColor: COLOR.secondary_a}}>
-				<View style={{padding: 30, paddingTop: 20}}>
+			<ScrollView style={{ flex: 1, backgroundColor: COLOR.secondary_a }}>
+				<View style={{ padding: 30, paddingTop: 20 }}>
 					<ContainerSection>
-						<View style={{flexDirection: 'row', flex: 1}}>
+						<View style={{ flexDirection: 'row', flex: 1 }}>
 							<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
-							<View style={{flex: 1}}>
+							<View style={{ flex: 1 }}>
 								<TouchableOpacity onPress={() => this.refs.drawer.closeDrawer()}>
 									<View>
-										<Icon style={{color: '#fff', alignSelf: 'flex-end'}} st name="md-arrow-back" size={24} />
+										<Icon style={{ color: '#fff', alignSelf: 'flex-end' }} st name="md-arrow-back" size={24} />
 									</View>
 								</TouchableOpacity>
 							</View>
 						</View>
 					</ContainerSection>
-					<View style={{borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10}} />
-					
+					<View style={{ borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10 }} />
+
 					{
 						menus.map((item, index) =>
-							<TouchableOpacity 
-								key={index} 
+							<TouchableOpacity
+								key={index}
 								onPress={() => this.props.navigation.navigate(item.screen)}
 							>
-								<View style={{marginBottom: 20}}>
+								<View style={{ marginBottom: 15, width: 100 }}>
 									<ContainerSection>
-										<Image 
+										<Image
 											style={styles.menuIcon}
-											source={item.icon} 
+											source={item.icon}
 										/>
 										<Text style={styles.drawerItemText}>{item.label}</Text>
 									</ContainerSection>
@@ -159,25 +159,25 @@ class Home extends Component {
 						)
 					}
 
-					<View style={{borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10}} />
+					<View style={{ borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10 }} />
 
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Term')}>
-						<View style={{marginBottom: 20}}>
+						<View style={{ marginBottom: 20 }}>
 							<ContainerSection>
-								<Image 
+								<Image
 									style={styles.menuIcon}
-									source={require('../../assets/dokumen.png')} 
+									source={require('../../assets/dokumen.png')}
 								/>
 								<Text style={styles.drawerItemText}>Terms & Conditions</Text>
 							</ContainerSection>
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Help')}>
-						<View style={{marginBottom: 20}}>
+						<View style={{ marginBottom: 20 }}>
 							<ContainerSection>
-								<Image 
+								<Image
 									style={styles.menuIcon}
-									source={require('../../assets/ic_pusatbantuan_white.png')} 
+									source={require('../../assets/ic_pusatbantuan_white.png')}
 								/>
 								<Text style={styles.drawerItemText}>Pusat Bantuan</Text>
 							</ContainerSection>
@@ -188,17 +188,17 @@ class Home extends Component {
 							const resetAction = NavigationActions.reset({
 								index: 0,
 								actions: [
-									NavigationActions.navigate({ routeName: 'Login'})
+									NavigationActions.navigate({ routeName: 'Login' })
 								]
 							})
 							this.props.navigation.dispatch(resetAction)
 						})}
 					>
-						<View style={{marginBottom: 20}}>
+						<View style={{ marginBottom: 20 }}>
 							<ContainerSection>
-								<Image 
+								<Image
 									style={styles.menuIcon}
-									source={require('../../assets/ic_keluar_white.png')} 
+									source={require('../../assets/ic_keluar_white.png')}
 								/>
 								<Text style={styles.drawerItemText}>Keluar</Text>
 							</ContainerSection>
@@ -217,35 +217,39 @@ class Home extends Component {
 					renderNavigationView={() => menuDrawer}
 				>
 					<View style={styles.header}>
-						<TouchableOpacity onPress={() => this.refs.drawer.openDrawer()}>
-							<Icon size={25} name="md-menu" color="#fff" />
-						</TouchableOpacity>
+						<View style={{ marginLeft: -28 }}>
+							<TouchableOpacity onPress={() => this.refs.drawer.openDrawer()}>
+								<Icon size={25} name="md-menu" color="#fff" />
+							</TouchableOpacity>
+						</View>
 						<Text style={styles.headerText}>Nelayan Aruna</Text>
-						<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
-							<Image 
-								style={{height: 20, width: 15}}
-								source={
-									this.props.user.unreadNotif > 0 ?
-										require('../../assets/ic_notification_on.png')
-									:
-										require('../../assets/ic_notification.png')
-								} 
-							/>
-						</TouchableOpacity>
+						<View style={{ marginLeft: -25, marginRight: -25 }}>
+							<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
+								<Image
+									style={{ height: 20, width: 15 }}
+									source={
+										this.props.user.unreadNotif > 0 ?
+											require('../../assets/ic_notification_on.png')
+											:
+											require('../../assets/ic_notification.png')
+									}
+								/>
+							</TouchableOpacity>
+						</View>
 					</View>
 
 					<View style={headerHomeStyle}>
 						<View style={profileImageContainer}>
-							<Image 
+							<Image
 								style={profileImage}
-								source={{uri: `${BASE_URL}/images/${this.props.user.data.photo}`}} 
+								source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
 							/>
 						</View>
 						<Text style={profileName}>{this.props.user.data.name}</Text>
 						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-							<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-								<View style={{flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5}}>
-									<Image 
+							<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+								<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5 }}>
+									<Image
 										style={coin}
 										source={require('../../assets/coin.png')}
 									/>
@@ -255,16 +259,16 @@ class Home extends Component {
 						</TouchableWithoutFeedback>
 					</View>
 					<View style={menuContainerStyle}>
-						<View style={{flexDirection: 'row'}}>
-							<View style={{flex: 1}}>
-								<TouchableNativeFeedback onPress={() => this.setState({screen: 'MenuItem'})}>
+						<View style={{ flexDirection: 'row' }}>
+							<View style={{ flex: 1 }}>
+								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
 									<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
 										<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
 									</View>
 								</TouchableNativeFeedback>
 							</View>
-							<View style={{flex: 1}}>
-								<TouchableNativeFeedback onPress={() => this.setState({screen: 'OrderList'})}>
+							<View style={{ flex: 1 }}>
+								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'OrderList' })}>
 									<View style={screen === 'OrderList' ? tabContainerActive : tabContainer}>
 										<Text style={screen === 'OrderList' ? tabTextActive : tabText}>Transaksi</Text>
 									</View>
@@ -289,7 +293,7 @@ const styles = {
 		backgroundColor: COLOR.secondary_a,
 		height: 60,
 		shadowColor: '#000',
-		shadowOffset: { width: 10, height: 20},
+		shadowOffset: { width: 10, height: 20 },
 		alignItems: 'center',
 		shadowOpacity: 0.2,
 		width: '100%',
@@ -336,7 +340,7 @@ const styles = {
 		alignSelf: 'center'
 	},
 	point: {
-		marginTop: 1, 
+		marginTop: 1,
 		marginLeft: 5,
 		fontSize: 15,
 	},
@@ -365,8 +369,8 @@ const styles = {
 		fontSize: 14
 	},
 	menuIcon: {
-		height: 20,
-		width: 20,
+		height: 40,
+		width: 40,
 		marginRight: 20
 	}
 }
