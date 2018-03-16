@@ -223,7 +223,7 @@ class Home extends Component {
 							</TouchableOpacity>
 						</View>
 						<Text style={styles.headerText}>Nelayan Aruna</Text>
-						<View style={{ marginLeft: -25, marginRight: -25 }}>
+						<View style={{ marginLeft: -25, marginRight: -30 }}>
 							<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
 								<Image
 									style={{ height: 20, width: 15 }}
@@ -369,8 +369,8 @@ const styles = {
 		fontSize: 14
 	},
 	menuIcon: {
-		height: 40,
-		width: 40,
+		height: 20,
+		width: 20,
 		marginRight: 20
 	}
 }

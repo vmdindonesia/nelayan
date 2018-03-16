@@ -38,7 +38,7 @@ class MenuItem extends Component {
 						/>
 					}
 				>
-					<View style={{flexDirection: 'row', marginLeft: -4}}>
+					<View style={{flexDirection: 'row', marginLeft: -8}}>
 						<TouchableNativeFeedback onPress={() => this.props.navi.navigate('Profile')}>
 							<View style={menuItemStyle}>
 								<Image 
@@ -67,7 +67,7 @@ class MenuItem extends Component {
 							</View>
 						</TouchableNativeFeedback>
 					</View>
-					<View style={{flexDirection: 'row', marginLeft: -4}}>
+					<View style={{flexDirection: 'row', marginLeft: -8, marginTop: 1}}>
 						<TouchableNativeFeedback onPress={() => this.props.navi.navigate('MemberList')}>
 							<View style={menuItemStyle}>
 								<Image 
@@ -122,8 +122,8 @@ const styles = {
 	menuItemStyle: {
 		borderRadius: 2,
 		elevation: 1,
-		marginLeft: 5,
-		marginTop: 10,
+		marginLeft: 10,
+		marginTop: -1,
 		marginBottom: 10,
 		width: 105,
 		height: 105,
