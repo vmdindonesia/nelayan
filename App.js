@@ -96,6 +96,7 @@ const Routes = StackNavigator({
     cardStyle: { backgroundColor: '#fafafa' },
     navigationOptions: {
       headerTitleStyle: {
+        flex: 1,
         alignSelf: 'center',
         color: '#fff',
         fontFamily: 'Muli-Bold',
