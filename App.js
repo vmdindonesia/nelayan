@@ -101,7 +101,6 @@ const Routes = StackNavigator({
         fontFamily: 'Muli-Bold',
         fontWeight: '300',
         textAlign: 'center',
-        flex: 1
       },
       headerStyle: {
         backgroundColor: COLOR.secondary_a,
