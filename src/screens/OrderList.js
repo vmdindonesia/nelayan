@@ -17,34 +17,42 @@ class OrderList extends Component {
 	}
 
 	imageIcon = (item, index) => {
-		if (index <= item.StatusHistories.length) {
-			switch (index) {
-				case 1:
-					return require('../../assets/status1f.png')
-				case 2:
-					return require('../../assets/status2f.png')
-				case 3:
-					return require('../../assets/status3f.png')
-				case 4:
-					return require('../../assets/status4f.png')
-				case 5:
-					return require('../../assets/status5f.png')
-				default:
-					return require('../../assets/status1f.png')
-			}
-		}
-		
 		switch (index) {
-			case 1:
+			case 1: {
+				let obj = item.StatusHistories.find(o => o.StatusId === 11)
+				if (obj) {
+					return require('../../assets/status1f.png')
+				}
 				return require('../../assets/status1.png')
-			case 2:
+			}
+			case 2: {
+				let obj = item.StatusHistories.find(o => o.StatusId === 12)
+				if (obj) {
+					return require('../../assets/status2f.png')
+				}
 				return require('../../assets/status2.png')
-			case 3:
+			}
+			case 3: {
+				let obj = item.StatusHistories.find(o => o.StatusId === 13)
+				if (obj) {
+					return require('../../assets/status3f.png')
+				}
 				return require('../../assets/status3.png')
-			case 4:
+			}
+			case 4: {
+				let obj = item.StatusHistories.find(o => o.StatusId === 14)
+				if (obj) {
+					return require('../../assets/status4f.png')
+				}
 				return require('../../assets/status4.png')
-			case 5:
+			}
+			case 5: {
+				let obj = item.StatusHistories.find(o => o.StatusId === 23)
+				if (obj) {
+					return require('../../assets/status5f.png')
+				}
 				return require('../../assets/status5.png')
+			}
 			default:
 				return require('../../assets/status1.png')
 		}
