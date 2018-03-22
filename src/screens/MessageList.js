@@ -18,6 +18,7 @@ class MessageList extends Component {
 	}
 
 	renderItem = (item) => {
+		console.log(item, 'Item Diskusi');
 		return (
 			<Card>
 				<TouchableNativeFeedback 

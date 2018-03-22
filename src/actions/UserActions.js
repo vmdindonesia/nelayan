@@ -17,7 +17,7 @@ export const login = (email, password) => {
 
 		const data = {email, password}
 
-		axios.post(`${BASE_URL}/login`, data)
+		axios.post(`${BASE_URL}/supplier/login`, data)
 		.then(response => loginSuccess(dispatch, response))
 		.catch(error => loginFail(dispatch, error))
 	}
