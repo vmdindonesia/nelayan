@@ -19,21 +19,23 @@ class FishLogList extends Component {
 
 	constructor(props) {
 		super(props)
-	
+
 		this.state = {
 			fishName: '',
-			fishes: []
+			fishes: [],
+			isDisable: false,
+			dateCompare: ''
 		}
 	}
 
 	componentWillMount() {
 		this.props.fishLogsFetch(this.props.user.token, '')
-
+		this.setState({ dateCompare: new Date() })
 		this.fetchProducts()
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({[name]: v})
+		this.setState({ [name]: v })
 
 		// search params
 		let params = `key=${v}`
@@ -44,41 +46,52 @@ class FishLogList extends Component {
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: {token},
+			headers: { token },
 			timeout: REQUEST_TIME_OUT
 		})
-		.then(response => {			
-			this.setState({fishes: response.data.data})
-		})
-		.catch(error => {
-			if (error.response) {
-				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-			}
-			else {
-				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-			}
-		})
+			.then(response => {
+				this.setState({ fishes: response.data.data })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+			})
 	}
 
 	renderItem = (item) => {
 		return (
 			<Card>
-				<TouchableNativeFeedback 
-					onPress={() => this.props.navigation.navigate('FishLogEdit', {id: item.id})}
+				<TouchableNativeFeedback
+					onPress={() => {
+						const dateNow = new Date();
+						const a = moment(item.createdAt).format('YYYY-MM-DD');
+						const b = moment(dateNow).format('YYYY-MM-DD');
+						if (a < b) {
+							ToastAndroid.show('Fislog tidak dapat di edit setelah 1x24 Jam', ToastAndroid.SHORT)
+						}
+						else if (a === b) {
+							this.props.navigation.navigate('FishLogEdit', { id: item.id })
+						}
+					}
+					}
 				>
 					<View style={styles.itemContainerStyle}>
 						<View style={styles.thumbnailContainerStyle}>
-							<Image 
+							<Image
 								style={styles.thumbnailStyle}
-								source={{uri: `${BASE_URL}/images/${item.photo}`}} 
+								source={{ uri: `${BASE_URL}/images/${item.photo}` }}
 							/>
 						</View>
 						<View style={styles.headerContentStyle}>
 							<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 							<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
-							<View style={{flexDirection: 'row'}}>
-								<Text style={{flex: 1}}>{item.quantity} Kg</Text>
-								<Text style={{flex: 1}}>{item.size} {item.unit || 'Unit'}</Text>
+							<View style={{ flexDirection: 'row' }}>
+								<Text style={{ flex: 1 }}>{numeral(item.quantity).format('0,0')} Kg</Text>
+								<Text style={{ flex: 1 }}>{numeral(item.size).format('0,0')} {item.unit || 'Unit'}</Text>
 							</View>
 							<Text>Rp {numeral(item.price).format('0,0')}</Text>
 						</View>
@@ -88,22 +101,22 @@ class FishLogList extends Component {
 		)
 	}
 
-	render() {	
+	render() {
 		const { fishName, fishes } = this.state
 		console.log(this.props.fishLogs.loading, 'loading fishlogs')
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{ flex: 1 }}>
 				<View style={styles.pickerContainer}>
 					<View style={styles.pickerStyle}>
-						<Icon name='md-search' size={24} style={{position: 'absolute', margin: 13}} />
+						<Icon name='md-search' size={24} style={{ position: 'absolute', margin: 13 }} />
 						<Picker
 							selectedValue={fishName}
 							onValueChange={v => this.onChangeInput('fishName', v)}
 						>
 							<Picker.Item label="       Cari Fishlog..." value="" />
 							{
-								fishes && fishes.map((item, index) => 
+								fishes && fishes.map((item, index) =>
 									<Picker.Item key={index} label={`       ${item.name}`} value={item.name} />
 								)
 							}
@@ -113,7 +126,7 @@ class FishLogList extends Component {
 
 				<FlatList
 					data={this.props.fishLogs.data}
-					renderItem={({item}) => this.renderItem(item)}
+					renderItem={({ item }) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
 					onRefresh={() => this.props.fishLogsFetch(this.props.user.token, '')}
 					refreshing={this.props.fishLogs.loading}
@@ -148,7 +161,7 @@ const styles = {
 		marginBottom: 10
 	},
 	itemContainerStyle: {
-		borderBottomWidth: 1, 
+		borderBottomWidth: 1,
 		justifyContent: 'flex-start',
 		flexDirection: 'row',
 		borderColor: '#ddd',
@@ -182,4 +195,4 @@ const mapStateToProps = state => {
 	return { fishLogs, user }
 }
 
-export default connect(mapStateToProps, {fishLogsFetch})(FishLogList)
+export default connect(mapStateToProps, { fishLogsFetch })(FishLogList)

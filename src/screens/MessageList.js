@@ -85,7 +85,6 @@ class MessageList extends Component {
 							</View>
 
 							<View style={styles.headerContentStyle}>
-								<Text style={{fontSize: 12}}>{moment().format('DD MMM YYYY, HH:mm')}</Text>
 								<Text style={styles.hedaerTextStyle}>
 									Admin Aruna
 								</Text>

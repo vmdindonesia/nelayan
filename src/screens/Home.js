@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, Image, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
+import { View, ScrollView, Text, Image, TouchableNativeFeedback, RefreshControl, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -22,7 +22,8 @@ class Home extends Component {
 
 		this.state = {
 			screen: 'MenuItem',
-			redirectToNotification: false
+			redirectToNotification: false,
+			refreshing: true
 		}
 	}
 
@@ -37,6 +38,7 @@ class Home extends Component {
 
 	componentDidMount() {
 		OneSignal.configure({})
+		this.setState({ refreshing: false });
 	}
 
 	componentWillUnmount() {
@@ -44,6 +46,16 @@ class Home extends Component {
 		OneSignal.removeEventListener('opened', this.onOpened)
 		OneSignal.removeEventListener('registered', this.onRegistered)
 		OneSignal.removeEventListener('ids', this.onIds)
+	}
+
+	onRefresh() {
+		this.setState({
+			refreshing: true
+		}, () => {
+			this.props.unreadNotifFetch(this.props.user.token);
+			console.log(this.props.user.data.pointNow, 'Point');
+			this.setState({ refreshing: false });
+		});
 	}
 
 	onReceived(notification) {
@@ -77,7 +89,7 @@ class Home extends Component {
 	render() {
 		const { screen } = this.state
 
-		console.log(this.props.user.unreadNotif, 'jumlah unread')
+		console.log(this.props.user.data, 'DATAAAAAAAAAAA')
 
 		// if (this.props.user.unreadNotif > 0 && redirectToNotification === false) {
 		// 	this.props.navigation.navigate('NotificationList')
@@ -237,46 +249,55 @@ class Home extends Component {
 							</TouchableOpacity>
 						</View>
 					</View>
-
-					<View style={headerHomeStyle}>
-						<View style={profileImageContainer}>
-							<Image
-								style={profileImage}
-								source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
+					<ScrollView
+						refreshControl={
+							<RefreshControl
+								refreshing={this.state.refreshing}
+								onRefresh={this.onRefresh.bind(this)}
 							/>
+						}
+					>
+						<View style={headerHomeStyle}>
+							<View style={profileImageContainer}>
+								<Image
+									style={profileImage}
+									source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
+								/>
+							</View>
+							<Text style={profileName}>{this.props.user.data.name}</Text>
+							<Text style={profileName}>{this.props.user.data.organization}</Text>
+							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
+								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+									<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5 }}>
+										<Image
+											style={coin}
+											source={require('../../assets/coin.png')}
+										/>
+										<Text style={point}>{this.props.user.data.pointNow}</Text>
+									</View>
+								</View>
+							</TouchableWithoutFeedback>
 						</View>
-						<Text style={profileName}>{this.props.user.data.name}</Text>
-						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-							<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-								<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5 }}>
-									<Image
-										style={coin}
-										source={require('../../assets/coin.png')}
-									/>
-									<Text style={point}>{this.props.user.data.pointNow}</Text>
+						<View style={menuContainerStyle}>
+							<View style={{ flexDirection: 'row' }}>
+								<View style={{ flex: 1 }}>
+									<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
+										<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
+											<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
+										</View>
+									</TouchableNativeFeedback>
+								</View>
+								<View style={{ flex: 1 }}>
+									<TouchableNativeFeedback onPress={() => this.setState({ screen: 'OrderList' })}>
+										<View style={screen === 'OrderList' ? tabContainerActive : tabContainer}>
+											<Text style={screen === 'OrderList' ? tabTextActive : tabText}>Transaksi</Text>
+										</View>
+									</TouchableNativeFeedback>
 								</View>
 							</View>
-						</TouchableWithoutFeedback>
-					</View>
-					<View style={menuContainerStyle}>
-						<View style={{ flexDirection: 'row' }}>
-							<View style={{ flex: 1 }}>
-								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
-									<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
-										<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
-									</View>
-								</TouchableNativeFeedback>
-							</View>
-							<View style={{ flex: 1 }}>
-								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'OrderList' })}>
-									<View style={screen === 'OrderList' ? tabContainerActive : tabContainer}>
-										<Text style={screen === 'OrderList' ? tabTextActive : tabText}>Transaksi</Text>
-									</View>
-								</TouchableNativeFeedback>
-							</View>
+							{this.renderScreen()}
 						</View>
-						{this.renderScreen()}
-					</View>
+					</ScrollView>
 				</DrawerLayoutAndroid>
 			</View>
 		)

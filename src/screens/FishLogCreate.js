@@ -340,7 +340,7 @@ class FishLogCreate extends Component {
 						<Input
 							label="Jumlah"
 							keyboardType="numeric"
-							value={quantity}
+							value={numeral(parseInt(quantity, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('quantity', v)}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
@@ -349,7 +349,7 @@ class FishLogCreate extends Component {
 						<Input
 							label="Ukuran"
 							keyboardType="numeric"
-							value={size}
+							value={numeral(parseInt(size, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('size', v)}
 						/>
 						<View style={{marginTop: 50, marginLeft: 10, flex: 1}}>
@@ -369,7 +369,7 @@ class FishLogCreate extends Component {
 						<Input
 							label="Harga/Kg"
 							keyboardType="numeric"
-							value={price ? numeral(parseInt(price)).format('0,0') : ''}
+							value={price ? numeral(parseInt(price, 0)).format('0,0') : ''}
 							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
 						/>
 					</ContainerSection>

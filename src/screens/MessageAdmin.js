@@ -21,6 +21,7 @@ class MessageAdmin extends Component {
 			loading: true,
 			data: {},
 			text: '',
+			textTemp: '',
 		}
 	}
 
@@ -33,7 +34,9 @@ class MessageAdmin extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({[name]: v})
+		this.setState({ [name]: v }, () => {
+			this.setState({ text: this.state.textTemp })
+		})
 	}
 
 	fetchMessage = () => {
@@ -87,7 +90,7 @@ class MessageAdmin extends Component {
 	}
 
 	render() {
-		const { loading, data, text } = this.state
+		const { loading, data, textTemp } = this.state
 		console.log(data)
 
 		if (loading) {
@@ -127,17 +130,17 @@ class MessageAdmin extends Component {
 				<View style={styles.send}>
 					<ContainerSection>
 						<Input
-							onChangeText={val => this.onChangeInput('text', val)}
+							onChangeText={val => this.onChangeInput('textTemp', val)}
 							placeholder="Tulis Pesan..."
-							value={text}
+							value={textTemp}
 							multiline
 						/>
 						<TouchableOpacity 
-							disabled={text === ''} 
-							onPress={() => this.postMessage()}
+							disabled={textTemp === ''} 
+							onPress={() => this.setState({ textTemp: ''}, () => { this.postMessage() })}
 						>
 							<View style={{marginLeft: 10}}>
-								<Icon size={46} color={text === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
+								<Icon size={46} color={textTemp === '' ? '#eaeaea' : COLOR.secondary_a} name="md-send" />
 							</View>
 						</TouchableOpacity>
 					</ContainerSection>

@@ -24,7 +24,8 @@ class FishLogEdit extends Component {
 								'Yakin batal mengubah fishlog?',
 								[
 									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-									{text: 'Ya', onPress: () => {
+									{text: 'Ya', 
+									onPress: () => {
 										navigation.setParams({change: false})
 										navigation.goBack()
 									}},
@@ -71,7 +72,8 @@ class FishLogEdit extends Component {
 					'Yakin batal mengubah fishlog?',
 					[
 						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-						{text: 'Ya', onPress: () => {
+						{text: 'Ya', 
+						onPress: () => {
 							this.props.navigation.setParams({change: false})
 							this.props.navigation.goBack()
 						}},
@@ -360,7 +362,7 @@ class FishLogEdit extends Component {
 						<Input
 							label="Jumlah"
 							keyboardType="numeric"
-							value={data.quantity && data.quantity.toString()}
+							value={numeral(parseInt(data.quantity, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('quantity', v)}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
@@ -369,7 +371,7 @@ class FishLogEdit extends Component {
 						<Input
 							label="Ukuran"
 							keyboardType="numeric"
-							value={data.size && data.size.toString()}
+							value={numeral(parseInt(data.size, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('size', v)}
 						/>
 						<View style={{marginTop: 50, marginLeft: 10, flex: 1}}>
@@ -389,7 +391,7 @@ class FishLogEdit extends Component {
 						<Input
 							label="Harga/Kg"
 							keyboardType="numeric"
-							value={data.price ? numeral(parseInt(data.price)).format('0,0') : ''}
+							value={data.price ? numeral(parseInt(data.price, 0)).format('0,0') : ''}
 							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
 						/>
 					</ContainerSection>
