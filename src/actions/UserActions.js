@@ -1,6 +1,7 @@
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { AsyncStorage } from 'react-native'
+import OneSignal from 'react-native-onesignal';
 import { BASE_URL } from '../constants'
 import {
 	USER_LOADING,
@@ -24,7 +25,7 @@ export const login = (email, password) => {
 }
 
 export const logout = (callback) => {
-	AsyncStorage.removeItem('token').then(console.log('token terhapus'))
+	AsyncStorage.removeItem('token').then(OneSignal.deleteTag('userid'))
 
 	callback()
 

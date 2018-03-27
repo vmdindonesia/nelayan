@@ -211,7 +211,7 @@ class OrderDetail extends Component {
 			}
 		}
 
-		ImagePicker.launchCamera(options, (response) => {
+		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);
 
 			if (response.didCancel) {

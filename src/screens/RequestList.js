@@ -12,25 +12,46 @@ class RequestList extends Component {
 		headerRight: <View />
 	}
 
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			lengthData: '',
+			anyData: true,
+			noListData: null
+		};
+	}
+
 	componentWillMount() {
 		this.props.requestsFetch(this.props.user.token)
 	}
 
+	componentWillReceiveProps() {
+		setTimeout(() => {
+			console.log(this.props.requests.data.length, 'Data');
+			this.setState({ lengthData: this.props.requests.data.length })
+			if (this.state.lengthData === 0) {
+				this.setState({ noListData: true })
+			}
+		});
+	}
+
+
 	renderItem = (item) => {
 		return (
 			<TouchableNativeFeedback
-				onPress={() => this.props.navigation.navigate('RequestDetail', {id: item.id})}
+				onPress={() => this.props.navigation.navigate('RequestDetail', { id: item.id })}
 			>
 				<View>
-					<Card style={{backgroundColor: item.StatusId === 3 ? '#d0d0d0b3' : '#fff'}}>
-						<CardSection style={{flexDirection: 'row'}}>
-							<View style={{flexDirection: 'column'}}>
-								<Image 
+					<Card style={{ backgroundColor: item.StatusId === 3 ? '#d0d0d0b3' : '#fff' }}>
+						<CardSection style={{ flexDirection: 'row' }}>
+							<View style={{ flexDirection: 'column' }}>
+								<Image
 									style={styles.thumbnailStyle}
-									source={{uri: `${BASE_URL}/images/${item.Transaction.photo}`}} 
+									source={{ uri: `${BASE_URL}/images/${item.Transaction.photo}` }}
 								/>
 							</View>
-							<View style={{justifyContent: 'space-around', flex: 1}}>
+							<View style={{ justifyContent: 'space-around', flex: 1 }}>
 								<View>
 									<Text style={styles.buyerName}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 									<Text style={styles.productName}>{item.Transaction.Fish.name}</Text>
@@ -48,21 +69,46 @@ class RequestList extends Component {
 	}
 
 	render() {
+		const { noListData, anyData } = this.state;
 		return (
-			<View style={{flex: 1}}>
-				<FlatList
-					data={this.props.requests.data}
-					renderItem={({item}) => this.renderItem(item)}
-					keyExtractor={(item, index) => index}
-					onRefresh={() => this.props.requestsFetch(this.props.user.token)}
-					refreshing={this.props.requests.loading}
-				/>
+			<View style={{ flex: 1 }}>
+				{
+					anyData ?
+						<FlatList
+							data={this.props.requests.data}
+							renderItem={({ item }) => this.renderItem(item)}
+							keyExtractor={(item, index) => index}
+							onRefresh={() => this.props.requestsFetch(this.props.user.token)}
+							refreshing={this.props.requests.loading}
+						/>
+						:
+						<View />
+				}
+				{
+					noListData ?
+						<View style={{ flex: 1, marginTop: '-60%' }}>
+							<View style={styles.thumbnailContainerStyle}>
+								<Image
+									style={styles.thumbnailStyle}
+									source={require('./../../assets/empty_transaksi.png')}
+								/>
+							</View>
+							<Text style={{ textAlign: 'center' }}>Belum ada PO</Text>
+						</View>
+						:
+						<View />
+				}
 			</View>
 		)
 	}
 }
 
 const styles = {
+	thumbnailContainerStyle: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		margin: 10,
+	},
 	thumbnailStyle: {
 		height: 100,
 		width: 100,
@@ -84,5 +130,5 @@ const mapStateToProps = state => {
 	return { requests, user }
 }
 
-export default connect(mapStateToProps, {requestsFetch})(RequestList)
+export default connect(mapStateToProps, { requestsFetch })(RequestList)
 

@@ -197,6 +197,7 @@ class Home extends Component {
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={() => this.props.logout(() => {
+							OneSignal.deleteTag('userid')
 							const resetAction = NavigationActions.reset({
 								index: 0,
 								actions: [

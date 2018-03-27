@@ -24,7 +24,8 @@ class FishLogList extends Component {
 			fishName: '',
 			fishes: [],
 			isDisable: false,
-			dateCompare: ''
+			dateCompare: '',
+			paramsKey: ''
 		}
 	}
 
@@ -38,7 +39,8 @@ class FishLogList extends Component {
 		this.setState({ [name]: v })
 
 		// search params
-		let params = `key=${v}`
+		let params = `key=${v}`;
+		this.setState({ paramsKey: `key=${v}` })
 		this.props.fishLogsFetch(this.props.user.token, params)
 	}
 
@@ -128,7 +130,7 @@ class FishLogList extends Component {
 					data={this.props.fishLogs.data}
 					renderItem={({ item }) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
-					onRefresh={() => this.props.fishLogsFetch(this.props.user.token, '')}
+					onRefresh={() => this.props.fishLogsFetch(this.props.user.token, this.state.paramsKey)}
 					refreshing={this.props.fishLogs.loading}
 				/>
 
