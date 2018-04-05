@@ -135,7 +135,7 @@ class Home extends Component {
 			},
 			{
 				label: 'Official Store',
-				icon: require('../../assets/menu6_white.png'),
+				icon: require('../../assets/OS.png'),
 				screen: 'Store'
 			}
 		]

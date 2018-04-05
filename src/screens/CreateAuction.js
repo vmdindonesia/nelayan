@@ -8,7 +8,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { setUserToken } from '../actions'
 import { BASE_URL, COLOR } from '../constants'
-import { ContainerSection, Input, Spinner, InputDate, Button } from '../components/common'
+import { ContainerSection, Input, Spinner, InputDate, Button, InputNumber } from '../components/common'
 import AutoComplete from './../components/AutoComplete';
 
 class CreateAuction extends Component {
@@ -25,7 +25,7 @@ class CreateAuction extends Component {
 			suggestions: [],
 			value: '',
 			FishId: '',
-			unitFish: '',
+			unitFish: 'Kg',
 			isDisabled: false,
 			valueCity: '',
 			loadingCity: null,
@@ -41,12 +41,30 @@ class CreateAuction extends Component {
 			quantity: '',
 			dating: '',
 			temp: '',
-			data: ''
+			data: '',
+			dataParsing: '',
+			isShow: null
 		}
 	}
 
 	componentWillMount() {
-		return this.getData();
+		if (this.props.navigation.state.params === undefined) {
+			this.setState({
+				isShow: true
+			}, () => {
+				return this.getData();
+			});
+		} else {
+			this.setState({
+				dataParsing: this.props.navigation.state.params.datax
+			}, () => {
+				this.setState({
+					photo: this.state.dataParsing.Fish.photo,
+					FishId: this.state.dataParsing.Fish.id,
+					isShow: false
+				});
+			});
+		}
 	}
 
 
@@ -295,6 +313,7 @@ class CreateAuction extends Component {
 				this.props.navigation.dispatch(resetAction)
 			})
 			.catch(error => {
+				console.log(error.message.data, 'Error');
 				this.setState({ loader: false });
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
@@ -319,7 +338,9 @@ class CreateAuction extends Component {
 			dateStart,
 			dateEnd,
 			quantity,
-			data
+			data,
+			isShow,
+			dataParsing
 		} = this.state;
 		return (
 			<View style={styles.containerStyle}>
@@ -327,39 +348,69 @@ class CreateAuction extends Component {
 					<View style={styles.card}>
 						<ContainerSection>
 							<View style={styles.thumbnailContainerStyle}>
-								<TouchableOpacity onPress={this.takePhoto.bind(this)}>
-									<View>
-										{this.state.photo === null ?
-											<Image
-												style={styles.thumbnailStyle}
-												source={require('./../../assets/ic_add_a_photo.png')}
-												resizeMode='contain'
-											/>
+								<View>
+									{
+										this.state.photo === null ?
+											<TouchableOpacity onPress={this.takePhoto.bind(this)}>
+												<Image
+													style={styles.thumbnailStyle}
+													source={require('./../../assets/ic_add_a_photo.png')}
+													resizeMode='contain'
+												/>
+											</TouchableOpacity>
 											:
-											<Image style={{ marginLeft: '17%', height: 110, width: 95, borderRadius: 10 }} source={this.state.photo} />
-										}
-									</View>
-								</TouchableOpacity>
+											<View>
+												{
+													isShow ?
+														<TouchableOpacity onPress={this.takePhoto.bind(this)}>
+															<Image
+																style={{ marginLeft: '17%', height: 110, width: 95, borderRadius: 10 }}
+																source={this.state.photo}
+																resizeMode='contain'
+															/>
+														</TouchableOpacity>
+														:
+														<Image
+															style={{ marginLeft: '17%', height: 110, width: 95, borderRadius: 10 }}
+															source={{ uri: `${BASE_URL}/images/${this.state.photo}` }}
+															resizeMode='contain'
+														/>
+												}
+											</View>
+									}
+								</View>
 							</View>
 							<View style={styles.headerContentStyle}>
-								<ContainerSection>
-									<View style={{ flex: 1, borderColor: '#a9a9a9', borderRadius: 5, borderWidth: 1, height: 47 }}>
-										<Picker
-											selectedValue={unitFish}
-											onValueChange={v => this.onChangeInput('unitFish', v)}
+								{
+									isShow ?
+										<ContainerSection>
+											<View style={{ flex: 1, borderColor: '#a9a9a9', borderRadius: 5, borderWidth: 1, height: 47 }}>
+												<Picker
+													selectedValue={unitFish}
+													onValueChange={v => this.onChangeInput('unitFish', v)}
+												>
+													<Picker.Item label='Pilih Komoditas' value='' />
+													{
+														data ?
+															data.Products && data.Products.map((item, index) =>
+																<Picker.Item key={index} label={item.Fish.name} value={item.Fish.id} />
+															)
+															:
+															<View />
+													}
+												</Picker>
+											</View>
+										</ContainerSection>
+										:
+										<View
+											style={{
+												paddingLeft: -100,
+												marginLeft: -100
+											}}
 										>
-											<Picker.Item label='Pilih Komoditas' value='' />
-											{
-												data ?
-													data.Products && data.Products.map((item, index) =>
-														<Picker.Item key={index} label={item.Fish.name} value={item.Fish.id} />
-													)
-													:
-													<View />
-											}
-										</Picker>
-									</View>
-								</ContainerSection>
+											<Text style={{ fontSize: 20, color: COLOR.secondary_a }}>{dataParsing.Fish.name === undefined ? '' : dataParsing.Fish.name}</Text>
+										</View>
+								}
 								<ContainerSection>
 									<Input
 										placeholder='Kuantitas'
@@ -416,42 +467,70 @@ class CreateAuction extends Component {
 					<View style={styles.card}>
 						<View style={{ margin: 10 }}>
 							<ContainerSection>
-								<Input
-									label='Harga Pembuka'
-									placeholder='Rp. 1.000.000'
-									value={openPrice ? numeral(parseInt(openPrice, 0)).format('0,0') : ''}
-									onChangeText={v => this.onChangeInput('openPrice', v)}
-								/>
-								<View style={{ flex: 1 }}>
-									<Input
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<InputNumber
+										label='Harga Pembuka'
+										icon="minus"
+										icons="plus"
+										placeholder='Rp. 1.000.000'
+										value={openPrice ? numeral(parseInt(openPrice, 0)).format('0,0') : ''}
+										onChangeText={v => this.onChangeInput('openPrice', v)}
+									/>
+									<Image
+										style={{ width: 20, height: 20, marginTop: '32%', marginLeft: '2%', marginRight: '5%' }}
+										source={require('./../../assets/Group.png')}
+										resizeMode='contain'
+									/>
+								</View>
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<InputNumber
 										label='Kelipatan'
+										icon="minus"
+										icons="plus"
 										placeholder='Rp. 1.000.000'
 										value={IncrementPrice ? numeral(parseInt(IncrementPrice, 0)).format('0,0') : ''}
 										onChangeText={v => this.onChangeInput('IncrementPrice', v)}
 									/>
+									<Image
+										style={{ width: 20, height: 20, marginTop: '32%', marginLeft: '2%', marginRight: '5%' }}
+										source={require('./../../assets/Group.png')}
+										resizeMode='contain'
+									/>
 								</View>
 							</ContainerSection>
 							<ContainerSection style={{ paddingBottom: 10 }}>
-								<InputDate
-									label='Tanggal Mulai'
-									value={dateStart}
-									onChangeText={v => this.onChangeInput('dateStart', v)}
-									onFocus={() => this.datePicker('dateStart')}
-									icon={'icon_date'}
-								/>
-								<InputDate
-									label='Tanggal Selesai'
-									value={dateEnd}
-									onChangeText={v => this.onChangeInput('dateEnd', v)}
-									onFocus={() => this.datePicker('dateEnd')}
-									icon={'icon_date'}
-								/>
-								<DateTimePicker
-									isVisible={this.state.PickerDate}
-									onConfirm={this.handleDatePicked}
-									onCancel={this.hideDatePicker}
-									minimumDate={new Date()}
-								/>
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<InputDate
+										label='Tanggal Mulai'
+										value={dateStart}
+										onChangeText={v => this.onChangeInput('dateStart', v)}
+										onFocus={() => this.datePicker('dateStart')}
+									/>
+									<Image
+										style={{ width: 20, height: 20, marginTop: '32%', marginLeft: '2%', marginRight: '5%' }}
+										source={require('./../../assets/icon_date.png')}
+										resizeMode='contain'
+									/>
+								</View>
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<InputDate
+										label='Tanggal Selesai'
+										value={dateEnd}
+										onChangeText={v => this.onChangeInput('dateEnd', v)}
+										onFocus={() => this.datePicker('dateEnd')}
+									/>
+									<DateTimePicker
+										isVisible={this.state.PickerDate}
+										onConfirm={this.handleDatePicked}
+										onCancel={this.hideDatePicker}
+										minimumDate={new Date()}
+									/>
+									<Image
+										style={{ width: 20, height: 20, marginTop: '32%', marginLeft: '2%', marginRight: '5%' }}
+										source={require('./../../assets/icon_date.png')}
+										resizeMode='contain'
+									/>
+								</View>
 							</ContainerSection>
 							<ContainerSection>
 								<View />

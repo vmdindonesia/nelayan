@@ -11,7 +11,7 @@ import { Card, CardSection, ContainerSection, Button } from '../components/commo
 
 class ListAuction extends Component {
     static navigationOptions = {
-        title: 'Official Store',
+        title: 'Daftar Lelang',
         headerRight: <View />
     }
 
@@ -164,13 +164,15 @@ class ListAuction extends Component {
     render() {
         return (
             <View style={styles.containerStyle}>
-                <FlatList
-                    data={this.state.listAuction}
-                    renderItem={({ item }) => this.renderList(item)}
-                    keyExtractor={(item, index) => index}
-                    refreshing={this.state.refresh}
-                    onRefresh={() => this.handleRefresh()}
-                />
+                <View style={{ marginTop: '3%' }}>
+                    <FlatList
+                        data={this.state.listAuction}
+                        renderItem={({ item }) => this.renderList(item)}
+                        keyExtractor={(item, index) => index}
+                        refreshing={this.state.refresh}
+                        onRefresh={() => this.handleRefresh()}
+                    />
+                </View>
             </View>
         )
     }

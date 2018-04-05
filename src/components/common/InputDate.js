@@ -58,7 +58,7 @@ class InputDate extends Component {
 					/>
 
 					{
-						icon ? <Image source={this.imageIcon(icon)} style={{width: 24, height: 24}} /> : <View />
+						icon ? <Image source={this.imageIcon(icon)} style={{width: 24, height: 24, marginRight: '2%'}} /> : <View />
 					}
 					
 				</View>
