@@ -16,37 +16,37 @@ class InputNumber extends Component {
 		})
 	}
 
-	minus = () => {
-		console.log('PROPS MINUS');
-		// this.props.isMinus();
-	}
+	// minus = () => {
+	// 	console.log('PROPS MINUS');
+	// 	// this.props.isMinus();
+	// }
 
-	plus = () => {
-		console.log('PROPS PLUS');
-		// this.props.isPlus();
-	}
+	// plus = () => {
+	// 	console.log('PROPS PLUS');
+	// 	// this.props.isPlus();
+	// }
 
-	imageIcon = (icon) => {
-		switch (icon) {
-			case 'minus':
-				return require('./../../../assets/minus.png')
-			case 'plus':
-				return require('./../../../assets/plus.png')
-			default:
-				return require('./../../../assets/plus.png')
-		}
-	}
+	// imageIcon = (icon) => {
+	// 	switch (icon) {
+	// 		case 'minus':
+	// 			return require('./../../../assets/minus.png')
+	// 		case 'plus':
+	// 			return require('./../../../assets/plus.png')
+	// 		default:
+	// 			return require('./../../../assets/plus.png')
+	// 	}
+	// }
 
-	imageIcons = (icons) => {
-		switch (icons) {
-			case 'minus':
-				return require('./../../../assets/minus.png')
-			case 'plus':
-				return require('./../../../assets/plus.png')
-			default:
-				return require('./../../../assets/plus.png')
-		}
-	}
+	// imageIcons = (icons) => {
+	// 	switch (icons) {
+	// 		case 'minus':
+	// 			return require('./../../../assets/minus.png')
+	// 		case 'plus':
+	// 			return require('./../../../assets/plus.png')
+	// 		default:
+	// 			return require('./../../../assets/plus.png')
+	// 	}
+	// }
 
 	render() {
 		const { label, value, onChangeText, placeholder, onFocus, secureTextEntry, keyboardType, multiline, lines, editable, icon, icons, textAlignVertical } = this.props
@@ -62,7 +62,7 @@ class InputNumber extends Component {
 				}
 
 				<View style={{ ...styles.formWrapper, ...((editable === false) ? styles.lockedForm : {}), ...((this.state.isFocus === true) ? styles.onFocus : {}) }}>
-					{
+					{/* {
 						icon ?
 							<TouchableNativeFeedback
 								onPress={() => this.minus(props)}
@@ -71,7 +71,7 @@ class InputNumber extends Component {
 							</TouchableNativeFeedback>
 							:
 							<View />
-					}
+					} */}
 					<TextInput
 						secureTextEntry={secureTextEntry}
 						placeholder={placeholder}
@@ -88,7 +88,7 @@ class InputNumber extends Component {
 						numberOfLines={lines || 1}
 						textAlignVertical={textAlignVertical}
 					/>
-					{
+					{/* {
 						icons ?
 							<TouchableNativeFeedback
 								onPress={() => this.plus(props)}
@@ -97,7 +97,7 @@ class InputNumber extends Component {
 							</TouchableNativeFeedback>
 							:
 							<View />
-					}
+					} */}
 				</View>
 			</View>
 		)

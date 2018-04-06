@@ -4,11 +4,12 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import ImagePicker from 'react-native-image-picker';
+import { NavigationActions } from 'react-navigation'
 import moment from 'moment';
 import numeral from 'numeral';
 import { setUserToken } from '../actions'
 import { BASE_URL, COLOR } from '../constants'
-import { ContainerSection, Input, Spinner, InputDate, Button, InputNumber } from '../components/common'
+import { ContainerSection, Input, Spinner, InputDate, Button } from '../components/common'
 import AutoComplete from './../components/AutoComplete';
 
 class CreateAuction extends Component {
@@ -42,8 +43,7 @@ class CreateAuction extends Component {
 			dating: '',
 			temp: '',
 			data: '',
-			dataParsing: '',
-			isShow: null
+			dataParsing: ''
 		}
 	}
 
@@ -59,9 +59,7 @@ class CreateAuction extends Component {
 				dataParsing: this.props.navigation.state.params.datax
 			}, () => {
 				this.setState({
-					photo: this.state.dataParsing.Fish.photo,
 					FishId: this.state.dataParsing.Fish.id,
-					isShow: false
 				});
 			});
 		}
@@ -69,7 +67,9 @@ class CreateAuction extends Component {
 
 
 	onChangeInput = (name, v) => {
-		this.setState({ [name]: v });
+		this.setState({ [name]: v }, () => {
+			console.log([name], 'STATE', v, 'VALUE');
+		});
 	}
 
 
@@ -78,6 +78,12 @@ class CreateAuction extends Component {
 			suggestionsCity: [],
 			idCity: item.id,
 			valueCity: item.name
+		})
+	}
+
+	onFishSelected = (item) => {
+		this.setState({
+			FishId: item.Fish.id
 		})
 	}
 
@@ -284,18 +290,18 @@ class CreateAuction extends Component {
 		dataAuction.append('endDate', IncrementPrice);
 		dataAuction.append('address', IncrementPrice);
 		dataAuction.append('photo', {
-			uri: photo,
+			uri: photo.uri,
 			type: 'image/jpeg',
 			name: 'auction.png'
 		});
 
-		const token = this.props.user.token
-
+		const token = this.props.user.token;
+		console.log(token, 'Token');
+		console.log(dataAuction, 'Data');
 		axios.post(`${BASE_URL}/supplier/auctions`,
 			dataAuction
 			, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
 					token
 				}
 			}).then(response => {
@@ -328,7 +334,7 @@ class CreateAuction extends Component {
 	render() {
 		const {
 			loader,
-			unitFish,
+			FishId,
 			address,
 			suggestionsCity,
 			valueCity,
@@ -360,22 +366,13 @@ class CreateAuction extends Component {
 											</TouchableOpacity>
 											:
 											<View>
-												{
-													isShow ?
-														<TouchableOpacity onPress={this.takePhoto.bind(this)}>
-															<Image
-																style={{ marginLeft: '17%', height: 110, width: 95, borderRadius: 10 }}
-																source={this.state.photo}
-																resizeMode='contain'
-															/>
-														</TouchableOpacity>
-														:
-														<Image
-															style={{ marginLeft: '17%', height: 110, width: 95, borderRadius: 10 }}
-															source={{ uri: `${BASE_URL}/images/${this.state.photo}` }}
-															resizeMode='contain'
-														/>
-												}
+												<TouchableOpacity onPress={this.takePhoto.bind(this)}>
+													<Image
+														style={{ marginLeft: '17%', height: 110, width: 95, borderRadius: 10 }}
+														source={this.state.photo}
+														resizeMode='contain'
+													/>
+												</TouchableOpacity>
 											</View>
 									}
 								</View>
@@ -385,9 +382,13 @@ class CreateAuction extends Component {
 									isShow ?
 										<ContainerSection>
 											<View style={{ flex: 1, borderColor: '#a9a9a9', borderRadius: 5, borderWidth: 1, height: 47 }}>
+												{/* <TouchableOpacity
+													key={item.id}
+													onPress={() => this.onFishSelected(item)}
+												> */}
 												<Picker
-													selectedValue={unitFish}
-													onValueChange={v => this.onChangeInput('unitFish', v)}
+													selectedValue={FishId}
+													onValueChange={v => this.onChangeInput('FishId', v)}
 												>
 													<Picker.Item label='Pilih Komoditas' value='' />
 													{
@@ -399,6 +400,7 @@ class CreateAuction extends Component {
 															<View />
 													}
 												</Picker>
+												{/* </TouchableOpacity> */}
 											</View>
 										</ContainerSection>
 										:
@@ -468,13 +470,12 @@ class CreateAuction extends Component {
 						<View style={{ margin: 10 }}>
 							<ContainerSection>
 								<View style={{ flex: 1, flexDirection: 'row' }}>
-									<InputNumber
+									<Input
 										label='Harga Pembuka'
-										icon="minus"
-										icons="plus"
 										placeholder='Rp. 1.000.000'
+										keyboardType="numeric"
 										value={openPrice ? numeral(parseInt(openPrice, 0)).format('0,0') : ''}
-										onChangeText={v => this.onChangeInput('openPrice', v)}
+										onChangeText={v => this.onChangeInput('openPrice', v.replace(/\./g, ''))}
 									/>
 									<Image
 										style={{ width: 20, height: 20, marginTop: '32%', marginLeft: '2%', marginRight: '5%' }}
@@ -483,13 +484,12 @@ class CreateAuction extends Component {
 									/>
 								</View>
 								<View style={{ flex: 1, flexDirection: 'row' }}>
-									<InputNumber
+									<Input
 										label='Kelipatan'
-										icon="minus"
-										icons="plus"
 										placeholder='Rp. 1.000.000'
+										keyboardType="numeric"
 										value={IncrementPrice ? numeral(parseInt(IncrementPrice, 0)).format('0,0') : ''}
-										onChangeText={v => this.onChangeInput('IncrementPrice', v)}
+										onChangeText={v => this.onChangeInput('IncrementPrice', v.replace(/\./g, ''))}
 									/>
 									<Image
 										style={{ width: 20, height: 20, marginTop: '32%', marginLeft: '2%', marginRight: '5%' }}

@@ -19,7 +19,7 @@ class OfficialStore extends Component {
                 }}
             >
                 <View>
-                    <Icon style={{ color: '#fff', alignSelf: 'flex-end' }} st name="md-list" size={24} />
+                    <Icon style={{ color: '#fff', paddingRight: '-30%' }} st name="md-list" size={24} />
                 </View>
             </TouchableOpacity>
     })
@@ -57,7 +57,7 @@ class OfficialStore extends Component {
             })
             .catch(error => {
                 if (error.response) {
-                    alert(error.response.data.message)
+                    alert(error.response.message)
                 }
                 else {
                     alert('Koneksi internet bermasalah')
@@ -121,9 +121,9 @@ class OfficialStore extends Component {
                 />
 
                 {
-                    isOfficial === null || isOfficial === undefined ?
+                    isOfficial !== null ?
                         <View style={{ paddingTop: 50 }}>
-                            <Text style={{ fontSize: '20', textAlign: 'center' }}>Maaf, Anda belum terpilih menjadi Official Store.</Text>
+                            <Text style={{ fontSize: 20, textAlign: 'center' }}>Maaf, Anda belum terpilih menjadi Official Store.</Text>
                         </View>
                         :
                         <View style={{ flex: 1 }}>
