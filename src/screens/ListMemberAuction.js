@@ -8,7 +8,7 @@ import { setUserToken } from '../actions'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, ContainerSection, Button } from '../components/common'
 
-class ListAuction extends Component {
+class ListMemberAuction extends Component {
     static navigationOptions = {
         title: 'Riwayat Lelang',
         headerRight: <View />
@@ -18,99 +18,56 @@ class ListAuction extends Component {
         super(props)
 
         this.state = {
-            listAuction: '',
+            listMemberAuction: '',
             refresh: true,
-            timeEnd: '',
-
-            day: '',
-            hour: '',
-            minute: '',
-            second: '',
-
-
-            not: null,
-            work: null,
-            done: null
         }
     }
 
     componentWillMount() {
-        return this.getData();
-    }
-
-
-    getData() {
-        const token = this.props.user.token
-        axios.get(`${BASE_URL}/supplier/auctions`, {
-            headers: { token },
-            timeout: REQUEST_TIME_OUT
-        })
-            .then(response => {
-                this.setState({ listAuction: response.data.data, refresh: false })
-                console.log(response.data.data, 'Data List Auction')
-            })
-            .catch(error => {
-                console.log(error, 'Error');
-                if (error.response) {
-                    alert(error.response.data.message)
-                }
-                else {
-                    alert('Koneksi internet bermasalah')
-                }
-                this.setState({ refresh: false })
-            })
-    }
-
-    handleRefresh = () => {
-        console.log('Refresh');
+        console.log(this.props.navigation.state.params.dataMember, 'Member');
         this.setState({
-            refresh: true
+            listMemberAuction: this.props.navigation.state.params.dataMember.AuctionHistories
         }, () => {
-            console.log('Fetch Again');
-            this.getData();
+            console.log(this.state.listMemberAuction, 'Data Member');
         })
     }
 
     renderList = (item) => {
+        console.log(item, 'ITEM BOS');
+        console.log(item.Buyer.organizationType, 'ASDASDASDASD');
         return (
-            <TouchableNativeFeedback
-                key={item.id}
-                onPress={() => {
-                    const { navigate } = this.props.navigation
-                    navigate('DetailAuctions', { idBos: item.id });
-                }}
-            >
-                <View style={styles.card}>
+            <View style={styles.card}>
+                <View style={{ flexDirection: 'row' }}>
                     <View style={styles.thumbnailContainerStyle}>
                         <Image
-                            style={styles.image}
-                            source={{ uri: `${BASE_URL}/images/${item.Fish.photo}` }}
-                            resizeMode='contain'
+                            style={styles.imageBuyer}
+                            source={{ uri: `${BASE_URL}/images/${item.Buyer.photo}` }}
                         />
                     </View>
                     <View style={styles.headerContentStyle}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontSize: 18, color: COLOR.secondary_a, flex: 1 }}>{item.Fish.name}</Text>
-                            <Text style={{ marginTop: 4, flex: 1 }}>{moment(item.startDate).format('HH : mm : ss')}</Text>
+                            <Text style={{ marginTop: 4, flex: 1, color: COLOR.secondary_a, fontSize: 15 }}>{item.Buyer.organizationType + item.Buyer.organization}</Text>
                         </View>
-                        <Text>Rp. {numeral(parseInt(item.openingPrice, 0)).format('0,0')}</Text>
-                        <Text>{item.countBid} Tawaran</Text>
+                        <View style={{ flexDirection: 'column', paddingTop: 5 }}>
+                            <Text>Rp. {numeral(parseInt(item.bidAmount, 0)).format('0,0')}</Text>
+                            <Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+                        </View>
                     </View>
                 </View>
-            </TouchableNativeFeedback>
+            </View>
         );
     }
 
 
     render() {
+        const { listMemberAuction } = this.state;
+        console.log(listMemberAuction, 'AWAL DATA');
         return (
             <View style={styles.containerStyle}>
                 <FlatList
-                    data={this.state.listAuction}
+                    data={listMemberAuction}
                     renderItem={({ item }) => this.renderList(item)}
                     keyExtractor={(item, index) => index}
-                    refreshing={this.state.refresh}
-                    onRefresh={() => this.handleRefresh()}
                 />
             </View>
         )
@@ -148,8 +105,7 @@ const styles = {
         borderRadius: 4
     },
     headerContentStyle: {
-        flex: 1,
-        margin: 13,
+        width: '100%',
         flexDirection: 'column',
         justifyContent: 'space-around'
     },
@@ -157,6 +113,11 @@ const styles = {
         marginTop: 14,
         fontSize: 14,
         fontWeight: 'bold',
+    },
+    imageBuyer: {
+        height: 100,
+        width: 100,
+        borderRadius: 50,
     },
 }
 
@@ -166,4 +127,4 @@ const mapStateToProps = state => {
     return { user }
 }
 
-export default connect(mapStateToProps, { setUserToken })(ListAuction)
+export default connect(mapStateToProps, { setUserToken })(ListMemberAuction)

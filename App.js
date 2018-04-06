@@ -42,6 +42,8 @@ import CreateAuction from './src/screens/CreateAuction'
 import OfficialStore from './src/screens/OfficialStore'
 import PreviewPhoto from './src/screens/PreviewPhoto'
 import ListAuction from './src/screens/ListAuction'
+import DetailAuction from './src/screens/DetailAuction'
+import ListMemberAuction from './src/screens/ListMemberAuction'
 import { COLOR } from './src/constants'
 
 numeral.register('locale', 'id', {
@@ -97,7 +99,9 @@ const Routes = StackNavigator({
   Auction: { screen: CreateAuction },
   Store: { screen: OfficialStore },
   Preview: { screen: PreviewPhoto },
-  ListAuctions: { screen: ListAuction }
+  ListAuctions: { screen: ListAuction },
+  DetailAuctions: { screen: DetailAuction },
+  ListMemberAuctions: { screen: ListMemberAuction }
 }, {
     cardStyle: { backgroundColor: '#fafafa' },
     navigationOptions: {

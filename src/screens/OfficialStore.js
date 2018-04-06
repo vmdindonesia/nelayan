@@ -13,13 +13,16 @@ class OfficialStore extends Component {
         headerRight:
             <TouchableOpacity
                 onPress={() => {
-                    console.log(navigation, 'Tes');
                     const { navigate } = navigation
                     navigate('ListAuctions');
                 }}
             >
                 <View>
-                    <Icon style={{ color: '#fff', paddingRight: '-30%' }} st name="md-list" size={24} />
+                    <Icon
+                        style={{ color: '#fff', height: 20, width: 20, margin: 20, marginRight: 17 }}
+                        st
+                        name="md-list" size={24}
+                    />
                 </View>
             </TouchableOpacity>
     })
@@ -83,29 +86,31 @@ class OfficialStore extends Component {
         const number = parseInt(itemProduct.index, 0) + 1;
         console.log(itemProduct, 'Item Favorit')
         return (
-            <TouchableWithoutFeedback
-                onPress={() => {
-                    if (this.state.data.myAuction === 0) {
-                        const { navigate } = this.props.navigation
-                        navigate('Auction', { datax: itemProduct.item });
-                    } else {
-                        ToastAndroid.show('Anda masih mempunyai lelang yang berjalan', ToastAndroid.SHORT);
-                    }
-                }}
-            >
-                <View style={styles.card}>
-                    <Image
-                        style={styles.image}
-                        source={{ uri: `${BASE_URL}/images/${itemProduct.item.Fish.photo}` }}
-                        resizeMode='contain'
-                    />
-                    <Text style={{ textAlign: 'center', backgroundColor: '#FFF' }}>
-                        {
-                            itemProduct.item.Fish.name.length >= 12 ? `${number}. ${itemProduct.item.Fish.name.substring(0, 12)}...` : `${number}. ${itemProduct.item.Fish.name}`
+            <View>
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                        if (this.state.data.myAuction === 0) {
+                            const { navigate } = this.props.navigation
+                            navigate('Auction', { datax: itemProduct.item });
+                        } else {
+                            ToastAndroid.show('Anda masih mempunyai lelang yang berjalan', ToastAndroid.SHORT);
                         }
-                    </Text>
-                </View>
-            </TouchableWithoutFeedback>
+                    }}
+                >
+                    <View style={styles.card}>
+                        <Image
+                            style={styles.image}
+                            source={{ uri: `${BASE_URL}/images/${itemProduct.item.Fish.photo}` }}
+                            resizeMode='contain'
+                        />
+                        <Text style={{ textAlign: 'center', backgroundColor: '#FFF' }}>
+                            {
+                                itemProduct.item.Fish.name.length >= 12 ? `${number}. ${itemProduct.item.Fish.name.substring(0, 12)}...` : `${number}. ${itemProduct.item.Fish.name}`
+                            }
+                        </Text>
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
         )
     }
 
@@ -115,19 +120,26 @@ class OfficialStore extends Component {
         console.log(productFavorit, 'Data Favorit');
         return (
             <View style={styles.containerStyle}>
-                <Image
-                    style={styles.imageAds}
-                    source={require('../../assets/ads-auction.png')}
-                />
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refresh}
+                            onRefresh={this.handleRefresh.bind(this)}
+                        />
+                    }
+                >
+                    <Image
+                        style={styles.imageAds}
+                        source={require('../../assets/ads-auction.png')}
+                    />
 
-                {
-                    isOfficial !== null ?
-                        <View style={{ paddingTop: 50 }}>
-                            <Text style={{ fontSize: 20, textAlign: 'center' }}>Maaf, Anda belum terpilih menjadi Official Store.</Text>
-                        </View>
-                        :
-                        <View style={{ flex: 1 }}>
-                            <View style={{ paddingTop: 50, paddingLeft: 15, height: '50%', backgroundColor: '#F4F4F4' }}>
+                    {
+                        isOfficial === null ?
+                            <View style={{ paddingTop: 50 }}>
+                                <Text style={{ fontSize: 20, textAlign: 'center' }}>Maaf, Anda belum terpilih menjadi Official Store.</Text>
+                            </View>
+                            :
+                            <View style={{ flex: 1 }}>
                                 <View style={styles.containerFlatList}>
                                     {
                                         productFavorit ?
@@ -142,36 +154,36 @@ class OfficialStore extends Component {
                                             <View />
                                     }
                                 </View>
-                            </View>
 
-                            <View style={{ height: '30%', padding: '5%', paddingTop: '7%' }}>
-                                <Button
-                                    onPress={() => {
-                                        if (data.myAuction === 0) {
-                                            const { navigate } = this.props.navigation
-                                            navigate('Auction');
-                                        } else {
-                                            ToastAndroid.show('Anda masih mempunyai lelang yang berjalan', ToastAndroid.SHORT);
-                                        }
-                                    }}
-                                >
-                                    Lelang Produk Anda
+                                <View style={{ height: '30%', padding: '5%', paddingTop: '7%' }}>
+                                    <Button
+                                        onPress={() => {
+                                            if (data.myAuction === 0) {
+                                                const { navigate } = this.props.navigation
+                                                navigate('Auction');
+                                            } else {
+                                                ToastAndroid.show('Anda masih mempunyai lelang yang berjalan', ToastAndroid.SHORT);
+                                            }
+                                        }}
+                                    >
+                                        Lelang Produk Anda
                                 </Button>
-                            </View>
+                                </View>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 7 }}>
-                                <Text style={{ textAlign: 'center' }}>
-                                    Pertanyaan mengenai Official Store?
-                                </Text>
-                            </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                                    <Text style={{ textAlign: 'center' }}>
+                                        Pertanyaan mengenai Official Store?
+                                    </Text>
+                                </View>
 
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
-                                <Text style={{ textAlign: 'center', marginTop: 10, color: COLOR.secondary_a }}>
-                                    Hubungi Aruna
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                }
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('ForgotPassword')}>
+                                    <Text style={{ textAlign: 'center', marginTop: 10, color: COLOR.secondary_a }}>
+                                        Hubungi Aruna
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                    }
+                </ScrollView>
             </View>
         )
     }
@@ -183,9 +195,9 @@ const styles = {
     },
     containerFlatList: {
         flex: 1,
-        marginLeft: -3,
+        marginLeft: 13,
         paddingRight: 13,
-        marginTop: -20
+        paddingTop: 25
     },
     card: {
         borderWidth: 1,
@@ -196,8 +208,7 @@ const styles = {
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
-        backgroundColor: '#FFF',
-        paddingRight: '2%'
+        backgroundColor: '#FFF'
     },
     thumbnailContainerStyle: {
         justifyContent: 'center',
@@ -205,11 +216,11 @@ const styles = {
         margin: 15,
     },
     image: {
+        height: 90,
+        width: 120,
+        borderRadius: 4,
         alignSelf: 'stretch',
-        height: 100,
-        width: 100,
-        resizeMode: 'cover',
-        borderRadius: 4
+        resizeMode: 'cover'
     },
     imageAds: {
         alignSelf: 'stretch',
