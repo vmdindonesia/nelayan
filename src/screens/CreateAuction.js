@@ -286,9 +286,9 @@ class CreateAuction extends Component {
 		dataAuction.append('unit', unitFish);
 		dataAuction.append('openingPrice', openPrice);
 		dataAuction.append('minIncrement', IncrementPrice);
-		dataAuction.append('startDate', IncrementPrice);
-		dataAuction.append('endDate', IncrementPrice);
-		dataAuction.append('address', IncrementPrice);
+		dataAuction.append('startDate', dateStart);
+		dataAuction.append('endDate', dateEnd);
+		dataAuction.append('address', address);
 		dataAuction.append('photo', {
 			uri: photo.uri,
 			type: 'image/jpeg',

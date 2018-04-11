@@ -170,7 +170,7 @@ class OfficialStore extends Component {
                                 </Button>
                                 </View>
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
                                     <Text style={{ textAlign: 'center' }}>
                                         Pertanyaan mengenai Official Store?
                                     </Text>
@@ -208,6 +208,7 @@ const styles = {
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
+        padding: 10,
         backgroundColor: '#FFF'
     },
     thumbnailContainerStyle: {

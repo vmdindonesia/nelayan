@@ -3,7 +3,7 @@ import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
-import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
+import { Container, ContainerSection, Input, Button, Spinner, InputCancel } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
@@ -49,7 +49,28 @@ class Register extends Component {
 
 			photo: null,
 			idPhoto: null,
+
+			textInput: [],
+			comboKapal: [],
+			shipId: '',
+			ShipName: [],
+			ShipSize: [],
+			tempShipName: '',
+			tempShipSize: '',
+
+
+			comboInput: [],
+			idAlat: [],
+			idForge: '',
+
+			checkedShipSizeMinus: [],
+			checkedShipSizePlus: []
 		}
+	}
+
+	componentWillMount() {
+		this.addAlat(this.state.comboInput.length);
+		this.addComboBoxKapal(this.state.comboKapal.length);
 	}
 
 	onCitySelected = (item) => {
@@ -75,6 +96,7 @@ class Register extends Component {
 	onChangeInput = (name, v) => {
 		this.setState({ [name]: v })
 	}
+
 
 	selectPhotoTapped = (name) => {
 		const options = {
@@ -178,51 +200,52 @@ class Register extends Component {
 
 	onSubmitRegister = () => {
 		Keyboard.dismiss()
+		console.log(this.state, 'STATE BOS')
 
-		const data = this.state
-
+		const data = this.state;
+		this.submitRegister(data)
 
 		// Form Validation
-		if (data.organizationType === '') {
-			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
-		}
-		else if (data.password !== data.confirmPassword) {
-			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
-		}
-		else if (data.CityId === '') {
-			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.idNumber.length !== 16) {
-			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
-			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[0] === '' && data.values[0] !== '') {
-			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[1] === '' && data.values[1] !== '') {
-			ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[2] === '' && data.values[2] !== '') {
-			ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[3] === '' && data.values[3] !== '') {
-			ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[4] === '' && data.values[4] !== '') {
-			ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (!this.regexEmail(data.email)) {
-			ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
-		}
-		else {
-			this.submitRegister(data)
-		}
+		// if (data.organizationType === '') {
+		// 	ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
+		// }
+		// else if (data.password !== data.confirmPassword) {
+		// 	ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
+		// }
+		// else if (data.CityId === '') {
+		// 	ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.idNumber.length !== 16) {
+		// 	ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
+		// }
+		// else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
+		// 	ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
+		// }
+		// else if (data.FishIds[0] === '' && data.values[0] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.FishIds[1] === '' && data.values[1] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.FishIds[2] === '' && data.values[2] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.FishIds[3] === '' && data.values[3] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.FishIds[4] === '' && data.values[4] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (!this.regexEmail(data.email)) {
+		// 	ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
+		// }
+		// else {
+		// 	this.submitRegister(data)
+		// }
 	}
 
 	submitRegister = (data) => {
-		this.setState({ loading: true })
+		this.setState({ loading: true });
 
 		let formData = new FormData()
 		// organization data
@@ -263,36 +286,108 @@ class Register extends Component {
 			(item !== '' ? formData.append(`FishIds[${index}]`, item) : '')
 		)
 
-		axios.post(`${BASE_URL}/supplier/register`, formData, {
-			headers: { 'Content-Type': 'multipart/form-data' },
-			timeout: REQUEST_TIME_OUT
+		if (data.ShipSize.length < 1) {
+			data.ShipName.map((shiped) =>
+				(shiped !== '' ? formData.append('MyShips', { 'name': shiped, 'type': data.shipId }) : '')
+			)
+		} else if (data.ShipSize.length >= 1) {
+			data.ShipName.map((shiped, i) =>
+				(shiped !== '' ? formData.append('MyShips', { 'name': shiped, 'size': data.ShipSize[i], 'type': data.shipId }) : '')
+			)
+		}
+
+		data.idAlat.map((item) =>
+			(shiped !== '' ? formData.append('MyFishingGearIds', item) : '')
+		)
+		console.log(data, 'DATAAAA');
+		console.log(formData, 'FORM DATA');
+		// axios.post(`${BASE_URL}/supplier/register`, formData, {
+		// 	headers: { 'Content-Type': 'multipart/form-data' },
+		// 	timeout: REQUEST_TIME_OUT
+		// })
+		// 	.then(response => {
+		// 		console.log(response.status)
+
+		// 		const resetAction = NavigationActions.reset({
+		// 			index: 0,
+		// 			actions: [
+		// 				NavigationActions.navigate({ routeName: 'Login' })
+		// 			]
+		// 		})
+		// 		this.props.navigation.dispatch(resetAction)
+		// 		Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
+
+		// 		this.setState({ loading: false })
+		// 	})
+		// 	.catch(error => {
+		// 		console.log(error.response)
+
+		// 		if (error.response) {
+		// 			ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+		// 		}
+		// 		else {
+		// 			ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+		// 		}
+
+		// 		this.setState({ loading: false })
+		// 	})
+	}
+
+	ChangeInputForge = (name, v) => {
+		console.log(name, 'NAME selectedValue');
+		this.setState({
+			// textInput: [],
+			[name]: v
+		}, () => {
+			this.addTextInput(this.state.textInput.length);
+		});
+	}
+
+	onChangeAlat = (name, v, key) => {
+		console.log(name, 'Name');
+		console.log(v, 'Value');
+		console.log(key, 'Key');
+		this.setState({
+			[name]: v
 		})
-			.then(response => {
-				console.log(response.status)
+		// , () => {
+		// 	this.pushAlat(key, v);
+		// 	console.log(this.state[name], 'STATE');
+		// });
+	}
 
-				const resetAction = NavigationActions.reset({
-					index: 0,
-					actions: [
-						NavigationActions.navigate({ routeName: 'Login' })
-					]
-				})
-				this.props.navigation.dispatch(resetAction)
-				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
+	pushAlat = (key, v) => {
+		const newAlat = this.state.idAlat;
+		newAlat[key] = v;
+		this.setState({ idAlat: newAlat }, () => {
+			console.log(this.state.idAlat, 'Alat Name');
+		})
+	}
 
-				this.setState({ loading: false })
+	onChangeInputShipName = (name, v, key) => {
+		console.log(name, 'Name');
+		console.log(v, 'Value');
+		console.log(key, 'Key');
+		this.setState({ [name]: v }, () => {
+			const newShipName = this.state.ShipName;
+			newShipName[key] = v;
+			this.setState({ ShipName: newShipName }, () => {
+				console.log(this.state.ShipName, 'Ship Name');
 			})
-			.catch(error => {
-				console.log(error.response)
+		});
+	}
 
-				if (error.response) {
-					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-				}
-				else {
-					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-				}
-
-				this.setState({ loading: false })
+	onChangeInputShipSize = (name, v, key) => {
+		console.log(name, 'Name');
+		console.log(v, 'Value');
+		console.log(key, 'Key')
+		this.setState({ [name]: v }, () => {
+			const newShipSize = this.state.ShipSize;
+			newShipSize[key] = v;
+			this.setState({ ShipSize: newShipSize }, () => {
+				console.log(this.state.ShipSize, 'Ship Size');
 			})
+		});
 	}
 
 	renderButton = () => {
@@ -316,6 +411,139 @@ class Register extends Component {
 				Register
 			</Button>
 		)
+	}
+
+
+	addAlat = (key) => {
+		console.log('COMBO ALAT NYA MAS');
+		const { idForge } = this.state;
+		const comboInput = this.state.comboInput;
+		comboInput.push(
+			<View key={key}>
+				<ContainerSection>
+					<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+						<Picker
+							selectedValue={idForge}
+							onValueChange={v => this.onChangeAlat(`idForge${key}`, v, key)}
+						>
+							<Picker.Item label='--- Pilih ---' value='' />
+							<Picker.Item label='Pukat Udang' value='Pukat Udang' />
+							<Picker.Item label='Pukat Karang' value='Pukat Karang' />
+							<Picker.Item label='Pukat Kantung' value='Pukat Kantung' />
+						</Picker>
+					</View>
+				</ContainerSection>
+			</View>
+		);
+		this.setState({ comboInput })
+	}
+
+	checkShipMinus = data => {
+		const { checkedShipSizeMinus } = this.state;
+		console.log(checkedShipSizeMinus, 'Sebelumnya');
+		if (!checkedShipSizeMinus.includes(data)) {
+			console.log('IF');
+			this.setState({
+				checkedShipSizeMinus: [...checkedShipSizeMinus, data]
+			}, () => {
+				console.log(checkedShipSizeMinus);
+			});
+		} else {
+			console.log('ELSE');
+			this.setState({
+				checkedShipSizeMinus: checkedShipSizeMinus.filter(a => a !== data)
+			}, () => {
+				console.log(checkedShipSizeMinus);
+			});
+		}
+	}
+
+	checkShipPlus = data => {
+		const { checkedShipSizePlus } = this.state;
+		if (!checkedShipSizePlus.includes(data)) {
+			this.setState({
+				checkedShipSizePlus: [...checkedShipSizePlus, data]
+			});
+		} else {
+			this.setState({
+				checkedShipSizePlus: checkedShipSizePlus.filter(a => a !== data)
+			});
+		}
+	}
+
+	addComboBoxKapal = (key) => {
+		console.log('COMBO KAPAL NYA MAS');
+		const { shipId } = this.state;
+		const comboKapal = this.state.comboKapal;
+
+		comboKapal.push(
+			<View key={key}>
+				<ContainerSection>
+					<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+						<Picker
+							selectedValue={shipId + [key]}
+							onValueChange={v => this.ChangeInputForge(`shipId${key}`, v)}
+						>
+							<Picker.Item label='--- Pilih ---' value='' />
+							<Picker.Item label='<= 1 GT' value='<=1 GT' />
+							<Picker.Item label='>1 GT' value='>1 GT' />
+						</Picker>
+					</View>
+				</ContainerSection>
+			</View>
+		);
+		this.setState({ comboKapal });
+	}
+
+	addTextInput = (key) => {
+		const { shipId, tempShipName, tempShipSize } = this.state;
+		const textInput = this.state.textInput;
+
+		this.setState({ textInput })
+		if (shipId === '<=1 GT') {
+			textInput.push(
+				<View key={key}>
+					<ContainerSection>
+						<View style={{ padding: 5, width: '100%' }}>
+							<Input
+								label='Nama Kapal'
+								placeholder="Nama Kapal"
+								value={tempShipName[key]}
+								onChangeText={v => this.onChangeInputShipName(`tempShipName${key}`, v, key)}
+							/>
+						</View>
+					</ContainerSection>
+				</View>
+			);
+			this.setState({ textInput })
+		} else if (shipId === '>1 GT') {
+			textInput.push(
+				<View key={key}>
+					<ContainerSection>
+						<View style={{ padding: 5, width: '100%' }}>
+							<Input
+								label='Nama Kapal'
+								placeholder="Nama Kapal"
+								value={tempShipName[key]}
+								onChangeText={v => this.onChangeInputShipName(`tempShipName${key}`, v, key)}
+							/>
+						</View>
+					</ContainerSection>
+
+					<ContainerSection>
+						<View style={{ padding: 5, width: '100%' }}>
+							<Input
+								label='Ukuran Kapal'
+								placeholder="Ukuran Kapal"
+								value={tempShipSize[key]}
+								onChangeText={v => this.onChangeInputShipSize(`tempShipSize${key}`, v, key)}
+							/>
+						</View>
+					</ContainerSection>
+				</View>
+			);
+			this.setState({ textInput })
+		}
 	}
 
 	render() {
@@ -348,10 +576,12 @@ class Register extends Component {
 			valueCity,
 
 			idPhoto,
-			photo
-		} = this.state
-
-		console.log(this.state)
+			photo,
+			textInput,
+			shipId,
+			comboInput,
+			comboKapal
+		} = this.state;
 
 		return (
 			<ScrollView
@@ -725,14 +955,62 @@ class Register extends Component {
 							}
 						</AutoComplete>
 					</ContainerSection>
+				</Container>
+
+				<Container>
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Peralatan (Opsional)
+						</Text>
+					</ContainerSection>
+					<View style={{ flexDirection: 'row', flex: 1 }}>
+						<Text style={{ flex: 1 }}>Pilih Ukuran</Text>
+						<TouchableOpacity
+							onPress={() => {
+								console.log('Tambah Kapal Mas');
+								this.addComboBoxKapal(comboKapal.length)
+							}}
+						>
+							<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Kapal +</Text>
+						</TouchableOpacity>
+					</View>
+					{
+						comboKapal && comboKapal.map((value) =>
+							value
+						)
+					}
+					{
+						textInput && textInput.map((value) =>
+							value
+						)
+					}
+
+					<View style={{ flexDirection: 'row', flex: 1 }}>
+						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
+						<TouchableOpacity
+							onPress={() => {
+								console.log('Tambah Alat Mas');
+								this.addAlat(this.state.comboInput.length)
+							}}
+						>
+							<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Alat +</Text>
+						</TouchableOpacity>
+					</View>
+
+					{
+						comboInput && comboInput.map((value) =>
+							value
+						)
+					}
 
 					<View style={{ marginTop: 20, marginBottom: 20 }}>
 						<ContainerSection>
 							{this.renderButton()}
 						</ContainerSection>
 					</View>
-
 				</Container>
+
+
 			</ScrollView>
 		)
 	}

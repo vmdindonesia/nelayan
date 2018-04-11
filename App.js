@@ -44,6 +44,9 @@ import PreviewPhoto from './src/screens/PreviewPhoto'
 import ListAuction from './src/screens/ListAuction'
 import DetailAuction from './src/screens/DetailAuction'
 import ListMemberAuction from './src/screens/ListMemberAuction'
+import Member from './src/screens/Member'
+import Peralatan from './src/screens/Peralatan'
+import CreatePeralatan from './src/screens/CreatePeralatan'
 import { COLOR } from './src/constants'
 
 numeral.register('locale', 'id', {
@@ -101,7 +104,10 @@ const Routes = StackNavigator({
   Preview: { screen: PreviewPhoto },
   ListAuctions: { screen: ListAuction },
   DetailAuctions: { screen: DetailAuction },
-  ListMemberAuctions: { screen: ListMemberAuction }
+  ListMemberAuctions: { screen: ListMemberAuction },
+  Members: { screen: Member },
+  Forge: { screen: Peralatan },
+  CreateForge: { screen: CreatePeralatan }
 }, {
     cardStyle: { backgroundColor: '#fafafa' },
     navigationOptions: {
