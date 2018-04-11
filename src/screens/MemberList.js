@@ -35,15 +35,15 @@ class MemberList extends Component {
 					<View style={{ flexDirection: 'row' }}>
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MemberList' })}>
-								<View style={screen === 'MenuItem' ? styles.tabContainerActive : styles.tabContainer}>
-									<Text style={screen === 'MenuItem' ? styles.tabTextActive : styles.tabText}>Anggota</Text>
+								<View style={screen === 'MemberList' ? styles.tabContainerActive : styles.tabContainer}>
+									<Text style={screen === 'MemberList' ? styles.tabTextActive : styles.tabText}>Anggota</Text>
 								</View>
 							</TouchableNativeFeedback>
 						</View>
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Forge' })}>
-								<View style={screen === 'OrderList' ? styles.tabContainerActive : styles.tabContainer}>
-									<Text style={screen === 'OrderList' ? styles.tabTextActive : styles.tabText}>Peralatan</Text>
+								<View style={screen === 'Forge' ? styles.tabContainerActive : styles.tabContainer}>
+									<Text style={screen === 'Forge' ? styles.tabTextActive : styles.tabText}>Peralatan</Text>
 								</View>
 							</TouchableNativeFeedback>
 						</View>
