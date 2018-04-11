@@ -1,5 +1,7 @@
 export * from './UserActions'
 export * from './FishLogActions'
+export * from './PeralatanActions'
+export * from './KapalActions'
 export * from './RequestActions'
 export * from './OrderActions'
 export * from './ItemActions'

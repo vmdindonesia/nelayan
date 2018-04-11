@@ -23,6 +23,12 @@ export const REWARD_HISTORIES_FETCH_FAIL = 'reward_histories_fetch_fail'
 export const MEMBERS_FETCH_SUCCESS = 'members_fetch_success'
 export const MEMBERS_FETCH_FAIL = 'members_fetch_fail'
 
+export const ALAT_FETCH_SUCCESS = 'alat_fetch_success'
+export const ALAT_FETCH_FAIL = 'alat_fetch_fail'
+
+export const KAPAL_FETCH_SUCCESS = 'kapal_fetch_success'
+export const KAPAL_FETCH_FAIL = 'kapal_fetch_fail'
+
 export const MESSAGES_FETCH_SUCCESS = 'messages_fetch_success'
 export const MESSAGES_FETCH_FAIL = 'messages_fetch_fail'
 
