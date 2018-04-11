@@ -142,7 +142,10 @@ class Home extends Component {
 						<View style={{ flexDirection: 'row', flex: 1 }}>
 							<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
 							<View style={{ flex: 1 }}>
-								<TouchableOpacity onPress={() => this.refs.drawer.closeDrawer()}>
+								<TouchableOpacity 
+									style={{height: 45, position: 'absolute', right: -10, width: 50, paddingRight: 20, marginTop: -10, paddingTop: 10}}
+									onPress={() => this.refs.drawer.closeDrawer()}
+								>
 									<View>
 										<Icon style={{ color: '#fff', alignSelf: 'flex-end' }} st name="md-arrow-back" size={24} />
 									</View>
@@ -230,14 +233,20 @@ class Home extends Component {
 					renderNavigationView={() => menuDrawer}
 				>
 					<View style={styles.header}>
-						<View style={{ marginLeft: -28 }}>
-							<TouchableOpacity onPress={() => this.refs.drawer.openDrawer()}>
+						<TouchableOpacity 
+							style={{ marginLeft: -28, height: 45, paddingTop: 10, width: 40, paddingLeft: 5 }} 
+							onPress={() => this.refs.drawer.openDrawer()}
+						>
+							<View >
 								<Icon size={25} name="md-menu" color="#fff" />
-							</TouchableOpacity>
-						</View>
+							</View>
+						</TouchableOpacity>
 						<Text style={styles.headerText}>Nelayan Aruna</Text>
-						<View style={{ marginLeft: -25, marginRight: -30 }}>
-							<TouchableOpacity onPress={() => this.props.navigation.navigate('NotificationList')}>
+						<TouchableOpacity 
+							style={{ marginLeft: -25, marginRight: -25, height: 45, paddingTop: 15, width: 40, paddingLeft: 20 }}
+							onPress={() => this.props.navigation.navigate('NotificationList')}
+						>
+							<View>
 								<Image
 									style={{ height: 20, width: 15 }}
 									source={
@@ -247,8 +256,8 @@ class Home extends Component {
 											require('../../assets/ic_notification.png')
 									}
 								/>
-							</TouchableOpacity>
-						</View>
+							</View>
+						</TouchableOpacity>
 					</View>
 					<ScrollView
 						refreshControl={
