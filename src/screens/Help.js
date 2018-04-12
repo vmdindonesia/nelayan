@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Image, Linking, TouchableOpacity } from 'react-native'
-import { Container, ContainerSection } from '../components/common'
+import { Container, ContainerSection, Button } from '../components/common'
 
 class Help extends Component {
 	static navigationOptions = {
@@ -40,6 +40,20 @@ class Help extends Component {
 								<Text style={{fontSize: 20, marginTop: 10, marginBottom: 10}}>info@aruna.id</Text>
 							</View>
 						</TouchableOpacity>
+						<Text>atau</Text>
+						<View style={{height: 50, marginTop: 10}}>
+							<Button 
+								style={{paddingLeft: 10, paddingRight: 10}}
+								onPress={() => this.props.navigation.navigate('MessageAdmin', {
+										id: 1,
+										codeNumber: 'chat admin',
+										organizationType: 'Admin Aruna',
+									})
+								}
+							>
+								Chat dengan admin aruna
+							</Button>
+						</View>
 					</View>
 				</Container>
 			</View>
