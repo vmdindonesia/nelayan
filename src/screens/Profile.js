@@ -5,7 +5,7 @@ import axios from 'axios'
 import numeral from 'numeral'
 
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
-import { Card, CardSection, ContainerSection, Button } from '../components/common'
+import { Card, CardSection, Spinner, ContainerSection, Button } from '../components/common'
 
 class Profile extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -155,7 +155,7 @@ class Profile extends Component {
 									/>
 									<View style={{ flex: 1, margin: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
 										<Text style={{ color: COLOR.secondary_a, fontSize: 20, marginLeft: 10 }}>{item.Fish && item.Fish.name}</Text>
-										<Text style={{ fontSize: 16, marginLeft: 10 }}>{'\n'}{numeral(item.capacity).format('0,0')}</Text>
+										<Text style={{ fontSize: 16,  marginLeft: 10 }}>{'\n'}{numeral(item.capacity).format('0,0')}</Text>
 									</View>
 								</CardSection>
 							</Card>

@@ -15,38 +15,37 @@ import { setUserToken } from '../actions'
 class FishLogCreate extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: 'Tambah Fishlog',
-		headerLeft:
+		headerLeft: 
 			<TouchableOpacity
-				onPress={() => {
-					if (navigation.state.params && navigation.state.params.change) {
-						Alert.alert(
-							'',
-							'Yakin batal mengisi fishlog?',
-							[
-								{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-								{
-									text: 'Ya', onPress: () => {
-										navigation.setParams({ change: false })
+				onPress={() => 
+					{
+						if (navigation.state.params && navigation.state.params.change) {
+							Alert.alert(
+								'',
+								'Yakin batal mengisi fishlog?',
+								[
+									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+									{text: 'Ya', onPress: () => {
+										navigation.setParams({change: false})
 										navigation.goBack()
-									}
-								},
-							]
-						)
+									}},
+								]
+							)
+						}
+						else {
+							navigation.goBack()
+						}
 					}
-					else {
-						navigation.goBack()
-					}
-				}
 				}
 			>
-				<Icon style={{ marginLeft: 20, color: '#fff' }} name="md-arrow-back" size={24} />
+				<Icon style={{marginLeft: 20, color: '#fff'}} name="md-arrow-back" size={24} />
 			</TouchableOpacity>,
 		headerRight: <View />
 	})
 
 	constructor(props) {
 		super(props)
-
+	
 		this.state = {
 			loading: false,
 			// form
@@ -59,11 +58,7 @@ class FishLogCreate extends Component {
 			unit: 'Kg',
 			//data
 			fishes: [],
-			provinces: [],
-
-			shipSize: '',
-			shipName: '',
-			forgeName: ''
+			provinces: []
 		}
 	}
 
@@ -75,19 +70,17 @@ class FishLogCreate extends Component {
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			const { params } = this.props.navigation.state
-
+			
 			if (params && params.change === true) {
 				Alert.alert(
 					'',
 					'Yakin batal mengisi fishlog?',
 					[
-						{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-						{
-							text: 'Ya', onPress: () => {
-								this.props.navigation.setParams({ change: false })
-								this.props.navigation.goBack()
-							}
-						},
+						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+						{text: 'Ya', onPress: () => {
+							this.props.navigation.setParams({change: false})
+							this.props.navigation.goBack()
+						}},
 					]
 				)
 
@@ -97,9 +90,9 @@ class FishLogCreate extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({ [name]: v })
+		this.setState({[name]: v})
 
-		this.props.navigation.setParams({ change: true })
+		this.props.navigation.setParams({change: true})
 	}
 
 	onSubmit = () => {
@@ -114,7 +107,7 @@ class FishLogCreate extends Component {
 			ToastAndroid.show('Anda belum pilih Provinsi', ToastAndroid.SHORT)
 		}
 		else {
-			this.setState({ loading: true })
+			this.setState({loading: true})
 
 			let token = this.props.user.token
 
@@ -125,8 +118,6 @@ class FishLogCreate extends Component {
 			formData.append('quantity', data.quantity)
 			formData.append('unit', data.unit)
 			formData.append('price', data.price)
-			formData.append('MyFishingGearId', data.forgeName)
-			formData.append('MyShipId', data.shipName)
 			if (data.photo) {
 				formData.append('photo', {
 					uri: data.photo.uri,
@@ -142,83 +133,83 @@ class FishLogCreate extends Component {
 				},
 				timeout: REQUEST_TIME_OUT
 			})
-				.then(response => {
-					this.props.setUserToken(response.data.refreshToken)
-					this.props.navigation.setParams({ change: false })
+			.then(response => {			
+				this.props.setUserToken(response.data.refreshToken)
+				this.props.navigation.setParams({change: false})
 
-					const resetAction = NavigationActions.reset({
-						index: 1,
-						actions: [
-							NavigationActions.navigate({ routeName: 'Home' }),
-							NavigationActions.navigate({ routeName: 'FishLogList' })
-						]
-					})
-					this.props.navigation.dispatch(resetAction)
-
-					this.setState({ loading: false })
-					ToastAndroid.show('Berhasil tambah fishlog', ToastAndroid.SHORT)
+				const resetAction = NavigationActions.reset({
+					index: 1,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Home'}),
+						NavigationActions.navigate({ routeName: 'FishLogList'})
+					]
 				})
-				.catch(error => {
-					if (error.response) {
-						alert(error.response.data.message)
-					}
-					else {
-						alert('Koneksi internet bermasalah')
-					}
+				this.props.navigation.dispatch(resetAction)
 
-					this.setState({ loading: false })
-				})
+				this.setState({loading: false})
+				ToastAndroid.show('Berhasil tambah fishlog', ToastAndroid.SHORT)
+			})
+			.catch(error => {
+				if (error.response) {
+					alert(error.response.data.message)
+				}
+				else {
+					alert('Koneksi internet bermasalah')
+				}
+
+				this.setState({loading: false})
+			})
 		}
 	}
 
 	fetchProducts = () => {
-		this.setState({ loading: true })
+		this.setState({loading: true})
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: { token },
+			headers: {token},
 			timeout: REQUEST_TIME_OUT
 		})
-			.then(response => {
-				this.setState({ fishes: response.data.data })
+		.then(response => {			
+			this.setState({fishes: response.data.data})
 
-				this.setState({ loading: false })
-			})
-			.catch(error => {
-				if (error.response) {
-					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-				}
-				else {
-					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-				}
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+			}
+			else {
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+			}
 
-				this.setState({ loading: false })
-			})
+			this.setState({loading: false})
+		})
 	}
 
 	fetchProvinces = () => {
-		this.setState({ loading: true })
+		this.setState({loading: true})
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/provinces`, {
-			headers: { token },
+			headers: {token},
 			timeout: REQUEST_TIME_OUT
 		})
-			.then(response => {
-				this.setState({ provinces: response.data.data })
+		.then(response => {			
+			this.setState({provinces: response.data.data})
 
-				this.setState({ loading: false })
-			})
-			.catch(error => {
-				if (error.response) {
-					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-				}
-				else {
-					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-				}
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+			}
+			else {
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+			}
 
-				this.setState({ loading: false })
-			})
+			this.setState({loading: false})
+		})
 	}
 
 	selectPhotoTapped = (name) => {
@@ -268,8 +259,8 @@ class FishLogCreate extends Component {
 						'',
 						'Yakin sudah mengisi informasi dengan benar?',
 						[
-							{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-							{ text: 'Ya', onPress: () => this.onSubmit() },
+							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+							{text: 'Ya', onPress: () => this.onSubmit()},
 						]
 					)
 				}
@@ -289,10 +280,7 @@ class FishLogCreate extends Component {
 			photo,
 			fishes,
 			unit,
-			provinces,
-			shipSize,
-			shipName,
-			forgeName
+			provinces
 		} = this.state
 
 		return (
@@ -313,7 +301,7 @@ class FishLogCreate extends Component {
 								>
 									<Picker.Item label="-- Pilih Komoditas --" value="" />
 									{
-										fishes && fishes.map((item, index) =>
+										fishes && fishes.map((item, index) => 
 											<Picker.Item key={index} label={item.name} value={item.id} />
 										)
 									}
@@ -322,13 +310,13 @@ class FishLogCreate extends Component {
 						</View>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{ color: '#5e5e5e', fontSize: 14 }}>Tanggal Penangkapan</Text>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal Penangkapan</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
 							value={moment().format('DD/MM/YYYY')}
 							editable={false}
-						/>
+						/>						
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
@@ -340,7 +328,7 @@ class FishLogCreate extends Component {
 								>
 									<Picker.Item label="-- Pilih Provinsi --" value="" />
 									{
-										provinces && provinces.map((item, index) =>
+										provinces && provinces.map((item, index) => 
 											<Picker.Item key={index} label={item.name} value={item.id} />
 										)
 									}
@@ -364,7 +352,7 @@ class FishLogCreate extends Component {
 							value={numeral(parseInt(size, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('size', v)}
 						/>
-						<View style={{ marginTop: 50, marginLeft: 10, flex: 1 }}>
+						<View style={{marginTop: 50, marginLeft: 10, flex: 1}}>
 							<View style={styles.pickerUnitStyle}>
 								<Picker
 									selectedValue={unit}
@@ -385,89 +373,30 @@ class FishLogCreate extends Component {
 							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
 						/>
 					</ContainerSection>
-
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Peralatan
-						</Text>
-					</ContainerSection>
-
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Pilih Ukuran</Text>
-					</View>
-
-					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={shipSize}
-								onValueChange={v => this.onChangeInput('shipSize', v)}
-							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='<= 1 GT' value='<=1 GT' />
-								<Picker.Item label='>1 GT' value='>1 GT' />
-							</Picker>
-						</View>
-					</ContainerSection>
-
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Pilih Kapal</Text>
-					</View>
-
-					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={shipName}
-								onValueChange={v => this.onChangeInput('shipName', v)}
-							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='Titanic' value='1' />
-								<Picker.Item label='Pesiar' value='2' />
-							</Picker>
-						</View>
-					</ContainerSection>
-
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
-					</View>
-					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={forgeName}
-								onValueChange={v => this.onChangeInput('forgeName', v)}
-							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='Pukat Udang' value='1' />
-								<Picker.Item label='Pukat Karang' value='2' />
-								<Picker.Item label='Pukat Kantung' value='3' />
-							</Picker>
-						</View>
-					</ContainerSection>
-
-
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
 							Foto Komoditas
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{ color: '#5e5e5e', fontSize: 14 }}>Ambil Foto Komoditas</Text>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Ambil Foto Komoditas</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5 }}>
+						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5}}>
 							<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
 								<View>
-									{photo === null ?
+								{ photo === null ? 
 										<Image
-											source={require('../../assets/ic_add_a_photo.png')}
+											source={require('../../assets/ic_add_a_photo.png')} 
 										/>
-										:
-										<Image style={{ height: 200, width: 300 }} source={photo} />
-									}
+									:
+										<Image style={{height: 200, width: 300}} source={photo} />
+								}
 								</View>
 							</TouchableOpacity>
 						</View>
 					</ContainerSection>
-					<View style={{ marginTop: 20, marginBottom: 20 }}>
+					<View style={{marginTop: 20, marginBottom: 20}}>
 						<ContainerSection>
 							{this.renderButton()}
 						</ContainerSection>
@@ -484,7 +413,7 @@ const styles = {
 		fontSize: 18,
 	},
 	pickerContainer: {
-		flex: 1,
+		flex: 1, 
 		marginBottom: 5,
 	},
 	pickerStyle: {
@@ -510,7 +439,7 @@ const styles = {
 		marginBottom: 10
 	},
 	unitStyle: {
-		marginTop: 55,
+		marginTop: 55, 
 		flex: 1,
 		marginLeft: 20,
 		fontSize: 16,

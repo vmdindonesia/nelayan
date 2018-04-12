@@ -5,7 +5,7 @@ import ReduxThunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import numeral from 'numeral'
 import { setCustomText } from 'react-native-global-props'
-// import codePush from 'react-native-code-push'
+import codePush from 'react-native-code-push'
 
 import reducers from './src/reducers'
 
@@ -38,15 +38,7 @@ import MessageList from './src/screens/MessageList'
 import MessageAdmin from './src/screens/MessageAdmin'
 import Help from './src/screens/Help'
 import Term from './src/screens/Term'
-import CreateAuction from './src/screens/CreateAuction'
-import OfficialStore from './src/screens/OfficialStore'
-import PreviewPhoto from './src/screens/PreviewPhoto'
-import ListAuction from './src/screens/ListAuction'
-import DetailAuction from './src/screens/DetailAuction'
-import ListMemberAuction from './src/screens/ListMemberAuction'
-import Member from './src/screens/Member'
-import Peralatan from './src/screens/Peralatan'
-import CreatePeralatan from './src/screens/CreatePeralatan'
+
 import { COLOR } from './src/constants'
 
 numeral.register('locale', 'id', {
@@ -55,7 +47,7 @@ numeral.register('locale', 'id', {
     decimal: ','
   },
   ordinal: function (number) {
-    return number === 1 ? 'er' : 'ème';
+    return number === 1 ? 'er' : 'ème'
   },
   currency: {
     symbol: 'Rp'
@@ -99,15 +91,7 @@ const Routes = StackNavigator({
   MessageAdmin: { screen: MessageAdmin },
   Help: { screen: Help },
   Term: { screen: Term },
-  Auction: { screen: CreateAuction },
-  Store: { screen: OfficialStore },
-  Preview: { screen: PreviewPhoto },
-  ListAuctions: { screen: ListAuction },
-  DetailAuctions: { screen: DetailAuction },
-  ListMemberAuctions: { screen: ListMemberAuction },
-  Members: { screen: Member },
-  Forge: { screen: Peralatan },
-  CreateForge: { screen: CreatePeralatan }
+
 }, {
     cardStyle: { backgroundColor: '#fafafa' },
     navigationOptions: {
@@ -146,7 +130,7 @@ class App extends Component<{}> {
   }
 }
 
-// App = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(App)
+App = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(App)
 
 export default App
 

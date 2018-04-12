@@ -132,11 +132,6 @@ class Home extends Component {
 				label: 'Informasi',
 				icon: require('../../assets/menu6_white.png'),
 				screen: 'Information'
-			},
-			{
-				label: 'Official Store',
-				icon: require('../../assets/OS.png'),
-				screen: 'Store'
 			}
 		]
 
