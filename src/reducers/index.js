@@ -6,6 +6,8 @@ import orders from './OrderReducer'
 import items from './ItemReducer'
 import rewardHistories from './RewardHistoryReducer'
 import members from './MemberReducer'
+import alat from './AlatReducer'
+import kapal from './KapalReducer'
 import messages from './MessageReducer'
 import notifications from './NotificationReducer'
 
@@ -18,5 +20,7 @@ export default combineReducers({
 	rewardHistories,
 	members,
 	messages,
-	notifications
+	notifications,
+	alat,
+	kapal
 })

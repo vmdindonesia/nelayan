@@ -28,6 +28,7 @@ import RequestDetail from './src/screens/RequestDetail'
 import MemberList from './src/screens/MemberList'
 import MemberCreate from './src/screens/MemberCreate'
 import MemberEdit from './src/screens/MemberEdit'
+import PeralatanEdit from './src/screens/PeralatanEdit'
 import NotificationList from './src/screens/NotificationList'
 import Information from './src/screens/Information'
 import Reward from './src/screens/Reward'
@@ -87,6 +88,7 @@ const Routes = StackNavigator({
 
   OrderList: { screen: OrderList },
   OrderDetail: { screen: OrderDetail },
+  PeralatanEdits: { screen: PeralatanEdit },
 
   MemberList: { screen: MemberList },
   MemberCreate: { screen: MemberCreate },
