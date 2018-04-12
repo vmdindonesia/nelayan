@@ -21,7 +21,7 @@ class MemberList extends Component {
         return (
             <Card>
                 <TouchableNativeFeedback
-                    onPress={() => this.props.navigation.navigate('MemberEdit', { id: item.id })}
+                    onPress={() => this.props.navi.navigate('MemberEdit', { id: item.id })}
                 >
                     <View style={styles.itemContainerStyle}>
                         <View style={styles.thumbnailContainerStyle}>
@@ -56,7 +56,6 @@ class MemberList extends Component {
                 <ActionButton
                     buttonColor={COLOR.secondary_b}
                     onPress={() => {
-                        console.log(this.props, 'PROPS')
                         this.props.navi.navigate('MemberCreate')
                     }
                 }

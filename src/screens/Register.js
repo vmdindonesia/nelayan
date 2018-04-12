@@ -3,7 +3,7 @@ import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
-import { Container, ContainerSection, Input, Button, Spinner, InputCancel } from '../components/common'
+import { Container, ContainerSection, Input, Button, Spinner, PickerCustom } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
@@ -50,27 +50,24 @@ class Register extends Component {
 			photo: null,
 			idPhoto: null,
 
-			textInput: [],
-			comboKapal: [],
-			shipId: '',
-			ShipName: [],
-			ShipSize: [],
+			// Add Kapal dan Alat
+			statusComboShip: true,
+			ShipSize: '',
+			textInputShipDropDown: [],
+			textInputShip: [],
 			tempShipName: '',
 			tempShipSize: '',
+			plusShip: false,
 
-
-			comboInput: [],
-			idAlat: [],
-			idForge: '',
-
-			checkedShipSizeMinus: [],
-			checkedShipSizePlus: []
+			statusComboForge: true,
+			forgeName: [],
+			nameForge: '',
+			textInputForge: []
 		}
 	}
 
 	componentWillMount() {
-		this.addAlat(this.state.comboInput.length);
-		this.addComboBoxKapal(this.state.comboKapal.length);
+		console.log('Registrasi');
 	}
 
 	onCitySelected = (item) => {
@@ -95,6 +92,49 @@ class Register extends Component {
 
 	onChangeInput = (name, v) => {
 		this.setState({ [name]: v })
+	}
+
+	onChangeInputShip = (name, v) => {
+		this.setState({
+			statusComboShip: false,
+			plusShip: true
+		}, () => {
+			this.addTextInputShipDropDown(this.state.textInputShipDropDown.length, v);
+		});
+	}
+
+	onChangeInputForge = (name, v) => {
+		this.setState({
+			statusComboForge: false
+		}, () => {
+			this.addTextInputForge(this.state.textInputForge.length, v);
+		});
+	}
+
+	onChangeInputShipName = (name, v, key) => {
+		console.log(name, 'Name');
+		console.log(v, 'Value');
+		console.log(key, 'Key');
+		this.setState({ [name]: v }, () => {
+			const newShipName = this.state.ShipName;
+			newShipName[key] = v;
+			this.setState({ ShipName: newShipName }, () => {
+				console.log(this.state.ShipName, 'Ship Name');
+			})
+		});
+	}
+
+	onChangeInputShipSize = (name, v, key) => {
+		console.log(name, 'Name');
+		console.log(v, 'Value');
+		console.log(key, 'Key')
+		this.setState({ [name]: v }, () => {
+			const newShipSize = this.state.ShipSize;
+			newShipSize[key] = v;
+			this.setState({ ShipSize: newShipSize }, () => {
+				console.log(this.state.ShipSize, 'Ship Size');
+			})
+		});
 	}
 
 
@@ -296,10 +336,10 @@ class Register extends Component {
 			)
 		}
 
-		data.idAlat.map((item) =>
+		data.forgeName.map((item) =>
 			(shiped !== '' ? formData.append('MyFishingGearIds', item) : '')
 		)
-		console.log(data, 'DATAAAA');
+		// console.log(data, 'DATAAAA');
 		console.log(formData, 'FORM DATA');
 		// axios.post(`${BASE_URL}/supplier/register`, formData, {
 		// 	headers: { 'Content-Type': 'multipart/form-data' },
@@ -333,62 +373,6 @@ class Register extends Component {
 		// 	})
 	}
 
-	ChangeInputForge = (name, v) => {
-		console.log(name, 'NAME selectedValue');
-		this.setState({
-			// textInput: [],
-			[name]: v
-		}, () => {
-			this.addTextInput(this.state.textInput.length);
-		});
-	}
-
-	onChangeAlat = (name, v, key) => {
-		console.log(name, 'Name');
-		console.log(v, 'Value');
-		console.log(key, 'Key');
-		this.setState({
-			[name]: v
-		})
-		// , () => {
-		// 	this.pushAlat(key, v);
-		// 	console.log(this.state[name], 'STATE');
-		// });
-	}
-
-	pushAlat = (key, v) => {
-		const newAlat = this.state.idAlat;
-		newAlat[key] = v;
-		this.setState({ idAlat: newAlat }, () => {
-			console.log(this.state.idAlat, 'Alat Name');
-		})
-	}
-
-	onChangeInputShipName = (name, v, key) => {
-		console.log(name, 'Name');
-		console.log(v, 'Value');
-		console.log(key, 'Key');
-		this.setState({ [name]: v }, () => {
-			const newShipName = this.state.ShipName;
-			newShipName[key] = v;
-			this.setState({ ShipName: newShipName }, () => {
-				console.log(this.state.ShipName, 'Ship Name');
-			})
-		});
-	}
-
-	onChangeInputShipSize = (name, v, key) => {
-		console.log(name, 'Name');
-		console.log(v, 'Value');
-		console.log(key, 'Key')
-		this.setState({ [name]: v }, () => {
-			const newShipSize = this.state.ShipSize;
-			newShipSize[key] = v;
-			this.setState({ ShipSize: newShipSize }, () => {
-				console.log(this.state.ShipSize, 'Ship Size');
-			})
-		});
-	}
 
 	renderButton = () => {
 		if (this.state.loading) {
@@ -413,96 +397,37 @@ class Register extends Component {
 		)
 	}
 
-
-	addAlat = (key) => {
-		console.log('COMBO ALAT NYA MAS');
-		const { idForge } = this.state;
-		const comboInput = this.state.comboInput;
-		comboInput.push(
-			<View key={key}>
-				<ContainerSection>
-					<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-						<Picker
-							selectedValue={idForge}
-							onValueChange={v => this.onChangeAlat(`idForge${key}`, v, key)}
-						>
-							<Picker.Item label='--- Pilih ---' value='' />
-							<Picker.Item label='Pukat Udang' value='Pukat Udang' />
-							<Picker.Item label='Pukat Karang' value='Pukat Karang' />
-							<Picker.Item label='Pukat Kantung' value='Pukat Kantung' />
-						</Picker>
-					</View>
-				</ContainerSection>
-			</View>
-		);
-		this.setState({ comboInput })
+	addShipComboBox = () => {
+		this.setState({
+			statusComboShip: true,
+			plusShip: false
+		});
 	}
 
-	checkShipMinus = data => {
-		const { checkedShipSizeMinus } = this.state;
-		console.log(checkedShipSizeMinus, 'Sebelumnya');
-		if (!checkedShipSizeMinus.includes(data)) {
-			console.log('IF');
-			this.setState({
-				checkedShipSizeMinus: [...checkedShipSizeMinus, data]
-			}, () => {
-				console.log(checkedShipSizeMinus);
-			});
-		} else {
-			console.log('ELSE');
-			this.setState({
-				checkedShipSizeMinus: checkedShipSizeMinus.filter(a => a !== data)
-			}, () => {
-				console.log(checkedShipSizeMinus);
-			});
-		}
-	}
+	addTextInputShipDropDown = (key, value) => {
+		// Dropdown
+		const textInputShipDropDown = this.state.textInputShipDropDown;
+		this.setState({ textInputShipDropDown });
+		const sizeShip = value + key;
 
-	checkShipPlus = data => {
-		const { checkedShipSizePlus } = this.state;
-		if (!checkedShipSizePlus.includes(data)) {
-			this.setState({
-				checkedShipSizePlus: [...checkedShipSizePlus, data]
-			});
-		} else {
-			this.setState({
-				checkedShipSizePlus: checkedShipSizePlus.filter(a => a !== data)
-			});
-		}
-	}
+		// TextInput
+		const { tempShipName, tempShipSize } = this.state;
+		const textInputShip = this.state.textInputShip;
+		this.setState({ textInputShip })
 
-	addComboBoxKapal = (key) => {
-		console.log('COMBO KAPAL NYA MAS');
-		const { shipId } = this.state;
-		const comboKapal = this.state.comboKapal;
-
-		comboKapal.push(
-			<View key={key}>
-				<ContainerSection>
-					<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-						<Picker
-							selectedValue={shipId + [key]}
-							onValueChange={v => this.ChangeInputForge(`shipId${key}`, v)}
-						>
-							<Picker.Item label='--- Pilih ---' value='' />
-							<Picker.Item label='<= 1 GT' value='<=1 GT' />
-							<Picker.Item label='>1 GT' value='>1 GT' />
-						</Picker>
-					</View>
-				</ContainerSection>
-			</View>
-		);
-		this.setState({ comboKapal });
-	}
-
-	addTextInput = (key) => {
-		const { shipId, tempShipName, tempShipSize } = this.state;
-		const textInput = this.state.textInput;
-
-		this.setState({ textInput })
-		if (shipId === '<=1 GT') {
-			textInput.push(
+		if (value === '<=1 GT') {
+			textInputShipDropDown.push(
 				<View key={key}>
+					<ContainerSection>
+						<View style={{ padding: 5, width: '100%' }}>
+							<Input
+								label="Ukuran Kapal"
+								placeholder="Ukuran Kapal"
+								value={sizeShip}
+								editable={false}
+							/>
+						</View>
+					</ContainerSection>
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
@@ -515,10 +440,19 @@ class Register extends Component {
 					</ContainerSection>
 				</View>
 			);
-			this.setState({ textInput })
-		} else if (shipId === '>1 GT') {
-			textInput.push(
+		} else if (value === '>1 GT') {
+			textInputShipDropDown.push(
 				<View key={key}>
+					<ContainerSection>
+						<View style={{ padding: 5, width: '100%' }}>
+							<Input
+								label="Ukuran Kapal"
+								placeholder="Ukuran Kapal"
+								value={sizeShip}
+								editable={false}
+							/>
+						</View>
+					</ContainerSection>
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
@@ -542,9 +476,34 @@ class Register extends Component {
 					</ContainerSection>
 				</View>
 			);
-			this.setState({ textInput })
 		}
 	}
+
+
+	addTextInputForge = (key, value) => {
+		//Alat TextInput
+		const textInputForge = this.state.textInputForge;
+		this.setState({ textInputForge });
+
+		textInputForge.push(
+			<View key={key}>
+				<ContainerSection>
+					<Input
+						label="Ukuran Kapal"
+						placeholder="Ukuran Kapal"
+						value={value}
+						editable={false}
+					/>
+				</ContainerSection>
+			</View>
+		);
+
+		// Push Value
+		const newforgeName = this.state.forgeName
+		newforgeName[key] = value
+		this.setState({ forgeName: newforgeName });
+	}
+
 
 	render() {
 		const {
@@ -577,10 +536,19 @@ class Register extends Component {
 
 			idPhoto,
 			photo,
-			textInput,
-			shipId,
-			comboInput,
-			comboKapal
+
+			// Add Kapal da Alat
+			statusComboShip,
+			textInputShipDropDown,
+			textInputShip,
+			ShipSize,
+			plusShip,
+
+
+			statusComboForge,
+			forgeName,
+			nameForge,
+			textInputForge
 		} = this.state;
 
 		return (
@@ -963,29 +931,88 @@ class Register extends Component {
 							Peralatan (Opsional)
 						</Text>
 					</ContainerSection>
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Pilih Ukuran</Text>
-						<TouchableOpacity
-							onPress={() => {
-								console.log('Tambah Kapal Mas');
-								this.addComboBoxKapal(comboKapal.length)
-							}}
-						>
-							<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Kapal +</Text>
-						</TouchableOpacity>
-					</View>
+
 					{
-						comboKapal && comboKapal.map((value) =>
-							value
-						)
+						statusComboShip ?
+							<View>
+								<View style={{ flexDirection: 'row', flex: 1 }}>
+									<Text style={{ flex: 1 }}>Pilih Ukuran Kapal</Text>
+								</View>
+								<ContainerSection>
+									<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+										<Picker
+											selectedValue={ShipSize}
+											onValueChange={v => this.onChangeInputShip('ShipSize', v)}
+										>
+											<Picker.Item label='--- Pilih ---' value='' />
+											<Picker.Item label='<= 1 GT' value='<=1 GT' />
+											<Picker.Item label='>1 GT' value='>1 GT' />
+										</Picker>
+									</View>
+								</ContainerSection>
+							</View>
+							:
+							<View />
 					}
+
 					{
-						textInput && textInput.map((value) =>
-							value
+						plusShip ?
+							<View style={{ flex: 1 }}>
+								<TouchableOpacity
+									onPress={() => {
+										console.log('Tambah Kapal Mas');
+										this.setState({
+											plusShip: false
+										}, () => {
+											this.addShipComboBox();
+										});
+									}}
+								>
+									<Text style={{ marginLeft: '70%' }}>Tambah Kapal +</Text>
+								</TouchableOpacity>
+							</View>
+							:
+							<View />
+					}
+
+					{
+						textInputShipDropDown && textInputShipDropDown.map((item) =>
+							item
 						)
 					}
 
-					<View style={{ flexDirection: 'row', flex: 1 }}>
+
+					{
+						statusComboForge ?
+							<View>
+								<View style={{ flexDirection: 'row', flex: 1 }}>
+									<Text style={{ flex: 1 }}>Pilih Alat Tangkap</Text>
+								</View>
+								<ContainerSection>
+									<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+										<Picker
+											selectedValue={nameForge}
+											onValueChange={v => this.onChangeInputForge('nameForge', v)}
+										>
+											<Picker.Item label='--- Pilih ---' value='' />
+											<Picker.Item label='Pukat Udang' value='Pukat Udang' />
+											<Picker.Item label='Pukat Kantung' value='Pukat Kantung' />
+											<Picker.Item label='Pukat Karang' value='Pukat Karang' />
+										</Picker>
+									</View>
+								</ContainerSection>
+							</View>
+							:
+							<View />
+					}
+
+					{
+						textInputForge && textInputForge.map((item) =>
+							item
+						)
+					}
+
+					{/* <View style={{ flexDirection: 'row', flex: 1 }}>
 						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
 						<TouchableOpacity
 							onPress={() => {
@@ -995,13 +1022,7 @@ class Register extends Component {
 						>
 							<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Alat +</Text>
 						</TouchableOpacity>
-					</View>
-
-					{
-						comboInput && comboInput.map((value) =>
-							value
-						)
-					}
+					</View> */}
 
 					<View style={{ marginTop: 20, marginBottom: 20 }}>
 						<ContainerSection>
