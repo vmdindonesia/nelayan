@@ -52,17 +52,19 @@ class Register extends Component {
 
 			// Add Kapal dan Alat
 			statusComboShip: true,
-			ShipSize: '',
+			ShipSize: [],
 			textInputShipDropDown: [],
 			textInputShip: [],
 			tempShipName: '',
 			tempShipSize: '',
 			plusShip: false,
+			ShipName: [],
 
 			statusComboForge: true,
 			forgeName: [],
 			nameForge: '',
-			textInputForge: []
+			textInputForge: [],
+			plusForge: false
 		}
 	}
 
@@ -105,7 +107,8 @@ class Register extends Component {
 
 	onChangeInputForge = (name, v) => {
 		this.setState({
-			statusComboForge: false
+			statusComboForge: false,
+			plusForge: true
 		}, () => {
 			this.addTextInputForge(this.state.textInputForge.length, v);
 		});
@@ -243,45 +246,45 @@ class Register extends Component {
 		console.log(this.state, 'STATE BOS')
 
 		const data = this.state;
-		this.submitRegister(data)
+		// this.submitRegister(data)
 
 		// Form Validation
-		// if (data.organizationType === '') {
-		// 	ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
-		// }
-		// else if (data.password !== data.confirmPassword) {
-		// 	ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
-		// }
-		// else if (data.CityId === '') {
-		// 	ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		// }
-		// else if (data.idNumber.length !== 16) {
-		// 	ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
-		// }
-		// else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
-		// 	ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
-		// }
-		// else if (data.FishIds[0] === '' && data.values[0] !== '') {
-		// 	ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		// }
-		// else if (data.FishIds[1] === '' && data.values[1] !== '') {
-		// 	ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		// }
-		// else if (data.FishIds[2] === '' && data.values[2] !== '') {
-		// 	ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		// }
-		// else if (data.FishIds[3] === '' && data.values[3] !== '') {
-		// 	ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		// }
-		// else if (data.FishIds[4] === '' && data.values[4] !== '') {
-		// 	ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		// }
-		// else if (!this.regexEmail(data.email)) {
-		// 	ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
-		// }
-		// else {
-		// 	this.submitRegister(data)
-		// }
+		if (data.organizationType === '') {
+			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
+		}
+		else if (data.password !== data.confirmPassword) {
+			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
+		}
+		else if (data.CityId === '') {
+			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.idNumber.length !== 16) {
+			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
+			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[0] === '' && data.values[0] !== '') {
+			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[1] === '' && data.values[1] !== '') {
+			ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[2] === '' && data.values[2] !== '') {
+			ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[3] === '' && data.values[3] !== '') {
+			ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.FishIds[4] === '' && data.values[4] !== '') {
+			ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (!this.regexEmail(data.email)) {
+			ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
+		}
+		else {
+			this.submitRegister(data)
+		}
 	}
 
 	submitRegister = (data) => {
@@ -341,36 +344,36 @@ class Register extends Component {
 		)
 		// console.log(data, 'DATAAAA');
 		console.log(formData, 'FORM DATA');
-		// axios.post(`${BASE_URL}/supplier/register`, formData, {
-		// 	headers: { 'Content-Type': 'multipart/form-data' },
-		// 	timeout: REQUEST_TIME_OUT
-		// })
-		// 	.then(response => {
-		// 		console.log(response.status)
+		axios.post(`${BASE_URL}/supplier/register`, formData, {
+			headers: { 'Content-Type': 'multipart/form-data' },
+			timeout: REQUEST_TIME_OUT
+		})
+			.then(response => {
+				console.log(response.status)
 
-		// 		const resetAction = NavigationActions.reset({
-		// 			index: 0,
-		// 			actions: [
-		// 				NavigationActions.navigate({ routeName: 'Login' })
-		// 			]
-		// 		})
-		// 		this.props.navigation.dispatch(resetAction)
-		// 		Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
+				const resetAction = NavigationActions.reset({
+					index: 0,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Login' })
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
 
-		// 		this.setState({ loading: false })
-		// 	})
-		// 	.catch(error => {
-		// 		console.log(error.response)
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				console.log(error.response)
 
-		// 		if (error.response) {
-		// 			ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-		// 		}
-		// 		else {
-		// 			ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-		// 		}
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
 
-		// 		this.setState({ loading: false })
-		// 	})
+				this.setState({ loading: false })
+			})
 	}
 
 
@@ -404,11 +407,18 @@ class Register extends Component {
 		});
 	}
 
+	addForgeComboBox = () => {
+		this.setState({
+			statusComboForge: true,
+			plusForge: false
+		});
+	}
+
 	addTextInputShipDropDown = (key, value) => {
 		// Dropdown
 		const textInputShipDropDown = this.state.textInputShipDropDown;
 		this.setState({ textInputShipDropDown });
-		const sizeShip = value + key;
+		const sizeShip = value;
 
 		// TextInput
 		const { tempShipName, tempShipSize } = this.state;
@@ -489,8 +499,8 @@ class Register extends Component {
 			<View key={key}>
 				<ContainerSection>
 					<Input
-						label="Ukuran Kapal"
-						placeholder="Ukuran Kapal"
+						label="Alat Tangkap"
+						placeholder="Alat Tangkap"
 						value={value}
 						editable={false}
 					/>
@@ -548,7 +558,8 @@ class Register extends Component {
 			statusComboForge,
 			forgeName,
 			nameForge,
-			textInputForge
+			textInputForge,
+			plusForge
 		} = this.state;
 
 		return (
@@ -957,7 +968,7 @@ class Register extends Component {
 
 					{
 						plusShip ?
-							<View style={{ flex: 1 }}>
+							<View>
 								<TouchableOpacity
 									onPress={() => {
 										console.log('Tambah Kapal Mas');
@@ -968,7 +979,7 @@ class Register extends Component {
 										});
 									}}
 								>
-									<Text style={{ marginLeft: '70%' }}>Tambah Kapal +</Text>
+									<Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
 								</TouchableOpacity>
 							</View>
 							:
@@ -1001,6 +1012,26 @@ class Register extends Component {
 										</Picker>
 									</View>
 								</ContainerSection>
+							</View>
+							:
+							<View />
+					}
+
+					{
+						plusForge ?
+							<View style={{ flex: 1 }}>
+								<TouchableOpacity
+									onPress={() => {
+										console.log('Tambah Alat Mas');
+										this.setState({
+											plusForge: false
+										}, () => {
+											this.addForgeComboBox();
+										});
+									}}
+								>
+									<Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
+								</TouchableOpacity>
 							</View>
 							:
 							<View />
