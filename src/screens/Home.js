@@ -268,14 +268,18 @@ class Home extends Component {
 						}
 					>
 						<View style={headerHomeStyle}>
-							<View style={profileImageContainer}>
-								<Image
-									style={profileImage}
-									source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
-								/>
-							</View>
-							<Text style={profileName}>{this.props.user.data.name}</Text>
-							<Text style={profileName}>{this.props.user.data.organization}</Text>
+							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Profile')}>
+								<View>
+									<View style={profileImageContainer}>
+										<Image
+											style={profileImage}
+											source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
+										/>
+									</View>
+									<Text style={profileName}>{this.props.user.data.name}</Text>
+									<Text style={profileName}>{this.props.user.data.organization}</Text>
+								</View>
+							</TouchableWithoutFeedback>
 							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
 								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 									<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5 }}>
