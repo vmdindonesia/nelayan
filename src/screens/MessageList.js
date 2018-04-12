@@ -69,12 +69,12 @@ class MessageList extends Component {
 			<View style={{flex: 1}}>
 				<Card>
 					<TouchableNativeFeedback 
-						onPress={() => this.props.navigation.navigate('MessageAdmin', 
-							{
+						onPress={() => this.props.navigation.navigate('MessageAdmin', {
 								id: 1,
 								codeNumber: 'chat admin',
 								organizationType: 'Admin Aruna',
-							})}
+							})
+						}
 					>
 						<View style={styles.itemContainerStyle}>
 							<View style={styles.thumbnailContainerStyle}>
