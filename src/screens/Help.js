@@ -12,14 +12,14 @@ class Help extends Component {
 		return (
 			<View style={{flex: 1, marginTop: 50}}>
 				<Container>
-					<ContainerSection>
-						<View style={{flex: 1, marginBottom: 30}}>
-							<Image
-								style={{alignSelf: 'center'}}
-								source={require('../../assets/logo.png')} 
-							/>
-						</View>
-					</ContainerSection>
+					<View>
+						<Image
+							style={{alignSelf: 'center'}}
+							source={require('../../assets/logo.png')} 
+						/>
+					</View>
+					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v1.0.24</Text>
+
 					<View style={{justifyContent: 'center', alignItems: 'center'}}>
 						<Text>Hubungi</Text>
 						<Text>Pusat Bantuan</Text>
