@@ -33,8 +33,8 @@ class MemberList extends Component {
 						<View style={styles.headerContentStyle}>
 							<Text style={styles.hedaerTextStyle}>{item.name}</Text>
 							<Text>{item.address}</Text>
-							<Text>{item.phone}</Text>
-							<Text>No. KTP: {item.idNumber}</Text>
+							<Text style={{fontWeight: 'bold'}}>{item.phone}</Text>
+							<Text style={{fontSize: 11}}>No. KTP: {item.idNumber}</Text>
 						</View>
 					</View>
 				</TouchableNativeFeedback>
@@ -75,8 +75,8 @@ const styles = {
 		margin: 10,
 	},
 	thumbnailStyle: {
-		height: 100,
-		width: 100,
+		height: 80,
+		width: 80,
 		borderRadius: 50
 	},
 	headerContentStyle: {
@@ -89,7 +89,8 @@ const styles = {
 	},
 	hedaerTextStyle: {
 		fontSize: 20,
-		color: COLOR.secondary_a
+		color: COLOR.secondary_a,
+		fontWeight: 'bold'
 	}
 }
 
