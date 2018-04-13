@@ -103,7 +103,7 @@ class RewardItemList extends Component {
 		}
 
 		return (
-			<View style={{ flex: 1, padding: 15}}>
+			<View style={{ flex: 1, paddingLeft: 15, paddingRight: 15}}>
 				<FlatList
 					data={this.props.items.data}
 					renderItem={({item}) => this.renderItem(item)}
