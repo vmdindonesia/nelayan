@@ -46,7 +46,7 @@ const styles = {
 		flex: 1,
 		alignSelf: 'stretch',
 		backgroundColor: '#fff',
-		borderRadius: 8,
+		borderRadius: 4,
 	}
 }
 
