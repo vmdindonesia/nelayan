@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, Image, TouchableNativeFeedback, RefreshControl, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
+import { StatusBar, View, ScrollView, Text, Image, TouchableNativeFeedback, RefreshControl, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -231,6 +231,10 @@ class Home extends Component {
 
 		return (
 			<View style={containerStyle}>
+				<StatusBar
+					backgroundColor={COLOR.primary}
+					barStyle="light-content"
+				/>
 				<DrawerLayoutAndroid
 					ref="drawer"
 					drawerWidth={300}
