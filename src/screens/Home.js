@@ -98,7 +98,7 @@ class Home extends Component {
 
 		const {
 			containerStyle, headerHomeStyle, menuContainerStyle,
-			profileImageContainer, profileImage, profileName, profileSupplierName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
+			profileImageContainer, profileImage, profileImageContainerDrawer, profileImageDrawer, profileName, profileSupplierName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
 		} = styles
 
 
@@ -142,23 +142,34 @@ class Home extends Component {
 
 		const menuDrawer = (
 			<ScrollView style={{ flex: 1, backgroundColor: COLOR.secondary_a }}>
-				<View style={{ padding: 30, paddingTop: 20 }}>
-					<ContainerSection>
-						<View style={{ flexDirection: 'row', flex: 1 }}>
-							<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
-							<View style={{ flex: 1 }}>
-								<TouchableOpacity 
-									style={{height: 45, position: 'absolute', right: -10, width: 50, paddingRight: 20, marginTop: -10, paddingTop: 10}}
-									onPress={() => this.refs.drawer.closeDrawer()}
-								>
-									<View>
-										<Icon style={{ color: '#fff', alignSelf: 'flex-end' }} st name="md-arrow-back" size={24} />
-									</View>
-								</TouchableOpacity>
+				<View style={{ flexDirection: 'row', flex: 1, backgroundColor: COLOR.primary, paddingTop: 20, padding: 30 }}>
+					<View style={profileImageContainerDrawer}>
+						<Image
+							style={profileImageDrawer}
+							source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
+						/>
+					</View>
+					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1}}>
+						<TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileEdit')}>
+							<View>
+								<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
+								<View style={{height: 5}} />
+								<Text style={{color: 'white', fontSize: 11}}>Edit profile</Text>
 							</View>
+						</TouchableOpacity>
+						<View style={{ flex: 1 }}>
+							<TouchableOpacity 
+								style={{height: 45, position: 'absolute', right: -10, width: 50, paddingRight: 20, marginTop: -23, paddingTop: 10}}
+								onPress={() => this.refs.drawer.closeDrawer()}
+							>
+								<View>
+									<Icon style={{ color: '#fff', alignSelf: 'flex-end' }} st name="md-arrow-back" size={24} />
+								</View>
+							</TouchableOpacity>
 						</View>
-					</ContainerSection>
-					<View style={{ borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10 }} />
+					</View>
+				</View>
+				<View style={{ padding: 30, paddingTop: 10}}>
 
 					{
 						menus.map((item, index) =>
@@ -166,7 +177,7 @@ class Home extends Component {
 								key={index}
 								onPress={() => this.props.navigation.navigate(item.screen)}
 							>
-								<View style={{ marginBottom: 15, width: 100 }}>
+								<View style={{ marginBottom: 10, width: 100 }}>
 									<ContainerSection>
 										<Image
 											style={styles.menuIcon}
@@ -182,7 +193,7 @@ class Home extends Component {
 					<View style={{ borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10 }} />
 
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Term')}>
-						<View style={{ marginBottom: 20 }}>
+						<View style={{ marginBottom: 10 }}>
 							<ContainerSection>
 								<Image
 									style={styles.menuIcon}
@@ -193,7 +204,7 @@ class Home extends Component {
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Help')}>
-						<View style={{ marginBottom: 20 }}>
+						<View style={{ marginBottom: 10 }}>
 							<ContainerSection>
 								<Image
 									style={styles.menuIcon}
@@ -215,7 +226,7 @@ class Home extends Component {
 							this.props.navigation.dispatch(resetAction)
 						})}
 					>
-						<View style={{ marginBottom: 20 }}>
+						<View style={{ marginBottom: 10 }}>
 							<ContainerSection>
 								<Image
 									style={styles.menuIcon}
@@ -369,6 +380,18 @@ const styles = {
 	profileImage: {
 		height: 90,
 		width: 90,
+		borderRadius: 50,
+	},
+	profileImageContainerDrawer: {
+		marginLeft: 5,
+		height: 50,
+		width: 50,
+		alignSelf: 'center',
+		marginRight: 15
+	},
+	profileImageDrawer: {
+		height: 50,
+		width: 50,
 		borderRadius: 50,
 	},
 	profileName: {

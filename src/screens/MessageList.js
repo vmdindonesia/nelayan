@@ -39,13 +39,12 @@ class MessageList extends Component {
 						</View>
 
 						<View style={styles.headerContentStyle}>
-							<Text>No. PO {item.Request.codeNumber}</Text>
-							<Text style={{fontSize: 12}}>{item.lastUpdatedAt ? moment(item.lastUpdatedAt).format('DD MMM YYYY, HH:mm') : ''}</Text>
-							<Text style={styles.hedaerTextStyle}>
-								{item.Request.Buyer.organizationType} 
+							<Text style={{fontSize: 11}}>No. PO {item.Request.codeNumber}</Text>
+							<Text style={{fontSize: 12}}>{item.lastUpdatedAt ? moment(item.lastUpdatedAt).format('DD MMM YYYY, HH:mm') : moment().format('DD MMM YYYY, HH:mm')}</Text>
+							<Text style={styles.hedaerTextStyle2}> 
 								{
 									item.Request.Buyer.organization ? 
-									`\n${item.Request.Buyer.organization}`
+									`${item.Request.Buyer.organizationType} ${item.Request.Buyer.organization}`
 								: 
 									item.Request.Buyer.name
 								}
@@ -140,6 +139,10 @@ const styles = {
 	hedaerTextStyle: {
 		fontSize: 14,
 		color: COLOR.secondary_a
+	},
+	hedaerTextStyle2: {
+		fontSize: 14,
+		fontWeight: 'bold',
 	}
 }
 

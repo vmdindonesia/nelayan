@@ -85,9 +85,8 @@ class RewardItemList extends Component {
 						/>
 					</View>
 					<View style={styles.headerContentStyle}>
-						<View style={{flexDirection: 'row'}}>
-							<Text style={{flex: 1}}>{item.name} ({item.pointAmount}) poin</Text>
-						</View>
+						<Text style={{fontWeight: 'bold'}}>{item.name}</Text>
+						<Text>({item.pointAmount}) poin</Text>
 					</View>
 				</View>
 			</TouchableNativeFeedback>
@@ -104,7 +103,7 @@ class RewardItemList extends Component {
 		}
 
 		return (
-			<View style={{ flex: 1, padding: 15}}>
+			<View style={{ flex: 1, paddingLeft: 15, paddingRight: 15}}>
 				<FlatList
 					data={this.props.items.data}
 					renderItem={({item}) => this.renderItem(item)}

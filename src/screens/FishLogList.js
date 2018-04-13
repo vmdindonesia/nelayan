@@ -115,8 +115,9 @@ class FishLogList extends Component {
 						<Picker
 							selectedValue={fishName}
 							onValueChange={v => this.onChangeInput('fishName', v)}
+							itemStyle={{fontWeight: 'bold', color: 'red'}} 
 						>
-							<Picker.Item label="       Cari Fishlog..." value="" />
+							<Picker.Item label="       ---------------   Cari Fishlog   ---------------" value="" />
 							{
 								fishes && fishes.map((item, index) =>
 									<Picker.Item key={index} label={`       ${item.name}`} value={item.name} />
