@@ -52,13 +52,18 @@ class Register extends Component {
 
 			// Add Kapal dan Alat
 			statusComboShip: true,
-			ShipSize: [],
+			ShipId: [],
 			textInputShipDropDown: [],
 			textInputShip: [],
-			tempShipName: '',
-			tempShipSize: '',
 			plusShip: false,
-			ShipName: [],
+			ShipNameMin: [],
+			ShipSizeMin: [],
+			ShipNameMax: [],
+			ShipSizeMax: [],
+			tempShipNameMin: '',
+			tempShipSizeMin: '',
+			tempShipNameMax: '',
+			tempShipSizeMax: '',
 
 			statusComboForge: true,
 			forgeName: [],
@@ -97,9 +102,12 @@ class Register extends Component {
 	}
 
 	onChangeInputShip = (name, v) => {
+		const newShipId = this.state.ShipId
+		newShipId[this.state.ShipId.length] = v;
 		this.setState({
 			statusComboShip: false,
-			plusShip: true
+			plusShip: true,
+			ShipId: newShipId
 		}, () => {
 			this.addTextInputShipDropDown(this.state.textInputShipDropDown.length, v);
 		});
@@ -114,132 +122,45 @@ class Register extends Component {
 		});
 	}
 
-	onChangeInputShipName = (name, v, key) => {
+	onChangeInputShipNameMin = (name, v, key) => {
 		console.log(name, 'Name');
 		console.log(v, 'Value');
 		console.log(key, 'Key');
 		this.setState({ [name]: v }, () => {
-			const newShipName = this.state.ShipName;
-			newShipName[key] = v;
-			this.setState({ ShipName: newShipName }, () => {
-				console.log(this.state.ShipName, 'Ship Name');
-			})
+			const newShipNameMin = this.state.ShipNameMin;
+			newShipNameMin[key] = v;
+			this.setState({ ShipNameMin: newShipNameMin }, () => {
+				console.log(this.state.ShipNameMin, 'Ship Name Min');
+			});
 		});
 	}
 
-	onChangeInputShipSize = (name, v, key) => {
+	onChangeInputShipNameMax = (name, v, key) => {
 		console.log(name, 'Name');
 		console.log(v, 'Value');
-		console.log(key, 'Key')
+		console.log(key, 'Key');
 		this.setState({ [name]: v }, () => {
-			const newShipSize = this.state.ShipSize;
-			newShipSize[key] = v;
-			this.setState({ ShipSize: newShipSize }, () => {
-				console.log(this.state.ShipSize, 'Ship Size');
-			})
+			const newShipNameMax = this.state.ShipNameMax;
+			newShipNameMax[key] = v;
+			this.setState({ ShipNameMax: newShipNameMax }, () => {
+				console.log(this.state.ShipNameMax, 'Ship Name Max');
+			});
 		});
 	}
 
-
-	selectPhotoTapped = (name) => {
-		const options = {
-			quality: 1.0,
-			maxWidth: 500,
-			maxHeight: 500,
-			storageOptions: {
-				skipBackup: true
-			}
-		}
-
-		ImagePicker.showImagePicker(options, (response) => {
-			console.log('Response = ', response);
-
-			if (response.didCancel) {
-				console.log('User cancelled photo picker');
-			}
-			else if (response.error) {
-				console.log('ImagePicker Error: ', response.error);
-			}
-			else if (response.customButton) {
-				console.log('User tapped custom button: ', response.customButton);
-			}
-			else {
-				let source = { uri: response.uri };
-
-				// You can also display the image using data:
-				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-				this.setState({
-					[name]: source
-				});
-			}
+	onChangeInputShipSize = (name, v, key, value) => {
+		console.log(name, 'Name');
+		console.log(v, 'Value');
+		console.log(key, 'Key');
+		this.setState({ [name]: v }, () => {
+			const newShipSizeMax = this.state.ShipSizeMax;
+			newShipSizeMax[key] = v;
+			this.setState({ ShipSizeMax: newShipSizeMax }, () => {
+				console.log(this.state.ShipSizeMax, 'Ship Size Min');
+			});
 		});
 	}
 
-	queryCitySuggestion = (text) => {
-		this.setState({
-			valueCity: text,
-			loadingCity: true,
-			CityId: ''
-		})
-
-		axios.get(`${BASE_URL}/cities/search?key=${text}`)
-			.then(response => {
-				res = response.data.data
-				this.setState({ suggestionsCity: res, loadingCity: false })
-			})
-			.catch(error => {
-				if (error.response) {
-					alert(error.response.data.message)
-				}
-				else {
-					alert('Koneksi internet bermasalah')
-				}
-				this.setState({ loadingCity: false })
-			})
-
-		if (text.length === 1) {
-			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar pilihan kota', ToastAndroid.SHORT)
-		}
-	}
-
-	querySuggestion = (index, text) => {
-		const { values, suggestions, loadings, FishIds } = this.state
-		values[index] = text
-		loadings[index] = true
-		FishIds[index] = ''
-
-		this.setState({
-			values, loadings
-		})
-
-		axios.get(`${BASE_URL}/fishes/search?key=${text}`)
-			.then(response => {
-				res = response.data.data
-				suggestions[index] = res
-				loadings[index] = false
-				this.setState({ suggestions, loadings })
-			})
-			.catch(error => {
-				if (error.response) {
-					alert(error.response.data.message)
-				}
-				else {
-					alert('Koneksi internet bermasalah')
-				}
-				loadings[index] = false
-				this.setState({ loadings })
-			})
-
-		if (text.length === 1) {
-			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar pilihan Komoditas', ToastAndroid.SHORT)
-		}
-	}
-
-	regexEmail = (email) => {
-		const validate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		return validate.test(email);
-	};
 
 	onSubmitRegister = () => {
 		Keyboard.dismiss()
@@ -287,8 +208,112 @@ class Register extends Component {
 		}
 	}
 
+
+	regexEmail = (email) => {
+		const validate = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return validate.test(email);
+	};
+
+	querySuggestion = (index, text) => {
+		const { values, suggestions, loadings, FishIds } = this.state
+		values[index] = text
+		loadings[index] = true
+		FishIds[index] = ''
+
+		this.setState({
+			values, loadings
+		})
+
+		axios.get(`${BASE_URL}/fishes/search?key=${text}`)
+			.then(response => {
+				res = response.data.data
+				suggestions[index] = res
+				loadings[index] = false
+				this.setState({ suggestions, loadings })
+			})
+			.catch(error => {
+				if (error.response) {
+					alert(error.response.data.message)
+				}
+				else {
+					alert('Koneksi internet bermasalah')
+				}
+				loadings[index] = false
+				this.setState({ loadings })
+			})
+
+		if (text.length === 1) {
+			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar pilihan Komoditas', ToastAndroid.SHORT)
+		}
+	}
+
+
+	queryCitySuggestion = (text) => {
+		this.setState({
+			valueCity: text,
+			loadingCity: true,
+			CityId: ''
+		})
+
+		axios.get(`${BASE_URL}/cities/search?key=${text}`)
+			.then(response => {
+				res = response.data.data
+				this.setState({ suggestionsCity: res, loadingCity: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					alert(error.response.data.message)
+				}
+				else {
+					alert('Koneksi internet bermasalah')
+				}
+				this.setState({ loadingCity: false })
+			})
+
+		if (text.length === 1) {
+			ToastAndroid.show('Geser halaman ke atas untuk lihat daftar pilihan kota', ToastAndroid.SHORT)
+		}
+	}
+
+
+	selectPhotoTapped = (name) => {
+		const options = {
+			quality: 1.0,
+			maxWidth: 500,
+			maxHeight: 500,
+			storageOptions: {
+				skipBackup: true
+			}
+		}
+
+		ImagePicker.showImagePicker(options, (response) => {
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled photo picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else if (response.customButton) {
+				console.log('User tapped custom button: ', response.customButton);
+			}
+			else {
+				let source = { uri: response.uri };
+
+				// You can also display the image using data:
+				// let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+				this.setState({
+					[name]: source
+				});
+			}
+		});
+	}
+
+
 	submitRegister = (data) => {
-		this.setState({ loading: true });
+		// this.setState({ loading: true });
 
 		let formData = new FormData()
 		// organization data
@@ -325,24 +350,40 @@ class Register extends Component {
 		formData.append('bankAccount', data.bankAccount)
 		formData.append('bankAccountName', data.bankAccountName)
 		// komoditas data
+
 		data.FishIds.map((item, index) =>
 			(item !== '' ? formData.append(`FishIds[${index}]`, item) : '')
 		)
 
-		if (data.ShipSize.length < 1) {
-			data.ShipName.map((shiped) =>
-				(shiped !== '' ? formData.append('MyShips', { 'name': shiped, 'type': data.shipId }) : '')
-			)
-		} else if (data.ShipSize.length >= 1) {
-			data.ShipName.map((shiped, i) =>
-				(shiped !== '' ? formData.append('MyShips', { 'name': shiped, 'size': data.ShipSize[i], 'type': data.shipId }) : '')
+
+		console.log(data.ShipNameMax, 'SHIP NAME MAX');
+		console.log(data.ShipSizeMax, 'SHIP SIZE MAX');
+		console.log(data.ShipNameMin, 'SHIP NAME MIN');
+		console.log(data.ShipId, 'SHIP ID');
+
+		const ArrayShipNameMin = [];
+
+		if (data.ShipNameMin.length > 0) {
+			data.ShipNameMin.map((item) =>
+				ArrayShipNameMin.push(`{ "name": "${item}", "type": "<=1 GT" }`)
 			)
 		}
 
-		data.forgeName.map((item) =>
-			(shiped !== '' ? formData.append('MyFishingGearIds', item) : '')
-		)
-		// console.log(data, 'DATAAAA');
+		if (data.ShipNameMax.length > 0) {
+			data.ShipNameMax.map((item, index) =>
+				ArrayShipNameMin.push(`{ "name": "${item}", "size": "${data.ShipSizeMax[index]} M", "type": "<=1 GT" }`)
+			)
+		}
+
+
+		formData.append('MyShips', '[' + ArrayShipNameMin.toString() + ']');
+
+		if (data.forgeName.length > 0) {
+			data.forgeName.map((item, index) =>
+				(item !== '' ? formData.append(`MyFishingGearIds[${index}]`, item) : '')
+			)
+		}
+
 		console.log(formData, 'FORM DATA');
 		axios.post(`${BASE_URL}/supplier/register`, formData, {
 			headers: { 'Content-Type': 'multipart/form-data' },
@@ -363,7 +404,8 @@ class Register extends Component {
 				this.setState({ loading: false })
 			})
 			.catch(error => {
-				console.log(error.response)
+				console.log(error);
+				console.log(error.message);
 
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
@@ -376,29 +418,6 @@ class Register extends Component {
 			})
 	}
 
-
-	renderButton = () => {
-		if (this.state.loading) {
-			return <Spinner size='large' />
-		}
-
-		return (
-			<Button
-				onPress={
-					() => Alert.alert(
-						'',
-						'Yakin sudah mengisi informasi profil anda dengan tepat?',
-						[
-							{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-							{ text: 'Ya', onPress: () => this.onSubmitRegister() },
-						]
-					)
-				}
-			>
-				Register
-			</Button>
-		)
-	}
 
 	addShipComboBox = () => {
 		this.setState({
@@ -421,7 +440,7 @@ class Register extends Component {
 		const sizeShip = value;
 
 		// TextInput
-		const { tempShipName, tempShipSize } = this.state;
+		const { tempShipNameMin, tempShipNameMax, tempShipSizeMax } = this.state;
 		const textInputShip = this.state.textInputShip;
 		this.setState({ textInputShip })
 
@@ -443,8 +462,8 @@ class Register extends Component {
 							<Input
 								label='Nama Kapal'
 								placeholder="Nama Kapal"
-								value={tempShipName[key]}
-								onChangeText={v => this.onChangeInputShipName(`tempShipName${key}`, v, key)}
+								value={tempShipNameMin[key]}
+								onChangeText={v => this.onChangeInputShipNameMin(`tempShipNameMin${key}`, v, key)}
 							/>
 						</View>
 					</ContainerSection>
@@ -468,8 +487,8 @@ class Register extends Component {
 							<Input
 								label='Nama Kapal'
 								placeholder="Nama Kapal"
-								value={tempShipName[key]}
-								onChangeText={v => this.onChangeInputShipName(`tempShipName${key}`, v, key)}
+								value={tempShipNameMax[key]}
+								onChangeText={v => this.onChangeInputShipNameMax(`tempShipNameMax${key}`, v, key)}
 							/>
 						</View>
 					</ContainerSection>
@@ -479,8 +498,9 @@ class Register extends Component {
 							<Input
 								label='Ukuran Kapal'
 								placeholder="Ukuran Kapal"
-								value={tempShipSize[key]}
-								onChangeText={v => this.onChangeInputShipSize(`tempShipSize${key}`, v, key)}
+								keyboardType="numeric"
+								value={tempShipSizeMax[key]}
+								onChangeText={v => this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)}
 							/>
 						</View>
 					</ContainerSection>
@@ -512,6 +532,29 @@ class Register extends Component {
 		const newforgeName = this.state.forgeName
 		newforgeName[key] = value
 		this.setState({ forgeName: newforgeName });
+	}
+
+	renderButton = () => {
+		if (this.state.loading) {
+			return <Spinner size='large' />
+		}
+
+		return (
+			<Button
+				onPress={
+					() => Alert.alert(
+						'',
+						'Yakin sudah mengisi informasi profil anda dengan tepat?',
+						[
+							{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+							{ text: 'Ya', onPress: () => this.onSubmitRegister() },
+						]
+					)
+				}
+			>
+				Register
+			</Button>
+		)
 	}
 
 
@@ -559,7 +602,8 @@ class Register extends Component {
 			forgeName,
 			nameForge,
 			textInputForge,
-			plusForge
+			plusForge,
+			ShipId
 		} = this.state;
 
 		return (
@@ -1006,9 +1050,9 @@ class Register extends Component {
 											onValueChange={v => this.onChangeInputForge('nameForge', v)}
 										>
 											<Picker.Item label='--- Pilih ---' value='' />
-											<Picker.Item label='Pukat Udang' value='Pukat Udang' />
-											<Picker.Item label='Pukat Kantung' value='Pukat Kantung' />
-											<Picker.Item label='Pukat Karang' value='Pukat Karang' />
+											<Picker.Item label='Pukat Udang' value='1' />
+											<Picker.Item label='Pukat Kantung' value='2' />
+											<Picker.Item label='Pukat Karang' value='3' />
 										</Picker>
 									</View>
 								</ContainerSection>
