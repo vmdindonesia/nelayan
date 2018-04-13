@@ -252,7 +252,7 @@ class Home extends Component {
 						</TouchableOpacity>
 						<Text style={styles.headerText}>Nelayan Aruna</Text>
 						<TouchableOpacity 
-							style={{ marginLeft: -25, marginRight: -25, height: 45, paddingTop: 15, width: 40, paddingLeft: 20 }}
+							style={{ marginRight: -25, height: 45, paddingTop: 15, width: 40, paddingLeft: 20 }}
 							onPress={() => this.props.navigation.navigate('NotificationList')}
 						>
 							<View>
