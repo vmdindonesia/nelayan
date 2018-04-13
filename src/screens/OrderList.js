@@ -77,10 +77,10 @@ class OrderList extends Component {
 							/>
 						</View>
 						<View style={styles.headerContentStyle}>
-							<Text>No. PO {item.Request.codeNumber}</Text>
-							<Text>{item.Request.Transaction.Fish.name}</Text>
+							<Text style={{fontSize: 11}}>No. PO {item.Request.codeNumber}</Text>
+							<Text style={{fontWeight: 'bold', color: COLOR.primary}}>{item.Request.Transaction.Fish.name}</Text>
 							<Text>{item.Request.Buyer.name}</Text>
-							<Text style={styles.hedaerTextStyle}>
+							<Text style={styles.headerTextStyle}>
 								{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Proses Kontrak'}
 							</Text>
 							<View style={{flexDirection: 'row'}}>
@@ -155,8 +155,9 @@ const styles = {
 	headerContentStyle2: {
 		marginTop: 8,
 	},
-	hedaerTextStyle: {
-		color: COLOR.secondary_a
+	headerTextStyle: {
+		color: COLOR.secondary_a,
+		fontSize: 11
 	},
 	statusIcon: {
 		height: 25,
