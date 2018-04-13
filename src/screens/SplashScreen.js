@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, AsyncStorage } from 'react-native'
+import { View, Image, AsyncStorage, ImageBackground, TouchableWithoutFeedback } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 
@@ -10,48 +10,66 @@ class SplashScreen extends Component {
 	static navigationOptions = {
 		header: null
 	}
+
+	constructor(props) {
+		super(props)
+
+		this.state = {
+			image: require('../../assets/splash2.png'),
+		}
+	}
 	
 	componentWillMount() {
 		// to do: check token expired
 
-		setTimeout(() => {
 			AsyncStorage.getItem('token', (err, result) => {
-				console.log(result, 'Token')
-				if (!result || result === '') {
-					const resetAction = NavigationActions.reset({
-						index: 0,
-						actions: [
-							NavigationActions.navigate({ routeName: 'StartScreen'})
-						]
-					})
-					this.props.navigation.dispatch(resetAction)
-				} 
+				if (result) {
+					setTimeout(() => {
+						this.redirect(result)
+					}, 1000)
+				}
 				else {
-					this.props.setUserToken(result)
-					const resetAction = NavigationActions.reset({
-						index: 0,
-						actions: [
-							NavigationActions.navigate({ routeName: 'Home'})
-						]
-					})
-					this.props.navigation.dispatch(resetAction)
+					this.setState({image: require('../../assets/splash1.png')})
+
+					setTimeout(() => {
+						this.redirect('')
+					}, 20000)
 				}
 			})
-		}, 1000)
+	}
+
+	redirect = (result) => {
+		if (!result || result === '') {
+			const resetAction = NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'StartScreen'})
+				]
+			})
+			this.props.navigation.dispatch(resetAction)
+		} 
+		else {
+			this.props.setUserToken(result)
+			const resetAction = NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Home'})
+				]
+			})
+			this.props.navigation.dispatch(resetAction)
+		}
 	}
 
 	render() {
 		return (
-			<View 
-				style={{
-					backgroundColor: COLOR.secondary_a,
-					flex: 1,
-					justifyContent: 'center', 
-					alignItems: 'center'
-				}}
+			<ImageBackground 
+				source={this.state.image}
+				style={{width: '100%', height: '100%'}}
 			>
-				<Image source={require('../../assets/Ic_aruna_logogram.png')} />
-			</View>
+				<TouchableWithoutFeedback onPress={() => this.redirect('')}>
+					<View style={{flex: 1}} />
+				</TouchableWithoutFeedback>
+			</ImageBackground>
 		)
 	}
 }
