@@ -98,7 +98,7 @@ class Home extends Component {
 
 		const {
 			containerStyle, headerHomeStyle, menuContainerStyle,
-			profileImageContainer, profileImage, profileName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
+			profileImageContainer, profileImage, profileName, profileSupplierName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
 		} = styles
 
 
@@ -286,12 +286,12 @@ class Home extends Component {
 										/>
 									</View>
 									<Text style={profileName}>{this.props.user.data.name}</Text>
-									<Text style={profileName}>{this.props.user.data.organization}</Text>
+									<Text style={profileSupplierName}>{this.props.user.data.organization}</Text>
 								</View>
 							</TouchableWithoutFeedback>
 							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
 								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-									<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5 }}>
+									<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
 										<Image
 											style={coin}
 											source={require('../../assets/coin.png')}
@@ -378,6 +378,12 @@ const styles = {
 		fontSize: 20,
 		fontFamily: 'Muli-Bold'
 	},
+	profileSupplierName: {
+		textAlign: 'center',
+		color: '#fff',
+		fontFamily: 'Muli-Bold',
+		margin: 5
+	},
 	coin: {
 		height: 24,
 		width: 24,
@@ -389,12 +395,12 @@ const styles = {
 		fontSize: 15,
 	},
 	tabContainer: {
-		backgroundColor: COLOR.element_a3,
+		backgroundColor: COLOR.secondary_b,
 		height: 50,
 		justifyContent: 'center'
 	},
 	tabContainerActive: {
-		backgroundColor: COLOR.element_a4,
+		backgroundColor: COLOR.primary,
 		height: 50,
 		justifyContent: 'center'
 	},
