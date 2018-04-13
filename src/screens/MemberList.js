@@ -36,7 +36,7 @@ class MemberList extends Component {
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MemberList' })}>
 								<View style={screen === 'MemberList' ? styles.tabContainerActive : styles.tabContainer}>
-									<Text style={screen === 'MemberList' ? styles.tabTextActive : styles.tabText}>Anggota</Text>
+									<Text style={screen === 'MemberList' ? styles.tabTextActive : styles.tabText}>Nama</Text>
 								</View>
 							</TouchableNativeFeedback>
 						</View>
