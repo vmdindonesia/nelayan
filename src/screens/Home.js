@@ -238,7 +238,7 @@ class Home extends Component {
 				>
 					<View style={styles.header}>
 						<TouchableOpacity 
-							style={{ marginLeft: -28, height: 45, paddingTop: 10, width: 40, paddingLeft: 5 }} 
+							style={{ marginLeft: -20, height: 45, paddingTop: 10, width: 40, paddingLeft: 5 }} 
 							onPress={() => this.refs.drawer.openDrawer()}
 						>
 							<View >
@@ -247,7 +247,7 @@ class Home extends Component {
 						</TouchableOpacity>
 						<Text style={styles.headerText}>Nelayan Aruna</Text>
 						<TouchableOpacity 
-							style={{ marginRight: -25, height: 45, paddingTop: 15, width: 40, paddingLeft: 20 }}
+							style={{ marginRight: -20, height: 45, paddingTop: 15, width: 40, paddingLeft: 20 }}
 							onPress={() => this.props.navigation.navigate('NotificationList')}
 						>
 							<View>
@@ -376,8 +376,7 @@ const styles = {
 	profileSupplierName: {
 		textAlign: 'center',
 		color: '#fff',
-		fontFamily: 'Muli-Bold',
-		margin: 5
+		marginBottom: 10,
 	},
 	coin: {
 		height: 24,
