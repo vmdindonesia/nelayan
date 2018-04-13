@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FlatList, View, Text, Image } from 'react-native'
 import { connect } from 'react-redux'
-import { BASE_URL } from '../constants'
+import { BASE_URL, COLOR } from '../constants'
 import { rewardHistoriesFetch } from '../actions'
 
 class RewardHistory extends Component {
@@ -23,7 +23,7 @@ class RewardHistory extends Component {
 					<View style={{flexDirection: 'row'}}>
 						<Text style={{flex: 1}}>{item.Item ? item.Item.pointAmount : 'Poin'} Poin</Text>
 					</View>
-					<Text>Status: {item.Status ? item.Status.name : 'Status'}</Text>
+					<Text style={{fontSize: 12}}>Status: {item.Status ? item.Status.name : 'Status'}</Text>
 				</View>
 			</View>
 		)
@@ -58,8 +58,8 @@ const styles = {
 		margin: 15,
 	},
 	thumbnailStyle: {
-		height: 80,
-		width: 80,
+		height: 60,
+		width: 60,
 		borderRadius: 5
 	},
 	headerContentStyle: {
@@ -68,10 +68,12 @@ const styles = {
 		marginTop: 5,
 		marginBottom: 10,
 		flexDirection: 'column',
-		justifyContent: 'space-around'
+		justifyContent: 'space-around',
 	},
 	hedaerTextStyle: {
-		fontSize: 20,
+		fontSize: 16,
+		fontWeight: 'bold',
+		color: COLOR.primary
 	}
 }
 

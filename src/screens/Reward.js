@@ -30,9 +30,6 @@ const RewardTab = TabNavigator({
 class Reward extends Component {
 	static navigationOptions = {
 		title: 'Poin',
-		headerTitleStyle: {
-			alignSelf: 'center'
-		},
 		headerRight: (<View />)
 	}
 
@@ -47,7 +44,7 @@ class Reward extends Component {
 				<View style={headerHomeStyle}>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
 					<TouchableWithoutFeedback>
-						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: -10}}>
 							<View style={{flexDirection: 'row'}}>
 								<Image 
 									style={coin}
@@ -95,7 +92,8 @@ const styles = {
 		textAlign: 'center',
 		marginTop: 5,
 		color: '#fff',
-		fontSize: 18
+		fontSize: 18,
+		fontWeight: 'bold'
 	},
 	coin: {
 		height: 30,

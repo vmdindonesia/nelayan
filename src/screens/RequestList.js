@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import { requestsFetch } from '../actions'
 import { Card, CardSection } from '../components/common'
-import { BASE_URL } from '../constants'
+import { BASE_URL, COLOR } from '../constants'
 
 class RequestList extends Component {
 	static navigationOptions = {
@@ -51,15 +51,11 @@ class RequestList extends Component {
 									source={{ uri: `${BASE_URL}/images/${item.Transaction.photo}` }}
 								/>
 							</View>
-							<View style={{ justifyContent: 'space-around', flex: 1 }}>
-								<View>
-									<Text style={styles.buyerName}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
-									<Text style={styles.productName}>{item.Transaction.Fish.name}</Text>
-									<Text style={styles.productName}>{item.Transaction.quantity} Kg</Text>
-								</View>
-								<View>
-									<Text style={styles.buyerName}>{item.Status.name}</Text>
-								</View>
+							<View style={{ justifyContent: 'space-between', flex: 1 }}>
+								<Text style={styles.buyerName}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+								<Text style={styles.productName}>{item.Transaction.Fish.name}</Text>
+								<Text style={styles.quantity}>{item.Transaction.quantity} Kg</Text>
+								<Text style={styles.buyerName}>{item.Status.name}</Text>
 							</View>
 						</CardSection>
 					</Card>
@@ -120,7 +116,13 @@ const styles = {
 	productName: {
 		fontSize: 18,
 		marginLeft: 10,
-		color: '#000'
+		color: COLOR.primary,
+		fontWeight: 'bold'
+	},
+	quantity: {
+		fontSize: 14,
+		marginLeft: 10,
+		color: '#000',
 	}
 }
 
