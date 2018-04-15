@@ -147,10 +147,11 @@ class FishLogCreate extends Component {
 					this.props.navigation.setParams({ change: false })
 
 					const resetAction = NavigationActions.reset({
-						index: 1,
+						index: 2,
 						actions: [
 							NavigationActions.navigate({ routeName: 'Home' }),
-							NavigationActions.navigate({ routeName: 'FishLogList' })
+							NavigationActions.navigate({ routeName: 'FishLogList' }),
+							NavigationActions.navigate({ routeName: 'FishLogDetail'})
 						]
 					})
 					this.props.navigation.dispatch(resetAction)

@@ -16,6 +16,7 @@ import Home from './src/screens/Home'
 import StartScreen from './src/screens/StartScreen'
 
 import FishLogList from './src/screens/FishLogList'
+import FishLogDetail from './src/screens/FishLogDetail'
 import FishLogEdit from './src/screens/FishLogEdit'
 import FishLogCreate from './src/screens/FishLogCreate'
 import ProductForm from './src/screens/ProductForm'
@@ -75,6 +76,7 @@ const Routes = StackNavigator({
   ResetPassword: { screen: ResetPassword },
 
   FishLogList: { screen: FishLogList },
+  FishLogDetail: { screen: FishLogDetail },
   FishLogEdit: { screen: FishLogEdit },
   FishLogCreate: { screen: FishLogCreate },
 

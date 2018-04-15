@@ -68,17 +68,10 @@ class FishLogList extends Component {
 		return (
 			<Card>
 				<TouchableNativeFeedback
-					onPress={() => {
-						const dateNow = new Date();
-						const a = moment(item.createdAt).format('YYYY-MM-DD');
-						const b = moment(dateNow).format('YYYY-MM-DD');
-						if (a < b) {
-							ToastAndroid.show('Fislog tidak dapat di edit setelah 1x24 Jam', ToastAndroid.SHORT)
+					onPress={
+						() => {
+							this.props.navigation.navigate('FishLogDetail', { id: item.id })
 						}
-						else if (a === b) {
-							this.props.navigation.navigate('FishLogEdit', { id: item.id })
-						}
-					}
 					}
 				>
 					<View style={styles.itemContainerStyle}>

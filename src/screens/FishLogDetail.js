@@ -11,9 +11,9 @@ import ImagePicker from 'react-native-image-picker'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 
-class FishLogEdit extends Component {
+class FishlogDetail extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: 'Ubah Fishlog',
+		title: 'Detail Fishlog',
 		headerLeft: 
 			<TouchableOpacity
 				onPress={() => 
@@ -40,7 +40,26 @@ class FishLogEdit extends Component {
 			>
 				<Icon style={{marginLeft: 20, color: '#fff'}} name="md-arrow-back" size={24} />
 			</TouchableOpacity>,
-		headerRight: <View />
+		headerRight:
+			<Button
+				style={{ margin: 5, marginRight: 10 }}
+				onPress={
+					() => {
+						const createdAt = moment(navigation.state.params.fishLog.createdAt, 'YYYY-MM-DD')
+						const now = moment()
+						const diff = now.diff(createdAt, 'days')
+						console.log(diff, '-----diff')
+						if (diff > 1) {
+							ToastAndroid.show('Fislog tidak dapat di edit setelah 1x24 Jam', ToastAndroid.SHORT)
+						}
+						else {
+							navigation.navigate('FishLogEdit', {id: navigation.state.params.fishLog.id})
+						}
+					}
+				}
+			>
+				Ubah
+			</Button>
 	})
 
 	constructor(props) {
@@ -136,11 +155,10 @@ class FishLogEdit extends Component {
 				this.props.navigation.setParams({change: false})
 				
 				const resetAction = NavigationActions.reset({
-					index: 2,
+					index: 1,
 					actions: [
 						NavigationActions.navigate({ routeName: 'Home'}),
-						NavigationActions.navigate({ routeName: 'FishLogList'}),
-						NavigationActions.navigate({ routeName: 'FishLogDetail'})
+						NavigationActions.navigate({ routeName: 'FishLogList'})
 					]
 				})
 				this.props.navigation.dispatch(resetAction)
@@ -174,6 +192,8 @@ class FishLogEdit extends Component {
 				data: response.data.data,
 				loadingPage: false
 			})
+
+			this.props.navigation.setParams({fishLog: response.data.data})
 		})
 		.catch(error => {
 			if (error.response) {
@@ -314,22 +334,13 @@ class FishLogEdit extends Component {
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Komoditas</Text>
-							<View style={styles.pickerStyle}>
-								<Picker
-									selectedValue={data.FishId}
-									onValueChange={v => this.onChangeInput('FishId', v)}
-								>
-									<Picker.Item label="-- Pilih Komoditas --" value="" />
-									{
-										fishes && fishes.map((item, index) => 
-											<Picker.Item key={index} label={item.name} value={item.id} />
-										)
-									}
-								</Picker>
-							</View>
-						</View>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Komoditas</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							value={data.Fish && data.Fish.name}
+							editable={false}
+						/>	
 					</ContainerSection>
 					<ContainerSection>
 						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal Penangkapan</Text>
@@ -341,22 +352,13 @@ class FishLogEdit extends Component {
 						/>	
 					</ContainerSection>
 					<ContainerSection>
-						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Lokasi Penangkapan</Text>
-							<View style={styles.pickerStyle}>
-								<Picker
-									selectedValue={data.ProvinceId}
-									onValueChange={v => this.onChangeInput('ProvinceId', v)}
-								>
-									<Picker.Item label="-- Pilih Provinsi --" value="" />
-									{
-										provinces && provinces.map((item, index) => 
-											<Picker.Item key={index} label={item.name} value={item.id} />
-										)
-									}
-								</Picker>
-							</View>
-						</View>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Lokasi Penangkapan</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							value={(provinces.length > 0) && provinces[data.ProvinceId].name}
+							editable={false}
+						/>	
 					</ContainerSection>
 					<ContainerSection>
 						<Input
@@ -364,6 +366,7 @@ class FishLogEdit extends Component {
 							keyboardType="numeric"
 							value={numeral(parseInt(data.quantity, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('quantity', v)}
+							editable={false}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
 					</ContainerSection>
@@ -373,18 +376,13 @@ class FishLogEdit extends Component {
 							keyboardType="numeric"
 							value={numeral(parseInt(data.size, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('size', v)}
+							editable={false}
 						/>
 						<View style={{marginTop: 50, marginLeft: 10, flex: 1}}>
-							<View style={styles.pickerUnitStyle}>
-								<Picker
-									selectedValue={data.unit}
-									onValueChange={v => this.onChangeInput('unit', v)}
-								>
-									<Picker.Item label="Kg" value="Kg" />
-									<Picker.Item label="Cm" value="Cm" />
-									<Picker.Item label="Ekor/Kg" value="Ekor/Kg" />
-								</Picker>
-							</View>
+							<Input
+								value={data.unit}
+								editable={false}
+							/>	
 						</View>
 					</ContainerSection>
 					<ContainerSection>
@@ -393,6 +391,7 @@ class FishLogEdit extends Component {
 							keyboardType="numeric"
 							value={data.price ? numeral(parseInt(data.price, 0)).format('0,0') : ''}
 							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
+							editable={false}
 						/>
 					</ContainerSection>
 					<ContainerSection>
@@ -401,11 +400,8 @@ class FishLogEdit extends Component {
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Ambil Foto Komoditas</Text>
-					</ContainerSection>
-					<ContainerSection>
 						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5}}>
-							<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+							<TouchableOpacity>
 								<View>
 								{ photo === null ? 
 										<Image
@@ -420,11 +416,6 @@ class FishLogEdit extends Component {
 						</View>
 					</ContainerSection>
 					
-					<View style={{marginTop: 20, marginBottom: 20}}>
-						<ContainerSection>
-							{this.renderButton()}
-						</ContainerSection>
-					</View>
 				</Container>
 			</ScrollView>
 		)
@@ -485,4 +476,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(FishLogEdit)
+export default connect(mapStateToProps)(FishlogDetail)
