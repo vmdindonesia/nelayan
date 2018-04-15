@@ -29,7 +29,7 @@ class Peralatan extends Component {
     this.props.kapalFetch(this.props.user.token)
 
     console.log(this.props.alatFetch)
-    console.log(this.props.kapalFetch)
+    console.log(this.props.kapalFetch, 'kapalfetch')
   }
 
   toggleTab = (index) => {
@@ -77,8 +77,9 @@ class Peralatan extends Component {
             />
           </View>
           <View style={styles.headerContentStyle}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{flex: 1}}>{item.name}</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text>{item.name}</Text>
+              <Text>Ukuran: {item.size}</Text>
             </View>
           </View>
         </View>
@@ -92,30 +93,6 @@ class Peralatan extends Component {
 
     return (
       <View style={{ flex: 1, padding: 10 }}>
-        <ContainerSection>
-          <TouchableWithoutFeedback onPress={() => this.toggleTab(1)}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Text style={{fontSize: 20}}>Alat Tangkap</Text>
-              <View style={{flex: 1}}>
-                <Ionicons size={30} style={{alignSelf: 'flex-end'}} name={tabActive === 1 ? 'ios-arrow-up' : 'ios-arrow-down'} />
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </ContainerSection>
-        {
-          tabActive === 1 &&
-            <View style={{flex: 1}}>
-              <FlatList
-                data={this.props.alat.data}
-                renderItem={({item}) => this.renderAlat(item)}
-                keyExtractor={(item, index) => index}
-                numColumns={1}
-                onRefresh={() => this.props.alatFetch(this.props.user.token)}
-                refreshing={this.props.alat.loading}
-              />
-            </View>
-        }
-
         <ContainerSection>
           <TouchableWithoutFeedback onPress={() => this.toggleTab(2)}>
             <View style={{flex: 1, flexDirection: 'row'}}>
@@ -140,12 +117,36 @@ class Peralatan extends Component {
             </View>
         }
 
-      <ActionButton
-        buttonColor={COLOR.secondary_b}
-        onPress={() => 
-          this.props.navi.navigate('CreateForge')
+        <ContainerSection>
+          <TouchableWithoutFeedback onPress={() => this.toggleTab(1)}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Text style={{fontSize: 20}}>Alat Tangkap</Text>
+              <View style={{flex: 1}}>
+                <Ionicons size={30} style={{alignSelf: 'flex-end'}} name={tabActive === 1 ? 'ios-arrow-up' : 'ios-arrow-down'} />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </ContainerSection>
+        {
+          tabActive === 1 &&
+            <View style={{flex: 1}}>
+              <FlatList
+                data={this.props.alat.data}
+                renderItem={({item}) => this.renderAlat(item)}
+                keyExtractor={(item, index) => index}
+                numColumns={1}
+                onRefresh={() => this.props.alatFetch(this.props.user.token)}
+                refreshing={this.props.alat.loading}
+              />
+            </View>
         }
-      />
+
+        <ActionButton
+          buttonColor={COLOR.secondary_b}
+          onPress={() => 
+            this.props.navi.navigate('CreateForge')
+          }
+        />
       </View>
     )
   }
