@@ -151,7 +151,7 @@ class FishLogCreate extends Component {
 						actions: [
 							NavigationActions.navigate({ routeName: 'Home' }),
 							NavigationActions.navigate({ routeName: 'FishLogList' }),
-							NavigationActions.navigate({ routeName: 'FishLogDetail'})
+							NavigationActions.navigate({ routeName: 'FishLogDetail', params: {id: data.id}})
 						]
 					})
 					this.props.navigation.dispatch(resetAction)
