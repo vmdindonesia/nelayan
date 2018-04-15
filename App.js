@@ -5,7 +5,7 @@ import ReduxThunk from 'redux-thunk'
 import { createStore, applyMiddleware } from 'redux'
 import numeral from 'numeral'
 import { setCustomText } from 'react-native-global-props'
-// import codePush from 'react-native-code-push'
+import codePush from 'react-native-code-push'
 
 import reducers from './src/reducers'
 
@@ -150,7 +150,7 @@ class App extends Component<{}> {
   }
 }
 
-// App = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(App)
+App = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(App)
 
 export default App
 
