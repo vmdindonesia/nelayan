@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-native'
+import { FlatList, View, Image, Text, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
-import { BASE_URL, COLOR } from '../constants'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import { COLOR } from '../constants'
 import { alatFetch, kapalFetch } from '../actions'
-import { Spinner } from '../components/common'
+import { ContainerSection } from '../components/common'
 
 
 class Peralatan extends Component {
@@ -17,7 +19,8 @@ class Peralatan extends Component {
     super(props)
 
     this.state = {
-      alat_1: ''
+      alat_1: '',
+      tabActive: 0
     }
   }
 
@@ -27,6 +30,15 @@ class Peralatan extends Component {
 
     console.log(this.props.alatFetch)
     console.log(this.props.kapalFetch)
+  }
+
+  toggleTab = (index) => {
+    if (index === this.state.tabActive) {
+      this.setState({tabActive: 0})
+    }
+    else {
+      this.setState({tabActive: index})
+    }
   }
 
   renderAlat = (item) => {
@@ -76,31 +88,58 @@ class Peralatan extends Component {
 
 
   render() {
-    return (
-      <View style={{ flex: 1 }}>
-      <View style={{ flexDirection: 'row', padding: 15}}>
-        <View style={{ flex: 1}}>
-          <FlatList
-            data={this.props.alat.data}
-            renderItem={({item}) => this.renderAlat(item)}
-            keyExtractor={(item, index) => index}
-            numColumns={1}
-            onRefresh={() => this.props.alatFetch(this.props.user.token)}
-            refreshing={this.props.alat.loading}
-          />
-        </View>
-        <View style={{ flex: 1}}>
-          <FlatList
-            data={this.props.kapal.data}
-            renderItem={({item}) => this.renderKapal(item)}
-            keyExtractor={(item, index) => index}
-            numColumns={1}
-            onRefresh={() => this.props.alatFetch(this.props.user.token)}
-            refreshing={this.props.kapal.loading}
-          />
-        </View>
+    const { tabActive } = this.state
 
-      </View>
+    return (
+      <View style={{ flex: 1, padding: 10 }}>
+        <ContainerSection>
+          <TouchableWithoutFeedback onPress={() => this.toggleTab(1)}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Text style={{fontSize: 20}}>Alat Tangkap</Text>
+              <View style={{flex: 1}}>
+                <Ionicons size={30} style={{alignSelf: 'flex-end'}} name={tabActive === 1 ? 'ios-arrow-up' : 'ios-arrow-down'} />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </ContainerSection>
+        {
+          tabActive === 1 &&
+            <View style={{flex: 1}}>
+              <FlatList
+                data={this.props.alat.data}
+                renderItem={({item}) => this.renderAlat(item)}
+                keyExtractor={(item, index) => index}
+                numColumns={1}
+                onRefresh={() => this.props.alatFetch(this.props.user.token)}
+                refreshing={this.props.alat.loading}
+              />
+            </View>
+        }
+
+        <ContainerSection>
+          <TouchableWithoutFeedback onPress={() => this.toggleTab(2)}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Text style={{fontSize: 20}}>Kapal</Text>
+              <View style={{flex: 1}}>
+                <Ionicons size={30} style={{alignSelf: 'flex-end'}} name={tabActive === 2 ? 'ios-arrow-up' : 'ios-arrow-down'} />
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </ContainerSection>
+        {
+          tabActive === 2 &&
+            <View style={{flex: 1}}>
+              <FlatList
+                data={this.props.kapal.data}
+                renderItem={({item}) => this.renderKapal(item)}
+                keyExtractor={(item, index) => index}
+                numColumns={1}
+                onRefresh={() => this.props.alatFetch(this.props.user.token)}
+                refreshing={this.props.kapal.loading}
+              />
+            </View>
+        }
+
       <ActionButton
         buttonColor={COLOR.secondary_b}
         onPress={() => 
@@ -141,7 +180,12 @@ const styles = {
   },
   hedaerTextStyle: {
     fontSize: 20,
-  }
+  },
+  card: {
+    borderTopWidth: 1,
+    borderColor: '#eaeaea',
+    padding: 5
+  },
 }
 
 const mapStateToProps = state => {
