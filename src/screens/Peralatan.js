@@ -8,17 +8,17 @@ import { Spinner } from '../components/common'
 
 
 class Peralatan extends Component {
+  static navigationOptions = {
+    title: 'Peralatan',
+    headerRight: <View />
+  }
+
   constructor(props) {
     super(props)
 
     this.state = {
       alat_1: ''
     }
-  }
-
-  static navigationOptions = {
-    title: 'Peralatan',
-    headerRight: <View />
   }
 
   componentWillMount() {
@@ -38,7 +38,7 @@ class Peralatan extends Component {
           <View style={styles.thumbnailContainerStyle}>
             <Image 
               style={styles.thumbnailStyle}
-              source={ require('../../assets/alat-tangkap.png') }
+              source={require('../../assets/alat-tangkap.png')}
 
             />
           </View>
@@ -61,7 +61,7 @@ class Peralatan extends Component {
           <View style={styles.thumbnailContainerStyle}>
             <Image 
               style={styles.thumbnailStyle}
-              source={ require('../../assets/kapal.png') }
+              source={require('../../assets/kapal.png')}
             />
           </View>
           <View style={styles.headerContentStyle}>
@@ -76,40 +76,39 @@ class Peralatan extends Component {
 
 
   render() {
-
-      return (
-        <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row', padding: 15}}>
-          <View style={{ flex: 1}}>
-            <FlatList
-              data={this.props.alat.data}
-              renderItem={({item}) => this.renderAlat(item)}
-              keyExtractor={(item, index) => index}
-              numColumns={1}
-              onRefresh={() => this.props.alatFetch(this.props.user.token)}
-              refreshing={this.props.alat.loading}
-            />
-          </View>
-          <View style={{ flex: 1}}>
-            <FlatList
-              data={this.props.kapal.data}
-              renderItem={({item}) => this.renderKapal(item)}
-              keyExtractor={(item, index) => index}
-              numColumns={1}
-              onRefresh={() => this.props.alatFetch(this.props.user.token)}
-              refreshing={this.props.kapal.loading}
-            />
-          </View>
-
+    return (
+      <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', padding: 15}}>
+        <View style={{ flex: 1}}>
+          <FlatList
+            data={this.props.alat.data}
+            renderItem={({item}) => this.renderAlat(item)}
+            keyExtractor={(item, index) => index}
+            numColumns={1}
+            onRefresh={() => this.props.alatFetch(this.props.user.token)}
+            refreshing={this.props.alat.loading}
+          />
         </View>
-        <ActionButton
-          buttonColor={COLOR.secondary_b}
-          onPress={() => 
-            this.props.navi.navigate('CreateForge')
-          }
-        />
+        <View style={{ flex: 1}}>
+          <FlatList
+            data={this.props.kapal.data}
+            renderItem={({item}) => this.renderKapal(item)}
+            keyExtractor={(item, index) => index}
+            numColumns={1}
+            onRefresh={() => this.props.alatFetch(this.props.user.token)}
+            refreshing={this.props.kapal.loading}
+          />
         </View>
-      )
+
+      </View>
+      <ActionButton
+        buttonColor={COLOR.secondary_b}
+        onPress={() => 
+          this.props.navi.navigate('CreateForge')
+        }
+      />
+      </View>
+    )
   }
 }
 
