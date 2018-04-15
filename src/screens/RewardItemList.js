@@ -85,7 +85,7 @@ class RewardItemList extends Component {
 						/>
 					</View>
 					<View style={styles.headerContentStyle}>
-						<Text style={{fontWeight: 'bold'}}>{item.name}</Text>
+						<Text style={{fontWeight: 'bold'}}>{item.name.length >= 10 ? `${item.name.substring(0, 10)}...` : item.name}</Text>
 						<Text>({item.pointAmount}) poin</Text>
 					</View>
 				</View>
