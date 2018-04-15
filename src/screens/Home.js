@@ -133,11 +133,11 @@ class Home extends Component {
 				icon: require('../../assets/menu6_white.png'),
 				screen: 'Information'
 			},
-			{
-				label: 'Official Store',
-				icon: require('../../assets/OS.png'),
-				screen: 'Store'
-			}
+			// {
+			// 	label: 'Official Store',
+			// 	icon: require('../../assets/OS.png'),
+			// 	screen: 'Store'
+			// }
 		]
 
 		const menuDrawer = (
