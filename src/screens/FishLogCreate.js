@@ -394,23 +394,6 @@ class FishLogCreate extends Component {
 					</ContainerSection>
 
 					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Pilih Ukuran</Text>
-					</View>
-
-					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={shipSize}
-								onValueChange={v => this.onChangeInput('shipSize', v)}
-							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='<= 1 GT' value='<=1 GT' />
-								<Picker.Item label='>1 GT' value='>1 GT' />
-							</Picker>
-						</View>
-					</ContainerSection>
-
-					<View style={{ flexDirection: 'row', flex: 1 }}>
 						<Text style={{ flex: 1 }}>Pilih Kapal</Text>
 					</View>
 
