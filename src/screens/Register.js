@@ -3,6 +3,7 @@ import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
 import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
+
 import { Container, ContainerSection, Input, Button, Spinner, PickerCustom } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
@@ -10,6 +11,7 @@ import AutoComplete from '../components/AutoComplete'
 class Register extends Component {
 	static navigationOptions = {
 		headerTitle: 'Pendaftaran Akun',
+		headerLeft: <View />,
 		headerRight: <View />,
 	}
 
@@ -69,7 +71,8 @@ class Register extends Component {
 			forgeName: [],
 			nameForge: '',
 			textInputForge: [],
-			plusForge: false
+			plusForge: false,
+			tabActive: 1
 		}
 	}
 
@@ -313,7 +316,7 @@ class Register extends Component {
 
 
 	submitRegister = (data) => {
-		// this.setState({ loading: true });
+		this.setState({ loading: true });
 
 		let formData = new FormData()
 		// organization data
@@ -534,6 +537,16 @@ class Register extends Component {
 		this.setState({ forgeName: newforgeName });
 	}
 
+	nextTab = () => {
+		this.setState({tabActive: this.state.tabActive + 1})
+		this.scrollView.scrollTo({x: 0, y: 0, animated: false})
+	}
+
+	prevTab = () => {
+		this.setState({tabActive: this.state.tabActive - 1})
+		this.scrollView.scrollTo({x: 0, y: 0, animated: false})
+	}
+
 	renderButton = () => {
 		if (this.state.loading) {
 			return <Spinner size='large' />
@@ -556,7 +569,6 @@ class Register extends Component {
 			</Button>
 		)
 	}
-
 
 	render() {
 		const {
@@ -603,510 +615,555 @@ class Register extends Component {
 			nameForge,
 			textInputForge,
 			plusForge,
-			ShipId
+			ShipId,
+			tabActive
 		} = this.state;
 
 		return (
 			<ScrollView
 				style={styles.containerStyle}
 				keyboardShouldPersistTaps="always"
+				ref={ref => this.scrollView = ref}
 			>
-				<Container>
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Informasi Lembaga
-						</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<View style={styles.pickerContainer}>
-							<Text style={styles.pickerTextStyle}>Jenis Lembaga</Text>
-							<View style={styles.pickerStyle}>
-								<Picker
-									style={{ flex: 1 }}
-									selectedValue={organizationType}
-									onValueChange={v => this.onChangeInput('organizationType', v)}
-									textStyle={{ fontSize: 24 }}
-								>
-									<Picker.Item label="-- Pilih Jenis Lembaga --" value="" />
-									<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
-									<Picker.Item label="Personal" value="Personal" />
-								</Picker>
+				{
+					tabActive === 1 &&
+					<Container>
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								1. Informasi Lembaga
+							</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<View style={styles.pickerContainer}>
+								<Text style={styles.pickerTextStyle}>Jenis Lembaga</Text>
+								<View style={styles.pickerStyle}>
+									<Picker
+										style={{ flex: 1 }}
+										selectedValue={organizationType}
+										onValueChange={v => this.onChangeInput('organizationType', v)}
+										textStyle={{ fontSize: 24 }}
+									>
+										<Picker.Item label="-- Pilih Jenis Lembaga --" value="" />
+										<Picker.Item label="Kelompok Nelayan" value="Kelompok Nelayan" />
+										<Picker.Item label="Personal" value="Personal" />
+									</Picker>
+								</View>
 							</View>
-						</View>
-					</ContainerSection>
-					{
-						organizationType !== 'Personal' &&
+						</ContainerSection>
+						{
+							organizationType !== 'Personal' &&
+							<ContainerSection>
+								<Input
+									label='Nama Lembaga'
+									value={organization}
+									onChangeText={v => this.onChangeInput('organization', v)}
+								/>
+							</ContainerSection>
+						}
+
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								Lokasi Nelayan
+							</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Kota / Kabupaten"
+								suggestions={suggestionsCity}
+								onChangeText={text => this.queryCitySuggestion(text)}
+								value={valueCity}
+								ref="input"
+							>
+								{
+									loadingCity ?
+										<View style={{ flex: 1 }}>
+											<Spinner size='large' />
+										</View>
+										:
+										suggestionsCity && suggestionsCity.map(item =>
+											<TouchableOpacity
+												key={item.id}
+												onPress={() => this.onCitySelected(item)}
+											>
+												<View style={styles.containerItemAutoSelect}>
+													<Text>{item.name}</Text>
+												</View>
+											</TouchableOpacity>
+										)
+								}
+							</AutoComplete>
+						</ContainerSection>
 						<ContainerSection>
 							<Input
-								label='Nama Lembaga'
-								value={organization}
-								onChangeText={v => this.onChangeInput('organization', v)}
+								label='Kecamatan'
+								placeholder='contoh: Antapani'
+								value={subDistrict}
+								onChangeText={v => this.onChangeInput('subDistrict', v)}
 							/>
 						</ContainerSection>
-					}
-
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Lokasi Nelayan
-						</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<AutoComplete
-							label="Kota / Kabupaten"
-							suggestions={suggestionsCity}
-							onChangeText={text => this.queryCitySuggestion(text)}
-							value={valueCity}
-							ref="input"
-						>
-							{
-								loadingCity ?
-									<View style={{ flex: 1 }}>
-										<Spinner size='large' />
-									</View>
-									:
-									suggestionsCity && suggestionsCity.map(item =>
-										<TouchableOpacity
-											key={item.id}
-											onPress={() => this.onCitySelected(item)}
-										>
-											<View style={styles.containerItemAutoSelect}>
-												<Text>{item.name}</Text>
-											</View>
-										</TouchableOpacity>
-									)
-							}
-						</AutoComplete>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Kecamatan'
-							placeholder='contoh: Antapani'
-							value={subDistrict}
-							onChangeText={v => this.onChangeInput('subDistrict', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Desa / Kelurahan'
-							placeholder='contoh: Antapani Kidul'
-							value={village}
-							onChangeText={v => this.onChangeInput('village', v)}
-						/>
-					</ContainerSection>
-				</Container>
-
-				<Container>
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Informasi Personal
-						</Text>
-					</ContainerSection>
-
-					<Text style={[styles.pickerTextStyle, { marginLeft: 5, marginTop: 10 }]}>Upload Foto Profil</Text>
-					<ContainerSection>
-						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-							<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
-								<View>
-									{photo === null ?
-										<Image
-											source={require('../../assets/ic_add_a_photo.png')}
-										/>
-										:
-										<Image style={styles.avatar} source={photo} />
-									}
-								</View>
-							</TouchableOpacity>
-						</View>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Nama Lengkap'
-							placeholder='contoh: Ahmad Darudi'
-							value={name}
-							onChangeText={v => this.onChangeInput('name', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='No. KTP'
-							placeholder='contoh: 3213179890294565'
-							keyboardType="numeric"
-							value={idNumber}
-							onChangeText={v => this.onChangeInput('idNumber', v)}
-						/>
-					</ContainerSection>
-
-					<Text style={[styles.pickerTextStyle, { marginLeft: 5, marginTop: 10 }]}>Upload Foto KTP</Text>
-					<ContainerSection>
-						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-							<TouchableOpacity onPress={() => this.selectPhotoTapped('idPhoto')}>
-								<View>
-									{idPhoto === null ?
-										<Image
-											source={require('../../assets/ic_add_a_photo.png')}
-										/>
-										:
-										<Image style={{ height: 200, width: 300 }} source={idPhoto} />
-									}
-								</View>
-							</TouchableOpacity>
-						</View>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='No. HP'
-							placeholder='contoh: 085621017922'
-							keyboardType="numeric"
-							value={phone}
-							onChangeText={v => this.onChangeInput('phone', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Email'
-							placeholder='contoh: erwin@gmail.com'
-							value={email}
-							onChangeText={v => this.onChangeInput('email', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Username'
-							placeholder='contoh: erwin95'
-							value={username}
-							onChangeText={v => this.onChangeInput('username', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Password'
-							placeholder='minimal 6 karakter'
-							secureTextEntry
-							value={password}
-							onChangeText={v => this.onChangeInput('password', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Konfirmasi Password'
-							placeholder='minimal 6 karakter'
-							secureTextEntry
-							value={confirmPassword}
-							onChangeText={v => this.onChangeInput('confirmPassword', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Kode Referral'
-							placeholder='boleh dikosongkan'
-							value={referralCode}
-							onChangeText={v => this.onChangeInput('referralCode', v)}
-						/>
-					</ContainerSection>
-				</Container>
-
-				<Container>
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Informasi Rekening
-						</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Nama Bank'
-							value={bank}
-							onChangeText={v => this.onChangeInput('bank', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Cabang'
-							value={bankBranch}
-							onChangeText={v => this.onChangeInput('bankBranch', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Nomor Rekening'
-							keyboardType="numeric"
-							value={bankAccount}
-							onChangeText={v => this.onChangeInput('bankAccount', v)}
-						/>
-					</ContainerSection>
-					<ContainerSection>
-						<Input
-							label='Atas Nama'
-							value={bankAccountName}
-							onChangeText={v => this.onChangeInput('bankAccountName', v)}
-						/>
-					</ContainerSection>
-				</Container>
-
-				<Container>
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Informasi Komoditas
-						</Text>
-					</ContainerSection>
-					<ContainerSection>
-						<AutoComplete
-							label="Nama Komoditas"
-							suggestions={suggestions[0]}
-							onChangeText={text => this.querySuggestion(0, text)}
-							value={values[0]}
-						>
-							{
-								loadings[0] ?
-									<View style={{ flex: 1 }}>
-										<Spinner size='large' />
-									</View>
-									:
-									suggestions[0] && suggestions[0].map(item =>
-										<TouchableOpacity
-											key={item.id}
-											onPress={() => this.onItemSelected(0, item)}
-										>
-											<View style={styles.containerItemAutoSelect}>
-												<Text>{item.name}</Text>
-											</View>
-										</TouchableOpacity>
-									)
-							}
-						</AutoComplete>
-					</ContainerSection>
-					<ContainerSection>
-						<AutoComplete
-							label="Nama Komoditas"
-							suggestions={suggestions[1]}
-							onChangeText={text => this.querySuggestion(1, text)}
-							value={values[1]}
-						>
-							{
-								loadings[1] ?
-									<View style={{ flex: 1 }}>
-										<Spinner size='large' />
-									</View>
-									:
-									suggestions[1] && suggestions[1].map(item =>
-										<TouchableOpacity
-											key={item.id}
-											onPress={() => this.onItemSelected(1, item)}
-										>
-											<View style={styles.containerItemAutoSelect}>
-												<Text>{item.name}</Text>
-											</View>
-										</TouchableOpacity>
-									)
-							}
-						</AutoComplete>
-					</ContainerSection>
-					<ContainerSection>
-						<AutoComplete
-							label="Nama Komoditas"
-							suggestions={suggestions[2]}
-							onChangeText={text => this.querySuggestion(2, text)}
-							value={values[2]}
-						>
-							{
-								loadings[2] ?
-									<View style={{ flex: 1 }}>
-										<Spinner size='large' />
-									</View>
-									:
-									suggestions[2] && suggestions[2].map(item =>
-										<TouchableOpacity
-											key={item.id}
-											onPress={() => this.onItemSelected(2, item)}
-										>
-											<View style={styles.containerItemAutoSelect}>
-												<Text>{item.name}</Text>
-											</View>
-										</TouchableOpacity>
-									)
-							}
-						</AutoComplete>
-					</ContainerSection>
-					<ContainerSection>
-						<AutoComplete
-							label="Nama Komoditas"
-							suggestions={suggestions[3]}
-							onChangeText={text => this.querySuggestion(3, text)}
-							value={values[3]}
-						>
-							{
-								loadings[3] ?
-									<View style={{ flex: 1 }}>
-										<Spinner size='large' />
-									</View>
-									:
-									suggestions[3] && suggestions[3].map(item =>
-										<TouchableOpacity
-											key={item.id}
-											onPress={() => this.onItemSelected(3, item)}
-										>
-											<View style={styles.containerItemAutoSelect}>
-												<Text>{item.name}</Text>
-											</View>
-										</TouchableOpacity>
-									)
-							}
-						</AutoComplete>
-					</ContainerSection>
-					<ContainerSection>
-						<AutoComplete
-							label="Nama Komoditas"
-							suggestions={suggestions[4]}
-							onChangeText={text => this.querySuggestion(4, text)}
-							value={values[4]}
-						>
-							{
-								loadings[4] ?
-									<View style={{ flex: 1 }}>
-										<Spinner size='large' />
-									</View>
-									:
-									suggestions[4] && suggestions[4].map(item =>
-										<TouchableOpacity
-											key={item.id}
-											onPress={() => this.onItemSelected(4, item)}
-										>
-											<View style={styles.containerItemAutoSelect}>
-												<Text>{item.name}</Text>
-											</View>
-										</TouchableOpacity>
-									)
-							}
-						</AutoComplete>
-					</ContainerSection>
-				</Container>
-
-				<Container>
-					<ContainerSection>
-						<Text style={styles.headerStyle}>
-							Peralatan (Opsional)
-						</Text>
-					</ContainerSection>
-
-					{
-						statusComboShip ?
-							<View>
-								<View style={{ flexDirection: 'row', flex: 1 }}>
-									<Text style={{ flex: 1 }}>Pilih Ukuran Kapal</Text>
-								</View>
-								<ContainerSection>
-									<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-										<Picker
-											selectedValue={ShipSize}
-											onValueChange={v => this.onChangeInputShip('ShipSize', v)}
-										>
-											<Picker.Item label='--- Pilih ---' value='' />
-											<Picker.Item label='<= 1 GT' value='<=1 GT' />
-											<Picker.Item label='>1 GT' value='>1 GT' />
-										</Picker>
-									</View>
-								</ContainerSection>
-							</View>
-							:
-							<View />
-					}
-
-					{
-						plusShip ?
-							<View>
-								<TouchableOpacity
-									onPress={() => {
-										console.log('Tambah Kapal Mas');
-										this.setState({
-											plusShip: false
-										}, () => {
-											this.addShipComboBox();
-										});
-									}}
-								>
-									<Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
-								</TouchableOpacity>
-							</View>
-							:
-							<View />
-					}
-
-					{
-						textInputShipDropDown && textInputShipDropDown.map((item) =>
-							item
-						)
-					}
-
-
-					{
-						statusComboForge ?
-							<View>
-								<View style={{ flexDirection: 'row', flex: 1 }}>
-									<Text style={{ flex: 1 }}>Pilih Alat Tangkap</Text>
-								</View>
-								<ContainerSection>
-									<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-										<Picker
-											selectedValue={nameForge}
-											onValueChange={v => this.onChangeInputForge('nameForge', v)}
-										>
-											<Picker.Item label='--- Pilih ---' value='' />
-											<Picker.Item label='Pukat Udang' value='1' />
-											<Picker.Item label='Pukat Kantung' value='2' />
-											<Picker.Item label='Pukat Karang' value='3' />
-										</Picker>
-									</View>
-								</ContainerSection>
-							</View>
-							:
-							<View />
-					}
-
-					{
-						plusForge ?
-							<View style={{ flex: 1 }}>
-								<TouchableOpacity
-									onPress={() => {
-										console.log('Tambah Alat Mas');
-										this.setState({
-											plusForge: false
-										}, () => {
-											this.addForgeComboBox();
-										});
-									}}
-								>
-									<Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
-								</TouchableOpacity>
-							</View>
-							:
-							<View />
-					}
-
-					{
-						textInputForge && textInputForge.map((item) =>
-							item
-						)
-					}
-
-					{/* <View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
-						<TouchableOpacity
-							onPress={() => {
-								console.log('Tambah Alat Mas');
-								this.addAlat(this.state.comboInput.length)
-							}}
-						>
-							<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Alat +</Text>
-						</TouchableOpacity>
-					</View> */}
-
-					<View style={{ marginTop: 20, marginBottom: 20 }}>
 						<ContainerSection>
-							{this.renderButton()}
+							<Input
+								label='Desa / Kelurahan'
+								placeholder='contoh: Antapani Kidul'
+								value={village}
+								onChangeText={v => this.onChangeInput('village', v)}
+							/>
 						</ContainerSection>
-					</View>
-				</Container>
+
+						<View style={{ marginTop: 20, marginBottom: 20 }}>
+							<ContainerSection>
+								<Button onPress={this.nextTab}>Lanjut</Button>
+							</ContainerSection>
+						</View>
+					</Container>
+				}
+
+				{
+					tabActive === 2 &&
+					<Container>
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								2. Informasi Personal
+							</Text>
+						</ContainerSection>
+
+						<Text style={[styles.pickerTextStyle, { marginLeft: 5, marginTop: 10 }]}>Upload Foto Profil</Text>
+						<ContainerSection>
+							<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+								<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
+									<View>
+										{photo === null ?
+											<Image
+												source={require('../../assets/ic_add_a_photo.png')}
+											/>
+											:
+											<Image style={styles.avatar} source={photo} />
+										}
+									</View>
+								</TouchableOpacity>
+							</View>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Nama Lengkap'
+								placeholder='contoh: Ahmad Darudi'
+								value={name}
+								onChangeText={v => this.onChangeInput('name', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='No. KTP'
+								placeholder='contoh: 3213179890294565'
+								keyboardType="numeric"
+								value={idNumber}
+								onChangeText={v => this.onChangeInput('idNumber', v)}
+							/>
+						</ContainerSection>
+
+						<Text style={[styles.pickerTextStyle, { marginLeft: 5, marginTop: 10 }]}>Upload Foto KTP</Text>
+						<ContainerSection>
+							<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+								<TouchableOpacity onPress={() => this.selectPhotoTapped('idPhoto')}>
+									<View>
+										{idPhoto === null ?
+											<Image
+												source={require('../../assets/ic_add_a_photo.png')}
+											/>
+											:
+											<Image style={{ height: 200, width: 300 }} source={idPhoto} />
+										}
+									</View>
+								</TouchableOpacity>
+							</View>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='No. HP'
+								placeholder='contoh: 085621017922'
+								keyboardType="numeric"
+								value={phone}
+								onChangeText={v => this.onChangeInput('phone', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Email'
+								placeholder='contoh: erwin@gmail.com'
+								value={email}
+								onChangeText={v => this.onChangeInput('email', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Username'
+								placeholder='contoh: erwin95'
+								value={username}
+								onChangeText={v => this.onChangeInput('username', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Password'
+								placeholder='minimal 6 karakter'
+								secureTextEntry
+								value={password}
+								onChangeText={v => this.onChangeInput('password', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Konfirmasi Password'
+								placeholder='minimal 6 karakter'
+								secureTextEntry
+								value={confirmPassword}
+								onChangeText={v => this.onChangeInput('confirmPassword', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Kode Referral'
+								placeholder='boleh dikosongkan'
+								value={referralCode}
+								onChangeText={v => this.onChangeInput('referralCode', v)}
+							/>
+						</ContainerSection>
+
+						<View style={{ marginTop: 20, marginBottom: 20 }}>
+							<ContainerSection>
+								<Button secondary onPress={this.prevTab}>Kembali</Button>
+								<Button onPress={this.nextTab}>Lanjut</Button>
+							</ContainerSection>
+						</View>
+					</Container>
+				}
+
+				{
+					tabActive === 3 &&
+					<Container>
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								3. Informasi Rekening
+							</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Nama Bank'
+								value={bank}
+								onChangeText={v => this.onChangeInput('bank', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Cabang'
+								value={bankBranch}
+								onChangeText={v => this.onChangeInput('bankBranch', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Nomor Rekening'
+								keyboardType="numeric"
+								value={bankAccount}
+								onChangeText={v => this.onChangeInput('bankAccount', v)}
+							/>
+						</ContainerSection>
+						<ContainerSection>
+							<Input
+								label='Atas Nama'
+								value={bankAccountName}
+								onChangeText={v => this.onChangeInput('bankAccountName', v)}
+							/>
+						</ContainerSection>
+
+						<View style={{ marginTop: 20, marginBottom: 20 }}>
+							<ContainerSection>
+								<Button secondary onPress={this.prevTab}>Kembali</Button>
+								<Button onPress={this.nextTab}>Lanjut</Button>
+							</ContainerSection>
+						</View>
+					</Container>
+				}
+
+				{
+					tabActive === 4 &&
+					<Container>
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								4. Informasi Komoditas
+							</Text>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[0]}
+								onChangeText={text => this.querySuggestion(0, text)}
+								value={values[0]}
+							>
+								{
+									loadings[0] ?
+										<View style={{ flex: 1 }}>
+											<Spinner size='large' />
+										</View>
+										:
+										suggestions[0] && suggestions[0].map(item =>
+											<TouchableOpacity
+												key={item.id}
+												onPress={() => this.onItemSelected(0, item)}
+											>
+												<View style={styles.containerItemAutoSelect}>
+													<Text>{item.name}</Text>
+												</View>
+											</TouchableOpacity>
+										)
+								}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[1]}
+								onChangeText={text => this.querySuggestion(1, text)}
+								value={values[1]}
+							>
+								{
+									loadings[1] ?
+										<View style={{ flex: 1 }}>
+											<Spinner size='large' />
+										</View>
+										:
+										suggestions[1] && suggestions[1].map(item =>
+											<TouchableOpacity
+												key={item.id}
+												onPress={() => this.onItemSelected(1, item)}
+											>
+												<View style={styles.containerItemAutoSelect}>
+													<Text>{item.name}</Text>
+												</View>
+											</TouchableOpacity>
+										)
+								}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[2]}
+								onChangeText={text => this.querySuggestion(2, text)}
+								value={values[2]}
+							>
+								{
+									loadings[2] ?
+										<View style={{ flex: 1 }}>
+											<Spinner size='large' />
+										</View>
+										:
+										suggestions[2] && suggestions[2].map(item =>
+											<TouchableOpacity
+												key={item.id}
+												onPress={() => this.onItemSelected(2, item)}
+											>
+												<View style={styles.containerItemAutoSelect}>
+													<Text>{item.name}</Text>
+												</View>
+											</TouchableOpacity>
+										)
+								}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[3]}
+								onChangeText={text => this.querySuggestion(3, text)}
+								value={values[3]}
+							>
+								{
+									loadings[3] ?
+										<View style={{ flex: 1 }}>
+											<Spinner size='large' />
+										</View>
+										:
+										suggestions[3] && suggestions[3].map(item =>
+											<TouchableOpacity
+												key={item.id}
+												onPress={() => this.onItemSelected(3, item)}
+											>
+												<View style={styles.containerItemAutoSelect}>
+													<Text>{item.name}</Text>
+												</View>
+											</TouchableOpacity>
+										)
+								}
+							</AutoComplete>
+						</ContainerSection>
+						<ContainerSection>
+							<AutoComplete
+								label="Nama Komoditas"
+								suggestions={suggestions[4]}
+								onChangeText={text => this.querySuggestion(4, text)}
+								value={values[4]}
+							>
+								{
+									loadings[4] ?
+										<View style={{ flex: 1 }}>
+											<Spinner size='large' />
+										</View>
+										:
+										suggestions[4] && suggestions[4].map(item =>
+											<TouchableOpacity
+												key={item.id}
+												onPress={() => this.onItemSelected(4, item)}
+											>
+												<View style={styles.containerItemAutoSelect}>
+													<Text>{item.name}</Text>
+												</View>
+											</TouchableOpacity>
+										)
+								}
+							</AutoComplete>
+						</ContainerSection>
+
+						<View style={{ marginTop: 20, marginBottom: 20 }}>
+							<ContainerSection>
+								<Button secondary onPress={this.prevTab}>Kembali</Button>
+								<Button onPress={this.nextTab}>Lanjut</Button>
+							</ContainerSection>
+						</View>
+					</Container>
+				}
+
+				{
+					tabActive === 5 &&
+					<Container>
+						<ContainerSection>
+							<Text style={styles.headerStyle}>
+								5. Peralatan (Opsional)
+							</Text>
+						</ContainerSection>
+
+						{
+							statusComboShip ?
+								<View>
+									<View style={{ flexDirection: 'row', flex: 1 }}>
+										<Text style={{ flex: 1 }}>Pilih Ukuran Kapal</Text>
+									</View>
+									<ContainerSection>
+										<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+											<Picker
+												selectedValue={ShipSize}
+												onValueChange={v => this.onChangeInputShip('ShipSize', v)}
+											>
+												<Picker.Item label='--- Pilih ---' value='' />
+												<Picker.Item label='<= 1 GT' value='<=1 GT' />
+												<Picker.Item label='>1 GT' value='>1 GT' />
+											</Picker>
+										</View>
+									</ContainerSection>
+								</View>
+								:
+								<View />
+						}
+
+						{
+							plusShip ?
+								<View>
+									<TouchableOpacity
+										onPress={() => {
+											console.log('Tambah Kapal Mas');
+											this.setState({
+												plusShip: false
+											}, () => {
+												this.addShipComboBox();
+											});
+										}}
+									>
+										<Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
+									</TouchableOpacity>
+								</View>
+								:
+								<View />
+						}
+
+						{
+							textInputShipDropDown && textInputShipDropDown.map((item) =>
+								item
+							)
+						}
 
 
+						{
+							statusComboForge ?
+								<View>
+									<View style={{ flexDirection: 'row', flex: 1 }}>
+										<Text style={{ flex: 1 }}>Pilih Alat Tangkap</Text>
+									</View>
+									<ContainerSection>
+										<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+											<Picker
+												selectedValue={nameForge}
+												onValueChange={v => this.onChangeInputForge('nameForge', v)}
+											>
+												<Picker.Item label='--- Pilih ---' value='' />
+												<Picker.Item label='Pukat Udang' value='1' />
+												<Picker.Item label='Pukat Kantung' value='2' />
+												<Picker.Item label='Pukat Karang' value='3' />
+											</Picker>
+										</View>
+									</ContainerSection>
+								</View>
+								:
+								<View />
+						}
+
+						{
+							plusForge ?
+								<View style={{ flex: 1 }}>
+									<TouchableOpacity
+										onPress={() => {
+											console.log('Tambah Alat Mas');
+											this.setState({
+												plusForge: false
+											}, () => {
+												this.addForgeComboBox();
+											});
+										}}
+									>
+										<Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
+									</TouchableOpacity>
+								</View>
+								:
+								<View />
+						}
+
+						{
+							textInputForge && textInputForge.map((item) =>
+								item
+							)
+						}
+
+						{/* <View style={{ flexDirection: 'row', flex: 1 }}>
+							<Text style={{ flex: 1 }}>Alat Tangkap</Text>
+							<TouchableOpacity
+								onPress={() => {
+									console.log('Tambah Alat Mas');
+									this.addAlat(this.state.comboInput.length)
+								}}
+							>
+								<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Alat +</Text>
+							</TouchableOpacity>
+						</View> */}
+
+						<View style={{ marginTop: 20, marginBottom: 20 }}>
+							<ContainerSection>
+								<Button secondary onPress={this.prevTab}>Kembali</Button>
+								{this.renderButton()}
+							</ContainerSection>
+						</View>
+					</Container>
+				}
+
+				
 			</ScrollView>
 		)
 	}
