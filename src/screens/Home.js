@@ -154,7 +154,7 @@ class Home extends Component {
 							<View>
 								<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
 								<View style={{height: 5}} />
-								<Text style={{color: 'white', fontSize: 11}}>Edit profile</Text>
+								<Text style={{color: 'white', fontSize: 11}}>Ubah profile</Text>
 							</View>
 						</TouchableOpacity>
 						<View style={{ flex: 1 }}>
