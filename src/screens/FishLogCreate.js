@@ -60,6 +60,8 @@ class FishLogCreate extends Component {
 			//data
 			fishes: [],
 			provinces: [],
+			ship: [],
+			forge: [],
 
 			shipSize: '',
 			shipName: '',
@@ -70,6 +72,9 @@ class FishLogCreate extends Component {
 	componentWillMount() {
 		this.fetchProducts()
 		this.fetchProvinces()
+		console.log(this.props.user.token, 'Token');
+		this.fetchShip()
+		this.fetchForge()
 	}
 
 	componentDidMount() {
@@ -83,7 +88,8 @@ class FishLogCreate extends Component {
 					[
 						{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
 						{
-							text: 'Ya', onPress: () => {
+							text: 'Ya', 
+							onPress: () => {
 								this.props.navigation.setParams({ change: false })
 								this.props.navigation.goBack()
 							}
@@ -134,7 +140,7 @@ class FishLogCreate extends Component {
 					name: 'fishlog.jpg'
 				})
 			}
-
+			console.log(formData, 'Form Data');
 			axios.post(`${BASE_URL}/fishlogs`, formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
@@ -160,6 +166,7 @@ class FishLogCreate extends Component {
 					ToastAndroid.show('Berhasil tambah fishlog', ToastAndroid.SHORT)
 				})
 				.catch(error => {
+					console.log(error.response.data.message, 'ERROR');
 					if (error.response) {
 						alert(error.response.data.message)
 					}
@@ -207,6 +214,58 @@ class FishLogCreate extends Component {
 		})
 			.then(response => {
 				this.setState({ provinces: response.data.data })
+
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+
+				this.setState({ loading: false })
+			})
+	}
+
+	fetchShip = () => {
+		this.setState({ loading: true })
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/supplier/my-ships`, {
+			headers: { token },
+			timeout: REQUEST_TIME_OUT
+		})
+			.then(response => {
+				this.setState({ ship: response.data.data })
+				console.log(response.data.data, 'SHIP');
+
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+
+				this.setState({ loading: false })
+			})
+	}
+
+	fetchForge = () => {
+		this.setState({ loading: true })
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/supplier/my-fishing-gears`, {
+			headers: { token },
+			timeout: REQUEST_TIME_OUT
+		})
+			.then(response => {
+				this.setState({ forge: response.data.data })
+				console.log(response.data.data, 'FORGE');
 
 				this.setState({ loading: false })
 			})
@@ -291,6 +350,8 @@ class FishLogCreate extends Component {
 			fishes,
 			unit,
 			provinces,
+			ship,
+			forge,
 			shipSize,
 			shipName,
 			forgeName
@@ -353,8 +414,8 @@ class FishLogCreate extends Component {
 						<Input
 							label="Jumlah"
 							keyboardType="numeric"
-							value={numeral(parseInt(quantity, 0)).format('0,0')}
-							onChangeText={v => this.onChangeInput('quantity', v)}
+							value={quantity ? numeral(parseInt(quantity, 0)).format('0,0') : ''}
+							onChangeText={v => this.onChangeInput('quantity', v.replace(/\./g, ''))}
 						/>
 						<Text style={styles.unitStyle}>Kg</Text>
 					</ContainerSection>
@@ -362,14 +423,14 @@ class FishLogCreate extends Component {
 						<Input
 							label="Ukuran"
 							keyboardType="numeric"
-							value={numeral(parseInt(size, 0)).format('0,0')}
-							onChangeText={v => this.onChangeInput('size', v)}
+							value={size ? numeral(parseInt(size, 0)).format('0,0') : ''}
+							onChangeText={v => this.onChangeInput('size', v.replace(/\./g, ''))}
 						/>
 						<View style={{ marginTop: 50, marginLeft: 10, flex: 1 }}>
 							<View style={styles.pickerUnitStyle}>
 								<Picker
 									selectedValue={unit}
-									onValueChange={v => this.onChangeInput('unit', v)}
+									onValueChange={v => this.onChangeInput('unit', v.replace(/\./g, ''))}
 								>
 									<Picker.Item label="Kg" value="Kg" />
 									<Picker.Item label="Cm" value="Cm" />
@@ -402,9 +463,12 @@ class FishLogCreate extends Component {
 								selectedValue={shipName}
 								onValueChange={v => this.onChangeInput('shipName', v)}
 							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='Titanic' value='1' />
-								<Picker.Item label='Pesiar' value='2' />
+								<Picker.Item label='--- Pilih Kapal---' value='' />
+								{
+									ship && ship.map((item, index) =>
+										<Picker.Item key={index} label={item.name} value={item.id} />
+									)
+								}
 							</Picker>
 						</View>
 					</ContainerSection>
@@ -418,10 +482,12 @@ class FishLogCreate extends Component {
 								selectedValue={forgeName}
 								onValueChange={v => this.onChangeInput('forgeName', v)}
 							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='Pukat Udang' value='1' />
-								<Picker.Item label='Pukat Karang' value='2' />
-								<Picker.Item label='Pukat Kantung' value='3' />
+								<Picker.Item label='--- Pilih Alat---' value='' />
+								{
+									forge && forge.map((item, index) =>
+										<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />
+									)
+								}
 							</Picker>
 						</View>
 					</ContainerSection>
