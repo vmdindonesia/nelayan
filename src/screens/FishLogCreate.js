@@ -457,7 +457,6 @@ class FishLogCreate extends Component {
 					<View style={{ flexDirection: 'row', flex: 1 }}>
 						<Text style={{ flex: 1 }}>Pilih Kapal</Text>
 					</View>
-
 					<ContainerSection>
 						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
 							<Picker
