@@ -112,72 +112,6 @@ class FishlogDetail extends Component {
 		this.props.navigation.setParams({change: true})
 	}
 
-	onSubmit = () => {
-		let id = this.props.navigation.state.params.id
-		let { data } = this.state
-		let token = this.props.user.token
-
-		Keyboard.dismiss()
-
-		// form validation
-		if (data.FishId === '') {
-			ToastAndroid.show('Anda belum pilih Komoditas', ToastAndroid.SHORT)
-		}
-		else if (data.ProvinceId === '') {
-			ToastAndroid.show('Anda belum pilih Provinsi', ToastAndroid.SHORT)
-		}
-		else {
-			this.setState({loading: true})
-
-			let formData = new FormData()
-			formData.append('FishId', data.FishId)
-			formData.append('ProvinceId', data.ProvinceId)
-			formData.append('size', data.size)
-			formData.append('quantity', data.quantity)
-			formData.append('unit', data.unit)
-			formData.append('price', data.price)
-			if (this.state.photo) {
-				formData.append('photo', {
-					uri: this.state.photo.uri,
-					type: 'image/jpeg',
-					name: 'fishlog.jpg'
-				})
-			}
-
-			axios.put(`${BASE_URL}/fishlogs/${id}`, formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-					token
-				},
-				timeout: REQUEST_TIME_OUT
-			})
-			.then(() => {
-				this.props.navigation.setParams({change: false})
-				
-				const resetAction = NavigationActions.reset({
-					index: 1,
-					actions: [
-						NavigationActions.navigate({ routeName: 'Home'}),
-						NavigationActions.navigate({ routeName: 'FishLogList'})
-					]
-				})
-				this.props.navigation.dispatch(resetAction)
-
-				this.setState({loading: false})
-			})
-			.catch(error => {
-				if (error.response) {
-					alert(error.response.data.message)
-				}
-				else {
-					alert('Koneksi internet bermasalah')
-				}
-
-				this.setState({loading: false})
-			})
-		}
-	}
-
 	fetchData = () => {
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
@@ -291,29 +225,6 @@ class FishlogDetail extends Component {
 		});
 	}
 
-	renderButton = () => {
-		if (this.state.loading) {
-			return <Spinner size='large' />
-		}
-
-		return (
-			<Button
-				onPress={
-					() => Alert.alert(
-						'',
-						'Yakin ingin merubah data?',
-						[
-							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-							{text: 'Ya', onPress: () => this.onSubmit()},
-						]
-					)
-				}
-			>
-				Simpan
-			</Button>
-		)
-	}
-
 	render() {
 		const { data, loadingPage, photo, fishes, provinces } = this.state
 
@@ -356,7 +267,7 @@ class FishlogDetail extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							value={(provinces.length > 0) && provinces[data.ProvinceId].name}
+							value={(provinces.length > 0) ? provinces[data.ProvinceId].name : ''}
 							editable={false}
 						/>	
 					</ContainerSection>
