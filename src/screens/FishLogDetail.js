@@ -267,7 +267,7 @@ class FishlogDetail extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							value={(provinces.length > 0) ? provinces[data.ProvinceId].name : ''}
+							value={((provinces.length > 0) && provinces[data.ProvinceId]) ? provinces[data.ProvinceId].name : ''}
 							editable={false}
 						/>	
 					</ContainerSection>
@@ -305,6 +305,33 @@ class FishlogDetail extends Component {
 							editable={false}
 						/>
 					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Peralatan
+						</Text>
+					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Kapal</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							value={data.MyShip && data.MyShip.name}
+							editable={false}
+						/>	
+					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={{color: '#5e5e5e', fontSize: 14}}>Alat Tangkap</Text>
+					</ContainerSection>
+					<ContainerSection>
+						<Input
+							value={(data.MyFishingGear && data.MyFishingGear.FishingGear) ? data.MyFishingGear.FishingGear.name : ''}
+							editable={false}
+						/>	
+					</ContainerSection>
+
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
 							Foto Komoditas

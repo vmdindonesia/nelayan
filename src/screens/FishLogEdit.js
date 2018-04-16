@@ -117,6 +117,8 @@ class FishLogEdit extends Component {
 			formData.append('quantity', data.quantity)
 			formData.append('unit', data.unit)
 			formData.append('price', data.price)
+			formData.append('MyFishingGearId', data.MyFishingGearId)
+			formData.append('MyShipId', data.MyShipId)
 			if (this.state.photo) {
 				formData.append('photo', {
 					uri: this.state.photo.uri,
@@ -395,6 +397,46 @@ class FishLogEdit extends Component {
 							onChangeText={v => this.onChangeInput('price', v.replace(/\./g, ''))}
 						/>
 					</ContainerSection>
+
+					<ContainerSection>
+						<Text style={styles.headerStyle}>
+							Peralatan
+						</Text>
+					</ContainerSection>
+
+					<View style={{ flexDirection: 'row', flex: 1 }}>
+						<Text style={{ flex: 1 }}>Pilih Kapal</Text>
+					</View>
+					<ContainerSection>
+						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+							<Picker
+								selectedValue={data.MyShipId}
+								onValueChange={v => this.onChangeInput('MyShipId', v)}
+							>
+								<Picker.Item label='--- Pilih ---' value='' />
+								<Picker.Item label='Titanic' value='1' />
+								<Picker.Item label='Pesiar' value='2' />
+							</Picker>
+						</View>
+					</ContainerSection>
+
+					<View style={{ flexDirection: 'row', flex: 1 }}>
+						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
+					</View>
+					<ContainerSection>
+						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+							<Picker
+								selectedValue={data.MyFishingGearId}
+								onValueChange={v => this.onChangeInput('MyFishingGearId', v)}
+							>
+								<Picker.Item label='--- Pilih ---' value='' />
+								<Picker.Item label='Pukat Udang' value='1' />
+								<Picker.Item label='Pukat Karang' value='2' />
+								<Picker.Item label='Pukat Kantung' value='3' />
+							</Picker>
+						</View>
+					</ContainerSection>
+
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
 							Foto Komoditas
