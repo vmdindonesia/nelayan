@@ -166,9 +166,11 @@ class Profile extends Component {
 						<ContainerSection>
 							<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
 								Tambah Komoditas
-						</Button>
+							</Button>
 						</ContainerSection>
 					</View>
+
+					<View style={{height: 50}} />
 				</ScrollView>
 			</View>
 		)
