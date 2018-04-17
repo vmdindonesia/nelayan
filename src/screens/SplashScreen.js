@@ -18,24 +18,24 @@ class SplashScreen extends Component {
 			image: require('../../assets/splash2.png'),
 		}
 	}
-	
+
 	componentWillMount() {
 		// to do: check token expired
 
-			AsyncStorage.getItem('token', (err, result) => {
-				if (result) {
-					setTimeout(() => {
-						this.redirect(result)
-					}, 1000)
-				}
-				else {
-					this.setState({image: require('../../assets/splash1.png')})
+		AsyncStorage.getItem('token', (err, result) => {
+			if (result) {
+				setTimeout(() => {
+					this.redirect(result)
+				}, 1000)
+			}
+			else {
+				this.setState({ image: require('../../assets/splash1.png') })
 
-					setTimeout(() => {
-						this.redirect('')
-					}, 20000)
-				}
-			})
+				setTimeout(() => {
+					this.redirect('')
+				}, 2000)
+			}
+		})
 	}
 
 	redirect = (result) => {
@@ -43,17 +43,17 @@ class SplashScreen extends Component {
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
-					NavigationActions.navigate({ routeName: 'StartScreen'})
+					NavigationActions.navigate({ routeName: 'StartScreen' })
 				]
 			})
 			this.props.navigation.dispatch(resetAction)
-		} 
+		}
 		else {
 			this.props.setUserToken(result)
 			const resetAction = NavigationActions.reset({
 				index: 0,
 				actions: [
-					NavigationActions.navigate({ routeName: 'Home'})
+					NavigationActions.navigate({ routeName: 'Home' })
 				]
 			})
 			this.props.navigation.dispatch(resetAction)
@@ -62,14 +62,10 @@ class SplashScreen extends Component {
 
 	render() {
 		return (
-			<ImageBackground 
+			<ImageBackground
 				source={this.state.image}
-				style={{width: '100%', height: '100%'}}
-			>
-				<TouchableWithoutFeedback onPress={() => this.redirect('')}>
-					<View style={{flex: 1}} />
-				</TouchableWithoutFeedback>
-			</ImageBackground>
+				style={{ width: '100%', height: '100%' }}
+			/>
 		)
 	}
 }
