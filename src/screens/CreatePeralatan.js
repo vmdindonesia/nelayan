@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Picker, ScrollView, Text, ToastAndroid } from 'react-native';
+import { View, Picker, ScrollView, Text, ToastAndroid, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
@@ -20,11 +20,57 @@ class CreatePeralatan extends Component {
       gearsId: '',
       name: '',
       size: '',
-      FishingGearId: ''
+      FishingGearId: '',
+
+      statusComboShip: true,
+      ShipId: [],
+      textInputShipDropDown: [],
+      textInputShip: [],
+      plusShip: false,
+      ShipNameMin: [],
+      ShipSizeMin: [],
+      ShipNameMax: [],
+      ShipSizeMax: [],
+      tempShipNameMin: '',
+      tempShipSizeMin: '',
+      tempShipNameMax: '',
+      tempShipSizeMax: '',
+    
+      statusComboForge: true,
+      forgeName: [],
+      nameForge: '',
+      textInputForge: [],
+      plusForge: false,
+      data: {},
+
+      type: ''
     }
   }
 
+  getAlat = () => {
+    this.setState({ loading: true })
+    let token = this.props.user.token
+  
+    axios.get(`${BASE_URL}/supplier/fishing-gears`, {
+    headers: { token },
+    })
+    .then(response => {
+      this.setState({ data: response.data.data })
+      this.setState({ loading: false })
+    })
+    .catch(error => {
+      if (error.response) {
+      alert(error.response.data.message)
+      }
+      else {
+      alert('Koneksi internet bermasalah')
+      }
+      this.setState({ loading: false })
+    })
+  }
+
   componentWillMount() {
+    this.getAlat()
     console.log(this.props.user.token, 'Token');
   }
 
@@ -34,117 +80,298 @@ class CreatePeralatan extends Component {
     });
   }
 
-  checkSecurity() {
-    const { gearsId, name, size, FishingGearId } = this.state;
-    if (gearsId === '1') {
-      switch (gearsId) {
-        case '':
-          return ToastAndroid.show('Alat tangkap tidak boleh kosong', ToastAndroid.SHORT);
-        default:
-          console.log('GearsId Lolos');
-          switch (name) {
-            case '':
-              return ToastAndroid.show('Nama kapal tidak boleh kosong', ToastAndroid.SHORT);
-            default:
-              console.log('Name Lolos')
-              switch (size) {
-                case '':
-                  return ToastAndroid.show('Size kapal tidak boleh kosong', ToastAndroid.SHORT);
-                default:
-                  console.log('Size Lolos')
-                  this.saveForgeShips();
-              }
-          }
+  onChangeInputShip = (name, v) => {
+    console.log(name, '-----name')
+    console.log(v, '-----value')
+    this.setState({[name]: v})
+  }
+  
+  onChangeInputForge = (name, v) => {
+    console.log(v, 'V nya')
+
+    this.setState({
+      statusComboForge: false,
+      plusForge: true
+    }, () => {
+    this.addTextInputForge(this.state.textInputForge.length, v);
+    });
+  }
+  
+  onChangeInputShipNameMin = (name, v, key) => {
+    console.log(name, 'Name');
+    console.log(v, 'Value');
+    console.log(key, 'Key');
+    this.setState({ [name]: v }, () => {
+    const newShipNameMin = this.state.ShipNameMin;
+    newShipNameMin[key] = v;
+    this.setState({ ShipNameMin: newShipNameMin }, () => {
+      console.log(this.state.ShipNameMin, 'Ship Name Min');
+    });
+    });
+  }
+  
+  onChangeInputShipNameMax = (name, v, key) => {
+    console.log(name, 'Name');
+    console.log(v, 'Value');
+    console.log(key, 'Key');
+    this.setState({ [name]: v }, () => {
+    const newShipNameMax = this.state.ShipNameMax;
+    newShipNameMax[key] = v;
+    this.setState({ ShipNameMax: newShipNameMax }, () => {
+      console.log(this.state.ShipNameMax, 'Ship Name Max');
+    });
+    });
+  }
+  
+  onChangeInputShipSize = (name, v, key, value) => {
+    console.log(name, 'Name');
+    console.log(v, 'Value');
+    console.log(key, 'Key');
+    this.setState({ [name]: v }, () => {
+    const newShipSizeMax = this.state.ShipSizeMax;
+    newShipSizeMax[key] = v;
+    this.setState({ ShipSizeMax: newShipSizeMax }, () => {
+      console.log(this.state.ShipSizeMax, 'Ship Size Min');
+    });
+    });
+  }
+
+  addShipComboBox = () => {
+    this.setState({
+    statusComboShip: true,
+    plusShip: false
+    });
+  }
+  
+  addForgeComboBox = () => {
+    this.setState({
+    statusComboForge: true,
+    plusForge: false
+    });
+  }
+
+ 
+  addTextInputShipDropDown = (key, value) => {
+    // Dropdown
+    const textInputShipDropDown = this.state.textInputShipDropDown;
+    this.setState({ textInputShipDropDown });
+    const sizeShip = value;
+  
+    // TextInput
+    const { tempShipNameMin, tempShipNameMax, tempShipSizeMax } = this.state;
+    const textInputShip = this.state.textInputShip;
+    this.setState({ textInputShip })
+  
+    if (value === '<=1 GT') {
+    textInputShipDropDown.push(
+      <View key={key}>
+      <ContainerSection>
+        <View style={{ padding: 5, width: '100%' }}>
+        <Input
+          label="Ukuran Kapal"
+          placeholder="Ukuran Kapal"
+          value={sizeShip}
+          editable={false}
+        />
+        </View> 
+      </ContainerSection>
+      <ContainerSection>
+        <View style={{ padding: 5, width: '100%' }}>
+        <Input
+          label='Nama Kapal'
+          placeholder="Nama Kapal"
+          value={tempShipNameMin[key]}
+          onChangeText={v => this.onChangeInputShipNameMin(`tempShipNameMin${key}`, v, key)}
+        />
+        </View>
+      </ContainerSection>
+      </View>
+    );
+    } else if (value === '>1 GT') {
+    textInputShipDropDown.push(
+      <View key={key}>
+      <ContainerSection>
+        <View style={{ padding: 5, width: '100%' }}>
+        <Input
+          label="Ukuran Kapal"
+          placeholder="Ukuran Kapal"
+          value={sizeShip}
+          editable={false}
+        />
+        </View>
+      </ContainerSection>
+      <ContainerSection>
+        <View style={{ padding: 5, width: '100%' }}>
+        <Input
+          label='Nama Kapal'
+          placeholder="Nama Kapal"
+          value={tempShipNameMax[key]}
+          onChangeText={v => this.onChangeInputShipNameMax(`tempShipNameMax${key}`, v, key)}
+        />
+        </View>
+      </ContainerSection>
+  
+      <ContainerSection>
+        <View style={{ padding: 5, width: '100%' }}>
+        <Input
+          label='Ukuran Kapal'
+          placeholder="Ukuran Kapal"
+          keyboardType="numeric"
+          value={tempShipSizeMax[key]}
+          onChangeText={v => this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)}
+        />
+        </View>
+      </ContainerSection>
+      </View>
+    );
+    }
+  }
+  
+  
+  addTextInputForge = (key, value) => {
+    //Alat TextInput
+    console.log(value, 'VALUE FORGE');
+
+    const textInputForge = this.state.textInputForge;
+    this.setState({ textInputForge });
+  
+    textInputForge.push(
+    <View key={key}>
+      <ContainerSection>
+      <Input
+        label="Alat Tangkap"
+        placeholder="Alat Tangkap"
+        value={value.name}
+        editable={false}
+      />
+      </ContainerSection>
+    </View>
+    );
+  
+    // Push Value
+    const newforgeName = this.state.forgeName
+    newforgeName[key] = value
+    this.setState({ forgeName: newforgeName });
+  }
+
+  saveForgeShips() {
+    // form validation
+    if (this.state.type === '') {
+      ToastAndroid.show('Pilih tipe ukuran kapal dahulu', ToastAndroid.SHORT)
+    }
+    else if (this.state.name === '') {
+      ToastAndroid.show('Isi nama kapal dahulu', ToastAndroid.SHORT)
+    }
+    else {
+      this.setState({ loader: true })
+      let token = this.props.user.token;
+
+      axios.post(`${BASE_URL}/supplier/my-ships`, {
+        name: this.state.name,
+        size: (this.state.type === '<=1 GT' ? 'kecil' : this.state.size),
+        type: this.state.type
+      }, {
+        headers: { token },
+      })
+      .then(response => {
+        console.log(response)
+        this.setState({ loader: false })
+        ToastAndroid.show('Sukses', ToastAndroid.SHORT)
+        const resetAction = NavigationActions.reset({
+          index: 1,
+          actions: [
+            NavigationActions.navigate({ routeName: 'Home' }),
+            NavigationActions.navigate({ routeName: 'MemberList' })
+          ]
+        })
+        this.props.navigation.dispatch(resetAction)
+      })
+      .catch(error => {
+        if (error.response) {
+          alert(error.response.data.message)
+        }
+        else {
+          alert('Koneksi internet bermasalah')
+        }
+        this.setState({ loader: false })
+      })
+    }
+  }
+
+  saveForgeGears() {
+    // form validation
+    if (this.state.gearsId === '') {
+      ToastAndroid.show('Pilih peralatan dahulu', ToastAndroid.SHORT)
+    }
+    else {
+      this.setState({ loader: true })
+      const { forgeName } = this.state;
+      let token = this.props.user.token;
+
+      console.log(forgeName, '---forgename')
+      if (forgeName.length < 1) {
+        ToastAndroid.show('Pilih alat tangkap dahulu', ToastAndroid.SHORT)
+        this.setState({ loader: false })
       }
-    } else if (gearsId === '2') {
-      switch (gearsId) {
-        case '':
-          return ToastAndroid.show('Alat tangkap tidak boleh kosong', ToastAndroid.SHORT);
-        default:
-          console.log('GearsId Lolos');
-          switch (FishingGearId) {
-            case '':
-              return ToastAndroid.show('Alat tangkap tidak boleh kosong', ToastAndroid.SHORT);
-            default:
-              console.log('Fishing Lolos');
-              this.saveForgeGears();
+      else {
+        axios.post(`${BASE_URL}/supplier/my-fishing-gears`, {
+          FishingGearId: forgeName[0].id
+        }, {
+          headers: { token },
+        })
+        .then(response => {
+          console.log(response)
+          this.setState({ loader: false })
+          ToastAndroid.show('Sukses', ToastAndroid.SHORT)
+          const resetAction = NavigationActions.reset({
+            index: 1,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Home' }),
+              NavigationActions.navigate({ routeName: 'MemberList' })
+            ]
+          })
+          this.props.navigation.dispatch(resetAction)
+        })
+        .catch(error => {
+          if (error.response) {
+            alert(error.response.data.message)
           }
+          else {
+            alert('Koneksi internet bermasalah')
+          }
+          this.setState({ loader: false })
+        })
       }
     }
   }
 
-  saveForgeShips() {
-    this.setState({ loader: true })
-    const { name, size } = this.state;
-    let token = this.props.user.token;
-
-    axios.post(`${BASE_URL}/supplier/my-ships`, {
-      name,
-      size
-    }, {
-        headers: { token },
-      })
-      .then(response => {
-        console.log(response)
-        this.setState({ loader: false })
-        ToastAndroid.show('Sukses', ToastAndroid.SHORT)
-        const resetAction = NavigationActions.reset({
-          index: 1,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Home' }),
-            NavigationActions.navigate({ routeName: 'MemberList' })
-          ]
-        })
-        this.props.navigation.dispatch(resetAction)
-      })
-      .catch(error => {
-        if (error.response) {
-          alert(error.response.data.message)
-        }
-        else {
-          alert('Koneksi internet bermasalah')
-        }
-        this.setState({ loader: false })
-      })
-  }
-
-  saveForgeGears() {
-    this.setState({ loader: true })
-    const { FishingGearId } = this.state;
-    let token = this.props.user.token;
-
-    axios.post(`${BASE_URL}/supplier/my-fishing-gears`, {
-      FishingGearId
-    }, {
-        headers: { token },
-      })
-      .then(response => {
-        console.log(response)
-        this.setState({ loader: false })
-        ToastAndroid.show('Sukses', ToastAndroid.SHORT)
-        const resetAction = NavigationActions.reset({
-          index: 1,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Home' }),
-            NavigationActions.navigate({ routeName: 'MemberList' })
-          ]
-        })
-        this.props.navigation.dispatch(resetAction)
-      })
-      .catch(error => {
-        if (error.response) {
-          alert(error.response.data.message)
-        }
-        else {
-          alert('Koneksi internet bermasalah')
-        }
-        this.setState({ loader: false })
-      })
-  }
-
 
   render() {
-    const { gearsId, name, size, loader, FishingGearId } = this.state;
+    const { 
+      gearsId, 
+      name, 
+      size, 
+      loader, 
+      FishingGearId,
+
+      statusComboShip,
+      textInputShipDropDown,
+      textInputShip,
+      ShipSize,
+      plusShip,
+  
+  
+      statusComboForge,
+      forgeName,
+      nameForge,
+      textInputForge,
+      plusForge,
+      ShipId,
+      data,
+
+      type
+    } = this.state;
+    
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -166,57 +393,126 @@ class CreatePeralatan extends Component {
           {
             gearsId === '1' ?
               <View>
-                <ContainerSection>
-                  <View style={{ padding: 5, width: '100%' }}>
-                    <Input
-                      label='Nama'
-                      placeholder="Nama"
-                      value={name}
-                      onChangeText={v => this.onChangeInput('name', v)}
-                    />
-                  </View>
-                </ContainerSection>
-                <ContainerSection>
+              {
+                statusComboShip ?
+                  <ContainerSection>
                   <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
-                    <Text>Ukuran</Text>
-                    <View style={{ flex: 1, borderColor: '#a9a9a9', borderRadius: 5, borderWidth: 1, height: 47 }}>
-                      <Picker
-                        selectedValue={size}
-                        onValueChange={v => this.onChangeInput('size', v)}
-                      >
-                        <Picker.Item label='Pilih Ukuran' value='' />
-                        <Picker.Item label='Kecil (<10 Meter)' value='1' />
-                        <Picker.Item label='Sedang (<20 Meter)' value='2' />
-                        <Picker.Item label='Besar (>20 Meter)' value='3' />
-                      </Picker>
+                    <Text style={{ flex: 1 }}>Pilih Tipe Ukuran Kapal</Text>
+                    <View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+                    <Picker
+                      selectedValue={type}
+                      onValueChange={v => this.onChangeInputShip('type', v)}
+                    >
+                      <Picker.Item label='--- Pilih ---' value='' />
+                      <Picker.Item label='<= 1 GT' value='<=1 GT' />
+                      <Picker.Item label='>1 GT' value='>1 GT' />
+                    </Picker>
                     </View>
                   </View>
-                </ContainerSection>
-              </View>
-              :
-              <View>
-                {
-                  gearsId === '2' ?
+                  </ContainerSection>
+                :
+                <View />
+              }
+
+              {
+                this.state.type === '<=1 GT' ? 
+                  <ContainerSection>
+                    <View style={{ padding: 5, width: '100%' }}>
+                    <Input
+                      label='Nama Kapal'
+                      placeholder="Nama Kapal"
+                      value={name}
+                      onChangeText={v => this.onChangeInputShip('name', v)}
+                    />
+                    </View>
+                  </ContainerSection>
+                :
+                  <View>
                     <ContainerSection>
-                      <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
-                        <Text>Pilih alat tangkap</Text>
-                        <View style={{ flex: 1, borderColor: '#a9a9a9', borderRadius: 5, borderWidth: 1, height: 47 }}>
-                          <Picker
-                            selectedValue={FishingGearId}
-                            onValueChange={v => this.onChangeInput('FishingGearId', v)}
-                          >
-                            <Picker.Item label='--Pilih--' value='' />
-                            <Picker.Item label='Jala Kecil' value='1' />
-                            <Picker.Item label='Jala Sedang' value='2' />
-                            <Picker.Item label='Jala Besar' value='3' />
-                          </Picker>
-                        </View>
+                      <View style={{ padding: 5, width: '100%' }}>
+                      <Input
+                        label="Ukuran Kapal"
+                        placeholder="Ukuran Kapal"
+                        value={size}
+                        keyboardType="numeric"
+                        onChangeText={v => this.onChangeInputShip('size', v)}
+                      />
                       </View>
                     </ContainerSection>
-                    :
-                    <View />
-                }
-              </View>
+                    <ContainerSection>
+                      <View style={{ padding: 5, width: '100%' }}>
+                      <Input
+                        label='Nama Kapal'
+                        placeholder="Nama Kapal"
+                        value={name}
+                        onChangeText={v => this.onChangeInputShip('name', v)}
+                      />
+                      </View>
+                    </ContainerSection>
+                  </View>
+              }
+
+            </View>
+            :
+          <View>
+            {
+            gearsId === '2' ? 
+            <View>
+            {
+              statusComboForge ?
+              <ContainerSection>
+                <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
+                  <Text style={{ flex: 1 }}>Pilih Alat Tangkap</Text>
+                  <View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+                  <Picker
+                    selectedValue={nameForge}
+                    onValueChange={v => this.onChangeInputForge('nameForge', v)}
+                  >
+                    <Picker.Item label='--- Pilih ---' value='' />
+                   {
+                    data !== undefined && data.map(item =>
+                      <Picker.Item key={item.id} label={item.name} value={item} />
+                    )
+                    
+                    }
+                  </Picker>
+                  </View>
+                </View>
+              </ContainerSection>
+              :
+              <View />
+            }
+
+            {
+              // plusForge ?
+              // <View style={{ flex: 1 }}>
+              //   <TouchableOpacity
+              //   onPress={() => {
+              //     console.log('Tambah Alat Mas');
+              //     this.setState({
+              //     plusForge: false
+              //     }, () => {
+              //     this.addForgeComboBox();
+              //     });
+              //   }}
+              //   >
+              //   <Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
+              //   </TouchableOpacity>
+              // </View>
+              // :
+              // <View />
+            }
+
+            {
+              textInputForge && textInputForge.map((item) =>
+              item
+              )
+            }
+            </View>
+            :
+            <View />
+            }
+          </View>
           }
         </ScrollView>
         <ContainerSection>
@@ -228,11 +524,16 @@ class CreatePeralatan extends Component {
               :
               <Button
                 onPress={() => {
-                  this.checkSecurity();
+                  if (gearsId === '1') {
+                    this.saveForgeShips()
+                  }
+                  else {
+                    this.saveForgeGears()
+                  }
                 }}
               >
                 Selesai
-                  </Button>
+          </Button>
           }
         </ContainerSection>
       </View>
