@@ -49,6 +49,7 @@ class FishLogCreate extends Component {
 
 		this.state = {
 			loading: false,
+			loader: null,
 			// form
 			FishId: '',
 			ProvinceId: '',
@@ -71,10 +72,6 @@ class FishLogCreate extends Component {
 
 	componentWillMount() {
 		this.fetchProducts()
-		this.fetchProvinces()
-		console.log(this.props.user.token, 'Token');
-		this.fetchShip()
-		this.fetchForge()
 	}
 
 	componentDidMount() {
@@ -88,7 +85,7 @@ class FishLogCreate extends Component {
 					[
 						{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
 						{
-							text: 'Ya', 
+							text: 'Ya',
 							onPress: () => {
 								this.props.navigation.setParams({ change: false })
 								this.props.navigation.goBack()
@@ -180,7 +177,7 @@ class FishLogCreate extends Component {
 	}
 
 	fetchProducts = () => {
-		this.setState({ loading: true })
+		this.setState({ loader: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
@@ -188,11 +185,12 @@ class FishLogCreate extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 			.then(response => {
-				this.setState({ fishes: response.data.data })
-
-				this.setState({ loading: false })
+				this.setState({ fishes: response.data.data }, () => {
+					this.fetchProvinces()
+				});
 			})
 			.catch(error => {
+				console.log('Error Di Fetch Products');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -200,12 +198,11 @@ class FishLogCreate extends Component {
 					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 				}
 
-				this.setState({ loading: false })
+				this.setState({ loader: false })
 			})
 	}
 
 	fetchProvinces = () => {
-		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/provinces`, {
@@ -213,11 +210,12 @@ class FishLogCreate extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 			.then(response => {
-				this.setState({ provinces: response.data.data })
-
-				this.setState({ loading: false })
+				this.setState({ provinces: response.data.data }, () => {
+					this.fetchShip();
+				});
 			})
 			.catch(error => {
+				console.log('Error Di Fetch Province');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -225,12 +223,11 @@ class FishLogCreate extends Component {
 					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 				}
 
-				this.setState({ loading: false })
+				this.setState({ loader: false })
 			})
 	}
 
 	fetchShip = () => {
-		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/supplier/my-ships`, {
@@ -238,12 +235,13 @@ class FishLogCreate extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 			.then(response => {
-				this.setState({ ship: response.data.data })
+				this.setState({ ship: response.data.data }, () => {
+					this.fetchForge();
+				});
 				console.log(response.data.data, 'SHIP');
-
-				this.setState({ loading: false })
 			})
 			.catch(error => {
+				console.log('Error Di Fetch Ship');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -251,12 +249,11 @@ class FishLogCreate extends Component {
 					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 				}
 
-				this.setState({ loading: false })
+				this.setState({ loader: false })
 			})
 	}
 
 	fetchForge = () => {
-		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/supplier/my-fishing-gears`, {
@@ -267,9 +264,10 @@ class FishLogCreate extends Component {
 				this.setState({ forge: response.data.data })
 				console.log(response.data.data, 'FORGE');
 
-				this.setState({ loading: false })
+				this.setState({ loader: false })
 			})
 			.catch(error => {
+				console.log('Error Di Fetch Forge');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -277,7 +275,7 @@ class FishLogCreate extends Component {
 					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 				}
 
-				this.setState({ loading: false })
+				this.setState({ loader: false })
 			})
 	}
 
@@ -352,10 +350,13 @@ class FishLogCreate extends Component {
 			provinces,
 			ship,
 			forge,
-			shipSize,
 			shipName,
 			forgeName
 		} = this.state
+
+		if (this.state.loader) {
+			return <Spinner size='large' />
+		}
 
 		return (
 			<ScrollView keyboardShouldPersistTaps="always">
