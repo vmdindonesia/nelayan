@@ -42,7 +42,6 @@ class CreatePeralatan extends Component {
       textInputForge: [],
       plusForge: false,
       data: {},
-
     }
   }
 
@@ -68,8 +67,6 @@ class CreatePeralatan extends Component {
     })
   }
 
-  
-  
   componentWillMount() {
     this.getAlat()
     console.log(this.props.user.token, 'Token');
@@ -94,9 +91,11 @@ class CreatePeralatan extends Component {
   }
   
   onChangeInputForge = (name, v) => {
+    console.log(v, 'V nya')
+
     this.setState({
-    statusComboForge: false,
-    plusForge: true
+      statusComboForge: false,
+      plusForge: true
     }, () => {
     this.addTextInputForge(this.state.textInputForge.length, v);
     });
@@ -281,6 +280,8 @@ class CreatePeralatan extends Component {
   
   addTextInputForge = (key, value) => {
     //Alat TextInput
+    console.log(value, 'VALUE FORGE');
+
     const textInputForge = this.state.textInputForge;
     this.setState({ textInputForge });
   
@@ -290,7 +291,7 @@ class CreatePeralatan extends Component {
       <Input
         label="Alat Tangkap"
         placeholder="Alat Tangkap"
-        value={value.toString()}
+        value={value.name}
         editable={false}
       />
       </ContainerSection>
@@ -339,37 +340,50 @@ class CreatePeralatan extends Component {
   }
 
   saveForgeGears() {
-    this.setState({ loader: true })
-    const { FishingGearId } = this.state;
-    let token = this.props.user.token;
+    // form validation
+    if (this.state.gearsId === '') {
+      ToastAndroid.show('Pilih peralatan dahulu', ToastAndroid.SHORT)
+    }
+    else {
+      this.setState({ loader: true })
+      const { forgeName } = this.state;
+      let token = this.props.user.token;
 
-    axios.post(`${BASE_URL}/supplier/my-fishing-gears`, {
-      FishingGearId
-    }, {
-        headers: { token },
-      })
-      .then(response => {
-        console.log(response)
+      console.log(forgeName, '---forgename')
+      if (forgeName.length < 1) {
+        ToastAndroid.show('Pilih alat tangkap dahulu', ToastAndroid.SHORT)
         this.setState({ loader: false })
-        ToastAndroid.show('Sukses', ToastAndroid.SHORT)
-        const resetAction = NavigationActions.reset({
-          index: 1,
-          actions: [
-            NavigationActions.navigate({ routeName: 'Home' }),
-            NavigationActions.navigate({ routeName: 'MemberList' })
-          ]
+      }
+      else {
+        axios.post(`${BASE_URL}/supplier/my-fishing-gears`, {
+          FishingGearId: forgeName[0].id
+        }, {
+          headers: { token },
         })
-        this.props.navigation.dispatch(resetAction)
-      })
-      .catch(error => {
-        if (error.response) {
-          alert(error.response.data.message)
-        }
-        else {
-          alert('Koneksi internet bermasalah')
-        }
-        this.setState({ loader: false })
-      })
+        .then(response => {
+          console.log(response)
+          this.setState({ loader: false })
+          ToastAndroid.show('Sukses', ToastAndroid.SHORT)
+          const resetAction = NavigationActions.reset({
+            index: 1,
+            actions: [
+              NavigationActions.navigate({ routeName: 'Home' }),
+              NavigationActions.navigate({ routeName: 'MemberList' })
+            ]
+          })
+          this.props.navigation.dispatch(resetAction)
+        })
+        .catch(error => {
+          if (error.response) {
+            alert(error.response.data.message)
+          }
+          else {
+            alert('Koneksi internet bermasalah')
+          }
+          this.setState({ loader: false })
+        })
+      }
+    }
   }
 
 
@@ -395,7 +409,10 @@ class CreatePeralatan extends Component {
       plusForge,
       ShipId,
       data,
-     } = this.state;
+
+      ship
+    } = this.state;
+    
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -439,23 +456,23 @@ class CreatePeralatan extends Component {
               }
 
               {
-                plusShip ?
-                <View>
-                  <TouchableOpacity
-                  onPress={() => {
-                    console.log('Tambah Kapal');
-                    this.setState({
-                    plusShip: false
-                    }, () => {
-                    this.addShipComboBox();
-                    });
-                  }}
-                  >
-                  <Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
-                  </TouchableOpacity>
-                </View>
-                :
-                <View />
+                // plusShip ?
+                // <View>
+                //   <TouchableOpacity
+                //   onPress={() => {
+                //     console.log('Tambah Kapal');
+                //     this.setState({
+                //     plusShip: false
+                //     }, () => {
+                //     this.addShipComboBox();
+                //     });
+                //   }}
+                //   >
+                //   <Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
+                //   </TouchableOpacity>
+                // </View>
+                // :
+                // <View />
               }
 
               {
@@ -482,7 +499,7 @@ class CreatePeralatan extends Component {
                     <Picker.Item label='--- Pilih ---' value='' />
                    {
                     data !== undefined && data.map(item =>
-                      <Picker.Item key={item.id} label={item.name} value={item.id} />
+                      <Picker.Item key={item.id} label={item.name} value={item} />
                     )
                     
                     }
@@ -495,23 +512,23 @@ class CreatePeralatan extends Component {
             }
 
             {
-              plusForge ?
-              <View style={{ flex: 1 }}>
-                <TouchableOpacity
-                onPress={() => {
-                  console.log('Tambah Alat Mas');
-                  this.setState({
-                  plusForge: false
-                  }, () => {
-                  this.addForgeComboBox();
-                  });
-                }}
-                >
-                <Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
-                </TouchableOpacity>
-              </View>
-              :
-              <View />
+              // plusForge ?
+              // <View style={{ flex: 1 }}>
+              //   <TouchableOpacity
+              //   onPress={() => {
+              //     console.log('Tambah Alat Mas');
+              //     this.setState({
+              //     plusForge: false
+              //     }, () => {
+              //     this.addForgeComboBox();
+              //     });
+              //   }}
+              //   >
+              //   <Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
+              //   </TouchableOpacity>
+              // </View>
+              // :
+              // <View />
             }
 
             {
@@ -535,7 +552,12 @@ class CreatePeralatan extends Component {
               :
               <Button
                 onPress={() => {
-                  this.saveForgeShips();
+                  if (gearsId === '1') {
+                    this.saveForgeShips()
+                  }
+                  else {
+                    this.saveForgeGears()
+                  }
                 }}
               >
                 Selesai
