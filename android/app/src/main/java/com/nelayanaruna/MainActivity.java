@@ -1,4 +1,4 @@
-package com.aruna_nelayan;
+package id.aruna.nelayanapp;
 
 import com.facebook.react.ReactActivity;
 

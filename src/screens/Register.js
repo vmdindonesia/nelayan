@@ -72,12 +72,14 @@ class Register extends Component {
 			nameForge: '',
 			textInputForge: [],
 			plusForge: false,
-			tabActive: 1
+			tabActive: 1,
+			forge: []
 		}
 	}
 
 	componentWillMount() {
 		console.log('Registrasi');
+		this.fetchForge();
 	}
 
 	onCitySelected = (item) => {
@@ -117,6 +119,7 @@ class Register extends Component {
 	}
 
 	onChangeInputForge = (name, v) => {
+		console.log(v, 'V nya')
 		this.setState({
 			statusComboForge: false,
 			plusForge: true
@@ -421,6 +424,30 @@ class Register extends Component {
 			})
 	}
 
+	fetchForge = () => {
+		this.setState({ loading: true })
+
+		axios.get(`${BASE_URL}/supplier/fishing-gears`, {
+			timeout: REQUEST_TIME_OUT
+		})
+			.then(response => {
+				this.setState({ forge: response.data.data })
+				console.log(response.data.data, 'FORGE');
+
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+
+				this.setState({ loading: false })
+			})
+	}
+
 
 	addShipComboBox = () => {
 		this.setState({
@@ -515,6 +542,7 @@ class Register extends Component {
 
 	addTextInputForge = (key, value) => {
 		//Alat TextInput
+		console.log(value, 'VALUE FORGE');
 		const textInputForge = this.state.textInputForge;
 		this.setState({ textInputForge });
 
@@ -524,7 +552,7 @@ class Register extends Component {
 					<Input
 						label="Alat Tangkap"
 						placeholder="Alat Tangkap"
-						value={value}
+						value={value.name}
 						editable={false}
 					/>
 				</ContainerSection>
@@ -532,19 +560,19 @@ class Register extends Component {
 		);
 
 		// Push Value
-		const newforgeName = this.state.forgeName
-		newforgeName[key] = value
+		const newforgeName = this.state.forgeName;
+		newforgeName[key] = value.id;
 		this.setState({ forgeName: newforgeName });
 	}
 
 	nextTab = () => {
-		this.setState({tabActive: this.state.tabActive + 1})
-		this.scrollView.scrollTo({x: 0, y: 0, animated: false})
+		this.setState({ tabActive: this.state.tabActive + 1 })
+		this.scrollView.scrollTo({ x: 0, y: 0, animated: false })
 	}
 
 	prevTab = () => {
-		this.setState({tabActive: this.state.tabActive - 1})
-		this.scrollView.scrollTo({x: 0, y: 0, animated: false})
+		this.setState({ tabActive: this.state.tabActive - 1 })
+		this.scrollView.scrollTo({ x: 0, y: 0, animated: false })
 	}
 
 	renderButton = () => {
@@ -616,7 +644,8 @@ class Register extends Component {
 			textInputForge,
 			plusForge,
 			ShipId,
-			tabActive
+			tabActive,
+			forge
 		} = this.state;
 
 		return (
@@ -1054,7 +1083,7 @@ class Register extends Component {
 												selectedValue={ShipSize}
 												onValueChange={v => this.onChangeInputShip('ShipSize', v)}
 											>
-												<Picker.Item label='--- Pilih ---' value='' />
+												<Picker.Item label='--- Pilih Ukuran---' value='' />
 												<Picker.Item label='<= 1 GT' value='<=1 GT' />
 												<Picker.Item label='>1 GT' value='>1 GT' />
 											</Picker>
@@ -1104,10 +1133,12 @@ class Register extends Component {
 												selectedValue={nameForge}
 												onValueChange={v => this.onChangeInputForge('nameForge', v)}
 											>
-												<Picker.Item label='--- Pilih ---' value='' />
-												<Picker.Item label='Pukat Udang' value='1' />
-												<Picker.Item label='Pukat Kantung' value='2' />
-												<Picker.Item label='Pukat Karang' value='3' />
+												<Picker.Item label='--- Pilih Alat---' value='' />
+												{
+													forge && forge.map((item, index) =>
+														<Picker.Item key={index} label={item.name} value={item} />
+													)
+												}
 											</Picker>
 										</View>
 									</ContainerSection>
@@ -1163,7 +1194,7 @@ class Register extends Component {
 					</Container>
 				}
 
-				
+
 			</ScrollView>
 		)
 	}

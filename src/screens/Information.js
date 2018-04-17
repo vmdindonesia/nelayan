@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 
 class Information extends Component {
 	static navigationOptions = {
@@ -10,7 +10,7 @@ class Information extends Component {
 	render() {
 		return (
 			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-				<Text>Coming Soon</Text>
+				<Image style={{height: 200, width: 200}} source={require('../../assets/coming-soon.png')} />
 			</View>
 		)
 	}

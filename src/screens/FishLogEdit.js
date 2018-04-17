@@ -14,45 +14,48 @@ import { Container, ContainerSection, Input, Button, Spinner } from '../componen
 class FishLogEdit extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: 'Ubah Fishlog',
-		headerLeft: 
+		headerLeft:
 			<TouchableOpacity
-				onPress={() => 
-					{
-						if (navigation.state.params && navigation.state.params.change) {
-							Alert.alert(
-								'',
-								'Yakin batal mengubah fishlog?',
-								[
-									{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-									{text: 'Ya', 
+				onPress={() => {
+					if (navigation.state.params && navigation.state.params.change) {
+						Alert.alert(
+							'',
+							'Yakin batal mengubah fishlog?',
+							[
+								{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+								{
+									text: 'Ya',
 									onPress: () => {
-										navigation.setParams({change: false})
+										navigation.setParams({ change: false })
 										navigation.goBack()
-									}},
-								]
-							)
-						}
-						else {
-							navigation.goBack()
-						}
+									}
+								},
+							]
+						)
+					}
+					else {
+						navigation.goBack()
 					}
 				}
+				}
 			>
-				<Icon style={{marginLeft: 20, color: '#fff'}} name="md-arrow-back" size={24} />
+				<Icon style={{ marginLeft: 20, color: '#fff' }} name="md-arrow-back" size={24} />
 			</TouchableOpacity>,
 		headerRight: <View />
 	})
 
 	constructor(props) {
 		super(props)
-	
+
 		this.state = {
 			loading: false,
 			loadingPage: true,
 			data: {},
 			photo: null,
 			fishes: [],
-			provinces: []
+			provinces: [],
+			ship: [],
+			forge: []
 		}
 	}
 
@@ -60,23 +63,27 @@ class FishLogEdit extends Component {
 		this.fetchData()
 		this.fetchProducts()
 		this.fetchProvinces()
+		this.fetchShip()
+		this.fetchForge()
 	}
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			const { params } = this.props.navigation.state
-			
+
 			if (params && params.change === true) {
 				Alert.alert(
 					'',
 					'Yakin batal mengubah fishlog?',
 					[
-						{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-						{text: 'Ya', 
-						onPress: () => {
-							this.props.navigation.setParams({change: false})
-							this.props.navigation.goBack()
-						}},
+						{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+						{
+							text: 'Ya',
+							onPress: () => {
+								this.props.navigation.setParams({ change: false })
+								this.props.navigation.goBack()
+							}
+						},
 					]
 				)
 
@@ -88,9 +95,9 @@ class FishLogEdit extends Component {
 	onChangeInput = (name, v) => {
 		const { data } = this.state
 		data[name] = v
-		this.setState({data})
+		this.setState({ data })
 
-		this.props.navigation.setParams({change: true})
+		this.props.navigation.setParams({ change: true })
 	}
 
 	onSubmit = () => {
@@ -108,7 +115,7 @@ class FishLogEdit extends Component {
 			ToastAndroid.show('Anda belum pilih Provinsi', ToastAndroid.SHORT)
 		}
 		else {
-			this.setState({loading: true})
+			this.setState({ loading: true })
 
 			let formData = new FormData()
 			formData.append('FishId', data.FishId)
@@ -134,20 +141,49 @@ class FishLogEdit extends Component {
 				},
 				timeout: REQUEST_TIME_OUT
 			})
-			.then(() => {
-				this.props.navigation.setParams({change: false})
-				
-				const resetAction = NavigationActions.reset({
-					index: 1,
-					actions: [
-						NavigationActions.navigate({ routeName: 'Home'}),
-						NavigationActions.navigate({ routeName: 'FishLogList'}),
-						// NavigationActions.navigate({ routeName: 'FishLogDetail', params: {id: data.id}})
-					]
-				})
-				this.props.navigation.dispatch(resetAction)
+				.then(() => {
+					this.props.navigation.setParams({ change: false })
 
-				this.setState({loading: false})
+					const resetAction = NavigationActions.reset({
+						index: 1,
+						actions: [
+							NavigationActions.navigate({ routeName: 'Home' }),
+							NavigationActions.navigate({ routeName: 'FishLogList' }),
+							// NavigationActions.navigate({ routeName: 'FishLogDetail', params: {id: data.id}})
+						]
+					})
+					this.props.navigation.dispatch(resetAction)
+
+					this.setState({ loading: false })
+				})
+				.catch(error => {
+					if (error.response) {
+						alert(error.response.data.message)
+					}
+					else {
+						alert('Koneksi internet bermasalah')
+					}
+
+					this.setState({ loading: false })
+				})
+		}
+	}
+
+	fetchData = () => {
+		let id = this.props.navigation.state.params.id
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/fishlogs/${id}`, {
+			headers: { token },
+			timeout: REQUEST_TIME_OUT
+
+		})
+			.then(response => {
+				this.setState({
+					data: response.data.data,
+					loadingPage: false
+				});
+				console.log(response.data.data, 'DATA');
 			})
 			.catch(error => {
 				if (error.response) {
@@ -156,86 +192,110 @@ class FishLogEdit extends Component {
 				else {
 					alert('Koneksi internet bermasalah')
 				}
-
-				this.setState({loading: false})
+				this.setState({ loadingPage: false })
 			})
-		}
-	}
-
-	fetchData = () => {
-		let id = this.props.navigation.state.params.id
-		let token = this.props.user.token
-		
-		axios.get(`${BASE_URL}/fishlogs/${id}`, {
-			headers: {token},
-			timeout: REQUEST_TIME_OUT
-
-		})
-		.then(response => {
-			this.setState({
-				data: response.data.data,
-				loadingPage: false
-			})
-		})
-		.catch(error => {
-			if (error.response) {
-				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
-			}
-			this.setState({loadingPage: false})
-		})
 	}
 
 	fetchProducts = () => {
-		this.setState({loadingPage: true})
+		this.setState({ loadingPage: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
-			headers: {token},
+			headers: { token },
 			timeout: REQUEST_TIME_OUT
 		})
-		.then(response => {			
-			this.setState({fishes: response.data.data})
+			.then(response => {
+				this.setState({ fishes: response.data.data })
 
-			this.setState({loadingPage: false})
-		})
-		.catch(error => {
-			if (error.response) {
-				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-			}
-			else {
-				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-			}
+				this.setState({ loadingPage: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
 
-			this.setState({loadingPage: false})
-		})
+				this.setState({ loadingPage: false })
+			})
 	}
 
 	fetchProvinces = () => {
-		this.setState({loading: true})
+		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/provinces`, {
-			headers: {token},
+			headers: { token },
 			timeout: REQUEST_TIME_OUT
 		})
-		.then(response => {			
-			this.setState({provinces: response.data.data})
+			.then(response => {
+				this.setState({ provinces: response.data.data })
 
-			this.setState({loading: false})
-		})
-		.catch(error => {
-			if (error.response) {
-				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
-			}
-			else {
-				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-			}
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
 
-			this.setState({loading: false})
+				this.setState({ loading: false })
+			})
+	}
+
+	fetchShip = () => {
+		this.setState({ loading: true })
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/supplier/my-ships`, {
+			headers: { token },
+			timeout: REQUEST_TIME_OUT
 		})
+			.then(response => {
+				this.setState({ ship: response.data.data })
+				console.log(response.data.data, 'SHIP');
+
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+
+				this.setState({ loading: false })
+			})
+	}
+
+	fetchForge = () => {
+		this.setState({ loading: true })
+		let token = this.props.user.token
+
+		axios.get(`${BASE_URL}/supplier/my-fishing-gears`, {
+			headers: { token },
+			timeout: REQUEST_TIME_OUT
+		})
+			.then(response => {
+				this.setState({ forge: response.data.data })
+				console.log(response.data.data, 'FORGE');
+
+				this.setState({ loading: false })
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+
+				this.setState({ loading: false })
+			})
 	}
 
 	selectPhotoTapped = (name) => {
@@ -285,8 +345,8 @@ class FishLogEdit extends Component {
 						'',
 						'Yakin ingin merubah data?',
 						[
-							{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-							{text: 'Ya', onPress: () => this.onSubmit()},
+							{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+							{ text: 'Ya', onPress: () => this.onSubmit() },
 						]
 					)
 				}
@@ -297,11 +357,11 @@ class FishLogEdit extends Component {
 	}
 
 	render() {
-		const { data, loadingPage, photo, fishes, provinces } = this.state
+		const { data, loadingPage, photo, fishes, provinces, forge, ship } = this.state
 
 		if (loadingPage) {
 			return (
-				<View style={{flex: 1}}>
+				<View style={{ flex: 1 }}>
 					<Spinner size='large' />
 				</View>
 			)
@@ -325,7 +385,7 @@ class FishLogEdit extends Component {
 								>
 									<Picker.Item label="-- Pilih Komoditas --" value="" />
 									{
-										fishes && fishes.map((item, index) => 
+										fishes && fishes.map((item, index) =>
 											<Picker.Item key={index} label={item.name} value={item.id} />
 										)
 									}
@@ -334,13 +394,13 @@ class FishLogEdit extends Component {
 						</View>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal Penangkapan</Text>
+						<Text style={{ color: '#5e5e5e', fontSize: 14 }}>Tanggal Penangkapan</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<Input
 							value={moment(data.createdAt).format('DD/MM/YYYY')}
 							editable={false}
-						/>	
+						/>
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
@@ -352,7 +412,7 @@ class FishLogEdit extends Component {
 								>
 									<Picker.Item label="-- Pilih Provinsi --" value="" />
 									{
-										provinces && provinces.map((item, index) => 
+										provinces && provinces.map((item, index) =>
 											<Picker.Item key={index} label={item.name} value={item.id} />
 										)
 									}
@@ -376,7 +436,7 @@ class FishLogEdit extends Component {
 							value={numeral(parseInt(data.size, 0)).format('0,0')}
 							onChangeText={v => this.onChangeInput('size', v)}
 						/>
-						<View style={{marginTop: 50, marginLeft: 10, flex: 1}}>
+						<View style={{ marginTop: 50, marginLeft: 10, flex: 1 }}>
 							<View style={styles.pickerUnitStyle}>
 								<Picker
 									selectedValue={data.unit}
@@ -410,12 +470,15 @@ class FishLogEdit extends Component {
 					<ContainerSection>
 						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
 							<Picker
-								selectedValue={data.MyShipId}
+								selectedValue={data.MyShip.id}
 								onValueChange={v => this.onChangeInput('MyShipId', v)}
 							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='Titanic' value='1' />
-								<Picker.Item label='Pesiar' value='2' />
+								<Picker.Item label='--- Pilih Kapal---' value='' />
+								{
+									ship && ship.map((item, index) =>
+										<Picker.Item key={index} label={item.name} value={item.id} />
+									)
+								}
 							</Picker>
 						</View>
 					</ContainerSection>
@@ -426,13 +489,15 @@ class FishLogEdit extends Component {
 					<ContainerSection>
 						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
 							<Picker
-								selectedValue={data.MyFishingGearId}
+								selectedValue={data.MyFishingGear.id}
 								onValueChange={v => this.onChangeInput('MyFishingGearId', v)}
 							>
-								<Picker.Item label='--- Pilih ---' value='' />
-								<Picker.Item label='Pukat Udang' value='1' />
-								<Picker.Item label='Pukat Karang' value='2' />
-								<Picker.Item label='Pukat Kantung' value='3' />
+								<Picker.Item label='--- Pilih Alat---' value='' />
+								{
+									forge && forge.map((item, index) =>
+										<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />
+									)
+								}
 							</Picker>
 						</View>
 					</ContainerSection>
@@ -443,26 +508,26 @@ class FishLogEdit extends Component {
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Ambil Foto Komoditas</Text>
+						<Text style={{ color: '#5e5e5e', fontSize: 14 }}>Ambil Foto Komoditas</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5}}>
+						<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5 }}>
 							<TouchableOpacity onPress={() => this.selectPhotoTapped('photo')}>
 								<View>
-								{ photo === null ? 
+									{photo === null ?
 										<Image
-											source={{uri: `${BASE_URL}/images/${data.photo}`}}
-											style={{height: 200, width: 300}}
+											source={{ uri: `${BASE_URL}/images/${data.photo}` }}
+											style={{ height: 200, width: 300 }}
 										/>
-									:
-										<Image style={{height: 200, width: 300}} source={photo} />
-								}
+										:
+										<Image style={{ height: 200, width: 300 }} source={photo} />
+									}
 								</View>
 							</TouchableOpacity>
 						</View>
 					</ContainerSection>
-					
-					<View style={{marginTop: 20, marginBottom: 20}}>
+
+					<View style={{ marginTop: 20, marginBottom: 20 }}>
 						<ContainerSection>
 							{this.renderButton()}
 						</ContainerSection>
@@ -479,7 +544,7 @@ const styles = {
 		fontSize: 18,
 	},
 	pickerContainer: {
-		flex: 1, 
+		flex: 1,
 		marginBottom: 5,
 	},
 	pickerStyle: {
@@ -505,7 +570,7 @@ const styles = {
 		marginBottom: 10
 	},
 	unitStyle: {
-		marginTop: 55, 
+		marginTop: 55,
 		flex: 1,
 		marginLeft: 20,
 		fontSize: 16,
