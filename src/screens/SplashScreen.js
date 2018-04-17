@@ -30,10 +30,6 @@ class SplashScreen extends Component {
 			}
 			else {
 				this.setState({ image: require('../../assets/splash1.png') })
-
-				setTimeout(() => {
-					this.redirect('')
-				}, 2000)
 			}
 		})
 	}
@@ -65,7 +61,11 @@ class SplashScreen extends Component {
 			<ImageBackground
 				source={this.state.image}
 				style={{ width: '100%', height: '100%' }}
-			/>
+			>
+				<TouchableWithoutFeedback onPress={() => this.redirect('')}>
+					<View style={{flex: 1}} />
+				</TouchableWithoutFeedback>
+			</ImageBackground>
 		)
 	}
 }
