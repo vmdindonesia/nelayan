@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "build-staging": "cd android && ./gradlew assembleReleaseStaging",
-    "build-prod": "cd android && gradlew assembleRelease",
+    "build-prod": "cd android && ./gradlew assembleRelease",
     "deploy-staging": "code-push release-react  raosanfl/aruna_nelayan android",
     "deploy-prod": "code-push promote  raosanfl/aruna_nelayan Staging Production",
     "emulator": "/Users/raosan/Library/Android/sdk/tools/emulator -avd Nexus-5-API-23 -netdelay none -netspeed full",
