@@ -42,6 +42,8 @@ class CreatePeralatan extends Component {
       textInputForge: [],
       plusForge: false,
       data: {},
+
+      type: ''
     }
   }
 
@@ -79,15 +81,9 @@ class CreatePeralatan extends Component {
   }
 
   onChangeInputShip = (name, v) => {
-    const newShipId = this.state.ShipId
-    newShipId[this.state.ShipId.length] = v;
-    this.setState({
-    statusComboShip: false,
-    plusShip: true,
-    ShipId: newShipId
-    }, () => {
-    this.addTextInputShipDropDown(this.state.textInputShipDropDown.length, v);
-    });
+    console.log(name, '-----name')
+    console.log(v, '-----value')
+    this.setState({[name]: v})
   }
   
   onChangeInputForge = (name, v) => {
@@ -139,52 +135,6 @@ class CreatePeralatan extends Component {
     });
     });
   }
-
-/*     checkSecurity() {
-
-    const { 
-      gearsId, 
-      name, 
-      size, 
-      FishingGearId,
-      ShipNameMin,
-      ShipSizeMin,
-      ShipNameMax,
-      ShipSizeMax,
-      tempShipNameMin, 
-      tempShipNameMax, 
-      tempShipSizeMin,
-      tempShipSizeMax,
-
-      forgeName,
-      nameForge
-
-    } = this.state;
-    if (gearsId === '1') {
-      if(!gearsId){
-      return ToastAndroid.show('Alat tangkap tidak boleh kosong', ToastAndroid.SHORT)
-      }else if(!tempShipNameMin){
-      return ToastAndroid.show('Nama kapal tidak boleh kosong', ToastAndroid.SHORT)
-      }else{
-      this.saveForgeShips()
-      }
-
-    } else if (gearsId === '2') {
-      switch (gearsId) {
-        case '':
-          return ToastAndroid.show('Alat tangkap tidak boleh kosong', ToastAndroid.SHORT)
-        default:
-          console.log('GearsId Lolos')
-          switch (FishingGearId) {
-            case '':
-              return ToastAndroid.show('Alat tangkap tidak boleh kosong', ToastAndroid.SHORT)
-            default:
-              console.log('Fishing Lolos')
-              this.saveForgeGears()
-          }
-      }
-    }
-  } */
 
   addShipComboBox = () => {
     this.setState({
@@ -305,14 +255,22 @@ class CreatePeralatan extends Component {
   }
 
   saveForgeShips() {
-    this.setState({ loader: true })
-    const { tempShipNameMin, tempShipNameMax } = this.state;
-    let token = this.props.user.token;
+    // form validation
+    if (this.state.type === '') {
+      ToastAndroid.show('Pilih tipe ukuran kapal dahulu', ToastAndroid.SHORT)
+    }
+    else if (this.state.name === '') {
+      ToastAndroid.show('Isi nama kapal dahulu', ToastAndroid.SHORT)
+    }
+    else {
+      this.setState({ loader: true })
+      let token = this.props.user.token;
 
-    axios.post(`${BASE_URL}/supplier/my-ships`, {
-      tempShipNameMin,
-      tempShipNameMax
-    }, {
+      axios.post(`${BASE_URL}/supplier/my-ships`, {
+        name: this.state.name,
+        size: (this.state.type === '<=1 GT' ? 'kecil' : this.state.size),
+        type: this.state.type
+      }, {
         headers: { token },
       })
       .then(response => {
@@ -337,6 +295,7 @@ class CreatePeralatan extends Component {
         }
         this.setState({ loader: false })
       })
+    }
   }
 
   saveForgeGears() {
@@ -410,7 +369,7 @@ class CreatePeralatan extends Component {
       ShipId,
       data,
 
-      ship
+      type
     } = this.state;
     
     return (
@@ -438,11 +397,11 @@ class CreatePeralatan extends Component {
                 statusComboShip ?
                   <ContainerSection>
                   <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
-                    <Text style={{ flex: 1 }}>Pilih Ukuran Kapal</Text>
+                    <Text style={{ flex: 1 }}>Pilih Tipe Ukuran Kapal</Text>
                     <View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
                     <Picker
-                      selectedValue={ShipSize}
-                      onValueChange={v => this.onChangeInputShip('ShipSize', v)}
+                      selectedValue={type}
+                      onValueChange={v => this.onChangeInputShip('type', v)}
                     >
                       <Picker.Item label='--- Pilih ---' value='' />
                       <Picker.Item label='<= 1 GT' value='<=1 GT' />
@@ -456,30 +415,43 @@ class CreatePeralatan extends Component {
               }
 
               {
-                // plusShip ?
-                // <View>
-                //   <TouchableOpacity
-                //   onPress={() => {
-                //     console.log('Tambah Kapal');
-                //     this.setState({
-                //     plusShip: false
-                //     }, () => {
-                //     this.addShipComboBox();
-                //     });
-                //   }}
-                //   >
-                //   <Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
-                //   </TouchableOpacity>
-                // </View>
-                // :
-                // <View />
+                this.state.type === '<=1 GT' ? 
+                  <ContainerSection>
+                    <View style={{ padding: 5, width: '100%' }}>
+                    <Input
+                      label='Nama Kapal'
+                      placeholder="Nama Kapal"
+                      value={name}
+                      onChangeText={v => this.onChangeInputShip('name', v)}
+                    />
+                    </View>
+                  </ContainerSection>
+                :
+                  <View>
+                    <ContainerSection>
+                      <View style={{ padding: 5, width: '100%' }}>
+                      <Input
+                        label="Ukuran Kapal"
+                        placeholder="Ukuran Kapal"
+                        value={size}
+                        keyboardType="numeric"
+                        onChangeText={v => this.onChangeInputShip('size', v)}
+                      />
+                      </View>
+                    </ContainerSection>
+                    <ContainerSection>
+                      <View style={{ padding: 5, width: '100%' }}>
+                      <Input
+                        label='Nama Kapal'
+                        placeholder="Nama Kapal"
+                        value={name}
+                        onChangeText={v => this.onChangeInputShip('name', v)}
+                      />
+                      </View>
+                    </ContainerSection>
+                  </View>
               }
 
-              {
-                textInputShipDropDown && textInputShipDropDown.map((item) =>
-                item
-                )
-                }
             </View>
             :
           <View>
