@@ -48,8 +48,8 @@ class FishLogEdit extends Component {
 		super(props)
 
 		this.state = {
-			loading: false,
-			loadingPage: true,
+			loading: null,
+			loadingPage: null,
 			data: {},
 			photo: null,
 			fishes: [],
@@ -60,11 +60,7 @@ class FishLogEdit extends Component {
 	}
 
 	componentWillMount() {
-		this.fetchData()
-		this.fetchProducts()
-		this.fetchProvinces()
-		this.fetchShip()
-		this.fetchForge()
+		this.fetchData();
 	}
 
 	componentDidMount() {
@@ -115,7 +111,7 @@ class FishLogEdit extends Component {
 			ToastAndroid.show('Anda belum pilih Provinsi', ToastAndroid.SHORT)
 		}
 		else {
-			this.setState({ loading: true })
+			this.setState({ loadingPage: true })
 
 			let formData = new FormData()
 			formData.append('FishId', data.FishId)
@@ -154,7 +150,7 @@ class FishLogEdit extends Component {
 					})
 					this.props.navigation.dispatch(resetAction)
 
-					this.setState({ loading: false })
+					this.setState({ loadingPage: false })
 				})
 				.catch(error => {
 					if (error.response) {
@@ -164,12 +160,13 @@ class FishLogEdit extends Component {
 						alert('Koneksi internet bermasalah')
 					}
 
-					this.setState({ loading: false })
+					this.setState({ loadingPage: false })
 				})
 		}
 	}
 
 	fetchData = () => {
+		this.setState({ loading: true });
 		let id = this.props.navigation.state.params.id
 		let token = this.props.user.token
 
@@ -180,24 +177,25 @@ class FishLogEdit extends Component {
 		})
 			.then(response => {
 				this.setState({
-					data: response.data.data,
-					loadingPage: false
+					data: response.data.data
+				}, () => {
+					this.fetchProducts();
 				});
 				console.log(response.data.data, 'DATA');
 			})
 			.catch(error => {
+				console.log('Error Fetch Data');
 				if (error.response) {
 					alert(error.response.data.message)
 				}
 				else {
 					alert('Koneksi internet bermasalah')
 				}
-				this.setState({ loadingPage: false })
+				this.setState({ loading: false })
 			})
 	}
 
 	fetchProducts = () => {
-		this.setState({ loadingPage: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/fishes-products`, {
@@ -205,11 +203,12 @@ class FishLogEdit extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 			.then(response => {
-				this.setState({ fishes: response.data.data })
-
-				this.setState({ loadingPage: false })
+				this.setState({ fishes: response.data.data }, () => {
+					this.fetchProvinces();
+				});
 			})
 			.catch(error => {
+				console.log('Error Fetch Products');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -217,12 +216,11 @@ class FishLogEdit extends Component {
 					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 				}
 
-				this.setState({ loadingPage: false })
+				this.setState({ loading: false })
 			})
 	}
 
 	fetchProvinces = () => {
-		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/provinces`, {
@@ -230,11 +228,12 @@ class FishLogEdit extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 			.then(response => {
-				this.setState({ provinces: response.data.data })
-
-				this.setState({ loading: false })
+				this.setState({ provinces: response.data.data }, () => {
+					this.fetchShip();
+				});
 			})
 			.catch(error => {
+				console.log('Error Fetch Province');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -247,7 +246,6 @@ class FishLogEdit extends Component {
 	}
 
 	fetchShip = () => {
-		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/supplier/my-ships`, {
@@ -255,12 +253,13 @@ class FishLogEdit extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 			.then(response => {
-				this.setState({ ship: response.data.data })
+				this.setState({ ship: response.data.data }, () => {
+					this.fetchForge()
+				});
 				console.log(response.data.data, 'SHIP');
-
-				this.setState({ loading: false })
 			})
 			.catch(error => {
+				console.log('Error Fetch Ship');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -273,7 +272,6 @@ class FishLogEdit extends Component {
 	}
 
 	fetchForge = () => {
-		this.setState({ loading: true })
 		let token = this.props.user.token
 
 		axios.get(`${BASE_URL}/supplier/my-fishing-gears`, {
@@ -287,6 +285,7 @@ class FishLogEdit extends Component {
 				this.setState({ loading: false })
 			})
 			.catch(error => {
+				console.log('Error Fetch Forge');
 				if (error.response) {
 					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 				}
@@ -334,7 +333,7 @@ class FishLogEdit extends Component {
 	}
 
 	renderButton = () => {
-		if (this.state.loading) {
+		if (this.state.loadingPage) {
 			return <Spinner size='large' />
 		}
 
@@ -357,9 +356,9 @@ class FishLogEdit extends Component {
 	}
 
 	render() {
-		const { data, loadingPage, photo, fishes, provinces, forge, ship } = this.state
+		const { data, loading, photo, fishes, provinces, forge, ship } = this.state
 
-		if (loadingPage) {
+		if (loading) {
 			return (
 				<View style={{ flex: 1 }}>
 					<Spinner size='large' />
