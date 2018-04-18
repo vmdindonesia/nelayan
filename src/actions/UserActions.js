@@ -2,7 +2,7 @@ import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { AsyncStorage } from 'react-native'
 import OneSignal from 'react-native-onesignal';
-import { BASE_URL } from '../constants'
+import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 import {
 	USER_LOADING,
 	USER_LOGIN_SUCCESS,
@@ -18,7 +18,9 @@ export const login = (email, password) => {
 
 		const data = {email, password}
 
-		axios.post(`${BASE_URL}/supplier/login`, data)
+		axios.post(`${BASE_URL}/supplier/login`, data, {
+			timeout: REQUEST_TIME_OUT
+		})
 		.then(response => loginSuccess(dispatch, response))
 		.catch(error => loginFail(dispatch, error))
 	}
