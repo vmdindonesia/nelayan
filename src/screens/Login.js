@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Keyboard, Image, AsyncStorage, TouchableOpacity } from 'react-native'
+import { StatusBar, View, Text, Keyboard, Image, AsyncStorage, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import OneSignal from 'react-native-onesignal'
@@ -90,6 +90,10 @@ class Login extends Component {
 
 		return (
 			<View style={styles.container}>
+				<StatusBar
+					backgroundColor={COLOR.primary}
+					barStyle="light-content"
+				/>
 				<Container>
 					<ContainerSection>
 						<View style={{flex: 1, marginBottom: 30}}>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, BackHandler, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
+import { StatusBar, ScrollView, BackHandler, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 
-import { Container, ContainerSection, Input, Button, Spinner, PickerCustom } from '../components/common'
+import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
@@ -675,6 +675,10 @@ class Register extends Component {
 				keyboardShouldPersistTaps="always"
 				ref={ref => this.scrollView = ref}
 			>
+				<StatusBar
+					backgroundColor={COLOR.primary}
+					barStyle="light-content"
+				/>
 				{
 					tabActive === 1 &&
 					<Container>
