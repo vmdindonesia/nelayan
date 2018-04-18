@@ -16,7 +16,7 @@ export const COLOR = {
 	element_b1: '#f8bb7c',
 	element_b2: '#faa51a',
 	element_b3: '#f36e21',
-	element_b4: '#ef3f2c'
+	element_b4: '#faa51a'
 }
 
 // TimeOut constant

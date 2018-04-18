@@ -54,7 +54,7 @@ class MemberList extends Component {
         />
 
         <ActionButton
-          buttonColor={COLOR.secondary_b}
+          buttonColor={COLOR.element_b4}
           onPress={() => {
             this.props.navi.navigate('MemberCreate')
           }

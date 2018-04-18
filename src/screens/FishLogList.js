@@ -129,7 +129,7 @@ class FishLogList extends Component {
 				/>
 
 				<ActionButton
-					buttonColor={COLOR.secondary_b}
+					buttonColor={COLOR.element_b4}
 					onPress={() => this.props.navigation.navigate('FishLogCreate')}
 				/>
 
