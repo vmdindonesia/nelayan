@@ -45,16 +45,26 @@ class MemberList extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <FlatList
-          data={this.props.members.data}
-          renderItem={({ item }) => this.renderItem(item)}
-          keyExtractor={(item, index) => index}
-          onRefresh={() => this.props.membersFetch(this.props.user.token)}
-          refreshing={this.props.members.loading}
-        />
-
+        {
+          this.props.members.data.length > 0 ?
+            <FlatList
+              data={this.props.members.data}
+              renderItem={({ item }) => this.renderItem(item)}
+              keyExtractor={(item, index) => index}
+              onRefresh={() => this.props.membersFetch(this.props.user.token)}
+              refreshing={this.props.members.loading}
+            />
+          :
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+              <Image 
+                source={require('../../assets/Asset-8.png')} 
+              />
+              <Text style={{textAlign: 'center'}}>{'Anda belum\r\nmempunyai anggota'}</Text>
+            </View>
+        }
+        
         <ActionButton
-          buttonColor={COLOR.secondary_b}
+          buttonColor={COLOR.element_b4}
           onPress={() => {
             this.props.navi.navigate('MemberCreate')
           }

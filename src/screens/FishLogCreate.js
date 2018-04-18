@@ -163,12 +163,11 @@ class FishLogCreate extends Component {
 					ToastAndroid.show('Berhasil tambah fishlog', ToastAndroid.SHORT)
 				})
 				.catch(error => {
-					console.log(error.response.data.message, 'ERROR');
 					if (error.response) {
-						alert(error.response.data.message)
+						ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 					}
 					else {
-						alert('Koneksi internet bermasalah')
+						ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 					}
 
 					this.setState({ loading: false })

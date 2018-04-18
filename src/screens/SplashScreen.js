@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { View, Image, AsyncStorage, ImageBackground, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, AsyncStorage, ImageBackground, TouchableWithoutFeedback } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 
 import { setUserToken } from '../actions'
-import { COLOR } from '../constants'
 
 class SplashScreen extends Component {
 	static navigationOptions = {
@@ -16,6 +15,7 @@ class SplashScreen extends Component {
 
 		this.state = {
 			image: require('../../assets/splash2.png'),
+			hasLoggedIn: true
 		}
 	}
 
@@ -29,7 +29,10 @@ class SplashScreen extends Component {
 				}, 1000)
 			}
 			else {
-				this.setState({ image: require('../../assets/splash1.png') })
+				this.setState({ 
+					image: require('../../assets/splash1.png'),
+					hasLoggedIn: false
+				})
 			}
 		})
 	}
@@ -62,9 +65,13 @@ class SplashScreen extends Component {
 				source={this.state.image}
 				style={{ width: '100%', height: '100%' }}
 			>
-				<TouchableWithoutFeedback onPress={() => this.redirect('')}>
-					<View style={{flex: 1}} />
-				</TouchableWithoutFeedback>
+				{
+					<TouchableWithoutFeedback onPress={() => this.redirect('')}>
+						<View style={{flex: 1, justifyContent: 'flex-end'}}>
+							{this.state.hasLoggedIn ? <View /> : <Text style={{alignSelf: 'center', color: '#fff', marginBottom: 20, textDecorationLine: 'underline'}}>Klik untuk lanjut</Text>}
+						</View>
+					</TouchableWithoutFeedback>
+				}
 			</ImageBackground>
 		)
 	}

@@ -1,6 +1,14 @@
+import Config from 'react-native-config'
+
 // Base URL
-// export const BASE_URL = 'http://webapi.aruna.id/api/v1'
-export const BASE_URL = 'http://139.59.243.28/aruna/api/v1'
+const url = {
+  development: 'http://139.59.243.28/aruna/api/v1',
+  staging: 'http://139.59.243.28/aruna/api/v1',
+  production: 'http://webapi.aruna.id/api/v1',
+}
+const ENV = Config.ENV || 'development'
+
+export const BASE_URL = url[ENV]
 
 // Colors
 export const COLOR = {
@@ -16,7 +24,7 @@ export const COLOR = {
 	element_b1: '#f8bb7c',
 	element_b2: '#faa51a',
 	element_b3: '#f36e21',
-	element_b4: '#ef3f2c'
+	element_b4: '#faa51a'
 }
 
 // TimeOut constant

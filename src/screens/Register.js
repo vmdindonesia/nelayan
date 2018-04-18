@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
+import { StatusBar, ScrollView, BackHandler, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 
-import { Container, ContainerSection, Input, Button, Spinner, PickerCustom } from '../components/common'
+import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import AutoComplete from '../components/AutoComplete'
 
@@ -78,8 +78,17 @@ class Register extends Component {
 	}
 
 	componentWillMount() {
-		console.log('Registrasi');
 		this.fetchForge();
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			if (this.state.tabActive > 1) {
+				this.prevTab()
+
+				return true
+			}
+		})
 	}
 
 	onCitySelected = (item) => {
@@ -203,42 +212,8 @@ class Register extends Component {
 		// this.submitRegister(data)
 
 		// Form Validation
-		if (data.organizationType === '') {
-			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
-		}
-		else if (data.password !== data.confirmPassword) {
-			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
-		}
-		else if (data.CityId === '') {
-			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.idNumber.length !== 16) {
-			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
-			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[0] === '' && data.values[0] !== '') {
-			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[1] === '' && data.values[1] !== '') {
-			ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[2] === '' && data.values[2] !== '') {
-			ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[3] === '' && data.values[3] !== '') {
-			ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.FishIds[4] === '' && data.values[4] !== '') {
-			ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (!this.regexEmail(data.email)) {
-			ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
-		}
-		else {
-			this.submitRegister(data)
-		}
+		
+		this.submitRegister(data)
 	}
 
 
@@ -287,6 +262,7 @@ class Register extends Component {
 			loadingCity: true,
 			CityId: ''
 		})
+		console.log('masuk get city')
 
 		axios.get(`${BASE_URL}/cities/search?key=${text}`)
 			.then(response => {
@@ -679,9 +655,53 @@ class Register extends Component {
 	}
 
 	nextTab = () => {
-		console.log(this.state, 'STATE ALL BUTTON NEXT')
-		this.setState({ tabActive: this.state.tabActive + 1 })
-		this.scrollView.scrollTo({ x: 0, y: 0, animated: false })
+		Keyboard.dismiss()
+
+		const data = this.state
+
+		if (data.tabActive === 1 && data.organizationType === '') {
+			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 1 && data.CityId === '') {
+			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 2 && data.password !== data.confirmPassword) {
+			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 2 && data.idNumber.length !== 16) {
+			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 2 && !this.regexEmail(data.email)) {
+			ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
+		}
+		else if (data.tabActive === 2 && data.photo === null) {
+			ToastAndroid.show('Foto profil harus ditambahkan', ToastAndroid.SHORT);
+		}
+		else if (data.tabActive === 2 && data.idPhoto === null) {
+			ToastAndroid.show('Foto KTP harus ditambahkan', ToastAndroid.SHORT);
+		}
+		else if (data.tabActive === 4 && data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
+			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 4 && data.FishIds[0] === '' && data.values[0] !== '') {
+			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 4 && data.FishIds[1] === '' && data.values[1] !== '') {
+			ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 4 && data.FishIds[2] === '' && data.values[2] !== '') {
+			ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 4 && data.FishIds[3] === '' && data.values[3] !== '') {
+			ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else if (data.tabActive === 4 && data.FishIds[4] === '' && data.values[4] !== '') {
+			ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		}
+		else {
+			this.setState({ tabActive: this.state.tabActive + 1 })
+			this.scrollView.scrollTo({ x: 0, y: 0, animated: false })	
+		}
 	}
 
 	prevTab = () => {
@@ -708,7 +728,7 @@ class Register extends Component {
 					)
 				}
 			>
-				Register
+				Daftar
 			</Button>
 		)
 	}
@@ -770,6 +790,10 @@ class Register extends Component {
 				keyboardShouldPersistTaps="always"
 				ref={ref => this.scrollView = ref}
 			>
+				<StatusBar
+					backgroundColor={COLOR.primary}
+					barStyle="light-content"
+				/>
 				{
 					tabActive === 1 &&
 					<Container>
@@ -857,7 +881,7 @@ class Register extends Component {
 
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
@@ -977,7 +1001,7 @@ class Register extends Component {
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
 								<Button secondary onPress={this.prevTab}>Kembali</Button>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
@@ -1024,7 +1048,7 @@ class Register extends Component {
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
 								<Button secondary onPress={this.prevTab}>Kembali</Button>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
@@ -1172,7 +1196,7 @@ class Register extends Component {
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
 								<Button secondary onPress={this.prevTab}>Kembali</Button>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>

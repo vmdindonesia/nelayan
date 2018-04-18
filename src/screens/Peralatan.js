@@ -106,14 +106,25 @@ class Peralatan extends Component {
         {
           tabActive === 2 &&
             <View style={{flex: 1}}>
-              <FlatList
-                data={this.props.kapal.data}
-                renderItem={({item}) => this.renderKapal(item)}
-                keyExtractor={(item, index) => index}
-                numColumns={1}
-                onRefresh={() => this.props.alatFetch(this.props.user.token)}
-                refreshing={this.props.kapal.loading}
-              />
+              {
+                this.props.kapal.data.length > 0 ?
+                  <FlatList
+                    data={this.props.kapal.data}
+                    renderItem={({item}) => this.renderKapal(item)}
+                    keyExtractor={(item, index) => index}
+                    numColumns={1}
+                    onRefresh={() => this.props.alatFetch(this.props.user.token)}
+                    refreshing={this.props.kapal.loading}
+                  />
+                :
+                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Image 
+                      source={require('../../assets/kapal.png')} 
+                      style={{height: 100, width: 100}}
+                    />
+                    <Text style={{textAlign: 'center'}}>{'Anda belum\r\nmempunyai kapal'}</Text>
+                  </View>
+              }
             </View>
         }
 
@@ -130,19 +141,30 @@ class Peralatan extends Component {
         {
           tabActive === 1 &&
             <View style={{flex: 1}}>
-              <FlatList
-                data={this.props.alat.data}
-                renderItem={({item}) => this.renderAlat(item)}
-                keyExtractor={(item, index) => index}
-                numColumns={1}
-                onRefresh={() => this.props.alatFetch(this.props.user.token)}
-                refreshing={this.props.alat.loading}
-              />
+              {
+                this.props.alat.data.length > 0 ?
+                  <FlatList
+                    data={this.props.alat.data}
+                    renderItem={({item}) => this.renderAlat(item)}
+                    keyExtractor={(item, index) => index}
+                    numColumns={1}
+                    onRefresh={() => this.props.alatFetch(this.props.user.token)}
+                    refreshing={this.props.alat.loading}
+                  />
+                :
+                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <Image 
+                      source={require('../../assets/alat-tangkap.png')} 
+                      style={{height: 100, width: 100}}
+                    />
+                    <Text style={{textAlign: 'center'}}>{'Anda belum mempunyai\r\nalat tangkap'}</Text>
+                  </View>
+              }
             </View>
         }
 
         <ActionButton
-          buttonColor={COLOR.secondary_b}
+          buttonColor={COLOR.element_b4}
           onPress={() => 
             this.props.navi.navigate('CreateForge')
           }
