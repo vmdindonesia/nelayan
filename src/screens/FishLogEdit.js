@@ -469,7 +469,7 @@ class FishLogEdit extends Component {
 					<ContainerSection>
 						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
 							<Picker
-								selectedValue={data.MyShip.id}
+								selectedValue={data.MyShipId}
 								onValueChange={v => this.onChangeInput('MyShipId', v)}
 							>
 								<Picker.Item label='--- Pilih Kapal---' value='' />
@@ -488,7 +488,7 @@ class FishLogEdit extends Component {
 					<ContainerSection>
 						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
 							<Picker
-								selectedValue={data.MyFishingGear.id}
+								selectedValue={data.MyFishingGearId}
 								onValueChange={v => this.onChangeInput('MyFishingGearId', v)}
 							>
 								<Picker.Item label='--- Pilih Alat---' value='' />

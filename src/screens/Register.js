@@ -558,7 +558,7 @@ class Register extends Component {
 											this.minusShipComboBox(key);
 										}}
 									>
-										<Text style={{ marginLeft: '70%' }}>
+										<Text style={{ marginLeft: '58%' }}>
 											Hapus Kapal
 											<Image
 												style={{ marginLeft: '10%', width: 20, height: 20 }}
@@ -603,7 +603,7 @@ class Register extends Component {
 											this.minusShipComboBox(key);
 										}}
 									>
-										<Text style={{ marginLeft: '67%' }}>
+										<Text style={{ marginLeft: '58%' }}>
 											Hapus Kapal
 											<Image
 												style={{ marginLeft: '10%', width: 20, height: 20 }}
@@ -659,7 +659,7 @@ class Register extends Component {
 								this.minusForgeComboBox(key);
 							}}
 						>
-							<Text style={{ marginLeft: '59%', marginTop: '5%' }}>
+							<Text style={{ marginLeft: '46%', marginTop: '5%' }}>
 								Hapus Alat
 								<Image
 									style={{ width: 20, height: 20 }}
@@ -1227,7 +1227,7 @@ class Register extends Component {
 												});
 											}}
 										>
-											<Text style={{ marginLeft: '58%' }}>
+											<Text style={{ marginLeft: '39%' }}>
 												Tambah Kapal
 												<Image
 													style={{ marginLeft: '10%', width: 20, height: 20 }}
@@ -1291,7 +1291,7 @@ class Register extends Component {
 												});
 											}}
 										>
-											<Text style={{ marginLeft: '69%' }}>
+											<Text style={{ marginLeft: '57%' }}>
 												Tambah Alat
 												<Image
 													style={{ marginLeft: '10%', width: 20, height: 20 }}
