@@ -68,7 +68,7 @@ class SplashScreen extends Component {
 				{
 					<TouchableWithoutFeedback onPress={() => this.redirect('')}>
 						<View style={{flex: 1, justifyContent: 'flex-end'}}>
-							{this.state.hasLoggedIn ? <View /> : <Text style={{alignSelf: 'center', color: '#fff', marginBottom: 20, textDecorationLine: 'underline'}}>Klik untuk lanjut...</Text>}
+							{this.state.hasLoggedIn ? <View /> : <Text style={{alignSelf: 'center', color: '#fff', marginBottom: 20, textDecorationLine: 'underline'}}>Klik untuk lanjut</Text>}
 						</View>
 					</TouchableWithoutFeedback>
 				}
