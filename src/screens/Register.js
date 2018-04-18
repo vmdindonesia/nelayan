@@ -85,9 +85,9 @@ class Register extends Component {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			if (this.state.tabActive > 1) {
 				this.prevTab()
-			}
 
-			return true
+				return true
+			}
 		})
 	}
 
