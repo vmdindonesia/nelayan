@@ -1,6 +1,14 @@
+import Config from 'react-native-config'
+
 // Base URL
-export const BASE_URL = 'http://webapi.aruna.id/api/v1'
-// export const BASE_URL = 'http://139.59.243.28/aruna/api/v1'
+const url = {
+  development: 'http://139.59.243.28/aruna/api/v1',
+  staging: 'http://139.59.243.28/aruna/api/v1',
+  production: 'http://webapi.aruna.id/api/v1',
+}
+const ENV = Config.ENV || 'development'
+
+export const BASE_URL = url[ENV]
 
 // Colors
 export const COLOR = {

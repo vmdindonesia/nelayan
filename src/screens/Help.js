@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Image, Linking, TouchableOpacity } from 'react-native'
+import Config from 'react-native-config'
+
 import { Container, ContainerSection, Button } from '../components/common'
 
 class Help extends Component {
@@ -18,7 +20,7 @@ class Help extends Component {
 							source={require('../../assets/logo.png')} 
 						/>
 					</View>
-					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v1.0.27</Text>
+					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v{Config.VERSION_NAME}</Text>
 
 					<View style={{justifyContent: 'center', alignItems: 'center'}}>
 						<Text>Hubungi</Text>

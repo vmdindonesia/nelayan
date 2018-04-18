@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import OneSignal from 'react-native-onesignal'
 import jwtDecode from 'jwt-decode'
+import Config from 'react-native-config'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { login, setUserToken } from '../actions'
@@ -87,6 +88,7 @@ class Login extends Component {
 		const { navigate } = this.props.navigation
 		const { email, password } = this.state
 		console.log(this.state)
+		console.log(Config, '--- config dari login')
 
 		return (
 			<View style={styles.container}>
