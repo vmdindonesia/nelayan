@@ -18,7 +18,7 @@ class Help extends Component {
 							source={require('../../assets/logo.png')} 
 						/>
 					</View>
-					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v1.0.26</Text>
+					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v1.0.27</Text>
 
 					<View style={{justifyContent: 'center', alignItems: 'center'}}>
 						<Text>Hubungi</Text>
