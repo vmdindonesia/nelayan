@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { ScrollView, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
+import { ScrollView, BackHandler, Text, Picker, Alert, Keyboard, ToastAndroid, TouchableOpacity, View, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 
 import { Container, ContainerSection, Input, Button, Spinner, PickerCustom } from '../components/common'
@@ -78,8 +78,17 @@ class Register extends Component {
 	}
 
 	componentWillMount() {
-		console.log('Registrasi');
 		this.fetchForge();
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			if (this.state.tabActive > 1) {
+				this.prevTab()
+			}
+
+			return true
+		})
 	}
 
 	onCitySelected = (item) => {
@@ -593,7 +602,7 @@ class Register extends Component {
 					)
 				}
 			>
-				Register
+				Daftar
 			</Button>
 		)
 	}
@@ -741,7 +750,7 @@ class Register extends Component {
 
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
@@ -861,7 +870,7 @@ class Register extends Component {
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
 								<Button secondary onPress={this.prevTab}>Kembali</Button>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
@@ -908,7 +917,7 @@ class Register extends Component {
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
 								<Button secondary onPress={this.prevTab}>Kembali</Button>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
@@ -1056,7 +1065,7 @@ class Register extends Component {
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
 								<Button secondary onPress={this.prevTab}>Kembali</Button>
-								<Button onPress={this.nextTab}>Lanjut</Button>
+								<Button onPress={this.nextTab}>Selanjutnya</Button>
 							</ContainerSection>
 						</View>
 					</Container>
