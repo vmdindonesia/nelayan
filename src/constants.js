@@ -1,5 +1,6 @@
 // Base URL
-export const BASE_URL = 'http://139.59.243.28/aruna/api/v1'
+export const BASE_URL = 'http://webapi.aruna.id/api/v1'
+// export const BASE_URL = 'http://139.59.243.28/aruna/api/v1'
 
 // Colors
 export const COLOR = {
