@@ -119,7 +119,33 @@ class Register extends Component {
 	}
 
 	onChangeInputForge = (name, v) => {
-		console.log(v, 'V nya')
+		console.log(this.state.forgeName, 'Forge Name Data');
+		if (this.state.forgeName.length === 0) {
+			this.setState({
+				statusComboForge: false,
+				plusForge: true
+			}, () => {
+				this.addTextInputForge(this.state.textInputForge.length, v);
+			});
+		} else {
+			for (let i = 0; i < this.state.forgeName.length; i++) {
+				if (this.state.forgeName[i] === v.id) {
+					console.log('SAMA');
+					return alert('Alat sudah dipilih, Silahkan pilih alat lain')
+				}
+			}
+
+			console.log('TIDAK SAMA');
+			this.setState({
+				statusComboForge: false,
+				plusForge: true
+			}, () => {
+				this.addTextInputForge(this.state.textInputForge.length, v);
+			});
+		}
+	}
+
+	onChangeInputForges = (v) => {
 		this.setState({
 			statusComboForge: false,
 			plusForge: true
@@ -132,13 +158,14 @@ class Register extends Component {
 		console.log(name, 'Name');
 		console.log(v, 'Value');
 		console.log(key, 'Key');
-		this.setState({ [name]: v }, () => {
-			const newShipNameMin = this.state.ShipNameMin;
-			newShipNameMin[key] = v;
-			this.setState({ ShipNameMin: newShipNameMin }, () => {
-				console.log(this.state.ShipNameMin, 'Ship Name Min');
-			});
+		// this.setState({ [name]: v }, () => {
+		// console.log(this.state[name], 'WLPWLPWLP');
+		const newShipNameMin = this.state.ShipNameMin;
+		newShipNameMin[key] = v;
+		this.setState({ ShipNameMin: newShipNameMin }, () => {
+			console.log(this.state.ShipNameMin, 'Ship Name Min');
 		});
+		// });
 	}
 
 	onChangeInputShipNameMax = (name, v, key) => {
@@ -456,6 +483,38 @@ class Register extends Component {
 		});
 	}
 
+	minusShipComboBox = (key) => {
+		const textInputShipDropDown = this.state.textInputShipDropDown;
+		if (this.state.textInputShipDropDown.length === 1) {
+			const keys = 0;
+			textInputShipDropDown.splice(keys, 1);
+			this.setState({ textInputShipDropDown });
+			this.setState({
+				statusComboShip: true,
+				plusShip: false
+			});
+		} else {
+			textInputShipDropDown.splice(key, 1);
+			this.setState({ textInputShipDropDown });
+		}
+	}
+
+	minusForgeComboBox = (key) => {
+		const textInputForge = this.state.textInputForge;
+		if (this.state.textInputForge.length === 1) {
+			const keys = 0;
+			textInputForge.splice(keys, 1);
+			this.setState({ textInputForge });
+			this.setState({
+				statusComboForge: true,
+				plusForge: false
+			});
+		} else {
+			textInputForge.splice(key, 1);
+			this.setState({ textInputForge });
+		}
+	}
+
 	addForgeComboBox = () => {
 		this.setState({
 			statusComboForge: true,
@@ -470,7 +529,7 @@ class Register extends Component {
 		const sizeShip = value;
 
 		// TextInput
-		const { tempShipNameMin, tempShipNameMax, tempShipSizeMax } = this.state;
+		const { ShipNameMin, tempShipNameMax, tempShipSizeMax } = this.state;
 		const textInputShip = this.state.textInputShip;
 		this.setState({ textInputShip })
 
@@ -480,7 +539,6 @@ class Register extends Component {
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
-								label="Ukuran Kapal"
 								placeholder="Ukuran Kapal"
 								value={sizeShip}
 								editable={false}
@@ -489,11 +547,32 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
+							<View style={{ flex: 1, flexDirection: 'row' }}>
+								<View>
+									<Text>Nama Kapal</Text>
+								</View>
+								<View style={{ marginRight: '15%', flexDirection: 'row' }}>
+									<TouchableOpacity
+										onPress={() => {
+											console.log('Kurangin Kapal Mas');
+											this.minusShipComboBox(key);
+										}}
+									>
+										<Text style={{ marginLeft: '70%' }}>
+											Hapus Kapal
+											<Image
+												style={{ marginLeft: '10%', width: 20, height: 20 }}
+												source={require('../../assets/add.png')}
+											/>
+										</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
+
 							<Input
-								label='Nama Kapal'
-								placeholder="Nama Kapal"
-								value={tempShipNameMin[key]}
-								onChangeText={v => this.onChangeInputShipNameMin(`tempShipNameMin${key}`, v, key)}
+								placeholder='Nama Kapal'
+								value={this.state.ShipNameMin[key]}
+								onChangeText={v => this.onChangeInputShipNameMin(`ShipNameMin${key}`, v, key)}
 							/>
 						</View>
 					</ContainerSection>
@@ -505,7 +584,6 @@ class Register extends Component {
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
-								label="Ukuran Kapal"
 								placeholder="Ukuran Kapal"
 								value={sizeShip}
 								editable={false}
@@ -514,8 +592,28 @@ class Register extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
+							<View style={{ flex: 1, flexDirection: 'row' }}>
+								<View>
+									<Text>Nama Kapal</Text>
+								</View>
+								<View style={{ marginRight: '15%', flexDirection: 'row' }}>
+									<TouchableOpacity
+										onPress={() => {
+											console.log('Kurangin Kapal Mas');
+											this.minusShipComboBox(key);
+										}}
+									>
+										<Text style={{ marginLeft: '67%' }}>
+											Hapus Kapal
+											<Image
+												style={{ marginLeft: '10%', width: 20, height: 20 }}
+												source={require('../../assets/add.png')}
+											/>
+										</Text>
+									</TouchableOpacity>
+								</View>
+							</View>
 							<Input
-								label='Nama Kapal'
 								placeholder="Nama Kapal"
 								value={tempShipNameMax[key]}
 								onChangeText={v => this.onChangeInputShipNameMax(`tempShipNameMax${key}`, v, key)}
@@ -550,11 +648,26 @@ class Register extends Component {
 			<View key={key}>
 				<ContainerSection>
 					<Input
-						label="Alat Tangkap"
 						placeholder="Alat Tangkap"
 						value={value.name}
 						editable={false}
 					/>
+					<View style={{ flex: 1 }}>
+						<TouchableOpacity
+							onPress={() => {
+								console.log('Kurangin alat Mas');
+								this.minusForgeComboBox(key);
+							}}
+						>
+							<Text style={{ marginLeft: '59%', marginTop: '5%' }}>
+								Hapus Alat
+								<Image
+									style={{ width: 20, height: 20 }}
+									source={require('../../assets/add.png')}
+								/>
+							</Text>
+						</TouchableOpacity>
+					</View>
 				</ContainerSection>
 			</View>
 		);
@@ -566,11 +679,13 @@ class Register extends Component {
 	}
 
 	nextTab = () => {
+		console.log(this.state, 'STATE ALL BUTTON NEXT')
 		this.setState({ tabActive: this.state.tabActive + 1 })
 		this.scrollView.scrollTo({ x: 0, y: 0, animated: false })
 	}
 
 	prevTab = () => {
+		console.log(this.state, 'STATE ALL BUTTON BACK');
 		this.setState({ tabActive: this.state.tabActive - 1 })
 		this.scrollView.scrollTo({ x: 0, y: 0, animated: false })
 	}
@@ -648,6 +763,7 @@ class Register extends Component {
 			forge
 		} = this.state;
 
+		console.log(textInputShipDropDown, 'POPOPOPOPOPOPP');
 		return (
 			<ScrollView
 				style={styles.containerStyle}
@@ -1075,7 +1191,7 @@ class Register extends Component {
 							statusComboShip ?
 								<View>
 									<View style={{ flexDirection: 'row', flex: 1 }}>
-										<Text style={{ flex: 1 }}>Pilih Ukuran Kapal</Text>
+										<Text style={{ flex: 1, marginLeft: '2%' }}>Pilih Ukuran Kapal</Text>
 									</View>
 									<ContainerSection>
 										<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
@@ -1096,19 +1212,30 @@ class Register extends Component {
 
 						{
 							plusShip ?
-								<View>
-									<TouchableOpacity
-										onPress={() => {
-											console.log('Tambah Kapal Mas');
-											this.setState({
-												plusShip: false
-											}, () => {
-												this.addShipComboBox();
-											});
-										}}
-									>
-										<Text style={{ marginLeft: '65%' }}>Tambah Kapal +</Text>
-									</TouchableOpacity>
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<View style={{ marginLeft: '2%' }}>
+										<Text>Pilihan Ukuran Kapal</Text>
+									</View>
+									<View style={{ marginRight: '15%', flexDirection: 'row' }}>
+										<TouchableOpacity
+											onPress={() => {
+												console.log('Tambah Kapal Mas');
+												this.setState({
+													plusShip: false
+												}, () => {
+													this.addShipComboBox();
+												});
+											}}
+										>
+											<Text style={{ marginLeft: '58%' }}>
+												Tambah Kapal
+												<Image
+													style={{ marginLeft: '10%', width: 20, height: 20 }}
+													source={require('../../assets/add.png')}
+												/>
+											</Text>
+										</TouchableOpacity>
+									</View>
 								</View>
 								:
 								<View />
@@ -1149,19 +1276,30 @@ class Register extends Component {
 
 						{
 							plusForge ?
-								<View style={{ flex: 1 }}>
-									<TouchableOpacity
-										onPress={() => {
-											console.log('Tambah Alat Mas');
-											this.setState({
-												plusForge: false
-											}, () => {
-												this.addForgeComboBox();
-											});
-										}}
-									>
-										<Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
-									</TouchableOpacity>
+								<View style={{ flex: 1, flexDirection: 'row' }}>
+									<View style={{ marginLeft: '2%' }}>
+										<Text>Alat Tangkap</Text>
+									</View>
+									<View style={{ marginRight: '15%', flexDirection: 'row' }}>
+										<TouchableOpacity
+											onPress={() => {
+												console.log('Tambah Alat Mas');
+												this.setState({
+													plusForge: false
+												}, () => {
+													this.addForgeComboBox();
+												});
+											}}
+										>
+											<Text style={{ marginLeft: '69%' }}>
+												Tambah Alat
+												<Image
+													style={{ marginLeft: '10%', width: 20, height: 20 }}
+													source={require('../../assets/add.png')}
+												/>
+											</Text>
+										</TouchableOpacity>
+									</View>
 								</View>
 								:
 								<View />
@@ -1172,18 +1310,6 @@ class Register extends Component {
 								item
 							)
 						}
-
-						{/* <View style={{ flexDirection: 'row', flex: 1 }}>
-							<Text style={{ flex: 1 }}>Alat Tangkap</Text>
-							<TouchableOpacity
-								onPress={() => {
-									console.log('Tambah Alat Mas');
-									this.addAlat(this.state.comboInput.length)
-								}}
-							>
-								<Text style={{ flex: 1, marginLeft: '40%' }}>Tambah Alat +</Text>
-							</TouchableOpacity>
-						</View> */}
 
 						<View style={{ marginTop: 20, marginBottom: 20 }}>
 							<ContainerSection>
