@@ -194,13 +194,21 @@ class Register extends Component {
 		console.log(name, 'Name');
 		console.log(v, 'Value');
 		console.log(key, 'Key');
-		this.setState({ [name]: v }, () => {
-			const newShipSizeMax = this.state.ShipSizeMax;
-			newShipSizeMax[key] = v;
-			this.setState({ ShipSizeMax: newShipSizeMax }, () => {
-				console.log(this.state.ShipSizeMax, 'Ship Size Min');
+
+		if (v.length > 5) {
+			console.log('MASUK IF')
+      ToastAndroid.show('Ukuran kapal harus kurang dari 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
+		}
+		else {
+			console.log('MASUK ELSE')
+			this.setState({ [name]: v }, () => {
+				const newShipSizeMax = this.state.ShipSizeMax;
+				newShipSizeMax[key] = v;
+				this.setState({ ShipSizeMax: newShipSizeMax }, () => {
+					console.log(this.state.ShipSizeMax, 'Ship Size Min');
+				});
 			});
-		});
+		}
 	}
 
 
@@ -209,9 +217,6 @@ class Register extends Component {
 		console.log(this.state, 'STATE BOS')
 
 		const data = this.state;
-		// this.submitRegister(data)
-
-		// Form Validation
 		
 		this.submitRegister(data)
 	}
@@ -604,7 +609,16 @@ class Register extends Component {
 								placeholder="Ukuran Kapal"
 								keyboardType="numeric"
 								value={tempShipSizeMax[key]}
-								onChangeText={v => this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)}
+								onChangeText={
+									v => {
+										if (v.length > 5) {
+      								ToastAndroid.show('Ukuran kapal harus kurang dari 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
+										}
+										else {
+											this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)
+										}
+									}
+								}
 							/>
 						</View>
 					</ContainerSection>
@@ -659,6 +673,7 @@ class Register extends Component {
 
 		const data = this.state
 
+		// Form Validation
 		if (data.tabActive === 1 && data.organizationType === '') {
 			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
 		}

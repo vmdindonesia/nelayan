@@ -259,6 +259,9 @@ class CreatePeralatan extends Component {
     if (this.state.type === '') {
       ToastAndroid.show('Pilih tipe ukuran kapal dahulu', ToastAndroid.SHORT)
     }
+    else if (this.state.type !== '<=1 GT' && this.state.size.length > 5) {
+      ToastAndroid.show('Ukuran kapal harus kurang dari 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
+    }
     else if (this.state.name === '') {
       ToastAndroid.show('Isi nama kapal dahulu', ToastAndroid.SHORT)
     }
