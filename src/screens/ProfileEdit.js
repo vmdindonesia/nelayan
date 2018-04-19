@@ -85,9 +85,12 @@ class ProfileEdit extends Component {
 	}
 
 	onCitySelected = (item) => {
+		let data = this.state.data
+		data['CityId'] = item.id
+
 		this.setState({
 			suggestionsCity: [],
-			CityId: item.id,
+			data,
 			valueCity: item.name
 		})
 	}
@@ -231,7 +234,6 @@ class ProfileEdit extends Component {
 		})
 
 		.then(response => {
-			console.log(response)
 			this.props.navigation.setParams({change: false})
 			this.props.setUserToken(response.data.refreshToken)
 
@@ -248,7 +250,6 @@ class ProfileEdit extends Component {
 			ToastAndroid.show('Ubah profil berhasil', ToastAndroid.SHORT)
 		})
 		.catch(error => {
-			console.log(error.response)
 			if (error.response) {
 				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
