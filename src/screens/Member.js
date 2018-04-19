@@ -103,7 +103,7 @@ const styles = {
   hedaerTextStyle: {
     fontSize: 20,
     color: COLOR.secondary_a,
-    fontWeight: 'bold'
+    fontFamily: 'Muli-Bold'
   }
 }
 

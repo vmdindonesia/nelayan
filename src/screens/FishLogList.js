@@ -85,8 +85,8 @@ class FishLogList extends Component {
 							<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 							<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
 							<View style={{ flexDirection: 'row' }}>
-								<Text style={{ flex: 1 }}>{numeral(item.quantity).format('0,0')} Kg</Text>
-								<Text style={{ flex: 1 }}>{numeral(item.size).format('0,0')} {item.unit || 'Unit'}</Text>
+								<Text style={{ flex: 1, fontWeight: 'bold' }}>{numeral(item.quantity).format('0,0')} Kg</Text>
+								<Text style={{ flex: 1, fontWeight: 'bold' }}>{numeral(item.size).format('0,0')} {item.unit || 'Unit'}</Text>
 							</View>
 							<Text>Rp {numeral(item.price).format('0,0')}</Text>
 						</View>

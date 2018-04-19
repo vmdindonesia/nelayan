@@ -95,10 +95,14 @@ class Peralatan extends Component {
       <View style={{ flex: 1, padding: 10 }}>
         <ContainerSection>
           <TouchableWithoutFeedback onPress={() => this.toggleTab(2)}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Text style={{fontSize: 20}}>Kapal</Text>
+            <View 
+              style={{ 
+                flex: 1, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, padding: 10, borderBottomWidth: 1, borderColor: '#eaeaea'
+              }}
+            >
+              <Text style={{fontSize: 16}}>Kapal</Text>
               <View style={{flex: 1}}>
-                <Ionicons size={30} style={{alignSelf: 'flex-end'}} name={tabActive === 2 ? 'ios-arrow-up' : 'ios-arrow-down'} />
+                <Ionicons size={24} style={{alignSelf: 'flex-end'}} name={tabActive === 2 ? 'ios-arrow-up' : 'ios-arrow-down'} />
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -130,10 +134,14 @@ class Peralatan extends Component {
 
         <ContainerSection>
           <TouchableWithoutFeedback onPress={() => this.toggleTab(1)}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Text style={{fontSize: 20}}>Alat Tangkap</Text>
+            <View 
+              style={{
+                flex: 1, flexDirection: 'row', paddingLeft: 20, paddingRight: 20, padding: 10, borderBottomWidth: 1, borderColor: '#eaeaea'
+              }}
+            >
+              <Text style={{fontSize: 16}}>Alat Tangkap</Text>
               <View style={{flex: 1}}>
-                <Ionicons size={30} style={{alignSelf: 'flex-end'}} name={tabActive === 1 ? 'ios-arrow-up' : 'ios-arrow-down'} />
+                <Ionicons size={24} style={{alignSelf: 'flex-end'}} name={tabActive === 1 ? 'ios-arrow-up' : 'ios-arrow-down'} />
               </View>
             </View>
           </TouchableWithoutFeedback>

@@ -142,14 +142,14 @@ class Home extends Component {
 
 		const menuDrawer = (
 			<ScrollView style={{ flex: 1, backgroundColor: COLOR.secondary_a }}>
-				<View style={{ flexDirection: 'row', flex: 1, backgroundColor: COLOR.primary, paddingTop: 20, padding: 30 }}>
+				<View style={{ backgroundColor: COLOR.primary, paddingTop: 20, padding: 16 }}>
 					<View style={profileImageContainerDrawer}>
 						<Image
 							style={profileImageDrawer}
 							source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
 						/>
 					</View>
-					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', flexDirection: 'row', flex: 1}}>
+					<View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop: 40}}>
 						<TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileEdit')}>
 							<View>
 								<Text style={styles.drawerItemText}>Nelayan Aruna</Text>
@@ -169,7 +169,7 @@ class Home extends Component {
 						</View>
 					</View>
 				</View>
-				<View style={{ padding: 30, paddingTop: 10}}>
+				<View style={{ padding: 16, paddingTop: 10}}>
 
 					{
 						menus.map((item, index) =>
@@ -189,9 +189,11 @@ class Home extends Component {
 							</TouchableOpacity>
 						)
 					}
+				</View>
 
-					<View style={{ borderTopWidth: 1, borderColor: '#fff', width: '70%', marginLeft: 5, marginRight: 5, marginBottom: 20, marginTop: 10 }} />
-
+				<View style={{ borderTopWidth: 1, borderColor: '#fff', marginBottom: 20, marginTop: -5 }} />
+					
+				<View style={{ paddingLeft: 16}}>
 					<TouchableOpacity onPress={() => this.props.navigation.navigate('Term')}>
 						<View style={{ marginBottom: 10 }}>
 							<ContainerSection>
@@ -301,7 +303,7 @@ class Home extends Component {
 								</View>
 							</TouchableWithoutFeedback>
 							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
 									<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
 										<Image
 											style={coin}
@@ -383,15 +385,12 @@ const styles = {
 		borderRadius: 50,
 	},
 	profileImageContainerDrawer: {
-		marginLeft: 5,
 		height: 50,
 		width: 50,
-		alignSelf: 'center',
-		marginRight: 15
 	},
 	profileImageDrawer: {
-		height: 50,
-		width: 50,
+		height: 80,
+		width: 80,
 		borderRadius: 50,
 	},
 	profileName: {
@@ -434,7 +433,8 @@ const styles = {
 	tabTextActive: {
 		color: '#fff',
 		textAlign: 'center',
-		fontSize: 18
+		fontSize: 18,
+		fontFamily: 'Muli-Bold'
 	},
 	drawerItemText: {
 		color: '#fff',

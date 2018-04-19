@@ -203,8 +203,8 @@ class Profile extends Component {
 					</View>
 					<Text style={profileName}>{this.props.user.data.name}</Text>
 					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-							<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5 }}>
+						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+							<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
 								<Image
 									style={coin}
 									source={require('../../assets/coin.png')}
@@ -215,7 +215,7 @@ class Profile extends Component {
 					</TouchableWithoutFeedback>
 				</View>
 				<View style={menuContainerStyle}>
-					<View style={{ flexDirection: 'row', marginBottom: 10 }}>
+					<View style={{ flexDirection: 'row'}}>
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Profile' })}>
 								<View style={screen === 'Profile' ? tabContainerActive : tabContainer}>
@@ -291,12 +291,12 @@ const styles = {
 		flex: 1
 	},
 	tabContainer: {
-		backgroundColor: COLOR.element_a3,
+		backgroundColor: COLOR.secondary_b,
 		height: 50,
 		justifyContent: 'center'
 	},
 	tabContainerActive: {
-		backgroundColor: COLOR.element_a4,
+		backgroundColor: COLOR.primary,
 		height: 50,
 		justifyContent: 'center'
 	},
@@ -308,7 +308,8 @@ const styles = {
 	tabTextActive: {
 		color: '#fff',
 		textAlign: 'center',
-		fontSize: 18
+		fontSize: 18,
+		fontFamily: 'Muli-Bold'
 	},
 	card: {
 		elevation: 1,

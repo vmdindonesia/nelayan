@@ -60,12 +60,12 @@ const styles = {
 		flex: 4
 	},
 	tabContainer: {
-		backgroundColor: COLOR.element_a3,
+		backgroundColor: COLOR.secondary_b,
 		height: 50,
 		justifyContent: 'center'
 	},
 	tabContainerActive: {
-		backgroundColor: COLOR.element_a4,
+		backgroundColor: COLOR.primary,
 		height: 50,
 		justifyContent: 'center'
 	},
@@ -77,7 +77,8 @@ const styles = {
 	tabTextActive: {
 		color: '#fff',
 		textAlign: 'center',
-		fontSize: 18
+		fontSize: 18,
+		fontFamily: 'Muli-Bold'
 	},
 }
 

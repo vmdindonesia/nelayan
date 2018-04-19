@@ -51,8 +51,8 @@ class RequestList extends Component {
 									source={{ uri: `${BASE_URL}/images/${item.Transaction.photo}` }}
 								/>
 							</View>
-							<View style={{ justifyContent: 'space-between', flex: 1 }}>
-								<Text style={styles.buyerName}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
+							<View style={{ justifyContent: 'space-around', flex: 1 }}>
+								<Text style={styles.date}>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 								<Text style={styles.productName}>{item.Transaction.Fish.name}</Text>
 								<Text style={styles.quantity}>{item.Transaction.quantity} Kg</Text>
 								<Text style={styles.buyerName}>{item.Status.name}</Text>
@@ -113,11 +113,16 @@ const styles = {
 		textAlign: 'left',
 		marginLeft: 10
 	},
+	date: {
+		textAlign: 'left',
+		marginLeft: 10,
+		fontSize: 12
+	},
 	productName: {
 		fontSize: 18,
 		marginLeft: 10,
 		color: COLOR.primary,
-		fontWeight: 'bold'
+		fontFamily: 'Muli-Bold'
 	},
 	quantity: {
 		fontSize: 14,
