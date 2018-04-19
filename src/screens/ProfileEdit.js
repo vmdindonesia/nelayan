@@ -52,6 +52,7 @@ class ProfileEdit extends Component {
 			loadingCity: false,
 			suggestionsCity: [],
 			valueCity: '',
+			cityEdited: false,
 
 			photo: null,
 			idPhoto: null
@@ -166,7 +167,8 @@ class ProfileEdit extends Component {
 	queryCitySuggestion = (text) => {
 		this.setState({
 			valueCity: text,
-			loadingCity: true
+			loadingCity: true,
+			cityEdited: true
 		})
 		
 		axios.get(`${BASE_URL}/cities/search?key=${text}`)
@@ -292,6 +294,7 @@ class ProfileEdit extends Component {
 			loadingCity,
 			suggestionsCity,
 			valueCity,
+			cityEdited,
 
 			photo,
 			idPhoto
@@ -345,7 +348,7 @@ class ProfileEdit extends Component {
 							label="Kota / Kabupaten"
 							suggestions={suggestionsCity}
 							onChangeText={text => this.queryCitySuggestion(text)}
-							value={valueCity || data.City.name}
+							value={cityEdited ? valueCity : data.City.name}
 						>
 						{
 							loadingCity ?
