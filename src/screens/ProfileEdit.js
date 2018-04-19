@@ -395,7 +395,7 @@ class ProfileEdit extends Component {
 					<ContainerSection>
 						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 							<TouchableWithoutFeedback 
-								// onPress={() => this.selectPhotoTapped('photo')}
+								onPress={() => this.selectPhotoTapped('photo')}
 							>
 								<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
 								{ photo === null ? 
