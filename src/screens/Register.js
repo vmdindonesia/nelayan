@@ -520,7 +520,7 @@ class Register extends Component {
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
-								placeholder="Ukuran Kapal"
+								placeholder="Ukuran Kapal (GT)"
 								value={sizeShip}
 								editable={false}
 							/>
@@ -565,7 +565,7 @@ class Register extends Component {
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
-								placeholder="Ukuran Kapal"
+								placeholder="Ukuran Kapal (GT)"
 								value={sizeShip}
 								editable={false}
 							/>
@@ -605,8 +605,8 @@ class Register extends Component {
 					<ContainerSection>
 						<View style={{ padding: 5, width: '100%' }}>
 							<Input
-								label='Ukuran Kapal'
-								placeholder="Ukuran Kapal"
+								label='Ukuran Kapal (GT)'
+								placeholder="Ukuran Kapal (GT)"
 								keyboardType="numeric"
 								value={tempShipSizeMax[key]}
 								onChangeText={
