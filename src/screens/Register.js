@@ -525,7 +525,7 @@ class Register extends Component {
 		const sizeShip = value;
 
 		// TextInput
-		const { ShipNameMin, tempShipNameMax, tempShipSizeMax } = this.state;
+		const { tempShipNameMax, tempShipSizeMax } = this.state;
 		const textInputShip = this.state.textInputShip;
 		this.setState({ textInputShip })
 
@@ -533,109 +533,98 @@ class Register extends Component {
 			textInputShipDropDown.push(
 				<View key={key}>
 					<ContainerSection>
-						<View style={{ padding: 5, width: '100%' }}>
-							<Input
-								placeholder="Ukuran Kapal (GT)"
-								value={sizeShip}
-								editable={false}
-							/>
+						<Input
+							placeholder="Ukuran Kapal (GT)"
+							value={sizeShip}
+							editable={false}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<View style={{flex: 1}}>
+							<Text>Nama Kapal</Text>
+						</View>
+						<View>
+							<TouchableOpacity
+								onPress={() => {
+									console.log('Kurangin Kapal Mas');
+									this.minusShipComboBox(key);
+								}}
+							>
+								<View style={{flexDirection: 'row'}}>
+									<Text>Hapus Kapal</Text>
+									<Image
+										style={{width: 20, height: 20 }}
+										source={require('../../assets/ic_cancel.png')}
+									/>
+								</View>
+							</TouchableOpacity>
 						</View>
 					</ContainerSection>
 					<ContainerSection>
-						<View style={{ padding: 5, width: '100%' }}>
-							<View style={{ flex: 1, flexDirection: 'row' }}>
-								<View>
-									<Text>Nama Kapal</Text>
-								</View>
-								<View style={{ marginRight: '15%', flexDirection: 'row' }}>
-									<TouchableOpacity
-										onPress={() => {
-											console.log('Kurangin Kapal Mas');
-											this.minusShipComboBox(key);
-										}}
-									>
-										<Text style={{ marginLeft: '58%' }}>
-											Hapus Kapal
-											<Image
-												style={{ marginLeft: '10%', width: 20, height: 20 }}
-												source={require('../../assets/add.png')}
-											/>
-										</Text>
-									</TouchableOpacity>
-								</View>
-							</View>
-
-							<Input
-								placeholder='Nama Kapal'
-								value={this.state.ShipNameMin[key]}
-								onChangeText={v => this.onChangeInputShipNameMin(`ShipNameMin${key}`, v, key)}
-							/>
-						</View>
+						<Input
+							placeholder='Nama Kapal'
+							value={this.state.ShipNameMin[key]}
+							onChangeText={v => this.onChangeInputShipNameMin(`ShipNameMin${key}`, v, key)}
+						/>
 					</ContainerSection>
 				</View>
 			);
-		} else if (value === '>1 GT') {
+		}
+		else if (value === '>1 GT') {
 			textInputShipDropDown.push(
 				<View key={key}>
 					<ContainerSection>
-						<View style={{ padding: 5, width: '100%' }}>
-							<Input
-								placeholder="Ukuran Kapal (GT)"
-								value={sizeShip}
-								editable={false}
-							/>
+						<Input
+							placeholder="Ukuran Kapal (GT)"
+							value={sizeShip}
+							editable={false}
+						/>
+					</ContainerSection>
+					<ContainerSection>
+						<View style={{flex: 1}}>
+							<Text>Nama Kapal</Text>
+						</View>
+						<View>
+							<TouchableOpacity
+								onPress={() => {
+									console.log('Kurangin Kapal Mas');
+									this.minusShipComboBox(key);
+								}}
+							>
+								<View style={{flexDirection: 'row'}}>
+									<Text>Hapus Kapal</Text>
+									<Image
+										style={{width: 20, height: 20 }}
+										source={require('../../assets/ic_cancel.png')}
+									/>
+								</View>
+							</TouchableOpacity>
 						</View>
 					</ContainerSection>
 					<ContainerSection>
-						<View style={{ padding: 5, width: '100%' }}>
-							<View style={{ flex: 1, flexDirection: 'row' }}>
-								<View>
-									<Text>Nama Kapal</Text>
-								</View>
-								<View style={{ marginRight: '15%', flexDirection: 'row' }}>
-									<TouchableOpacity
-										onPress={() => {
-											console.log('Kurangin Kapal Mas');
-											this.minusShipComboBox(key);
-										}}
-									>
-										<Text style={{ marginLeft: '58%' }}>
-											Hapus Kapal
-											<Image
-												style={{ marginLeft: '10%', width: 20, height: 20 }}
-												source={require('../../assets/add.png')}
-											/>
-										</Text>
-									</TouchableOpacity>
-								</View>
-							</View>
-							<Input
-								placeholder="Nama Kapal"
-								value={tempShipNameMax[key]}
-								onChangeText={v => this.onChangeInputShipNameMax(`tempShipNameMax${key}`, v, key)}
-							/>
-						</View>
+						<Input
+							placeholder="Nama Kapal"
+							value={tempShipNameMax[key]}
+							onChangeText={v => this.onChangeInputShipNameMax(`tempShipNameMax${key}`, v, key)}
+						/>
 					</ContainerSection>
-
 					<ContainerSection>
-						<View style={{ padding: 5, width: '100%' }}>
-							<Input
-								label='Ukuran Kapal (GT)'
-								placeholder="Ukuran Kapal (GT)"
-								keyboardType="numeric"
-								value={tempShipSizeMax[key]}
-								onChangeText={
-									v => {
-										if (v.length > 5) {
-      								ToastAndroid.show('Ukuran kapal harus kurang dari 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
-										}
-										else {
-											this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)
-										}
+						<Input
+							label='Ukuran Kapal (GT)'
+							placeholder="Ukuran Kapal (GT)"
+							keyboardType="numeric"
+							value={tempShipSizeMax[key]}
+							onChangeText={
+								v => {
+									if (v.length > 5) {
+										ToastAndroid.show('Ukuran kapal harus kurang dari 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
+									}
+									else {
+										this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)
 									}
 								}
-							/>
-						</View>
+							}
+						/>
 					</ContainerSection>
 				</View>
 			);
@@ -689,49 +678,49 @@ class Register extends Component {
 		const data = this.state
 
 		// Form Validation
-		if (data.tabActive === 1 && data.organizationType === '') {
-			ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 1 && data.CityId === '') {
-			ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 2 && data.password !== data.confirmPassword) {
-			ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 2 && data.idNumber.length !== 16) {
-			ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 2 && !this.regexEmail(data.email)) {
-			ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
-		}
-		else if (data.tabActive === 2 && data.photo === null) {
-			ToastAndroid.show('Foto profil harus ditambahkan', ToastAndroid.SHORT);
-		}
-		else if (data.tabActive === 2 && data.idPhoto === null) {
-			ToastAndroid.show('Foto KTP harus ditambahkan', ToastAndroid.SHORT);
-		}
-		else if (data.tabActive === 4 && data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
-			ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 4 && data.FishIds[0] === '' && data.values[0] !== '') {
-			ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 4 && data.FishIds[1] === '' && data.values[1] !== '') {
-			ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 4 && data.FishIds[2] === '' && data.values[2] !== '') {
-			ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 4 && data.FishIds[3] === '' && data.values[3] !== '') {
-			ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else if (data.tabActive === 4 && data.FishIds[4] === '' && data.values[4] !== '') {
-			ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
-		}
-		else {
+		// if (data.tabActive === 1 && data.organizationType === '') {
+		// 	ToastAndroid.show('Belum mengisi Jenis Lembaga', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 1 && data.CityId === '') {
+		// 	ToastAndroid.show('Kota / Kabupaten harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 2 && data.password !== data.confirmPassword) {
+		// 	ToastAndroid.show('Konfirmasi password tidak cocok dengan Password', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 2 && data.idNumber.length !== 16) {
+		// 	ToastAndroid.show(`No. KTP harus 16 digit, bukan ${data.idNumber.length} digit`, ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 2 && !this.regexEmail(data.email)) {
+		// 	ToastAndroid.show('Format Email Salah', ToastAndroid.SHORT);
+		// }
+		// else if (data.tabActive === 2 && data.photo === null) {
+		// 	ToastAndroid.show('Foto profil harus ditambahkan', ToastAndroid.SHORT);
+		// }
+		// else if (data.tabActive === 2 && data.idPhoto === null) {
+		// 	ToastAndroid.show('Foto KTP harus ditambahkan', ToastAndroid.SHORT);
+		// }
+		// else if (data.tabActive === 4 && data.FishIds[0] === '' && data.FishIds[1] === '' && data.FishIds[2] === '' && data.FishIds[3] === '' && data.FishIds[4] === '') {
+		// 	ToastAndroid.show('Harus pilih minimal 1 komoditas', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 4 && data.FishIds[0] === '' && data.values[0] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 1 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 4 && data.FishIds[1] === '' && data.values[1] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 2 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 4 && data.FishIds[2] === '' && data.values[2] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 3 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 4 && data.FishIds[3] === '' && data.values[3] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 4 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else if (data.tabActive === 4 && data.FishIds[4] === '' && data.values[4] !== '') {
+		// 	ToastAndroid.show('Komoditas ke 5 tidak valid. harus dipilih dari daftar pilihan', ToastAndroid.SHORT)
+		// }
+		// else {
 			this.setState({ tabActive: this.state.tabActive + 1 })
 			this.scrollView.scrollTo({ x: 0, y: 0, animated: false })	
-		}
+		// }
 	}
 
 	prevTab = () => {
@@ -1264,14 +1253,13 @@ class Register extends Component {
 
 						{
 							plusShip ?
-								<View style={{ flex: 1, flexDirection: 'row' }}>
-									<View style={{ marginLeft: '2%' }}>
-										<Text>Pilihan Ukuran Kapal</Text>
+								<ContainerSection>
+									<View style={{flex: 1}}>
+										<Text>Pilih Ukuran Kapal</Text>
 									</View>
-									<View style={{ marginRight: '15%', flexDirection: 'row' }}>
+									<View>
 										<TouchableOpacity
 											onPress={() => {
-												console.log('Tambah Kapal Mas');
 												this.setState({
 													plusShip: false
 												}, () => {
@@ -1279,16 +1267,16 @@ class Register extends Component {
 												});
 											}}
 										>
-											<Text style={{ marginLeft: '39%' }}>
-												Tambah Kapal
+											<View style={{flexDirection: 'row'}}>
+												<Text>Tambah Kapal</Text>
 												<Image
-													style={{ marginLeft: '10%', width: 20, height: 20 }}
+													style={{width: 20, height: 20 }}
 													source={require('../../assets/add.png')}
 												/>
-											</Text>
+											</View>
 										</TouchableOpacity>
 									</View>
-								</View>
+								</ContainerSection>
 								:
 								<View />
 						}
