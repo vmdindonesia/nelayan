@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Picker, ScrollView, Text, ToastAndroid, TouchableOpacity } from 'react-native';
+import { View, Picker, ScrollView, Text, ToastAndroid } from 'react-native';
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { NavigationActions } from 'react-navigation'
-import { BASE_URL } from '../constants'
+
+import { BASE_URL, COLOR } from '../constants'
 import { setUserToken } from '../actions'
-import { ContainerSection, Input, Spinner, Button } from '../components/common'
+import { Container, ContainerSection, Input, Spinner, Button } from '../components/common'
 
 class PeralatanCreate extends Component {
   static navigationOptions = {
@@ -20,29 +21,8 @@ class PeralatanCreate extends Component {
       gearsId: '',
       name: '',
       size: '',
-      FishingGearId: '',
-
-      statusComboShip: true,
-      ShipId: [],
-      textInputShipDropDown: [],
-      textInputShip: [],
-      plusShip: false,
-      ShipNameMin: [],
-      ShipSizeMin: [],
-      ShipNameMax: [],
-      ShipSizeMax: [],
-      tempShipNameMin: '',
-      tempShipSizeMin: '',
-      tempShipNameMax: '',
-      tempShipSizeMax: '',
-    
-      statusComboForge: true,
-      forgeName: [],
-      nameForge: '',
-      textInputForge: [],
-      plusForge: false,
+      FishingGearId: '',    
       data: {},
-
       type: ''
     }
   }
@@ -59,59 +39,11 @@ class PeralatanCreate extends Component {
   }
 
   onChangeInputShip = (name, v) => {
-    console.log(name, '-----name')
-    console.log(v, '-----value')
     this.setState({[name]: v})
   }
   
   onChangeInputForge = (name, v) => {
-    console.log(v, 'V nya')
-
-    this.setState({
-      statusComboForge: false,
-      plusForge: true
-    }, () => {
-    this.addTextInputForge(this.state.textInputForge.length, v);
-    });
-  }
-  
-  onChangeInputShipNameMin = (name, v, key) => {
-    console.log(name, 'Name');
-    console.log(v, 'Value');
-    console.log(key, 'Key');
-    this.setState({ [name]: v }, () => {
-    const newShipNameMin = this.state.ShipNameMin;
-    newShipNameMin[key] = v;
-    this.setState({ ShipNameMin: newShipNameMin }, () => {
-      console.log(this.state.ShipNameMin, 'Ship Name Min');
-    });
-    });
-  }
-  
-  onChangeInputShipNameMax = (name, v, key) => {
-    console.log(name, 'Name');
-    console.log(v, 'Value');
-    console.log(key, 'Key');
-    this.setState({ [name]: v }, () => {
-    const newShipNameMax = this.state.ShipNameMax;
-    newShipNameMax[key] = v;
-    this.setState({ ShipNameMax: newShipNameMax }, () => {
-      console.log(this.state.ShipNameMax, 'Ship Name Max');
-    });
-    });
-  }
-  
-  onChangeInputShipSize = (name, v, key, value) => {
-    console.log(name, 'Name');
-    console.log(v, 'Value');
-    console.log(key, 'Key');
-    this.setState({ [name]: v }, () => {
-    const newShipSizeMax = this.state.ShipSizeMax;
-    newShipSizeMax[key] = v;
-    this.setState({ ShipSizeMax: newShipSizeMax }, () => {
-      console.log(this.state.ShipSizeMax, 'Ship Size Min');
-    });
-    });
+    this.setState({[name]: v})
   }
 
   getAlat = () => {
@@ -136,131 +68,13 @@ class PeralatanCreate extends Component {
     })
   }
 
-  addShipComboBox = () => {
-    this.setState({
-    statusComboShip: true,
-    plusShip: false
-    });
-  }
-  
-  addForgeComboBox = () => {
-    this.setState({
-    statusComboForge: true,
-    plusForge: false
-    });
-  }
-
- 
-  addTextInputShipDropDown = (key, value) => {
-    // Dropdown
-    const textInputShipDropDown = this.state.textInputShipDropDown;
-    this.setState({ textInputShipDropDown });
-    const sizeShip = value;
-  
-    // TextInput
-    const { tempShipNameMin, tempShipNameMax, tempShipSizeMax } = this.state;
-    const textInputShip = this.state.textInputShip;
-    this.setState({ textInputShip })
-  
-    if (value === '<=1 GT') {
-    textInputShipDropDown.push(
-      <View key={key}>
-      <ContainerSection>
-        <View style={{ padding: 5, width: '100%' }}>
-        <Input
-          label="Ukuran Kapal (GT)"
-          placeholder="Ukuran Kapal (GT)"
-          value={sizeShip}
-          editable={false}
-        />
-        </View> 
-      </ContainerSection>
-      <ContainerSection>
-        <View style={{ padding: 5, width: '100%' }}>
-        <Input
-          label='Nama Kapal'
-          placeholder="Nama Kapal"
-          value={tempShipNameMin[key]}
-          onChangeText={v => this.onChangeInputShipNameMin(`tempShipNameMin${key}`, v, key)}
-        />
-        </View>
-      </ContainerSection>
-      </View>
-    );
-    } else if (value === '>1 GT') {
-    textInputShipDropDown.push(
-      <View key={key}>
-      <ContainerSection>
-        <View style={{ padding: 5, width: '100%' }}>
-        <Input
-          label="Ukuran Kapal (GT)"
-          placeholder="Ukuran Kapal (GT)"
-          value={sizeShip}
-          editable={false}
-        />
-        </View>
-      </ContainerSection>
-      <ContainerSection>
-        <View style={{ padding: 5, width: '100%' }}>
-        <Input
-          label='Nama Kapal'
-          placeholder="Nama Kapal"
-          value={tempShipNameMax[key]}
-          onChangeText={v => this.onChangeInputShipNameMax(`tempShipNameMax${key}`, v, key)}
-        />
-        </View>
-      </ContainerSection>
-  
-      <ContainerSection>
-        <View style={{ padding: 5, width: '100%' }}>
-        <Input
-          label='Ukuran Kapal (GT)'
-          placeholder="Ukuran Kapal (GT)"
-          keyboardType="numeric"
-          value={tempShipSizeMax[key]}
-          onChangeText={v => this.onChangeInputShipSize(`tempShipSizeMax${key}`, v, key)}
-        />
-        </View>
-      </ContainerSection>
-      </View>
-    );
-    }
-  }
-  
-  
-  addTextInputForge = (key, value) => {
-    //Alat TextInput
-    console.log(value, 'VALUE FORGE');
-
-    const textInputForge = this.state.textInputForge;
-    this.setState({ textInputForge });
-  
-    textInputForge.push(
-    <View key={key}>
-      <ContainerSection>
-      <Input
-        label="Alat Tangkap"
-        placeholder="Alat Tangkap"
-        value={value.name}
-        editable={false}
-      />
-      </ContainerSection>
-    </View>
-    );
-  
-    // Push Value
-    const newforgeName = this.state.forgeName
-    newforgeName[key] = value
-    this.setState({ forgeName: newforgeName });
-  }
-
   saveForgeShips() {
     // form validation
     if (this.state.type === '') {
       ToastAndroid.show('Pilih tipe ukuran kapal dahulu', ToastAndroid.SHORT)
     }
     else if (this.state.type !== '<=1 GT' && this.state.size.length > 5) {
-      ToastAndroid.show('Ukuran kapal harus kurang dari 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
+      ToastAndroid.show('Ukuran kapal maksimal 5 digit angka tanpa titik/koma', ToastAndroid.SHORT)
     }
     else if (this.state.name === '') {
       ToastAndroid.show('Isi nama kapal dahulu', ToastAndroid.SHORT)
@@ -279,7 +93,7 @@ class PeralatanCreate extends Component {
       .then(response => {
         console.log(response)
         this.setState({ loader: false })
-        ToastAndroid.show('Sukses', ToastAndroid.SHORT)
+        ToastAndroid.show('Sukses Menambah Kapal', ToastAndroid.SHORT)
         const resetAction = NavigationActions.reset({
           index: 1,
           actions: [
@@ -308,24 +122,23 @@ class PeralatanCreate extends Component {
     }
     else {
       this.setState({ loader: true })
-      const { forgeName } = this.state;
+      const { FishingGearId } = this.state;
       let token = this.props.user.token;
 
-      console.log(forgeName, '---forgename')
-      if (forgeName.length < 1) {
+      if (FishingGearId.length === '') {
         ToastAndroid.show('Pilih alat tangkap dahulu', ToastAndroid.SHORT)
         this.setState({ loader: false })
       }
       else {
         axios.post(`${BASE_URL}/supplier/my-fishing-gears`, {
-          FishingGearId: forgeName[0].id
+          FishingGearId
         }, {
           headers: { token },
         })
         .then(response => {
           console.log(response)
           this.setState({ loader: false })
-          ToastAndroid.show('Sukses', ToastAndroid.SHORT)
+          ToastAndroid.show('Sukses Menambah Alat Tangkap', ToastAndroid.SHORT)
           const resetAction = NavigationActions.reset({
             index: 1,
             actions: [
@@ -355,33 +168,20 @@ class PeralatanCreate extends Component {
       name, 
       size, 
       loader, 
+  
       FishingGearId,
-
-      statusComboShip,
-      textInputShipDropDown,
-      textInputShip,
-      ShipSize,
-      plusShip,
-  
-  
-      statusComboForge,
-      forgeName,
-      nameForge,
-      textInputForge,
-      plusForge,
-      ShipId,
       data,
 
       type
     } = this.state;
     
     return (
-      <View style={styles.container}>
-        <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="always">
+        <Container>
           <ContainerSection>
-            <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
-              <Text>Pilih Peralatan</Text>
-              <View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+            <View style={styles.pickerContainer}>
+              <Text style={styles.pickerTextStyle}>Pilih Peralatan</Text>
+              <View style={styles.pickerStyle}>
                 <Picker
                   selectedValue={gearsId}
                   onValueChange={v => this.onChangeInput('gearsId', v)}
@@ -396,162 +196,130 @@ class PeralatanCreate extends Component {
           {
             gearsId === '1' ?
               <View>
-              {
-                statusComboShip ?
-                  <ContainerSection>
-                  <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
-                    <Text style={{ flex: 1 }}>Pilih Tipe Ukuran Kapal</Text>
-                    <View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-                    <Picker
-                      selectedValue={type}
-                      onValueChange={v => this.onChangeInputShip('type', v)}
-                    >
-                      <Picker.Item label='--- Pilih ---' value='' />
-                      <Picker.Item label='<= 1 GT' value='<=1 GT' />
-                      <Picker.Item label='>1 GT' value='>1 GT' />
-                    </Picker>
+                <ContainerSection>
+                  <View style={styles.pickerContainer}>
+                    <Text style={styles.pickerTextStyle}>Pilih Tipe Ukuran Kapal</Text>
+                    <View style={styles.pickerStyle}>
+                      <Picker
+                        selectedValue={type}
+                        onValueChange={v => this.onChangeInputShip('type', v)}
+                      >
+                        <Picker.Item label='--- Pilih ---' value='' />
+                        <Picker.Item label='<= 1 GT' value='<=1 GT' />
+                        <Picker.Item label='>1 GT' value='>1 GT' />
+                      </Picker>
                     </View>
                   </View>
-                  </ContainerSection>
-                :
-                <View />
-              }
-
-              {
-                this.state.type === '<=1 GT' ? 
-                  <ContainerSection>
-                    <View style={{ padding: 5, width: '100%' }}>
-                    <Input
-                      label='Nama Kapal'
-                      placeholder="Nama Kapal"
-                      value={name}
-                      onChangeText={v => this.onChangeInputShip('name', v)}
-                    />
-                    </View>
-                  </ContainerSection>
-                :
-                  <View>
+                </ContainerSection>
+                {
+                  this.state.type === '<=1 GT' ? 
                     <ContainerSection>
-                      <View style={{ padding: 5, width: '100%' }}>
-                      <Input
-                        label="Ukuran Kapal (GT)"
-                        placeholder="Ukuran Kapal (GT)"
-                        value={size}
-                        keyboardType="numeric"
-                        onChangeText={v => this.onChangeInputShip('size', v)}
-                      />
-                      </View>
-                    </ContainerSection>
-                    <ContainerSection>
-                      <View style={{ padding: 5, width: '100%' }}>
                       <Input
                         label='Nama Kapal'
                         placeholder="Nama Kapal"
                         value={name}
                         onChangeText={v => this.onChangeInputShip('name', v)}
                       />
-                      </View>
                     </ContainerSection>
-                  </View>
-              }
-
-            </View>
-            :
-          <View>
-            {
-            gearsId === '2' ? 
-            <View>
-            {
-              statusComboForge ?
-              <ContainerSection>
-                <View style={{ flexDirection: 'column', width: '100%', padding: 5 }}>
-                  <Text style={{ flex: 1 }}>Pilih Alat Tangkap</Text>
-                  <View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-                  <Picker
-                    selectedValue={nameForge}
-                    onValueChange={v => this.onChangeInputForge('nameForge', v)}
-                  >
-                    <Picker.Item label='--- Pilih ---' value='' />
-                   {
-                    data !== undefined && data.map(item =>
-                      <Picker.Item key={item.id} label={item.name} value={item} />
-                    )
-                    
-                    }
-                  </Picker>
-                  </View>
-                </View>
-              </ContainerSection>
-              :
-              <View />
-            }
-
-            {
-              // plusForge ?
-              // <View style={{ flex: 1 }}>
-              //   <TouchableOpacity
-              //   onPress={() => {
-              //     console.log('Tambah Alat Mas');
-              //     this.setState({
-              //     plusForge: false
-              //     }, () => {
-              //     this.addForgeComboBox();
-              //     });
-              //   }}
-              //   >
-              //   <Text style={{ marginLeft: '70%' }}>Tambah Alat +</Text>
-              //   </TouchableOpacity>
-              // </View>
-              // :
-              // <View />
-            }
-
-            {
-              textInputForge && textInputForge.map((item) =>
-              item
-              )
-            }
-            </View>
-            :
-            <View />
-            }
-          </View>
-          }
-        </ScrollView>
-        <ContainerSection>
-          {
-            loader ?
-              <View style={{ flex: 1 }}>
-                <Spinner size='small' />
+                  :
+                    <View>
+                      <ContainerSection>
+                        <Input
+                          label="Ukuran Kapal (GT)"
+                          placeholder="Ukuran Kapal (GT)"
+                          value={size}
+                          keyboardType="numeric"
+                          onChangeText={v => this.onChangeInputShip('size', v)}
+                        />
+                      </ContainerSection>
+                      <ContainerSection>
+                        <Input
+                          label='Nama Kapal'
+                          placeholder="Nama Kapal"
+                          value={name}
+                          onChangeText={v => this.onChangeInputShip('name', v)}
+                        />
+                      </ContainerSection>
+                    </View>
+                }
               </View>
-              :
-              <Button
-                onPress={() => {
-                  if (gearsId === '1') {
-                    this.saveForgeShips()
-                  }
-                  else {
-                    this.saveForgeGears()
-                  }
-                }}
-              >
-                Selesai
-          </Button>
+            :
+              <View>
+                {gearsId === '2' &&
+                  <ContainerSection>
+                    <View style={styles.pickerContainer}>
+                      <Text style={styles.pickerTextStyle}>Pilih Alat Tangkap</Text>
+                      <View style={styles.pickerStyle}>
+                        <Picker
+                          selectedValue={FishingGearId}
+                          onValueChange={v => this.onChangeInputForge('FishingGearId', v)}
+                        >
+                          <Picker.Item label='--- Pilih ---' value='' />
+                          {
+                            data !== undefined && data.map(item =>
+                              <Picker.Item key={item.id} label={item.name} value={item.id} />
+                            )
+                          }
+                        </Picker>
+                      </View>
+                    </View>
+                  </ContainerSection>
+                }
+              </View>
           }
-        </ContainerSection>
-      </View>
+          <View style={{ marginTop: 20, marginBottom: 20 }}>
+            <ContainerSection>
+              {
+                loader ?
+                  <View style={{ flex: 1 }}>
+                    <Spinner size='small' />
+                  </View>
+                :
+                  <Button
+                    onPress={() => {
+                      if (gearsId === '1') {
+                        this.saveForgeShips()
+                      }
+                      else {
+                        this.saveForgeGears()
+                      }
+                    }}
+                  >
+                    Selesai
+                  </Button>
+              }
+            </ContainerSection>
+          </View>
+        </Container>
+      </ScrollView>
     )
   }
 }
 
-
 const styles = {
-  container: {
+  headerStyle: {
+    color: COLOR.secondary_a,
+    fontSize: 18,
+  },
+  pickerContainer: {
     flex: 1,
-    marginTop: 20
-  }
+    marginBottom: 5,
+  },
+  pickerStyle: {
+    borderColor: '#a9a9a9',
+    borderRadius: 5,
+    paddingLeft: 7,
+    borderWidth: 1,
+    backgroundColor: '#fff'
+  },
+  pickerTextStyle: {
+    color: '#5e5e5e',
+    fontSize: 14,
+    flex: 1,
+    marginTop: 10,
+    marginBottom: 10
+  },
 }
-
 
 const mapStateToProps = state => {
   const { user } = state

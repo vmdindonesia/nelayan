@@ -562,15 +562,6 @@ const styles = {
 		fontSize: 16,
 		color: '#000'
 	},
-	formWrapper: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderWidth: 1,
-		borderColor: '#a9a9a9',
-		borderRadius: 5,
-		paddingLeft: 7
-	},
 }
 
 const mapStateToProps = state => {
