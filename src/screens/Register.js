@@ -73,7 +73,9 @@ class Register extends Component {
 			textInputForge: [],
 			plusForge: false,
 			tabActive: 1,
-			forge: []
+			forge: [],
+
+			unsaveForm: false
 		}
 	}
 
@@ -85,8 +87,9 @@ class Register extends Component {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			if (this.state.tabActive > 1) {
 				this.prevTab()
+				return true
 			}
-			else {
+			else if (this.state.unsaveForm === true) {
 				Alert.alert(
 					'',
 					'Form pendaftaran belum disimpan, Anda yakin ingin keluar?',
@@ -95,14 +98,14 @@ class Register extends Component {
 						{
 							text: 'Ya',
 							onPress: () => {
+								this.setState({unsaveForm: false})
 								this.props.navigation.goBack()
 							}
 						},
 					]
 				)
+				return true
 			}
-
-			return true
 		})
 	}
 
@@ -127,7 +130,10 @@ class Register extends Component {
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({ [name]: v })
+		this.setState({ 
+			[name]: v,
+			unsaveForm: true
+		})
 	}
 
 	onChangeInputShip = (name, v) => {

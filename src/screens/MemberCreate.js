@@ -25,31 +25,37 @@ class MemberCreate extends Component {
 			address: '',
 			idNumber: '',
 			photo: null,
+			changedForm: false
 		}
 	}
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', () => {
-			Alert.alert(
-				'',
-				'Form ini belum disimpan, Anda yakin ingin keluar?',
-				[
-					{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-					{
-						text: 'Ya',
-						onPress: () => {
-							this.props.navigation.goBack()
-						}
-					},
-				]
-			)
-
-			return true
+			if (this.state.changedForm) {
+				Alert.alert(
+					'',
+					'Form ini belum disimpan, Anda yakin ingin keluar?',
+					[
+						{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+						{
+							text: 'Ya',
+							onPress: () => {
+								this.setState({changedForm: false})
+								this.props.navigation.goBack()
+							}
+						},
+					]
+				)
+				return true
+			}
 		})
 	}
 
 	onChangeInput = (name, v) => {
-		this.setState({[name]: v})
+		this.setState({
+			[name]: v,
+			changedForm: true
+		})
 	}
 
 	onSubmit = () => {
