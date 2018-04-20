@@ -11,6 +11,7 @@ class Help extends Component {
 	}
 
 	render() {
+		console.log(Config, 'config')
 		return (
 			<View style={{flex: 1, marginTop: 50}}>
 				<Container>
@@ -20,7 +21,7 @@ class Help extends Component {
 							source={require('../../assets/logo.png')} 
 						/>
 					</View>
-					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v{Config.VERSION_NAME}</Text>
+					<Text style={{marginBottom: 30, marginTop: 10, textAlign: 'center'}}>v{Config.VERSION_NAME} - {Config.ENV}</Text>
 
 					<View style={{justifyContent: 'center', alignItems: 'center'}}>
 						<Text>Hubungi</Text>
