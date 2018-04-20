@@ -78,7 +78,7 @@ class OrderList extends Component {
 						</View>
 						<View style={styles.headerContentStyle}>
 							<Text style={{fontSize: 11}}>No. PO {item.Request.codeNumber}</Text>
-							<Text style={{fontWeight: 'bold', color: COLOR.primary}}>{item.Request.Transaction.Fish.name}</Text>
+							<Text style={{fontFamily: 'Muli-Bold', color: COLOR.primary}}>{item.Request.Transaction.Fish.name}</Text>
 							<Text>{item.Request.Buyer.name}</Text>
 							<Text style={styles.headerTextStyle}>
 								{item.StatusHistories.length > 0 ? item.StatusHistories[item.StatusHistories.length - 1].Status.name : 'Proses Kontrak'}

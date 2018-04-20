@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, Keyboard, ToastAndroid, Image, TouchableOpacity } from 'react-native'
+import { View, BackHandler, Alert, ScrollView, Text, Keyboard, ToastAndroid, Image, TouchableOpacity } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import axios from 'axios'
@@ -26,6 +26,26 @@ class MemberCreate extends Component {
 			idNumber: '',
 			photo: null,
 		}
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', () => {
+			Alert.alert(
+				'',
+				'Form ini belum disimpan, Anda yakin ingin keluar?',
+				[
+					{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+					{
+						text: 'Ya',
+						onPress: () => {
+							this.props.navigation.goBack()
+						}
+					},
+				]
+			)
+
+			return true
+		})
 	}
 
 	onChangeInput = (name, v) => {

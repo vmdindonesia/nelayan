@@ -85,9 +85,24 @@ class Register extends Component {
 		BackHandler.addEventListener('hardwareBackPress', () => {
 			if (this.state.tabActive > 1) {
 				this.prevTab()
-
-				return true
 			}
+			else {
+				Alert.alert(
+					'',
+					'Form pendaftaran belum disimpan, Anda yakin ingin keluar?',
+					[
+						{ text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+						{
+							text: 'Ya',
+							onPress: () => {
+								this.props.navigation.goBack()
+							}
+						},
+					]
+				)
+			}
+
+			return true
 		})
 	}
 
@@ -1228,12 +1243,10 @@ class Register extends Component {
 
 						{
 							statusComboShip ?
-								<View>
-									<View style={{ flexDirection: 'row', flex: 1 }}>
-										<Text style={{ flex: 1, marginLeft: '2%' }}>Pilih Ukuran Kapal</Text>
-									</View>
-									<ContainerSection>
-										<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+								<ContainerSection>
+									<View style={styles.pickerContainer}>
+										<Text style={styles.pickerTextStyle}>Pilih Ukuran Kapal</Text>
+										<View style={styles.pickerStyle}>
 											<Picker
 												selectedValue={ShipSize}
 												onValueChange={v => this.onChangeInputShip('ShipSize', v)}
@@ -1243,9 +1256,9 @@ class Register extends Component {
 												<Picker.Item label='>1 GT' value='>1 GT' />
 											</Picker>
 										</View>
-									</ContainerSection>
-								</View>
-								:
+									</View>
+								</ContainerSection>
+							:
 								<View />
 						}
 
@@ -1289,12 +1302,10 @@ class Register extends Component {
 
 						{
 							statusComboForge ?
-								<View>
-									<View style={{ flexDirection: 'row', flex: 1 }}>
-										<Text style={{ flex: 1 }}>Pilih Alat Tangkap</Text>
-									</View>
-									<ContainerSection>
-										<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
+								<ContainerSection>
+									<View style={styles.pickerContainer}>
+										<Text style={styles.pickerTextStyle}>Pilih Alat Tangkap</Text>
+										<View style={styles.pickerStyle}>
 											<Picker
 												selectedValue={nameForge}
 												onValueChange={v => this.onChangeInputForge('nameForge', v)}
@@ -1307,8 +1318,8 @@ class Register extends Component {
 												}
 											</Picker>
 										</View>
-									</ContainerSection>
-								</View>
+									</View>
+								</ContainerSection>
 								:
 								<View />
 						}
