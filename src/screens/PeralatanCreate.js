@@ -7,9 +7,9 @@ import { BASE_URL } from '../constants'
 import { setUserToken } from '../actions'
 import { ContainerSection, Input, Spinner, Button } from '../components/common'
 
-class CreatePeralatan extends Component {
+class PeralatanCreate extends Component {
   static navigationOptions = {
-    title: 'Peralatan',
+    title: 'Tambah Peralatan',
     headerRight: <View />
   }
 
@@ -45,28 +45,6 @@ class CreatePeralatan extends Component {
 
       type: ''
     }
-  }
-
-  getAlat = () => {
-    this.setState({ loading: true })
-    let token = this.props.user.token
-  
-    axios.get(`${BASE_URL}/supplier/fishing-gears`, {
-    headers: { token },
-    })
-    .then(response => {
-      this.setState({ data: response.data.data })
-      this.setState({ loading: false })
-    })
-    .catch(error => {
-      if (error.response) {
-      alert(error.response.data.message)
-      }
-      else {
-      alert('Koneksi internet bermasalah')
-      }
-      this.setState({ loading: false })
-    })
   }
 
   componentWillMount() {
@@ -134,6 +112,28 @@ class CreatePeralatan extends Component {
       console.log(this.state.ShipSizeMax, 'Ship Size Min');
     });
     });
+  }
+
+  getAlat = () => {
+    this.setState({ loading: true })
+    let token = this.props.user.token
+  
+    axios.get(`${BASE_URL}/supplier/fishing-gears`, {
+    headers: { token },
+    })
+    .then(response => {
+      this.setState({ data: response.data.data })
+      this.setState({ loading: false })
+    })
+    .catch(error => {
+      if (error.response) {
+      alert(error.response.data.message)
+      }
+      else {
+      alert('Koneksi internet bermasalah')
+      }
+      this.setState({ loading: false })
+    })
   }
 
   addShipComboBox = () => {
@@ -559,4 +559,4 @@ const mapStateToProps = state => {
   return { user }
 }
 
-export default connect(mapStateToProps, { setUserToken })(CreatePeralatan)
+export default connect(mapStateToProps, { setUserToken })(PeralatanCreate)

@@ -48,7 +48,7 @@ import DetailAuction from './src/screens/DetailAuction'
 import ListMemberAuction from './src/screens/ListMemberAuction'
 import Member from './src/screens/Member'
 import Peralatan from './src/screens/Peralatan'
-import CreatePeralatan from './src/screens/CreatePeralatan'
+import PeralatanCreate from './src/screens/PeralatanCreate'
 import { COLOR } from './src/constants'
 
 numeral.register('locale', 'id', {
@@ -56,7 +56,7 @@ numeral.register('locale', 'id', {
     thousands: '.',
     decimal: ','
   },
-  ordinal: function (number) {
+  ordinal: (number) => {
     return number === 1 ? 'er' : 'ème';
   },
   currency: {
@@ -96,11 +96,14 @@ const Routes = StackNavigator({
   MemberCreate: { screen: MemberCreate },
   MemberEdit: { screen: MemberEdit },
   NotificationList: { screen: NotificationList },
+
   Information: { screen: Information },
   Reward: { screen: Reward },
+
   Message: { screen: Message },
   MessageList: { screen: MessageList },
   MessageAdmin: { screen: MessageAdmin },
+
   Help: { screen: Help },
   Term: { screen: Term },
   Auction: { screen: CreateAuction },
@@ -109,9 +112,10 @@ const Routes = StackNavigator({
   ListAuctions: { screen: ListAuction },
   DetailAuctions: { screen: DetailAuction },
   ListMemberAuctions: { screen: ListMemberAuction },
+  
   Members: { screen: Member },
-  Forge: { screen: Peralatan },
-  CreateForge: { screen: CreatePeralatan }
+  Peralatan: { screen: Peralatan },
+  PeralatanCreate: { screen: PeralatanCreate }
 }, {
     cardStyle: { backgroundColor: '#fafafa' },
     navigationOptions: {

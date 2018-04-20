@@ -174,7 +174,7 @@ class Peralatan extends Component {
         <ActionButton
           buttonColor={COLOR.element_b4}
           onPress={() => 
-            this.props.navi.navigate('CreateForge')
+            this.props.navi.navigate('PeralatanCreate')
           }
         />
       </View>
