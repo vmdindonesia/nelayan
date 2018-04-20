@@ -387,10 +387,7 @@ class FishLogCreate extends Component {
 						<Text style={{ color: '#5e5e5e', fontSize: 14 }}>Tanggal Penangkapan</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<Input
-							value={moment().format('DD/MM/YYYY')}
-							editable={false}
-						/>
+						<Text style={{ color: '#5e5e5e', fontSize: 14, marginLeft: 10, fontWeight: 'bold'}}>{moment().format('DD/MM/YYYY')}</Text>
 					</ContainerSection>
 					<ContainerSection>
 						<View style={styles.pickerContainer}>
