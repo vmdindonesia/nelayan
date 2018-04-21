@@ -35,52 +35,69 @@ class NotificationList extends Component {
 		let token = this.props.user.token
 		let newType = type
 
-		if (type === 'messages') {
-			newType = 'orders'
-		}
-		
-		axios.get(`${BASE_URL}/supplier/${newType}/${id}`, {
-			headers: {token},
-			timeout: REQUEST_TIME_OUT
-		})
-		.then(response => {
-			let link = 'RequestDetail'
-			let additionalProps = {id}
-			let item = response.data.data
+		if (type === 'Contact Admin') {
+			link = 'MessageAdmin'
 
-			if (type === 'orders') {
-				link = 'OrderDetail'
-
-				additionalProps = {
-					id: item.id,
-					codeNumber: item.Request.codeNumber,
-					organizationType: item.Request.Buyer.organizationType,
-					organization: item.Request.Buyer.organization
-				}
+			additionalProps = {
+				id: 1,
+				codeNumber: 'chat admin',
+				organizationType: 'Admin Aruna',
 			}
-			else if (type === 'messages') {
-				link = 'Message'
 
-				additionalProps = {
-					id: item.id,
-					codeNumber: item.Request.codeNumber,
-					organizationType: item.Request.Buyer.organizationType,
-					organization: item.Request.Buyer.organization
-				}
-			}
-	
 			this.props.navigation.navigate(link, additionalProps)
 			this.setState({loading: false})
-		})
-		.catch(error => {
-			if (error.response) {
-				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+		}
+		else if (type === 'rewards') {
+			this.props.navigation.navigate('Reward')
+		}
+		else {
+			if (type === 'messages') {
+				newType = 'orders'
 			}
-			else {
-				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
-			}
-			this.setState({loading: false})
-		})
+			
+			axios.get(`${BASE_URL}/supplier/${newType}/${id}`, {
+				headers: {token},
+				timeout: REQUEST_TIME_OUT
+			})
+			.then(response => {
+				let link = 'RequestDetail'
+				let additionalProps = {id}
+				let item = response.data.data
+
+				if (type === 'orders') {
+					link = 'OrderDetail'
+
+					additionalProps = {
+						id: item.id,
+						codeNumber: item.Request.codeNumber,
+						organizationType: item.Request.Buyer.organizationType,
+						organization: item.Request.Buyer.organization
+					}
+				}
+				else if (type === 'messages') {
+					link = 'Message'
+
+					additionalProps = {
+						id: item.id,
+						codeNumber: item.Request.codeNumber,
+						organizationType: item.Request.Buyer.organizationType,
+						organization: item.Request.Buyer.organization
+					}
+				}
+			
+				this.props.navigation.navigate(link, additionalProps)
+				this.setState({loading: false})
+			})
+			.catch(error => {
+				if (error.response) {
+					ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
+				}
+				else {
+					ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
+				}
+				this.setState({loading: false})
+			})
+		}
 	}
 
 	renderItem = (item) => {
@@ -103,6 +120,7 @@ class NotificationList extends Component {
 	}
 
 	render() {
+		console.log(this.props.notifications.data, '----data notif')
 		if (this.state.loading) {
 			return (
 				<View style={{flex: 1}}>
