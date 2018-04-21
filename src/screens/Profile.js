@@ -154,6 +154,7 @@ class Profile extends Component {
 								<CardSection>
 									<Image
 										style={{ width: 100, height: 100 }}
+            				resizeMode="contain"
 										source={{ uri: `${BASE_URL}/images/${item.Fish.photo}` }}
 									/>
 									<View style={{ flex: 1, margin: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
