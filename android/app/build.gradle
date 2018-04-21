@@ -132,7 +132,6 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "CODEPUSH_KEY", '""'
-            applicationIdSuffix ".debug"
         }
         releaseStaging {
             minifyEnabled enableProguardInReleaseBuilds
