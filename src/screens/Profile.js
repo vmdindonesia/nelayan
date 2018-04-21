@@ -145,6 +145,9 @@ class Profile extends Component {
 						/>
 					}
 				>
+					<Text style={{textAlign: 'right', marginRight: 15, marginTop: 5}}>
+						{data.Products && data.Products.length} / 5 Komoditas
+					</Text>
 					{
 						data.Products && data.Products.map(item =>
 							<Card key={item.id}>
@@ -163,13 +166,16 @@ class Profile extends Component {
 						)
 					}
 
-					<View style={{ margin: 10 }}>
-						<ContainerSection>
-							<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
-								Tambah Komoditas
-							</Button>
-						</ContainerSection>
-					</View>
+					{
+						data.Products && data.Products < 5 &&
+						<View style={{ margin: 10 }}>
+							<ContainerSection>
+								<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
+									Tambah Komoditas
+								</Button>
+							</ContainerSection>
+						</View>
+					}
 
 					<View style={{height: 50}} />
 				</ScrollView>
