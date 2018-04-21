@@ -167,7 +167,7 @@ class Profile extends Component {
 					}
 
 					{
-						data.Products && data.Products < 5 &&
+						data.Products && data.Products.length < 5 &&
 						<View style={{ margin: 10 }}>
 							<ContainerSection>
 								<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
