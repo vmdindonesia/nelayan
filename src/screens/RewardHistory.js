@@ -21,7 +21,7 @@ class RewardHistory extends Component {
 				<View style={styles.headerContentStyle}>
 					<Text style={styles.hedaerTextStyle}>{item.Item ? item.Item.name : 'Nama Reward'}</Text>
 					<View style={{flexDirection: 'row'}}>
-						<Text style={{flex: 1}}>{item.Item ? item.Item.pointAmount : 'Poin'} Poin</Text>
+						<Text style={{flex: 1, fontFamily: 'Muli-Bold'}}>{item.Item ? item.Item.pointAmount : 'Poin'} Poin</Text>
 					</View>
 					<Text style={{fontSize: 12}}>Status: {item.Status ? item.Status.name : 'Status'}</Text>
 				</View>

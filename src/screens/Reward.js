@@ -15,11 +15,11 @@ const RewardTab = TabNavigator({
 		upperCaseLabel: false,
 		activeTintColor: 'white',
 		indicatorStyle: {
-			borderBottomColor: COLOR.element_a4,
+			borderBottomColor: COLOR.primary,
 			borderBottomWidth: 100,
 		},
 		style: {
-			backgroundColor: COLOR.element_a3,
+			backgroundColor: COLOR.secondary_b,
 		},
 		labelStyle: {
       fontSize: 18,

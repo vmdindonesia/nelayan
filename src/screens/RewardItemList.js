@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { FlatList, View, Image, Text, TouchableNativeFeedback, Alert } from 'react-native'
+import { FlatList, ScrollView, View, Image, Text, TouchableNativeFeedback, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import { itemsFetch, rewardHistoriesFetch, setUserToken } from '../actions'
-import { Spinner } from '../components/common'
+import { Spinner, Button } from '../components/common'
 import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
 
 class RewardItemList extends Component {
@@ -69,24 +69,28 @@ class RewardItemList extends Component {
 
 	renderItem = (item) => {
 		return (
-			<TouchableNativeFeedback 
-				onPress={() => this.itemPressed(item)}
-			>
+			<TouchableNativeFeedback >
 				<View style={styles.itemContainerStyle}>
-					<View style={styles.thumbnailContainerStyle}>
-						<Image 
-							style={styles.thumbnailStyle}
-							source={
-								item.photo ?
-									{uri: `${BASE_URL}/images/${item.photo}`}
-								:
-									require('../../assets/coin.png')	
-							}
-						/>
-					</View>
-					<View style={styles.headerContentStyle}>
-						<Text style={{fontWeight: 'bold'}}>{item.name.length >= 10 ? `${item.name.substring(0, 10)}...` : item.name}</Text>
-						<Text>({item.pointAmount}) poin</Text>
+					<Image 
+						style={styles.thumbnailStyle}
+						resizeMode="contain"
+						source={
+							item.photo ?
+								{uri: `${BASE_URL}/images/${item.photo}`}
+							:
+								require('../../assets/coin.png')	
+						}
+					/>
+					<View style={{flexDirection: 'row'}}>
+						<View style={styles.headerContentStyle}>
+							<Text style={{fontWeight: 'bold'}}>{item.name}</Text>
+							<Text>{item.pointAmount} poin</Text>
+						</View>
+						<View style={{flex: 1, paddingBottom: 10, paddingTop: 5}}>
+							<Button onPress={() => this.itemPressed(item)}>
+								Tukarkan
+							</Button>
+						</View>
 					</View>
 				</View>
 			</TouchableNativeFeedback>
@@ -104,14 +108,15 @@ class RewardItemList extends Component {
 
 		return (
 			<View style={{ flex: 1, paddingLeft: 15, paddingRight: 15}}>
-				<FlatList
-					data={this.props.items.data}
-					renderItem={({item}) => this.renderItem(item)}
-					keyExtractor={(item, index) => index}
-					numColumns={2}
-					onRefresh={() => this.props.itemsFetch(this.props.user.token)}
-					refreshing={this.props.items.loading}
-				/>
+				{
+					<FlatList
+						data={this.props.items.data}
+						renderItem={({item}) => this.renderItem(item)}
+						keyExtractor={(item, index) => index}
+						onRefresh={() => this.props.itemsFetch(this.props.user.token)}
+						refreshing={this.props.items.loading}
+					/>
+				}
 			</View>
 		)
 	}
@@ -120,21 +125,15 @@ class RewardItemList extends Component {
 const styles = {
 	itemContainerStyle: {
 		flex: 1,
-		margin: 5,
-		justifyContent: 'flex-start',
-		flexDirection: 'row',
+		marginBottom: 10,
 		elevation: 1,
-		backgroundColor: '#fff'
-	},
-	thumbnailContainerStyle: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		margin: 10,
+		backgroundColor: '#fff',
+		paddingLeft: 10,
+		paddingRight: 10
 	},
 	thumbnailStyle: {
-		height: 30,
-		width: 30,
-		borderRadius: 5
+		height: 100,
+		width: '100%',
 	},
 	headerContentStyle: {
 		flex: 1,
