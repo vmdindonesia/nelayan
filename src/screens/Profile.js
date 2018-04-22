@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, Image, TouchableWithoutFeedback, TouchableNativeFeedback, RefreshControl } from 'react-native'
+import { ScrollView, Alert, View, Text, Image, TouchableWithoutFeedback, TouchableNativeFeedback, RefreshControl, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import numeral from 'numeral'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, ContainerSection, Button } from '../components/common'
@@ -48,19 +49,43 @@ class Profile extends Component {
 			headers: { token },
 			timeout: REQUEST_TIME_OUT
 		})
-			.then(response => {
-				this.setState({ data: response.data.user })
-				this.setState({ loading: false })
-			})
-			.catch(error => {
-				if (error.response) {
-					alert(error.response.data.message)
-				}
-				else {
-					alert('Koneksi internet bermasalah')
-				}
-				this.setState({ loading: false })
-			})
+		.then(response => {
+			this.setState({ data: response.data.user })
+			this.setState({ loading: false })
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({ loading: false })
+		})
+	}
+
+	deleteComodity = (id) => {
+		this.setState({ loading: true })
+		let token = this.props.user.token
+
+		axios.delete(`${BASE_URL}/products/${id}`, {
+			headers: { token },
+			timeout: REQUEST_TIME_OUT
+		})
+		.then(() => {
+			this.getData()
+			this.setState({ loading: false })
+			ToastAndroid.show('Berhail hapus komoditas', ToastAndroid.SHORT)
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({ loading: false })
+		})
 	}
 
 
@@ -162,6 +187,22 @@ class Profile extends Component {
 										<Text style={{ fontSize: 11, marginLeft: 10, fontFamily: 'Muli-Bold' }}>Kapasitas Produksi:</Text>
 										<Text style={{ fontSize: 16, marginLeft: 10 }}>{numeral(item.capacity).format('0,0')}</Text>
 									</View>
+									<TouchableNativeFeedback 
+										onPress={() =>
+											Alert.alert(
+												'Hapus Komoditas',
+												'Yakin hapus komoditas?',
+												[
+													{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+													{text: 'Ya', onPress: () => this.deleteComodity(item.id)},
+												]
+											)
+										}
+									>
+										<View>
+											<Icon name="md-trash" size={18} />
+										</View>
+									</TouchableNativeFeedback>
 								</CardSection>
 							</Card>
 						)
