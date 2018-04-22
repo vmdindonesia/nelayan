@@ -436,7 +436,10 @@ class Register extends Component {
 				this.props.navigation.dispatch(resetAction)
 				Alert.alert('Registrasi berhasil', `Silahkan cek email anda ${data.email} untuk verifikasi email`, [])
 
-				this.setState({ loading: false })
+				this.setState({ 
+					loading: false,
+					unsaveForm: false
+				})
 			})
 			.catch(error => {
 				console.log(error);

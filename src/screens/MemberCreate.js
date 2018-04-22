@@ -91,7 +91,7 @@ class MemberCreate extends Component {
 				},
 				timeout: REQUEST_TIME_OUT
 			})
-			.then(() => {			
+			.then(() => {
 				const resetAction = NavigationActions.reset({
 					index: 1,
 					actions: [
@@ -101,7 +101,10 @@ class MemberCreate extends Component {
 				})
 				this.props.navigation.dispatch(resetAction)
 
-				this.setState({loading: false})
+				this.setState({
+					loading: false,
+					changedForm: false
+				})
 				ToastAndroid.show('Berhasil tambah anggota', ToastAndroid.SHORT)
 			})
 			.catch(error => {
