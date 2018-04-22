@@ -75,7 +75,7 @@ class Profile extends Component {
 		.then(() => {
 			this.getData()
 			this.setState({ loading: false })
-			ToastAndroid.show('Berhail hapus komoditas', ToastAndroid.SHORT)
+			ToastAndroid.show('Berhasil hapus komoditas', ToastAndroid.SHORT)
 		})
 		.catch(error => {
 			if (error.response) {
