@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import ImagePicker from 'react-native-image-picker'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
+import { membersFetch } from '../actions'
 
 class FishLogEdit extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -60,7 +61,8 @@ class FishLogEdit extends Component {
 	}
 
 	componentWillMount() {
-		this.fetchData();
+		this.fetchData()
+    this.props.membersFetch(this.props.user.token)
 	}
 
 	componentDidMount() {
@@ -122,6 +124,7 @@ class FishLogEdit extends Component {
 			formData.append('price', data.price)
 			formData.append('MyFishingGearId', data.MyFishingGearId)
 			formData.append('MyShipId', data.MyShipId)
+			formData.append('MemberId', data.MemberId)
 			if (this.state.photo) {
 				formData.append('photo', {
 					uri: this.state.photo.uri,
@@ -151,13 +154,14 @@ class FishLogEdit extends Component {
 					this.props.navigation.dispatch(resetAction)
 
 					this.setState({ loadingPage: false })
+					ToastAndroid.show('Berhasil ubah fishlog', ToastAndroid.SHORT)
 				})
 				.catch(error => {
 					if (error.response) {
-						alert(error.response.data.message)
+						ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 					}
 					else {
-						alert('Koneksi internet bermasalah')
+						ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 					}
 
 					this.setState({ loadingPage: false })
@@ -357,6 +361,7 @@ class FishLogEdit extends Component {
 
 	render() {
 		const { data, loading, photo, fishes, provinces, forge, ship } = this.state
+		const members = this.props.members.data
 
 		if (loading) {
 			return (
@@ -419,6 +424,26 @@ class FishLogEdit extends Component {
 							</View>
 						</View>
 					</ContainerSection>
+
+					<ContainerSection>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Pilih Anggota</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={data.MemberId}
+									onValueChange={v => this.onChangeInput('MemberId', v)}
+								>
+									<Picker.Item label="-- Pilih Anggota --" value="" />
+									{
+										members && members.map((item, index) =>
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
+						</View>
+					</ContainerSection>
+
 					<ContainerSection>
 						<Input
 							label="Jumlah"
@@ -463,41 +488,41 @@ class FishLogEdit extends Component {
 						</Text>
 					</ContainerSection>
 
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Pilih Kapal</Text>
-					</View>
 					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={data.MyShipId}
-								onValueChange={v => this.onChangeInput('MyShipId', v)}
-							>
-								<Picker.Item label='--- Pilih Kapal---' value='' />
-								{
-									ship && ship.map((item, index) =>
-										<Picker.Item key={index} label={item.name} value={item.id} />
-									)
-								}
-							</Picker>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Pilih Kapal</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={data.MyShipId}
+									onValueChange={v => this.onChangeInput('MyShipId', v)}
+								>
+									<Picker.Item label='--- Pilih Kapal---' value='' />
+									{
+										ship && ship.map((item, index) =>
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
 						</View>
 					</ContainerSection>
 
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
-					</View>
 					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={data.MyFishingGearId}
-								onValueChange={v => this.onChangeInput('MyFishingGearId', v)}
-							>
-								<Picker.Item label='--- Pilih Alat---' value='' />
-								{
-									forge && forge.map((item, index) =>
-										<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />
-									)
-								}
-							</Picker>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Alat Tangkap</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={data.MyFishingGearId}
+									onValueChange={v => this.onChangeInput('MyFishingGearId', v)}
+								>
+									<Picker.Item label='--- Pilih Alat---' value='' />
+									{
+										forge && forge.map((item, index) =>
+											<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
 						</View>
 					</ContainerSection>
 
@@ -587,8 +612,9 @@ const styles = {
 }
 
 const mapStateToProps = state => {
-	const { user } = state
-	return { user }
+	const { members, user } = state
+
+	return { members, user }
 }
 
-export default connect(mapStateToProps)(FishLogEdit)
+export default connect(mapStateToProps, { membersFetch })(FishLogEdit)

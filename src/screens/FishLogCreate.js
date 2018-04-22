@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { Container, ContainerSection, Input, Button, Spinner } from '../components/common'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
-import { setUserToken } from '../actions'
+import { setUserToken, membersFetch } from '../actions'
 
 class FishLogCreate extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -66,12 +66,14 @@ class FishLogCreate extends Component {
 
 			shipSize: '',
 			shipName: '',
-			forgeName: ''
+			forgeName: '',
+			MemberId: ''
 		}
 	}
 
 	componentWillMount() {
 		this.fetchProducts()
+    this.props.membersFetch(this.props.user.token)
 	}
 
 	componentDidMount() {
@@ -130,6 +132,7 @@ class FishLogCreate extends Component {
 			formData.append('price', data.price)
 			formData.append('MyFishingGearId', data.forgeName)
 			formData.append('MyShipId', data.shipName)
+			formData.append('MemberId', data.MemberId)
 			if (data.photo) {
 				formData.append('photo', {
 					uri: data.photo.uri,
@@ -350,8 +353,11 @@ class FishLogCreate extends Component {
 			ship,
 			forge,
 			shipName,
-			forgeName
+			forgeName,
+			MemberId
 		} = this.state
+
+		const members = this.props.members.data
 
 		if (this.state.loader) {
 			return <Spinner size='large' />
@@ -407,6 +413,26 @@ class FishLogCreate extends Component {
 							</View>
 						</View>
 					</ContainerSection>
+
+					<ContainerSection>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Pilih Anggota</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={MemberId}
+									onValueChange={v => this.onChangeInput('MemberId', v)}
+								>
+									<Picker.Item label="-- Pilih Anggota --" value="" />
+									{
+										members && members.map((item, index) =>
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
+						</View>
+					</ContainerSection>
+
 					<ContainerSection>
 						<Input
 							label="Jumlah"
@@ -451,44 +477,43 @@ class FishLogCreate extends Component {
 						</Text>
 					</ContainerSection>
 
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Pilih Kapal</Text>
-					</View>
 					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={shipName}
-								onValueChange={v => this.onChangeInput('shipName', v)}
-							>
-								<Picker.Item label='--- Pilih Kapal---' value='' />
-								{
-									ship && ship.map((item, index) =>
-										<Picker.Item key={index} label={item.name} value={item.id} />
-									)
-								}
-							</Picker>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Pilih Kapal</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={shipName}
+									onValueChange={v => this.onChangeInput('shipName', v)}
+								>
+									<Picker.Item label='--- Pilih Kapal---' value='' />
+									{
+										ship && ship.map((item, index) =>
+											<Picker.Item key={index} label={item.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
 						</View>
 					</ContainerSection>
 
-					<View style={{ flexDirection: 'row', flex: 1 }}>
-						<Text style={{ flex: 1 }}>Alat Tangkap</Text>
-					</View>
 					<ContainerSection>
-						<View style={{ flex: 1, borderColor: '#a9a9a9', borderWidth: 1, height: 47 }}>
-							<Picker
-								selectedValue={forgeName}
-								onValueChange={v => this.onChangeInput('forgeName', v)}
-							>
-								<Picker.Item label='--- Pilih Alat---' value='' />
-								{
-									forge && forge.map((item, index) =>
-										<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />
-									)
-								}
-							</Picker>
+						<View style={styles.pickerContainer}>
+							<Text style={styles.pickerTextStyle}>Alat Tangkap</Text>
+							<View style={styles.pickerStyle}>
+								<Picker
+									selectedValue={forgeName}
+									onValueChange={v => this.onChangeInput('forgeName', v)}
+								>
+									<Picker.Item label='--- Pilih Alat---' value='' />
+									{
+										forge && forge.map((item, index) =>
+											<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />
+										)
+									}
+								</Picker>
+							</View>
 						</View>
 					</ContainerSection>
-
 
 					<ContainerSection>
 						<Text style={styles.headerStyle}>
@@ -565,9 +590,9 @@ const styles = {
 }
 
 const mapStateToProps = state => {
-	const { user } = state
+	const { members, user } = state
 
-	return { user }
+	return { members, user }
 }
 
-export default connect(mapStateToProps, { setUserToken })(FishLogCreate)
+export default connect(mapStateToProps, { setUserToken, membersFetch })(FishLogCreate)

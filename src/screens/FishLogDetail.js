@@ -245,29 +245,30 @@ class FishlogDetail extends Component {
 						</Text>
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Komoditas</Text>
-					</ContainerSection>
-					<ContainerSection>
 						<Input
+							label="Komoditas"
 							value={data.Fish && data.Fish.name}
 							editable={false}
 						/>	
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Tanggal Penangkapan</Text>
-					</ContainerSection>
-					<ContainerSection>
 						<Input
+							label="Tanggal Penangkapan"
 							value={moment(data.createdAt).format('DD/MM/YYYY')}
 							editable={false}
 						/>	
 					</ContainerSection>
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Lokasi Penangkapan</Text>
+						<Input
+							label="Lokasi Penangkapan"
+							value={((provinces.length > 0) && provinces[data.ProvinceId]) ? provinces[data.ProvinceId].name : ''}
+							editable={false}
+						/>	
 					</ContainerSection>
 					<ContainerSection>
 						<Input
-							value={((provinces.length > 0) && provinces[data.ProvinceId]) ? provinces[data.ProvinceId].name : ''}
+							label="Anggota"
+							value={data.Member && data.Member.name}
 							editable={false}
 						/>	
 					</ContainerSection>
@@ -313,20 +314,16 @@ class FishlogDetail extends Component {
 					</ContainerSection>
 
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Kapal</Text>
-					</ContainerSection>
-					<ContainerSection>
 						<Input
+							label="Kapal"
 							value={data.MyShip && data.MyShip.name}
 							editable={false}
 						/>	
 					</ContainerSection>
 
 					<ContainerSection>
-						<Text style={{color: '#5e5e5e', fontSize: 14}}>Alat Tangkap</Text>
-					</ContainerSection>
-					<ContainerSection>
 						<Input
+							label="Alat Tangkap"
 							value={(data.MyFishingGear && data.MyFishingGear.FishingGear) ? data.MyFishingGear.FishingGear.name : ''}
 							editable={false}
 						/>	
@@ -339,18 +336,16 @@ class FishlogDetail extends Component {
 					</ContainerSection>
 					<ContainerSection>
 						<View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5, marginBottom: 5}}>
-							<TouchableOpacity>
-								<View>
-								{ photo === null ? 
-										<Image
-											source={{uri: `${BASE_URL}/images/${data.photo}`}}
-											style={{height: 200, width: 300}}
-										/>
-									:
-										<Image style={{height: 200, width: 300}} source={photo} />
-								}
-								</View>
-							</TouchableOpacity>
+							<View>
+							{ photo === null ? 
+									<Image
+										source={{uri: `${BASE_URL}/images/${data.photo}`}}
+										style={{height: 200, width: 300}}
+									/>
+								:
+									<Image style={{height: 200, width: 300}} source={photo} />
+							}
+							</View>
 						</View>
 					</ContainerSection>
 					
