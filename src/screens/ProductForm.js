@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { ScrollView, Text, Keyboard, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, Keyboard, TouchableOpacity, View, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import { BASE_URL, REQUEST_TIME_OUT } from '../constants'
@@ -47,48 +47,56 @@ class ProductForm extends Component {
 
 	onSubmit = () => {
 		Keyboard.dismiss()
-		this.setState({loading: true})
+		
+		// Validation
+		if (this.state.FishId === '') {
+      ToastAndroid.show('Nama komoditas tidak tersedia, harap hubungi Admin Aruna', ToastAndroid.SHORT)
+		}
+		else {
+			this.setState({loading: true})
 
-		let token = this.props.user.token
-		const data = { FishId: this.state.FishId }
-		const { params } = this.props.navigation.state
+			let token = this.props.user.token
+			const data = { FishId: this.state.FishId }
+			const { params } = this.props.navigation.state
 
-		const url = params ? `${BASE_URL}/products/${params.ProductId}` : `${BASE_URL}/products`
+			const url = params ? `${BASE_URL}/products/${params.ProductId}` : `${BASE_URL}/products`
 
-		axios({
-			method: params ? 'put' : 'post',
-			url,
-			data,
-			headers: {token},
-			timeout: REQUEST_TIME_OUT
-		})
-		.then(response => {
-			this.props.navigation.setParams({FishId: '', value: '', ProductId: ''})
-			
-			const resetAction = NavigationActions.reset({
-				index: 1,
-				actions: [
-					NavigationActions.navigate({ routeName: 'Home'}),
-					NavigationActions.navigate({ routeName: 'Profile'})
-				]
+			axios({
+				method: params ? 'put' : 'post',
+				url,
+				data,
+				headers: {token},
+				timeout: REQUEST_TIME_OUT
 			})
-			this.props.navigation.dispatch(resetAction)
-		})
-		.catch(error => {
-			if (error.response) {
-				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
-			}
-			this.setState({loading: false})
-		})
+			.then(() => {
+				this.props.navigation.setParams({FishId: '', value: '', ProductId: ''})
+				
+				const resetAction = NavigationActions.reset({
+					index: 1,
+					actions: [
+						NavigationActions.navigate({ routeName: 'Home'}),
+						NavigationActions.navigate({ routeName: 'Profile'})
+					]
+				})
+				this.props.navigation.dispatch(resetAction)
+			})
+			.catch(error => {
+				if (error.response) {
+					alert(error.response.data.message)
+				}
+				else {
+					alert('Koneksi internet bermasalah')
+				}
+				this.setState({loading: false})
+			})
+		}
 	}
 
 	querySuggestion = (text) => {
 		this.setState({
 			value: text,
-			loadingProduct: true
+			loadingProduct: true,
+			FishId: ''
 		})
 
 		axios.get(`${BASE_URL}/fishes/search?key=${text}`, {
