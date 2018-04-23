@@ -199,7 +199,7 @@ class Profile extends Component {
 											)
 										}
 									>
-										<View>
+										<View style={{padding: 4}}>
 											<Icon name="md-trash" size={18} />
 										</View>
 									</TouchableNativeFeedback>
