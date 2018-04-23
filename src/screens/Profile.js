@@ -8,9 +8,6 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, ContainerSection, Button } from '../components/common'
 
-const HEADER_EXPANDED_HEIGHT = 100
-const HEADER_COLLAPSED_HEIGHT = 0
-
 class Profile extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: 'Profil',
@@ -148,9 +145,6 @@ class Profile extends Component {
 						</View>
 					</View>
 				</View>
-
-				<View style={{height: 40}} />
-
 			</View>
 		)
 	}
@@ -158,7 +152,7 @@ class Profile extends Component {
 	renderProducts = (data) => {
 		console.log(data, 'DATA KOMODITAS')
 		return (
-			<View >
+			<View style={{ marginBottom: 20 }}>
 				<Text style={{textAlign: 'right', marginRight: 15, marginTop: 5}}>
 					{data.Products && data.Products.length} / 5 Komoditas
 				</Text>
@@ -207,7 +201,6 @@ class Profile extends Component {
 						</ContainerSection>
 					</View>
 				}
-
 			</View>
 		)
 	}
@@ -228,23 +221,11 @@ class Profile extends Component {
 
 		const { data, screen } = this.state
 
-		const heightToZero = this.state.scrollY.interpolate({
-			inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
-			outputRange: [51, 0],
-			extrapolate: 'clamp'
-		})
-
-		const opacityToZero = this.state.scrollY.interpolate({
-			inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
-			outputRange: [1, 0],
-			extrapolate: 'clamp'
-		});
-
-		const opacityToOne = this.state.scrollY.interpolate({
-			inputRange: [100, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+		const toOne = this.state.scrollY.interpolate({
+			inputRange: [185, 200],
 			outputRange: [0, 1],
 			extrapolate: 'clamp'
-		});
+		})
 
 		const { width: SCREEN_WIDTH } = Dimensions.get('screen')
 
@@ -256,13 +237,13 @@ class Profile extends Component {
 						backgroundColor: COLOR.secondary_a,
 						width: SCREEN_WIDTH, 
 						position: 'absolute', 
-						paddingTop: 20,
 						top: 0, 
 						left: 0,
-						zIndex: opacityToOne
+						zIndex: 99,
+						opacity: toOne
 					}} 
 				>
-					<Animated.View style={{ flexDirection: 'row', position: 'absolute', opacity: opacityToOne}}>
+					<View style={{ flexDirection: 'row'}}>
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Profile' })}>
 								<View style={screen === 'Profile' ? tabContainerActive : tabContainer}>
@@ -277,8 +258,7 @@ class Profile extends Component {
 								</View>
 							</TouchableNativeFeedback>
 						</View>
-					</Animated.View>
-
+					</View>
 				</Animated.View>
 				<ScrollView 
 					onScroll={Animated.event(
@@ -310,8 +290,7 @@ class Profile extends Component {
 							</View>
 						</TouchableWithoutFeedback>
 					</View>
-
-					<Animated.View style={{ flexDirection: 'row', opacity: opacityToZero, height: heightToZero}}>
+					<View style={{ flexDirection: 'row'}}>
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Profile' })}>
 								<View style={screen === 'Profile' ? tabContainerActive : tabContainer}>
@@ -326,7 +305,7 @@ class Profile extends Component {
 								</View>
 							</TouchableNativeFeedback>
 						</View>
-					</Animated.View>
+					</View>
 					{this.renderScreen(data)}
 				</ScrollView>
 			</View>
@@ -339,8 +318,15 @@ const styles = {
 		flex: 1
 	},
 	headerHomeStyle: {
+		paddingTop: 20,
+		// flex: 2,
+		justifyContent: 'center',
+		alignSelf: 'center',
 		backgroundColor: COLOR.secondary_a,
-		paddingTop: 20
+		width: '100%'
+	},
+	menuContainerStyle: {
+		flex: 4,
 	},
 	profileImageContainer: {
 		height: 90,

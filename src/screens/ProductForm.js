@@ -79,6 +79,7 @@ class ProductForm extends Component {
 					]
 				})
 				this.props.navigation.dispatch(resetAction)
+      	ToastAndroid.show('Berhasil tambah komoditas', ToastAndroid.SHORT)
 			})
 			.catch(error => {
 				if (error.response) {
