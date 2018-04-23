@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, Alert, View, Text, Image, TouchableWithoutFeedback, TouchableNativeFeedback, RefreshControl, ToastAndroid } from 'react-native'
+import { ScrollView, Dimensions, Animated, Alert, View, Text, Image, TouchableWithoutFeedback, TouchableNativeFeedback, RefreshControl, ToastAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import numeral from 'numeral'
@@ -7,6 +7,9 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, ContainerSection, Button } from '../components/common'
+
+const HEADER_EXPANDED_HEIGHT = 100
+const HEADER_COLLAPSED_HEIGHT = 0
 
 class Profile extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -33,7 +36,7 @@ class Profile extends Component {
 			FishId: '',
 
 			screen: 'Profile',
-
+			scrollY: new Animated.Value(0)
 		}
 	}
 
@@ -91,15 +94,7 @@ class Profile extends Component {
 
 	renderProfile = (data) => {
 		return (
-			// <View style={{ paddingBottom: '13%' }}>
-			<ScrollView
-				refreshControl={
-					<RefreshControl
-						refreshing={this.state.loading}
-						onRefresh={() => this.getData()}
-					/>
-				}
-			>
+			<View>
 				<View style={styles.card}>
 					<View style={styles.cardSection}>
 						<Text style={{ color: COLOR.secondary_a }}>Data Pribadi</Text>
@@ -153,74 +148,66 @@ class Profile extends Component {
 						</View>
 					</View>
 				</View>
-			</ScrollView>
-			// </View>
+
+				<View style={{height: 40}} />
+
+			</View>
 		)
 	}
 
 	renderProducts = (data) => {
 		console.log(data, 'DATA KOMODITAS')
 		return (
-			<View style={{ marginBottom: 20 }}>
-				<ScrollView
-					refreshControl={
-						<RefreshControl
-							refreshing={this.state.loading}
-							onRefresh={() => this.getData()}
-						/>
-					}
-				>
-					<Text style={{textAlign: 'right', marginRight: 15, marginTop: 5}}>
-						{data.Products && data.Products.length} / 5 Komoditas
-					</Text>
-					{
-						data.Products && data.Products.map(item =>
-							<Card key={item.id}>
-								<CardSection>
-									<Image
-										style={{ width: 100, height: 100 }}
-										resizeMode="contain"
-										source={{ uri: `${BASE_URL}/images/${item.Fish.photo}` }}
-									/>
-									<View style={{ flex: 1, margin: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
-										<Text style={{ color: COLOR.secondary_a, fontSize: 20, marginLeft: 10 }}>{item.Fish && item.Fish.name}</Text>
-										<Text style={{ fontSize: 11, marginLeft: 10, fontFamily: 'Muli-Bold' }}>Kapasitas Produksi:</Text>
-										<Text style={{ fontSize: 16, marginLeft: 10 }}>{numeral(item.capacity).format('0,0')}</Text>
+			<View >
+				<Text style={{textAlign: 'right', marginRight: 15, marginTop: 5}}>
+					{data.Products && data.Products.length} / 5 Komoditas
+				</Text>
+				{
+					data.Products && data.Products.map(item =>
+						<Card key={item.id}>
+							<CardSection>
+								<Image
+									style={{ width: 100, height: 100 }}
+									resizeMode="contain"
+									source={{ uri: `${BASE_URL}/images/${item.Fish.photo}` }}
+								/>
+								<View style={{ flex: 1, margin: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
+									<Text style={{ color: COLOR.secondary_a, fontSize: 20, marginLeft: 10 }}>{item.Fish && item.Fish.name}</Text>
+									<Text style={{ fontSize: 11, marginLeft: 10, fontFamily: 'Muli-Bold' }}>Kapasitas Produksi:</Text>
+									<Text style={{ fontSize: 16, marginLeft: 10 }}>{numeral(item.capacity).format('0,0')}</Text>
+								</View>
+								<TouchableNativeFeedback 
+									onPress={() =>
+										Alert.alert(
+											'Hapus Komoditas',
+											'Yakin hapus komoditas?',
+											[
+												{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+												{text: 'Ya', onPress: () => this.deleteComodity(item.id)},
+											]
+										)
+									}
+								>
+									<View style={{padding: 4}}>
+										<Icon name="md-trash" size={18} />
 									</View>
-									<TouchableNativeFeedback 
-										onPress={() =>
-											Alert.alert(
-												'Hapus Komoditas',
-												'Yakin hapus komoditas?',
-												[
-													{text: 'Tidak', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-													{text: 'Ya', onPress: () => this.deleteComodity(item.id)},
-												]
-											)
-										}
-									>
-										<View style={{padding: 4}}>
-											<Icon name="md-trash" size={18} />
-										</View>
-									</TouchableNativeFeedback>
-								</CardSection>
-							</Card>
-						)
-					}
+								</TouchableNativeFeedback>
+							</CardSection>
+						</Card>
+					)
+				}
 
-					{
-						data.Products && data.Products.length < 5 &&
-						<View style={{ margin: 10 }}>
-							<ContainerSection>
-								<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
-									Tambah Komoditas
-								</Button>
-							</ContainerSection>
-						</View>
-					}
+				{
+					data.Products && data.Products.length < 5 &&
+					<View style={{ margin: 10 }}>
+						<ContainerSection>
+							<Button onPress={() => this.props.navigation.navigate('ProductForm')}>
+								Tambah Komoditas
+							</Button>
+						</ContainerSection>
+					</View>
+				}
 
-					<View style={{height: 50}} />
-				</ScrollView>
 			</View>
 		)
 	}
@@ -235,36 +222,47 @@ class Profile extends Component {
 
 	render() {
 		const {
-			containerStyle, headerHomeStyle, menuContainerStyle,
+			headerHomeStyle,
 			profileImageContainer, profileImage, profileName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive,
 		} = styles
 
 		const { data, screen } = this.state
 
+		const heightToZero = this.state.scrollY.interpolate({
+			inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+			outputRange: [51, 0],
+			extrapolate: 'clamp'
+		})
+
+		const opacityToZero = this.state.scrollY.interpolate({
+			inputRange: [0, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+			outputRange: [1, 0],
+			extrapolate: 'clamp'
+		});
+
+		const opacityToOne = this.state.scrollY.interpolate({
+			inputRange: [100, HEADER_EXPANDED_HEIGHT - HEADER_COLLAPSED_HEIGHT],
+			outputRange: [0, 1],
+			extrapolate: 'clamp'
+		});
+
+		const { width: SCREEN_WIDTH } = Dimensions.get('screen')
+
 		return (
-			<View style={containerStyle}>
-				<View style={headerHomeStyle}>
-					<View style={profileImageContainer}>
-						<Image
-							style={profileImage}
-							source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
-						/>
-					</View>
-					<Text style={profileName}>{this.props.user.data.name}</Text>
-					<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-						<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-							<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
-								<Image
-									style={coin}
-									source={require('../../assets/coin.png')}
-								/>
-								<Text style={point}>{this.props.user.data.pointNow}</Text>
-							</View>
-						</View>
-					</TouchableWithoutFeedback>
-				</View>
-				<View style={menuContainerStyle}>
-					<View style={{ flexDirection: 'row'}}>
+			<View style={styles.container}>
+				<Animated.View 
+					style={{
+						height: 50, 
+						backgroundColor: COLOR.secondary_a,
+						width: SCREEN_WIDTH, 
+						position: 'absolute', 
+						paddingTop: 20,
+						top: 0, 
+						left: 0,
+						zIndex: opacityToOne
+					}} 
+				>
+					<Animated.View style={{ flexDirection: 'row', position: 'absolute', opacity: opacityToOne}}>
 						<View style={{ flex: 1 }}>
 							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Profile' })}>
 								<View style={screen === 'Profile' ? tabContainerActive : tabContainer}>
@@ -279,30 +277,70 @@ class Profile extends Component {
 								</View>
 							</TouchableNativeFeedback>
 						</View>
+					</Animated.View>
+
+				</Animated.View>
+				<ScrollView 
+					onScroll={Animated.event(
+						[{ nativeEvent: {
+									contentOffset: {
+										y: this.state.scrollY
+									}
+								}
+						}])}
+					scrollEventThrottle={16}
+				>
+					<View style={headerHomeStyle}>
+						<View style={profileImageContainer}>
+							<Image
+								style={profileImage}
+								source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
+							/>
+						</View>
+						<Text style={profileName}>{this.props.user.data.name}</Text>
+						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
+							<View style={{alignItems: 'center', marginBottom: 10}}>
+								<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
+									<Image
+										style={coin}
+										source={require('../../assets/coin.png')}
+									/>
+									<Text style={point}>{this.props.user.data.pointNow}</Text>
+								</View>
+							</View>
+						</TouchableWithoutFeedback>
 					</View>
 
+					<Animated.View style={{ flexDirection: 'row', opacity: opacityToZero, height: heightToZero}}>
+						<View style={{ flex: 1 }}>
+							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Profile' })}>
+								<View style={screen === 'Profile' ? tabContainerActive : tabContainer}>
+									<Text style={screen === 'Profile' ? tabTextActive : tabText}>Profil</Text>
+								</View>
+							</TouchableNativeFeedback>
+						</View>
+						<View style={{ flex: 1 }}>
+							<TouchableNativeFeedback onPress={() => this.setState({ screen: 'Products' })}>
+								<View style={screen === 'Products' ? tabContainerActive : tabContainer}>
+									<Text style={screen === 'Products' ? tabTextActive : tabText}>Komoditas</Text>
+								</View>
+							</TouchableNativeFeedback>
+						</View>
+					</Animated.View>
 					{this.renderScreen(data)}
-				</View>
+				</ScrollView>
 			</View>
 		)
 	}
 }
 
 const styles = {
-	containerStyle: {
+	container: {
 		flex: 1
 	},
 	headerHomeStyle: {
-		paddingTop: 20,
-		paddingBottom: 10,
-		flex: 2,
-		justifyContent: 'center',
-		alignSelf: 'center',
 		backgroundColor: COLOR.secondary_a,
-		width: '100%'
-	},
-	menuContainerStyle: {
-		flex: 4,
+		paddingTop: 20
 	},
 	profileImageContainer: {
 		height: 90,
