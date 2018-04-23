@@ -125,6 +125,7 @@ class RewardItemList extends Component {
 const styles = {
 	itemContainerStyle: {
 		flex: 1,
+		margin: 1,
 		marginBottom: 10,
 		elevation: 1,
 		backgroundColor: '#fff',
