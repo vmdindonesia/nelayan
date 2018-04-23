@@ -125,7 +125,9 @@ class OrderDetail extends Component {
 				this.fetchDetail()
 				this.setState({ loading: false })
 				Alert.alert('Berhasil!', 'Kontrak berhasil disetujui', [])
-				this.props.ordersFetch(token)
+
+				let params = `page=${0}&pageSize=${10}`
+				this.props.ordersFetch(token, params)
 			})
 			.catch(error => {
 				if (error.response) {
@@ -156,7 +158,9 @@ class OrderDetail extends Component {
 				this.fetchDetail()
 				this.setState({ loading: false })
 				Alert.alert('', 'Revisi kontrak akan dikirim ke pembeli', [])
-				this.props.ordersFetch(token)
+
+				let params = `page=${0}&pageSize=${10}`
+				this.props.ordersFetch(token, params)
 			})
 			.catch(error => {
 				if (error.response) {
@@ -262,7 +266,9 @@ class OrderDetail extends Component {
 				this._toggleModal('isModalUploadVisible')
 				this.setState({ loading: false, photoStatus: '' })
 				Alert.alert('Berhasil!', 'Unggah bukti berhasil', [])
-				this.props.ordersFetch(token)
+
+				let params = `page=${0}&pageSize=${10}`
+				this.props.ordersFetch(token, params)
 			})
 			.catch(error => {
 				if (error.response) {

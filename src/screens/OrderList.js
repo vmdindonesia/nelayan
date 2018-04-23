@@ -13,7 +13,9 @@ class OrderList extends Component {
 	}
 
 	componentWillMount() {
-		this.props.ordersFetch(this.props.user.token)
+		let params = `page=${0}&pageSize=${10}`;
+
+		this.props.ordersFetch(this.props.user.token, params)
 	}
 
 	imageIcon = (item, index) => {

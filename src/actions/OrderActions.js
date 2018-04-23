@@ -6,8 +6,10 @@ import {
 	ORDERS_FETCH_FAIL
 } from './types'
 
-export const ordersFetch = (token) => async (dispatch) => {
-	axios.get(`${BASE_URL}/supplier/orders`, {
+export const ordersFetch = (token, params) => async (dispatch) => {
+  const paramEncoded = encodeURI(params)
+
+	axios.get(`${BASE_URL}/supplier/orders?${paramEncoded}`, {
 		headers: {token},
 		timeout: REQUEST_TIME_OUT
 	})

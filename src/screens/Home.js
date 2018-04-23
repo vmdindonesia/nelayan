@@ -306,7 +306,11 @@ class Home extends Component {
 							screen === 'OrderList' ?
 								<RefreshControl
 									refreshing={this.props.orders.loading}
-									onRefresh={() => this.props.ordersFetch(this.props.user.token)}
+									onRefresh={() => {
+										let params = `page=${0}&pageSize=${10}`;
+
+										this.props.ordersFetch(this.props.user.token, params)
+									}}
 								/>
 							:
 								''
