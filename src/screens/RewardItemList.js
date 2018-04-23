@@ -86,8 +86,8 @@ class RewardItemList extends Component {
 							<Text style={{fontWeight: 'bold'}}>{item.name}</Text>
 							<Text>{item.pointAmount} poin</Text>
 						</View>
-						<View style={{flex: 1, paddingBottom: 10, paddingTop: 5}}>
-							<Button onPress={() => this.itemPressed(item)}>
+						<View style={{ height: 35, width: 100, paddingTop: 2}}>
+							<Button textStyle={{paddingTop: 5}} onPress={() => this.itemPressed(item)}>
 								Tukarkan
 							</Button>
 						</View>
@@ -138,7 +138,6 @@ const styles = {
 	headerContentStyle: {
 		flex: 1,
 		marginRight: 15,
-		marginTop: 5,
 		marginBottom: 10,
 		flexDirection: 'column',
 		justifyContent: 'space-around'
