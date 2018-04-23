@@ -33,7 +33,10 @@ class MemberList extends Component {
             <View style={styles.headerContentStyle}>
               <Text style={styles.hedaerTextStyle}>{item.name}</Text>
               <Text>{item.address}</Text>
-              <Text style={{fontWeight: 'bold'}}>{item.phone}</Text>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={{fontWeight: 'bold'}}>{item.phone}</Text>
+                <Text style={{fontWeight: 'bold'}}>Poin: {item.pointNow}</Text>
+              </View>
               <Text style={{fontSize: 11}}>No. KTP: {item.idNumber}</Text>
             </View>
           </View>
