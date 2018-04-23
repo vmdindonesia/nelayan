@@ -23,7 +23,8 @@ class Home extends Component {
 		this.state = {
 			screen: 'MenuItem',
 			redirectToNotification: false,
-			scrollY: new Animated.Value(0)
+			scrollY: new Animated.Value(0),
+			loading: false
 		}
 	}
 
@@ -62,6 +63,18 @@ class Home extends Component {
 	// onRegistered(notifData) {
 	// 	console.log('Device had been registered for push notifications!', notifData)
 	// }
+
+	onRefresh = () => {
+		this.setState({loading: true})
+
+		this.props.unreadNotifFetch()
+		.then(() => {
+			this.setState({loading: false})
+		})
+		.catch(() => {
+			this.setState({loading: false})
+		})
+	}
 
 	onIds(device) {
 		console.log('Device info: ', device)
@@ -273,6 +286,7 @@ class Home extends Component {
 
 					<Animated.View 
 						style={{
+							height: 50, 
 							backgroundColor: COLOR.secondary_a,
 							width: SCREEN_WIDTH, 
 							position: 'absolute', 
@@ -283,11 +297,11 @@ class Home extends Component {
 							marginTop: 60
 						}} 
 					>
-						<View style={{ flexDirection: 'row' }}>
+						<View style={{ flexDirection: 'row'}}>
 							<View style={{ flex: 1 }}>
 								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
 									<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
-										<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
+										<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Profil</Text>
 									</View>
 								</TouchableNativeFeedback>
 							</View>
@@ -313,7 +327,10 @@ class Home extends Component {
 									}}
 								/>
 							:
-								''
+								<RefreshControl
+									refreshing={this.state.loading}
+									onRefresh={() => this.onRefresh()}
+								/>
 						}
 						onScroll={Animated.event(
 							[{ nativeEvent: {
@@ -323,23 +340,17 @@ class Home extends Component {
 									}
 							}])}
 						scrollEventThrottle={16}
-						style={{flex: 1}}
 					>
 						<View style={headerHomeStyle}>
-							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Profile')}>
-								<View>
-									<View style={profileImageContainer}>
-										<Image
-											style={profileImage}
-											source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
-										/>
-									</View>
-									<Text style={profileName}>{this.props.user.data.name}</Text>
-									<Text style={profileSupplierName}>{this.props.user.data.organization}</Text>
-								</View>
-							</TouchableWithoutFeedback>
+							<View style={profileImageContainer}>
+								<Image
+									style={profileImage}
+									source={{ uri: `${BASE_URL}/images/${this.props.user.data.photo}` }}
+								/>
+							</View>
+							<Text style={profileName}>{this.props.user.data.name}</Text>
 							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-								<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginBottom: 5}}>
+								<View style={{alignItems: 'center', marginBottom: 10}}>
 									<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
 										<Image
 											style={coin}
@@ -350,8 +361,7 @@ class Home extends Component {
 								</View>
 							</TouchableWithoutFeedback>
 						</View>
-
-						<View style={{ flexDirection: 'row' }}>
+						<View style={{ flexDirection: 'row'}}>
 							<View style={{ flex: 1 }}>
 								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
 									<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>

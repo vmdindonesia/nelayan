@@ -13,7 +13,7 @@ class OrderList extends Component {
 	}
 
 	componentWillMount() {
-		let params = `page=${0}&pageSize=${10}`;
+		let params = `page=${0}&pageSize=${10}`
 
 		this.props.ordersFetch(this.props.user.token, params)
 	}
