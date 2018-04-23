@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-native'
 import { connect } from 'react-redux'
-import moment from 'moment'
+
 import { ordersFetch } from '../actions'
 import { Card } from '../components/common'
 import { BASE_URL, COLOR } from '../constants'
@@ -121,8 +121,6 @@ class OrderList extends Component {
 					data={this.props.orders.data}
 					renderItem={({item}) => this.renderItem(item)}
 					keyExtractor={(item, index) => index}
-					onRefresh={() => this.props.ordersFetch(this.props.user.token)}
-					refreshing={this.props.orders.loading}
 				/>
 			</View>
 		)

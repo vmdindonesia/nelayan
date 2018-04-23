@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { StatusBar, View, ScrollView, Text, Image, TouchableNativeFeedback, RefreshControl, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
+import { StatusBar, Dimensions, Animated, View, ScrollView, Text, Image, TouchableNativeFeedback, RefreshControl, TouchableOpacity, TouchableWithoutFeedback, DrawerLayoutAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import { NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import OneSignal from 'react-native-onesignal'
 
-import { logout, unreadNotifFetch } from '../actions'
+import { logout, unreadNotifFetch, ordersFetch } from '../actions'
 import { BASE_URL, COLOR } from '../constants'
 import { ContainerSection } from '../components/common'
 
@@ -23,7 +23,7 @@ class Home extends Component {
 		this.state = {
 			screen: 'MenuItem',
 			redirectToNotification: false,
-			refreshing: true
+			scrollY: new Animated.Value(0)
 		}
 	}
 
@@ -38,7 +38,6 @@ class Home extends Component {
 
 	componentDidMount() {
 		OneSignal.configure({})
-		this.setState({ refreshing: false });
 	}
 
 	componentWillUnmount() {
@@ -46,16 +45,6 @@ class Home extends Component {
 		OneSignal.removeEventListener('opened', this.onOpened)
 		// OneSignal.removeEventListener('registered', this.onRegistered)
 		OneSignal.removeEventListener('ids', this.onIds)
-	}
-
-	onRefresh() {
-		this.setState({
-			refreshing: true
-		}, () => {
-			this.props.unreadNotifFetch(this.props.user.token);
-			console.log(this.props.user.data.pointNow, 'Point');
-			this.setState({ refreshing: false });
-		});
 	}
 
 	onReceived(notification) {
@@ -89,15 +78,15 @@ class Home extends Component {
 	render() {
 		const { screen } = this.state
 
-		console.log(this.props.user.data, 'DATAAAAAAAAAAA')
-
-		// if (this.props.user.unreadNotif > 0 && redirectToNotification === false) {
-		// 	this.props.navigation.navigate('NotificationList')
-		// 	this.setState({redirectToNotification: true})
-		// }
+		const toOne = this.state.scrollY.interpolate({
+			inputRange: [185, 200],
+			outputRange: [0, 1],
+			extrapolate: 'clamp'
+		})
+		const { width: SCREEN_WIDTH } = Dimensions.get('screen')
 
 		const {
-			containerStyle, headerHomeStyle, menuContainerStyle,
+			containerStyle, headerHomeStyle,
 			profileImageContainer, profileImage, profileImageContainerDrawer, profileImageDrawer, profileName, profileSupplierName, coin, point, tabContainer, tabContainerActive, tabText, tabTextActive
 		} = styles
 
@@ -281,13 +270,56 @@ class Home extends Component {
 							</View>
 						</TouchableOpacity>
 					</View>
-					<ScrollView
+
+					<Animated.View 
+						style={{
+							backgroundColor: COLOR.secondary_a,
+							width: SCREEN_WIDTH, 
+							position: 'absolute', 
+							top: 0, 
+							left: 0,
+							zIndex: 99,
+							opacity: toOne,
+							marginTop: 60
+						}} 
+					>
+						<View style={{ flexDirection: 'row' }}>
+							<View style={{ flex: 1 }}>
+								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
+									<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
+										<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
+									</View>
+								</TouchableNativeFeedback>
+							</View>
+							<View style={{ flex: 1 }}>
+								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'OrderList' })}>
+									<View style={screen === 'OrderList' ? tabContainerActive : tabContainer}>
+										<Text style={screen === 'OrderList' ? tabTextActive : tabText}>Transaksi</Text>
+									</View>
+								</TouchableNativeFeedback>
+							</View>
+						</View>
+					</Animated.View>
+
+					<ScrollView 
 						refreshControl={
-							<RefreshControl
-								refreshing={this.state.refreshing}
-								onRefresh={this.onRefresh.bind(this)}
-							/>
+							screen === 'OrderList' ?
+								<RefreshControl
+									refreshing={this.props.orders.loading}
+									onRefresh={() => this.props.ordersFetch(this.props.user.token)}
+								/>
+							:
+								''
 						}
+						onScroll={Animated.event(
+							[{ nativeEvent: {
+										contentOffset: {
+											y: this.state.scrollY
+										}
+									}
+							}])}
+						scrollEventThrottle={16}
+						style={{flex: 1}}
 					>
 						<View style={headerHomeStyle}>
 							<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Profile')}>
@@ -314,25 +346,25 @@ class Home extends Component {
 								</View>
 							</TouchableWithoutFeedback>
 						</View>
-						<View style={menuContainerStyle}>
-							<View style={{ flexDirection: 'row' }}>
-								<View style={{ flex: 1 }}>
-									<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
-										<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
-											<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
-										</View>
-									</TouchableNativeFeedback>
-								</View>
-								<View style={{ flex: 1 }}>
-									<TouchableNativeFeedback onPress={() => this.setState({ screen: 'OrderList' })}>
-										<View style={screen === 'OrderList' ? tabContainerActive : tabContainer}>
-											<Text style={screen === 'OrderList' ? tabTextActive : tabText}>Transaksi</Text>
-										</View>
-									</TouchableNativeFeedback>
-								</View>
+
+						<View style={{ flexDirection: 'row' }}>
+							<View style={{ flex: 1 }}>
+								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'MenuItem' })}>
+									<View style={screen === 'MenuItem' ? tabContainerActive : tabContainer}>
+										<Text style={screen === 'MenuItem' ? tabTextActive : tabText}>Menu</Text>
+									</View>
+								</TouchableNativeFeedback>
 							</View>
-							{this.renderScreen()}
+							<View style={{ flex: 1 }}>
+								<TouchableNativeFeedback onPress={() => this.setState({ screen: 'OrderList' })}>
+									<View style={screen === 'OrderList' ? tabContainerActive : tabContainer}>
+										<Text style={screen === 'OrderList' ? tabTextActive : tabText}>Transaksi</Text>
+									</View>
+								</TouchableNativeFeedback>
+							</View>
 						</View>
+
+						{this.renderScreen()}
 					</ScrollView>
 				</DrawerLayoutAndroid>
 			</View>
@@ -448,9 +480,9 @@ const styles = {
 }
 
 const mapStateToProps = (state) => {
-	const { user } = state
+	const { user, orders } = state
 
-	return { user }
+	return { user, orders }
 }
 
-export default connect(mapStateToProps, { logout, unreadNotifFetch })(Home)
+export default connect(mapStateToProps, { logout, unreadNotifFetch, ordersFetch })(Home)
