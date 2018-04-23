@@ -261,6 +261,12 @@ class Profile extends Component {
 					</View>
 				</Animated.View>
 				<ScrollView 
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.loading}
+							onRefresh={() => this.getData()}
+						/>
+					}
 					onScroll={Animated.event(
 						[{ nativeEvent: {
 									contentOffset: {
