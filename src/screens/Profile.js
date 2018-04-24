@@ -285,7 +285,7 @@ class Profile extends Component {
 						</View>
 						<Text style={profileName}>{this.props.user.data.name}</Text>
 						<TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('Reward')}>
-							<View style={{alignItems: 'center', marginBottom: 10}}>
+							<View style={{alignItems: 'center', marginBottom: 12}}>
 								<View style={{ flexDirection: 'row', backgroundColor: '#fff', borderRadius: 25, padding: 5, paddingRight: 10 }}>
 									<Image
 										style={coin}
