@@ -143,7 +143,7 @@ const styles = {
 	},
 	thumbnailStyle: {
 		height: 100,
-		width: 100,
+		width: 130,
 	},
 	headerContentStyle: {
 		flex: 1,

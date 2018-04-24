@@ -47,7 +47,7 @@ class RequestList extends Component {
 						<CardSection style={{ flexDirection: 'row' }}>
 							<View style={{ flexDirection: 'column' }}>
 								<Image
-									style={styles.thumbnailStyle}
+									style={styles.thumbnailProduct}
 									source={{ uri: `${BASE_URL}/images/${item.Transaction.photo}` }}
 								/>
 							</View>
@@ -108,6 +108,10 @@ const styles = {
 	thumbnailStyle: {
 		height: 100,
 		width: 100,
+	},
+	thumbnailProduct: {
+		height: 100,
+		width: 130,
 	},
 	buyerName: {
 		textAlign: 'left',
