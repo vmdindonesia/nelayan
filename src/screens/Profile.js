@@ -161,7 +161,7 @@ class Profile extends Component {
 						<Card key={item.id}>
 							<CardSection>
 								<Image
-									style={{ width: 100, height: 100 }}
+									style={{ width: 130, height: 100 }}
 									resizeMode="contain"
 									source={{ uri: `${BASE_URL}/images/${item.Fish.photo}` }}
 								/>

@@ -655,22 +655,23 @@ class Register extends Component {
 						value={value.name}
 						editable={false}
 					/>
-					<View style={{ flex: 1 }}>
-						<TouchableOpacity
-							onPress={() => {
-								console.log('Kurangin alat Mas');
-								this.minusForgeComboBox(key);
-							}}
-						>
-							<Text style={{ marginLeft: '46%', marginTop: '5%' }}>
-								Hapus Alat
-								<Image
-									style={{ width: 20, height: 20 }}
-									source={require('../../assets/add.png')}
-								/>
-							</Text>
-						</TouchableOpacity>
-					</View>
+				</ContainerSection>
+				<ContainerSection>
+					<View style={{flex: 1}} />
+					<TouchableOpacity
+						onPress={() => {
+							console.log('Kurangin alat Mas');
+							this.minusForgeComboBox(key);
+						}}
+					>
+						<View style={{flexDirection: 'row'}}>
+							<Text>Hapus Alat</Text>
+							<Image
+								style={{ width: 20, height: 20 }}
+								source={require('../../assets/ic_cancel.png')}
+							/>
+						</View>
+					</TouchableOpacity>
 				</ContainerSection>
 			</View>
 		);
@@ -1323,11 +1324,11 @@ class Register extends Component {
 
 						{
 							plusForge ?
-								<View style={{ flex: 1, flexDirection: 'row' }}>
-									<View style={{ marginLeft: '2%' }}>
+								<ContainerSection>
+									<View style={{ flex: 1}}>
 										<Text>Alat Tangkap</Text>
 									</View>
-									<View style={{ marginRight: '15%', flexDirection: 'row' }}>
+									<View>
 										<TouchableOpacity
 											onPress={() => {
 												console.log('Tambah Alat Mas');
@@ -1338,16 +1339,16 @@ class Register extends Component {
 												});
 											}}
 										>
-											<Text style={{ marginLeft: '57%' }}>
-												Tambah Alat
+											<View style={{flexDirection: 'row'}}>
+												<Text>Tambah Alat</Text>
 												<Image
-													style={{ marginLeft: '10%', width: 20, height: 20 }}
+													style={{ width: 20, height: 20 }}
 													source={require('../../assets/add.png')}
 												/>
-											</Text>
+											</View>
 										</TouchableOpacity>
 									</View>
-								</View>
+								</ContainerSection>
 								:
 								<View />
 						}
