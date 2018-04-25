@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, View, Text, Image, TouchableNativeFeedback } from 'react-native'
+import { FlatList, ScrollView, View, Text, Image, TouchableNativeFeedback, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import { requestsFetch } from '../actions'
@@ -67,9 +67,27 @@ class RequestList extends Component {
 	render() {
 		const { noListData, anyData } = this.state;
 		return (
-			<View style={{ flex: 1 }}>
+			<View style={{ flex: 1}}>
 				{
-					anyData ?
+					noListData ?
+						<ScrollView
+							refreshControl={
+								<RefreshControl
+									onRefresh={() => this.props.requestsFetch(this.props.user.token)}
+									refreshing={this.props.requests.loading}
+								/>
+							}
+							contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center' }}
+						>
+							<View style={styles.thumbnailContainerStyle}>
+								<Image
+									style={styles.thumbnailStyle}
+									source={require('./../../assets/menu3.png')}
+								/>
+							</View>
+							<Text style={{ textAlign: 'center' }}>Belum ada PO</Text>
+						</ScrollView>
+						:
 						<FlatList
 							data={this.props.requests.data}
 							renderItem={({ item }) => this.renderItem(item)}
@@ -77,22 +95,6 @@ class RequestList extends Component {
 							onRefresh={() => this.props.requestsFetch(this.props.user.token)}
 							refreshing={this.props.requests.loading}
 						/>
-						:
-						<View />
-				}
-				{
-					noListData ?
-						<View style={{ flex: 1, marginTop: '-60%' }}>
-							<View style={styles.thumbnailContainerStyle}>
-								<Image
-									style={styles.thumbnailStyle}
-									source={require('./../../assets/empty_transaksi.png')}
-								/>
-							</View>
-							<Text style={{ textAlign: 'center' }}>Belum ada PO</Text>
-						</View>
-						:
-						<View />
 				}
 			</View>
 		)
@@ -103,11 +105,10 @@ const styles = {
 	thumbnailContainerStyle: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		margin: 10,
 	},
 	thumbnailStyle: {
-		height: 100,
-		width: 100,
+		height: 80,
+		width: 80,
 	},
 	thumbnailProduct: {
 		height: 100,

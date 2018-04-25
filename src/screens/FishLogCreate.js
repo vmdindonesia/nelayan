@@ -485,7 +485,7 @@ class FishLogCreate extends Component {
 									selectedValue={shipName}
 									onValueChange={v => this.onChangeInput('shipName', v)}
 								>
-									<Picker.Item label='--- Pilih Kapal---' value='' />
+									<Picker.Item label='-- Pilih Kapal --' value='' />
 									{
 										ship && ship.map((item, index) =>
 											<Picker.Item key={index} label={item.name} value={item.id} />
@@ -504,7 +504,7 @@ class FishLogCreate extends Component {
 									selectedValue={forgeName}
 									onValueChange={v => this.onChangeInput('forgeName', v)}
 								>
-									<Picker.Item label='--- Pilih Alat---' value='' />
+									<Picker.Item label='-- Pilih Alat --' value='' />
 									{
 										forge && forge.map((item, index) =>
 											<Picker.Item key={index} label={item.FishingGear.name} value={item.id} />

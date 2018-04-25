@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, View, Text, TouchableNativeFeedback, ToastAndroid } from 'react-native'
+import { FlatList, Image, View, Text, TouchableNativeFeedback, ToastAndroid, ScrollView, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import axios from 'axios'
@@ -131,13 +131,33 @@ class NotificationList extends Component {
 
 		return (
 			<View style={{flex: 1}}>
-				<FlatList
-					data={this.props.notifications.data}
-					renderItem={({item}) => this.renderItem(item)}
-					keyExtractor={(item, index) => index}
-					onRefresh={() => this.props.notificationsFetch(this.props.user.token, '')}
-					refreshing={this.props.notifications.loading}
-				/>
+				{
+					this.props.notifications.data.length === 0 ?
+						<ScrollView
+							refreshControl={
+								<RefreshControl
+									onRefresh={() => this.props.notificationsFetch(this.props.user.token)}
+									refreshing={this.props.notifications.loading}
+								/>
+							}
+							contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: -20 }}
+						>
+							<Image
+								style={{width: 70, height: 70, marginBottom: 5}}
+								source={require('./../../assets/empty_notif.png')}
+							/>
+							<Text style={{ textAlign: 'center' }}>Belum ada</Text>
+							<Text style={{ textAlign: 'center' }}>notifikasi</Text>
+						</ScrollView>
+					:
+						<FlatList
+							data={this.props.notifications.data}
+							renderItem={({item}) => this.renderItem(item)}
+							keyExtractor={(item, index) => index}
+							onRefresh={() => this.props.notificationsFetch(this.props.user.token, '')}
+							refreshing={this.props.notifications.loading}
+						/>
+				}
 			</View>
 		)
 	}

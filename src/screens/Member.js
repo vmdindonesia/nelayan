@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, View, Image, Text, TouchableNativeFeedback } from 'react-native'
+import { FlatList, View, Image, Text, TouchableNativeFeedback, ScrollView, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
 
@@ -58,12 +58,22 @@ class MemberList extends Component {
               refreshing={this.props.members.loading}
             />
           :
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-              <Image 
-                source={require('../../assets/Asset-8.png')} 
-              />
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  onRefresh={() => this.props.membersFetch(this.props.user.token)}
+                  refreshing={this.props.members.loading}
+                />
+              }
+              contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: -20 }}
+            >
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+               <Image 
+                 source={require('../../assets/Asset-8.png')} 
+               />
+              </View>
               <Text style={{textAlign: 'center'}}>{'Anda belum\r\nmempunyai anggota'}</Text>
-            </View>
+            </ScrollView>
         }
         
         <ActionButton

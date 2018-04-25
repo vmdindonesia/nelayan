@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { FlatList, View, Image, Text, TouchableNativeFeedback, Picker, ToastAndroid } from 'react-native'
+import { FlatList, ScrollView, View, RefreshControl, Image, Text, TouchableNativeFeedback, Picker, ToastAndroid } from 'react-native'
 import moment from 'moment'
 import { connect } from 'react-redux'
 import ActionButton from 'react-native-action-button'
@@ -84,9 +84,11 @@ class FishLogList extends Component {
 						<View style={styles.headerContentStyle}>
 							<Text>{moment(item.createdAt).format('DD/MM/YYYY')}</Text>
 							<Text style={styles.hedaerTextStyle}>{item.Fish.name}</Text>
-							<View style={{ flexDirection: 'row' }}>
-								<Text style={{ flex: 1, fontWeight: 'bold' }}>{numeral(item.quantity).format('0,0')} Kg</Text>
-								<Text style={{ flex: 1, fontWeight: 'bold' }}>{numeral(item.size).format('0,0')} {item.unit || 'Unit'}</Text>
+							<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+								<Text style={{fontWeight: 'bold' }}>{numeral(item.quantity).format('0,0')} Kg</Text>
+								<View style={{flexDirection: 'row'}}>
+									<Text>Size: </Text><Text style={{fontWeight: 'bold' }}>{numeral(item.size).format('0,0')} {item.unit || 'Unit'}</Text>
+								</View>
 							</View>
 							<Text>Rp {numeral(item.price).format('0,0')}</Text>
 						</View>
@@ -110,7 +112,7 @@ class FishLogList extends Component {
 							onValueChange={v => this.onChangeInput('fishName', v)}
 							itemStyle={{fontWeight: 'bold', color: 'red'}} 
 						>
-							<Picker.Item label="       ---------------   Cari Fishlog   ---------------" value="" />
+							<Picker.Item label="       -- Cari Fishlog --" value="" />
 							{
 								fishes && fishes.map((item, index) =>
 									<Picker.Item key={index} label={`       ${item.name}`} value={item.name} />
@@ -120,13 +122,34 @@ class FishLogList extends Component {
 					</View>
 				</View>
 
-				<FlatList
-					data={this.props.fishLogs.data}
-					renderItem={({ item }) => this.renderItem(item)}
-					keyExtractor={(item, index) => index}
-					onRefresh={() => this.props.fishLogsFetch(this.props.user.token, this.state.paramsKey)}
-					refreshing={this.props.fishLogs.loading}
-				/>
+				{
+					this.props.fishLogs.data.length === 0 ?
+						<ScrollView
+							refreshControl={
+								<RefreshControl
+									onRefresh={() => this.props.fishLogsFetch(this.props.user.token)}
+									refreshing={this.props.fishLogs.loading}
+								/>
+							}
+							contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: -20 }}
+						>
+							<View style={{justifyContent: 'center', alignItems: 'center'}}>
+								<Image
+									style={{width: 80, height: 80}}
+									source={require('./../../assets/menu2.png')}
+								/>
+							</View>
+							<Text style={{ textAlign: 'center' }}>Belum ada fishlog</Text>
+						</ScrollView>
+					:
+						<FlatList
+							data={this.props.fishLogs.data}
+							renderItem={({ item }) => this.renderItem(item)}
+							keyExtractor={(item, index) => index}
+							onRefresh={() => this.props.fishLogsFetch(this.props.user.token, this.state.paramsKey)}
+							refreshing={this.props.fishLogs.loading}
+						/>
+				}
 
 				<ActionButton
 					buttonColor={COLOR.element_b4}

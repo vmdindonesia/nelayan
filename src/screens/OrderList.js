@@ -119,11 +119,29 @@ class OrderList extends Component {
 		
 		return (
 			<View style={{flex: 1}}>
-				<FlatList
-					data={this.props.orders.data}
-					renderItem={({item}) => this.renderItem(item)}
-					keyExtractor={(item, index) => index}
-				/>
+				{
+					this.props.orders.data.length === 0 ?
+						<View 
+							style={{ 
+								justifyContent: 'center',
+								alignItems: 'center',
+								marginTop: '20%'
+							}}
+						>
+							<Image
+								style={{width: 70, height: 70, marginBottom: 5}}
+								source={require('./../../assets/empty_transaksi.png')}
+							/>
+							<Text style={{ textAlign: 'center' }}>Belum ada</Text>
+							<Text style={{ textAlign: 'center' }}>transaksi</Text>
+						</View>
+					:
+						<FlatList
+							data={this.props.orders.data}
+							renderItem={({item}) => this.renderItem(item)}
+							keyExtractor={(item, index) => index}
+						/>
+				}
 			</View>
 		)
 	}

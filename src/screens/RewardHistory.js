@@ -15,7 +15,7 @@ class RewardHistory extends Component {
 				<View style={styles.thumbnailContainerStyle}>
 					<Image 
 						style={styles.thumbnailStyle}
-						source={{uri: `${BASE_URL}/images/${item.Item ? item.Item.photo : ''}`}} 
+						source={require('../../assets/coin.png')} 
 					/>
 				</View>
 				<View style={styles.headerContentStyle}>
@@ -58,9 +58,8 @@ const styles = {
 		margin: 15,
 	},
 	thumbnailStyle: {
-		height: 60,
-		width: 60,
-		borderRadius: 5
+		height: 50,
+		width: 50,
 	},
 	headerContentStyle: {
 		flex: 1,

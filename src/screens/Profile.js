@@ -168,7 +168,7 @@ class Profile extends Component {
 								<View style={{ flex: 1, margin: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
 									<Text style={{ color: COLOR.secondary_a, fontSize: 20, marginLeft: 10 }}>{item.Fish && item.Fish.name}</Text>
 									<Text style={{ fontSize: 11, marginLeft: 10, fontFamily: 'Muli-Bold' }}>Kapasitas Produksi:</Text>
-									<Text style={{ fontSize: 16, marginLeft: 10 }}>{numeral(item.capacity).format('0,0')}</Text>
+									<Text style={{ fontSize: 16, marginLeft: 10 }}>{numeral(item.capacity).format('0,0')} Kg</Text>
 								</View>
 								<TouchableNativeFeedback 
 									onPress={() =>

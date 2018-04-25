@@ -154,9 +154,9 @@ class Home extends Component {
 					<View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop: 40}}>
 						<TouchableOpacity onPress={() => this.props.navigation.navigate('ProfileEdit')}>
 							<View>
-								<Text style={{color: 'white', fontSize: 15}}>Nelayan Aruna</Text>
+								<Text style={{color: 'white', fontSize: 15, fontFamily: 'Muli-Bold'}}>{this.props.user.data.name}</Text>
 								<View style={{height: 5}} />
-								<Text style={{color: 'white', fontSize: 12}}>Ubah profile</Text>
+								<Text style={{color: 'white', fontSize: 12}}>Ubah profil</Text>
 							</View>
 						</TouchableOpacity>
 						<View style={{ flex: 1 }}>

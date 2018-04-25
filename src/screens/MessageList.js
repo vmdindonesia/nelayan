@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Image, TouchableNativeFeedback } from 'react-native'
+import { View, Text, FlatList, Image, TouchableNativeFeedback, ScrollView, RefreshControl } from 'react-native'
 import { connect } from 'react-redux'
 import moment from 'moment'
 
@@ -99,13 +99,34 @@ class MessageList extends Component {
 					</TouchableNativeFeedback>
 				</Card>
 
-				<FlatList
-					data={this.props.messages.data}
-					renderItem={({item}) => this.renderItem(item)}
-					keyExtractor={(item, index) => index}
-					onRefresh={() => this.props.messagesFetch(this.props.user.token, '')}
-					refreshing={this.props.messages.loading}
-				/>
+				{
+					this.props.messages.data.length === 0 ?
+						<ScrollView
+							refreshControl={
+								<RefreshControl
+									onRefresh={() => this.props.messagesFetch(this.props.user.token)}
+									refreshing={this.props.messages.loading}
+								/>
+							}
+							contentContainerStyle={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: -20 }}
+						>
+							<View style={{justifyContent: 'center', alignItems: 'center'}}>
+								<Image
+									style={{width: 80, height: 80}}
+									source={require('./../../assets/menu5.png')}
+								/>
+							</View>
+							<Text style={{ textAlign: 'center' }}>Belum ada diskusi</Text>
+						</ScrollView>
+					:
+						<FlatList
+							data={this.props.messages.data}
+							renderItem={({item}) => this.renderItem(item)}
+							keyExtractor={(item, index) => index}
+							onRefresh={() => this.props.messagesFetch(this.props.user.token, '')}
+							refreshing={this.props.messages.loading}
+						/>
+				}
 			</View>
 		)
 	}
