@@ -39,7 +39,8 @@ class FishLogList extends Component {
 		this.setState({ [name]: v })
 
 		// search params
-		let params = `key=${v}`;
+		// let params = `key=${v}`;
+		let params = `filtered=[{"id":"Fish.name","value":"${v}"}]`
 		this.setState({ paramsKey: `key=${v}` })
 		this.props.fishLogsFetch(this.props.user.token, params)
 	}
