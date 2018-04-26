@@ -5,6 +5,7 @@ import axios from 'axios'
 import numeral from 'numeral'
 import Icon from 'react-native-vector-icons/Ionicons'
 
+import { unreadNotifFetch } from '../actions'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, ContainerSection, Button } from '../components/common'
 
@@ -24,7 +25,7 @@ class Profile extends Component {
 		super(props)
 
 		this.state = {
-			loading: true,
+			loading: false,
 			data: {},
 			modalVisible: false,
 
@@ -50,19 +51,23 @@ class Profile extends Component {
 			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
-			this.setState({ data: response.data.user })
-			this.setState({ loading: false })
+			console.log(response.data.user, '---data perubahan')
+			this.setState({ data: response.data.user, loading: false })
 		})
 		.catch(error => {
 			if (error.response) {
-				alert(error.response.data.message)
+				ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT)
 			}
 			else {
-				alert('Koneksi internet bermasalah')
+				ToastAndroid.show('Koneksi internet bermasalah', ToastAndroid.SHORT)
 			}
 			this.setState({ loading: false })
 		})
 	}
+
+	// getData = () => {
+	//  this.setState({ data: this.props.user.data })
+	// }
 
 	deleteComodity = (id) => {
 		this.setState({ loading: true })
@@ -412,4 +417,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps)(Profile)
+export default connect(mapStateToProps, {unreadNotifFetch})(Profile)

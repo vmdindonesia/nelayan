@@ -46,7 +46,7 @@ class ProfileEdit extends Component {
 		super(props)
 	
 		this.state = {
-			loading: true,
+			loading: false,
 			data: {},
 
 			loadingCity: false,
@@ -107,26 +107,7 @@ class ProfileEdit extends Component {
 	}
 
 	getData = () => {
-		this.setState({loading: true})
-		let token = this.props.user.token
-		
-		axios.get(`${BASE_URL}/profile`, {
-			headers: {token},
-			timeout: REQUEST_TIME_OUT
-		})
-		.then(response => {
-			this.setState({data: response.data.user})
-			this.setState({loading: false})
-		})
-		.catch(error => {
-			if (error.response) {
-				alert(error.response.data.message)
-			}
-			else {
-				alert('Koneksi internet bermasalah')
-			}
-			this.setState({loading: false})
-		})
+		this.setState({ data: this.props.user.data })
 	}
 
 	selectPhotoTapped = (name) => {
@@ -348,7 +329,7 @@ class ProfileEdit extends Component {
 							label="Kota / Kabupaten"
 							suggestions={suggestionsCity}
 							onChangeText={text => this.queryCitySuggestion(text)}
-							value={cityEdited ? valueCity : data.City.name}
+							value={cityEdited ? valueCity : (data.City && data.City.name)}
 						>
 						{
 							loadingCity ?
