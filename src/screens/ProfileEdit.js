@@ -107,7 +107,26 @@ class ProfileEdit extends Component {
 	}
 
 	getData = () => {
-		this.setState({ data: this.props.user.data })
+		this.setState({loading: true})
+		let token = this.props.user.token
+		
+		axios.get(`${BASE_URL}/supplier/profile`, {
+			headers: {token},
+			timeout: REQUEST_TIME_OUT
+		})
+		.then(response => {
+			this.setState({data: response.data.user})
+			this.setState({loading: false})
+		})
+		.catch(error => {
+			if (error.response) {
+				alert(error.response.data.message)
+			}
+			else {
+				alert('Koneksi internet bermasalah')
+			}
+			this.setState({loading: false})
+		})
 	}
 
 	selectPhotoTapped = (name) => {
@@ -383,7 +402,7 @@ class ProfileEdit extends Component {
 							>
 								<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
 								{ photo === null ? 
-										<Image style={styles.avatar} source={{uri: `${BASE_URL}/images/${data.photo}`}} />
+										<Image style={styles.avatar} source={{uri: `${BASE_URL}/images/${data && data.photo}`}} />
 									:
 										<Image style={styles.avatar} source={photo} />
 								}

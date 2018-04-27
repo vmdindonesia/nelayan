@@ -5,7 +5,6 @@ import axios from 'axios'
 import numeral from 'numeral'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { unreadNotifFetch } from '../actions'
 import { BASE_URL, COLOR, REQUEST_TIME_OUT } from '../constants'
 import { Card, CardSection, ContainerSection, Button } from '../components/common'
 
@@ -46,12 +45,11 @@ class Profile extends Component {
 		this.setState({ loading: true })
 		let token = this.props.user.token
 
-		axios.get(`${BASE_URL}/profile`, {
+		axios.get(`${BASE_URL}/supplier/profile`, {
 			headers: { token },
 			timeout: REQUEST_TIME_OUT
 		})
 		.then(response => {
-			console.log(response.data.user, '---data perubahan')
 			this.setState({ data: response.data.user, loading: false })
 		})
 		.catch(error => {
@@ -64,10 +62,6 @@ class Profile extends Component {
 			this.setState({ loading: false })
 		})
 	}
-
-	// getData = () => {
-	//  this.setState({ data: this.props.user.data })
-	// }
 
 	deleteComodity = (id) => {
 		this.setState({ loading: true })
@@ -168,7 +162,7 @@ class Profile extends Component {
 								<Image
 									style={{ width: 130, height: 100 }}
 									resizeMode="contain"
-									source={{ uri: `${BASE_URL}/images/${item.Fish.photo}` }}
+									source={{ uri: `${BASE_URL}/images/${item.Fish && item.Fish.photo}` }}
 								/>
 								<View style={{ flex: 1, margin: 13, flexDirection: 'column', justifyContent: 'space-around' }}>
 									<Text style={{ color: COLOR.secondary_a, fontSize: 20, marginLeft: 10 }}>{item.Fish && item.Fish.name}</Text>
@@ -417,4 +411,4 @@ const mapStateToProps = state => {
 	return { user }
 }
 
-export default connect(mapStateToProps, {unreadNotifFetch})(Profile)
+export default connect(mapStateToProps, {})(Profile)
